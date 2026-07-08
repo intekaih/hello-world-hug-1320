@@ -14,11 +14,16 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LichChieuRouteImport } from './routes/lich-chieu'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DienVienIndexRouteImport } from './routes/dien-vien.index'
+import { Route as BrowseIndexRouteImport } from './routes/browse.index'
 import { Route as PhimSlugRouteImport } from './routes/phim.$slug'
+import { Route as DienVienNameRouteImport } from './routes/dien-vien.$name'
+import { Route as BrowseTypeRouteImport } from './routes/browse.$type'
 import { Route as ApiWatchlistRouteImport } from './routes/api/watchlist'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
@@ -69,6 +74,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LichChieuRoute = LichChieuRouteImport.update({
+  id: '/lich-chieu',
+  path: '/lich-chieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -89,9 +99,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DienVienIndexRoute = DienVienIndexRouteImport.update({
+  id: '/dien-vien/',
+  path: '/dien-vien/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseIndexRoute = BrowseIndexRouteImport.update({
+  id: '/browse/',
+  path: '/browse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhimSlugRoute = PhimSlugRouteImport.update({
   id: '/phim/$slug',
   path: '/phim/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DienVienNameRoute = DienVienNameRouteImport.update({
+  id: '/dien-vien/$name',
+  path: '/dien-vien/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseTypeRoute = BrowseTypeRouteImport.update({
+  id: '/browse/$type',
+  path: '/browse/$type',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiWatchlistRoute = ApiWatchlistRouteImport.update({
@@ -223,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -237,7 +268,11 @@ export interface FileRoutesByFullPath {
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse/': typeof BrowseIndexRoute
+  '/dien-vien/': typeof DienVienIndexRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -259,6 +294,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -273,7 +309,11 @@ export interface FileRoutesByTo {
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse': typeof BrowseIndexRoute
+  '/dien-vien': typeof DienVienIndexRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -296,6 +336,7 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
@@ -310,7 +351,11 @@ export interface FileRoutesById {
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse/': typeof BrowseIndexRoute
+  '/dien-vien/': typeof DienVienIndexRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -334,6 +379,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
@@ -348,7 +394,11 @@ export interface FileRouteTypes {
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse/'
+    | '/dien-vien/'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -370,6 +420,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
@@ -384,7 +435,11 @@ export interface FileRouteTypes {
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse'
+    | '/dien-vien'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -406,6 +461,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
@@ -420,7 +476,11 @@ export interface FileRouteTypes {
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse/'
+    | '/dien-vien/'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -443,6 +503,7 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
@@ -457,7 +518,11 @@ export interface RootRouteChildren {
   ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   ApiWatchlistRoute: typeof ApiWatchlistRouteWithChildren
+  BrowseTypeRoute: typeof BrowseTypeRoute
+  DienVienNameRoute: typeof DienVienNameRoute
   PhimSlugRoute: typeof PhimSlugRoute
+  BrowseIndexRoute: typeof BrowseIndexRoute
+  DienVienIndexRoute: typeof DienVienIndexRoute
   ApiActorsNameRoute: typeof ApiActorsNameRoute
   ApiActorsSearchRoute: typeof ApiActorsSearchRoute
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
@@ -505,6 +570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lich-chieu': {
+      id: '/lich-chieu'
+      path: '/lich-chieu'
+      fullPath: '/lich-chieu'
+      preLoaderRoute: typeof LichChieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
@@ -533,11 +605,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dien-vien/': {
+      id: '/dien-vien/'
+      path: '/dien-vien'
+      fullPath: '/dien-vien/'
+      preLoaderRoute: typeof DienVienIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/': {
+      id: '/browse/'
+      path: '/browse'
+      fullPath: '/browse/'
+      preLoaderRoute: typeof BrowseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/phim/$slug': {
       id: '/phim/$slug'
       path: '/phim/$slug'
       fullPath: '/phim/$slug'
       preLoaderRoute: typeof PhimSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dien-vien/$name': {
+      id: '/dien-vien/$name'
+      path: '/dien-vien/$name'
+      fullPath: '/dien-vien/$name'
+      preLoaderRoute: typeof DienVienNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/$type': {
+      id: '/browse/$type'
+      path: '/browse/$type'
+      fullPath: '/browse/$type'
+      preLoaderRoute: typeof BrowseTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/watchlist': {
@@ -779,6 +879,7 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
@@ -793,7 +894,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   ApiWatchlistRoute: ApiWatchlistRouteWithChildren,
+  BrowseTypeRoute: BrowseTypeRoute,
+  DienVienNameRoute: DienVienNameRoute,
   PhimSlugRoute: PhimSlugRoute,
+  BrowseIndexRoute: BrowseIndexRoute,
+  DienVienIndexRoute: DienVienIndexRoute,
   ApiActorsNameRoute: ApiActorsNameRoute,
   ApiActorsSearchRoute: ApiActorsSearchRoute,
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
