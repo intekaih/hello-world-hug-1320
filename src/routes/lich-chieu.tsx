@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -120,7 +121,7 @@ function MovieRow({ items, variant }: { items: Movie[]; variant: TabKey }) {
           >
             <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
               <img
-                src={m.poster_url}
+                src={thumbSrc(m.poster_url,{w:400})}
                 alt={m.title}
                 loading="lazy"
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -186,7 +187,7 @@ function UpcomingList({ items }: { items: Movie[] }) {
                 </div>
               )}
               <img
-                src={m.poster_url}
+                src={thumbSrc(m.poster_url,{w:400})}
                 alt=""
                 loading="lazy"
                 className="h-24 w-16 rounded-lg object-cover shadow-md sm:h-28 sm:w-20"

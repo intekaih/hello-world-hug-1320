@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { AnimatePresence, motion } from "motion/react";
 import {
   ChevronLeft,
@@ -57,7 +58,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           className="absolute inset-0"
         >
           <img
-            src={movie.backdrop_url}
+            src={thumbSrc(movie.backdrop_url,{w:1600})}
             alt=""
             className="h-full w-full object-cover"
           />
@@ -76,7 +77,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
         >
           {movie.logo_url ? (
             <img
-              src={movie.logo_url}
+              src={thumbSrc(movie.logo_url,{w:500})}
               alt={movie.title}
               className="max-h-24 w-auto max-w-[70%] object-contain drop-shadow-2xl sm:max-h-32"
             />
@@ -296,7 +297,7 @@ function MoviePoster({ movie }: { movie: MovieCard }) {
     >
       <div className="aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated">
         <img
-          src={movie.poster_url}
+          src={thumbSrc(movie.poster_url,{w:400})}
           alt={movie.title}
           loading="lazy"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -371,7 +372,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
             </span>
             <div className="relative ml-6 aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated shadow-[var(--shadow-elevated)] sm:ml-8">
               <img
-                src={m.poster_url}
+                src={thumbSrc(m.poster_url,{w:400})}
                 alt={m.title}
                 loading="lazy"
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -427,7 +428,7 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
           >
             <div className="relative aspect-video overflow-hidden">
               <img
-                src={m.poster_url}
+                src={thumbSrc(m.poster_url,{w:400})}
                 alt={m.title}
                 loading="lazy"
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Check, PlayCircle } from "lucide-react";
@@ -188,7 +189,7 @@ export function NotificationBell() {
                     >
                       <div className="relative flex-shrink-0">
                         <img
-                          src={n.movie_thumb}
+                          src={thumbSrc(n.movie_thumb,{w:200})}
                           alt=""
                           className="h-14 w-10 rounded-md object-cover"
                           loading="lazy"
@@ -262,7 +263,7 @@ export function NotificationRow({
       >
         <div className="relative flex-shrink-0">
           <img
-            src={n.movie_thumb}
+            src={thumbSrc(n.movie_thumb,{w:200})}
             alt=""
             className="h-24 w-16 rounded-lg object-cover shadow-md sm:h-28 sm:w-20"
             loading="lazy"

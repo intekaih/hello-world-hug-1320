@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useQuery } from "@tanstack/react-query";
@@ -293,7 +294,7 @@ function MovieCard({ item, index }: { item: BrowseMovie; index: number }) {
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           <img
-            src={item.poster_url}
+            src={thumbSrc(item.poster_url,{w:400})}
             alt={item.title}
             loading="lazy"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
