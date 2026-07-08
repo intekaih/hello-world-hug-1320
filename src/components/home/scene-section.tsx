@@ -246,7 +246,11 @@ export function SceneSection({
 type EntranceSpec = {
   initial: Record<string, number | string>;
   whileInView: Record<string, number | string>;
-  transition: { duration: number; ease: number[]; delay?: number };
+  transition: {
+    duration: number;
+    ease: [number, number, number, number];
+    delay?: number;
+  };
 };
 
 function getEntranceVariants(
@@ -258,6 +262,7 @@ function getEntranceVariants(
     whileInView: { opacity: 1 },
     transition: { duration: 0, ease: [0.16, 1, 0.3, 1] },
   };
+
   if (reduce) return NONE;
 
   switch (kind) {
