@@ -88,7 +88,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           )}
 
           <div className="flex flex-wrap items-center gap-2 text-xs text-foreground-muted sm:text-sm">
-            <span className="rounded border border-white/20 px-1.5 py-0.5 text-[10px] font-semibold">
+            <span className="rounded border border-foreground/20 px-1.5 py-0.5 text-[10px] font-semibold">
               {movie.rating}
             </span>
             <span>{movie.year}</span>
