@@ -289,12 +289,10 @@ export function MovieRow({
 
 function MoviePoster({ movie }: { movie: MovieCard }) {
   return (
-    <MotionLink
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2 }}
+    <Link
       to="/phim/$slug"
       params={{ slug: movie.slug }}
-      className="group relative w-[140px] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[160px] lg:w-[180px]"
+      className="group relative w-[140px] shrink-0 snap-start overflow-hidden rounded-xl transition-transform duration-200 hover:-translate-y-1 sm:w-[160px] lg:w-[180px]"
     >
       <div className="aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated">
         <img
@@ -313,7 +311,7 @@ function MoviePoster({ movie }: { movie: MovieCard }) {
           <span>{movie.year}</span>
         </div>
       </div>
-    </MotionLink>
+    </Link>
   );
 }
 
