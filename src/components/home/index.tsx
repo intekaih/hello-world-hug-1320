@@ -419,11 +419,11 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
         className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {items.map((m) => (
-          <motion.a
+          <Link
             key={m.id}
-            href="#"
-            whileHover={{ y: -4 }}
-            className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-elevated sm:w-[300px]"
+            to="/xem/$slug/tap-$episode"
+            params={{ slug: m.slug, episode: "1" }}
+            className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-elevated transition-transform duration-200 hover:-translate-y-1 sm:w-[300px]"
           >
             <div className="relative aspect-video overflow-hidden">
               <img
@@ -454,14 +454,14 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
                   {m.remaining}
                 </p>
               </div>
-              <button
-                aria-label="Add to list"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
+              <span
+                aria-hidden
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-foreground-muted"
               >
                 <Plus className="h-4 w-4" />
-              </button>
+              </span>
             </div>
-          </motion.a>
+          </Link>
         ))}
       </div>
     </div>
