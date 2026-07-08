@@ -72,7 +72,7 @@ function ProfilePage() {
   });
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       <PageHeader
         title="Hồ sơ"
         icon={<UserIcon className="h-5 w-5" />}
