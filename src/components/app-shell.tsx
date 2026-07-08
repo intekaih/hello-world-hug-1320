@@ -7,6 +7,7 @@ import {
   History,
   Home,
   Menu,
+  PanelLeft,
   Moon,
   Search,
   Sun,
