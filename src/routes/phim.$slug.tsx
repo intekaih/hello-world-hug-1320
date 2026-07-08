@@ -129,6 +129,8 @@ function MovieDetailPage() {
     );
   }
 
+  const loadedMovie: Movie = movieQ.data;
+
   return (
     <div className="space-y-10">
       <HeroSection movie={movie} />
