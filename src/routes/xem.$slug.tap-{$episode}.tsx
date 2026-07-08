@@ -11,9 +11,11 @@ import {
   type ServerSource,
 } from "@/components/watch/player";
 import { Link } from "@tanstack/react-router";
+import { RouteErrorBoundary, RouteNotFound } from "@/components/route-boundaries";
 import { buildPageMeta, SITE_NAME } from "@/lib/page-meta";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { thumbSrc } from "@/utils/thumbSrc";
+
 
 const searchSchema = z.object({
   t: fallback(z.number(), 0).default(0),
@@ -22,6 +24,14 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   validateSearch: zodValidator(searchSchema),
   component: WatchPage,
+  errorComponent: RouteErrorBoundary,
+  notFoundComponent: () => (
+    <RouteNotFound
+      title="Không tìm thấy tập phim"
+      description="Tập phim bạn muốn xem không tồn tại hoặc chưa được cập nhật."
+    />
+  ),
+
   head: ({ params }) => {
     const nice = params.slug
       .split("-")

@@ -20,9 +20,11 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { RouteErrorBoundary, RouteNotFound } from "@/components/route-boundaries";
 import { cn } from "@/lib/utils";
 import { buildPageMeta } from "@/lib/page-meta";
 import { usePageMeta } from "@/hooks/usePageMeta";
+
 
 type Movie = {
   slug: string;
@@ -58,6 +60,13 @@ type RelatedItem = {
 
 export const Route = createFileRoute("/phim/$slug")({
   component: MovieDetailPage,
+  errorComponent: RouteErrorBoundary,
+  notFoundComponent: () => (
+    <RouteNotFound
+      title="Không tìm thấy phim"
+      description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+    />
+  ),
   head: ({ params }) => {
     const nice = params.slug
       .split("-")
@@ -75,6 +84,7 @@ export const Route = createFileRoute("/phim/$slug")({
   },
 });
 
+
 function MovieDetailPage() {
   const { slug } = Route.useParams();
 
@@ -82,10 +92,22 @@ function MovieDetailPage() {
     queryKey: ["movie", slug],
     queryFn: async () => {
       const res = await fetch(`/api/movies/${slug}`);
-      if (!res.ok) throw new Error("Not found");
+      if (!res.ok) {
+        const err = new Error(
+          res.status === 404 ? "Không tìm thấy phim" : `Lỗi tải phim (${res.status})`,
+        ) as Error & { status: number };
+        err.status = res.status;
+        throw err;
+      }
       return res.json() as Promise<Movie>;
     },
+    retry: (failureCount, error) => {
+      const status = (error as { status?: number })?.status;
+      if (status && status >= 400 && status < 500) return false;
+      return failureCount < 2;
+    },
   });
+
 
   const relatedQ = useQuery({
     queryKey: ["movie", slug, "related"],
@@ -118,18 +140,23 @@ function MovieDetailPage() {
   if (movieQ.isLoading) return <DetailSkeleton />;
 
   if (movieQ.isError || !movieData) {
+    const status = (movieQ.error as { status?: number } | null)?.status;
+    if (status === 404) {
+      return (
+        <RouteNotFound
+          title="Không tìm thấy phim"
+          description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+        />
+      );
+    }
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
-        <p className="text-foreground-muted">Không tìm thấy phim này.</p>
-        <Link
-          to="/"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-        >
-          Về trang chủ
-        </Link>
-      </div>
+      <RouteErrorBoundary
+        error={(movieQ.error as Error) ?? new Error("Không tải được phim")}
+        reset={() => movieQ.refetch()}
+      />
     );
   }
+
 
   const movie: Movie = movieData;
 
