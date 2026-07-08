@@ -24,6 +24,14 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   validateSearch: zodValidator(searchSchema),
   component: WatchPage,
+  errorComponent: RouteErrorBoundary,
+  notFoundComponent: () => (
+    <RouteNotFound
+      title="Không tìm thấy tập phim"
+      description="Tập phim bạn muốn xem không tồn tại hoặc chưa được cập nhật."
+    />
+  ),
+
   head: ({ params }) => {
     const nice = params.slug
       .split("-")
