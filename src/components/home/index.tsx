@@ -279,13 +279,18 @@ export function CategoryChips() {
             key={c}
             onClick={() => setActive(c)}
             className={cn(
-              "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all",
-              isActive
-                ? "bg-primary text-primary-foreground shadow-[var(--shadow-glow-primary)]"
-                : "glass text-foreground-muted hover:text-foreground",
+              "relative shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-colors",
+              isActive ? "text-primary-foreground" : "text-foreground/70 hover:text-foreground",
             )}
           >
-            {c}
+            {isActive && (
+              <motion.span
+                layoutId="chip-pill"
+                className="absolute inset-0 rounded-full bg-[var(--gradient-ember)] shadow-[0_10px_30px_-10px_var(--color-primary)]"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className="relative">{c}</span>
           </button>
         );
       })}
@@ -382,28 +387,94 @@ export function MovieRow({
 }
 
 function MoviePoster({ movie }: { movie: MovieCard }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--rx", `${(py - 0.5) * -10}deg`);
+    el.style.setProperty("--ry", `${(px - 0.5) * 12}deg`);
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
+  };
+  const handleLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  };
+
   return (
     <Link
+      ref={ref}
       to="/phim/$slug"
       params={{ slug: movie.slug }}
-      className="group relative w-[140px] shrink-0 snap-start overflow-hidden rounded-xl transition-transform duration-200 hover:-translate-y-1 sm:w-[160px] lg:w-[180px]"
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className="group relative w-[150px] shrink-0 snap-start sm:w-[170px] lg:w-[190px] [perspective:1000px]"
+      style={{ ["--rx" as string]: "0deg", ["--ry" as string]: "0deg" }}
     >
-      <div className="aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated">
+      <div
+        className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:shadow-[0_30px_80px_-20px_oklch(0.65_0.22_15/0.5)]"
+        style={{
+          transform:
+            "rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0)",
+          transformStyle: "preserve-3d",
+        }}
+      >
         <img
-          src={thumbSrc(movie.poster_url,{w:400})}
+          src={thumbSrc(movie.poster_url, { w: 400 })}
           alt={movie.title}
           loading="lazy"
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
         />
-      </div>
-      <div className="mt-2 space-y-0.5">
-        <p className="truncate text-sm font-medium">{movie.title}</p>
-        <div className="flex items-center gap-1.5 text-xs text-foreground-subtle">
+
+        {/* Light sweep — follows mouse */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{
+            background:
+              "radial-gradient(circle at var(--mx,50%) var(--my,50%), oklch(1 0 0 / 0.18), transparent 40%)",
+          }}
+        />
+
+        {/* Bottom fade with meta reveal */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[oklch(0.08_0.02_280/0.95)] via-[oklch(0.08_0.02_280/0.55)] to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
+
+        {/* Rating chip — always visible top-left */}
+        <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 backdrop-blur-md">
           <Star className="h-3 w-3 fill-gold text-gold" />
-          <span>{movie.rating.toFixed(1)}</span>
-          <span aria-hidden>·</span>
-          <span>{movie.year}</span>
+          <span className="font-mono text-[10px] font-semibold text-white">
+            {movie.rating.toFixed(1)}
+          </span>
         </div>
+
+        {/* Hover-reveal title inside poster */}
+        <div className="absolute inset-x-0 bottom-0 translate-y-3 p-3 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
+          <p className="line-clamp-2 font-display text-[15px] font-medium leading-tight tracking-tight text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.6)]">
+            {movie.title}
+          </p>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/70">
+            {movie.year}
+          </p>
+        </div>
+
+        {/* Hair border */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
+      </div>
+
+      {/* Idle title (below poster, fades out on hover) */}
+      <div className="mt-2.5 space-y-0.5 transition-opacity duration-300 group-hover:opacity-60">
+        <p className="truncate text-[13px] font-medium tracking-tight text-foreground">
+          {movie.title}
+        </p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-foreground/50">
+          {movie.year}
+        </p>
       </div>
     </Link>
   );
@@ -449,27 +520,29 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
             key={m.id}
             to="/phim/$slug"
             params={{ slug: m.slug }}
-            className="group relative w-[160px] shrink-0 snap-start transition-transform duration-200 hover:-translate-y-1 sm:w-[180px] lg:w-[200px]"
+            className="group relative w-[170px] shrink-0 snap-start transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 sm:w-[190px] lg:w-[210px]"
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute -left-8 bottom-0 select-none font-display text-[130px] font-black leading-[0.8] text-transparent [-webkit-text-stroke:2px_var(--color-primary)] sm:-left-10 sm:text-[160px] lg:text-[180px]"
+              className="pointer-events-none absolute -left-6 bottom-2 select-none font-display text-[170px] italic leading-[0.78] tracking-[-0.08em] text-transparent [font-variation-settings:'opsz'_144,'SOFT'_100] [-webkit-text-stroke:1.5px_var(--color-primary)] sm:-left-8 sm:text-[210px] lg:-left-10 lg:text-[240px]"
               style={{
                 background:
-                  "linear-gradient(180deg, oklch(0.65 0.22 15 / 0.9), oklch(0.65 0.22 15 / 0.1))",
+                  "linear-gradient(160deg, oklch(0.65 0.22 15 / 0.95) 0%, oklch(0.78 0.16 70 / 0.7) 45%, oklch(0.65 0.22 15 / 0.05) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
+                fontWeight: 900,
               }}
             >
               {i + 1}
             </span>
-            <div className="relative ml-6 aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated shadow-[var(--shadow-elevated)] sm:ml-8">
+            <div className="relative ml-8 aspect-[2/3] overflow-hidden rounded-2xl bg-surface-elevated shadow-[var(--shadow-cinematic)] transition-shadow duration-500 group-hover:shadow-[0_40px_100px_-20px_oklch(0.65_0.22_15/0.55)] sm:ml-10">
               <img
-                src={thumbSrc(m.poster_url,{w:400})}
+                src={thumbSrc(m.poster_url, { w: 400 })}
                 alt={m.title}
                 loading="lazy"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
               />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
             </div>
           </Link>
         ))}
