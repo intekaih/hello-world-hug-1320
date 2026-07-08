@@ -146,29 +146,29 @@ export function SceneAtmosphere() {
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
     >
-      {previous && (
-        <div
-          key={`prev-${previous}`}
-          className="absolute inset-0"
-          style={{
-            background: layerBg(previous),
-            opacity: 0,
-            transition: "opacity 1.6s ease-out",
-          }}
-        />
-      )}
+      {/* Base current layer — always on. */}
       <div
-        key={`cur-${current}`}
         className="absolute inset-0"
-        style={{
-          background: layerBg(current),
-          opacity: 1,
-          transition: "opacity 1.6s ease-out",
-        }}
+        style={{ background: layerBg(current) }}
       />
-      {/* Vignette + subtle noise sold as constant film-grain */}
+      {/* Previous layer overlays and fades out — creates crossfade. */}
+      <AnimatePresence>
+        {previous && (
+          <motion.div
+            key={previous}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0"
+            style={{ background: layerBg(previous) }}
+          />
+        )}
+      </AnimatePresence>
+      {/* Vignette + constant film-grain overlay. */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgb(0_0_0/0.55)_100%)]" />
       <div className="absolute inset-0 opacity-[0.035] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:26px_26px]" />
     </div>
   );
 }
+
