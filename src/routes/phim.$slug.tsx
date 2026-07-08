@@ -140,18 +140,23 @@ function MovieDetailPage() {
   if (movieQ.isLoading) return <DetailSkeleton />;
 
   if (movieQ.isError || !movieData) {
+    const status = (movieQ.error as { status?: number } | null)?.status;
+    if (status === 404) {
+      return (
+        <RouteNotFound
+          title="Không tìm thấy phim"
+          description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+        />
+      );
+    }
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
-        <p className="text-foreground-muted">Không tìm thấy phim này.</p>
-        <Link
-          to="/"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-        >
-          Về trang chủ
-        </Link>
-      </div>
+      <RouteErrorBoundary
+        error={(movieQ.error as Error) ?? new Error("Không tải được phim")}
+        reset={() => movieQ.refetch()}
+      />
     );
   }
+
 
   const movie: Movie = movieData;
 
