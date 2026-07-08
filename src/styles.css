@@ -289,11 +289,11 @@
 
 /* Text opacity helpers matching the palette spec */
 @utility text-foreground-muted {
-  color: oklch(1 0 0 / 0.75);
+  color: color-mix(in oklab, var(--foreground) 75%, transparent);
 }
 
 @utility text-foreground-subtle {
-  color: oklch(1 0 0 / 0.5);
+  color: color-mix(in oklab, var(--foreground) 50%, transparent);
 }
 
 /* Skeleton shimmer + cross-fade */
