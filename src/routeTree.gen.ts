@@ -18,6 +18,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LichChieuRouteImport } from './routes/lich-chieu'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as AnimeRouteImport } from './routes/anime'
 import { Route as AboutRouteImport } from './routes/about'
@@ -97,6 +98,11 @@ const HistoryRoute = HistoryRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FavoritesRoute = FavoritesRouteImport.update({
@@ -284,6 +290,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/anime': typeof AnimeRoute
   '/favorites': typeof FavoritesRoute
+  '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
   '/lich-chieu': typeof LichChieuRoute
@@ -330,6 +337,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/anime': typeof AnimeRoute
   '/favorites': typeof FavoritesRoute
+  '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
   '/lich-chieu': typeof LichChieuRoute
@@ -377,6 +385,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/anime': typeof AnimeRoute
   '/favorites': typeof FavoritesRoute
+  '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
   '/lich-chieu': typeof LichChieuRoute
@@ -425,6 +434,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/anime'
     | '/favorites'
+    | '/feedback'
     | '/forgot-password'
     | '/history'
     | '/lich-chieu'
@@ -471,6 +481,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/anime'
     | '/favorites'
+    | '/feedback'
     | '/forgot-password'
     | '/history'
     | '/lich-chieu'
@@ -517,6 +528,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/anime'
     | '/favorites'
+    | '/feedback'
     | '/forgot-password'
     | '/history'
     | '/lich-chieu'
@@ -564,6 +576,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AnimeRoute: typeof AnimeRoute
   FavoritesRoute: typeof FavoritesRoute
+  FeedbackRoute: typeof FeedbackRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
   LichChieuRoute: typeof LichChieuRoute
@@ -661,6 +674,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/favorites': {
@@ -982,6 +1002,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AnimeRoute: AnimeRoute,
   FavoritesRoute: FavoritesRoute,
+  FeedbackRoute: FeedbackRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
   LichChieuRoute: LichChieuRoute,
