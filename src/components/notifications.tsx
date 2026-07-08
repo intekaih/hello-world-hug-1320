@@ -1,9 +1,11 @@
 import { thumbSrc } from "@/utils/thumbSrc";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Check, PlayCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+
 
 export type Notification = {
   id: string;
@@ -40,10 +42,55 @@ export function useUnreadCount() {
   return useQuery<{ count: number }>({
     queryKey: ["notifications", "unread-count"],
     queryFn: async () => (await fetch("/api/notifications/unread-count")).json(),
-    refetchInterval: 60_000,
+    refetchInterval: () => (typeof document !== "undefined" && document.hidden ? false : 60_000),
     refetchIntervalInBackground: false,
+    refetchOnWindowFocus: true,
   });
 }
+
+/**
+ * Watches the unread-count query and fires a toast + returns a "bump" pulse
+ * whenever the count increases (new notifications arrived while polling).
+ */
+function useNotificationAlerts(count: number, items: Notification[]) {
+  const prevRef = useRef<number | null>(null);
+  const navigate = useNavigate();
+  const [bump, setBump] = useState(0);
+
+  useEffect(() => {
+    const prev = prevRef.current;
+    prevRef.current = count;
+    if (prev == null) return; // first read — no baseline yet
+    if (count > prev) {
+      setBump((b) => b + 1);
+      const latest = items.find((n) => !n.read);
+      const title = latest ? `${latest.movie_name}` : "Bạn có thông báo mới";
+      const description = latest?.message ?? `${count} thông báo chưa đọc`;
+      toast(title, {
+        description,
+        action: latest
+          ? {
+              label: "Xem",
+              onClick: () => {
+                if (latest.episode) {
+                  navigate({
+                    to: "/xem/$slug/tap-{$episode}",
+                    params: { slug: latest.movie_slug, episode: latest.episode },
+                    search: { t: 0 },
+                  });
+                } else {
+                  navigate({ to: "/phim/$slug", params: { slug: latest.movie_slug } });
+                }
+              },
+            }
+          : undefined,
+      });
+    }
+  }, [count, items, navigate]);
+
+  return bump;
+}
+
 
 export function useMarkRead() {
   const qc = useQueryClient();
@@ -98,6 +145,19 @@ export function NotificationBell() {
   const count = countData?.count ?? 0;
   const items = data?.items ?? [];
   const latest = items.slice(0, 5);
+  const bump = useNotificationAlerts(count, items);
+
+  const qc = useQueryClient();
+  useEffect(() => {
+    const onVis = () => {
+      if (!document.hidden) {
+        qc.invalidateQueries({ queryKey: ["notifications", "unread-count"] });
+        qc.invalidateQueries({ queryKey: ["notifications"] });
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [qc]);
 
   useEffect(() => {
     if (!open) return;
@@ -108,22 +168,41 @@ export function NotificationBell() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
+
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label="Thông báo"
+        aria-label={count > 0 ? `Thông báo (${count} chưa đọc)` : "Thông báo"}
         aria-expanded={open}
         className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground"
       >
-        <Bell className="h-5 w-5" />
-        {count > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-white shadow-lg shadow-primary/40">
-            {count > 9 ? "9+" : count}
-          </span>
-        )}
+        <motion.span
+          key={bump}
+          animate={bump > 0 ? { rotate: [0, -15, 12, -8, 6, 0] } : { rotate: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="inline-flex"
+        >
+          <Bell className="h-5 w-5" />
+        </motion.span>
+        <AnimatePresence>
+          {count > 0 && (
+            <motion.span
+              key={`badge-${bump}`}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: [1, 1.35, 1], opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              aria-hidden="true"
+              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-white shadow-lg shadow-primary/40"
+            >
+              {count > 9 ? "9+" : count}
+            </motion.span>
+          )}
+        </AnimatePresence>
       </button>
+
 
       <AnimatePresence>
         {open && (
