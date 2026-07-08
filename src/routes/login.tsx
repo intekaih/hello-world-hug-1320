@@ -25,7 +25,7 @@ const loginSchema = z.object({
   remember: z.boolean().default(false),
 });
 
-type LoginForm = z.infer<typeof loginSchema>;
+type LoginForm = z.input<typeof loginSchema>;
 
 export const Route = createFileRoute("/login")({
   validateSearch: zodValidator(searchSchema),
