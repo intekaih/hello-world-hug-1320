@@ -21,6 +21,7 @@ import { NotificationBell } from "@/components/notifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useThemeStore } from "@/store/themeStore";
 
 type NavItem = {
   label: string;
@@ -53,15 +54,30 @@ function useIsActive(to: string) {
 }
 
 function useTheme() {
-  const [isDark, setIsDark] = useState(true);
+  const resolved = useThemeStore((s) => s.resolved);
+  const isDark = resolved === "dark";
+  const toggle = useThemeStore((s) => s.toggle);
+  const syncResolved = useThemeStore((s) => s.syncResolved);
+  const pref = useThemeStore((s) => s.isDark);
 
+  // Apply html.dark class + listen for OS-level scheme changes.
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) root.classList.add("dark");
     else root.classList.remove("dark");
   }, [isDark]);
 
-  return { isDark, toggle: () => setIsDark((v) => !v) };
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => {
+      if (pref === null) syncResolved();
+    };
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, [pref, syncResolved]);
+
+  return { isDark, toggle };
 }
 
 function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }) {
