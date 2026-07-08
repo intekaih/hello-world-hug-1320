@@ -11,6 +11,9 @@ import {
   type ServerSource,
 } from "@/components/watch/player";
 import { Link } from "@tanstack/react-router";
+import { buildPageMeta, SITE_NAME } from "@/lib/page-meta";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { thumbSrc } from "@/utils/thumbSrc";
 
 const searchSchema = z.object({
   t: fallback(z.number(), 0).default(0),
@@ -19,12 +22,21 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   validateSearch: zodValidator(searchSchema),
   component: WatchPage,
-  head: ({ params }) => ({
-    meta: [
-      { title: `Xem tập ${params.episode} — ${params.slug} · Stream` },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: ({ params }) => {
+    const nice = params.slug
+      .split("-")
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(" ");
+    return {
+      meta: buildPageMeta({
+        title: `Xem ${nice} Tập ${params.episode} - ${SITE_NAME}`,
+        description: `Xem ${nice} tập ${params.episode} online HD Vietsub, thuyết minh miễn phí trên ${SITE_NAME}.`,
+        url: `/xem/${params.slug}/tap-${params.episode}`,
+        type: "video.episode",
+        noindex: true,
+      }),
+    };
+  },
 });
 
 /* Fallback demo HLS sources if the API fails. */
