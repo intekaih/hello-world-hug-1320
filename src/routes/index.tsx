@@ -14,6 +14,8 @@ import {
   Top10Section,
   Top10Skeleton,
 } from "@/components/home";
+import { CinematicScene } from "@/components/home/cinematic-scene";
+import { GenreCosmos } from "@/components/home/genre-cosmos";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
 
@@ -90,6 +92,20 @@ function Home() {
           subtitle="Series được xem nhiều"
           movies={data.hotSeriesMovies}
         />
+      </StaggerItem>
+
+      {data.heroMovies[1] && (
+        <StaggerItem>
+          <CinematicScene
+            movie={data.heroMovies[1]}
+            eyebrow="Feature Presentation"
+            kicker="In spotlight this week"
+          />
+        </StaggerItem>
+      )}
+
+      <StaggerItem>
+        <GenreCosmos />
       </StaggerItem>
 
       <StaggerItem>
