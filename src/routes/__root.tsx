@@ -150,11 +150,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <OfflineBanner />
-      <AuthInitializer>
-        <AppShell />
-        <Toaster />
-      </AuthInitializer>
+      <I18nProvider>
+        <OfflineBanner />
+        <AuthInitializer>
+          <AppShell />
+          <Toaster />
+        </AuthInitializer>
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
