@@ -141,9 +141,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell />
+      <AuthInitializer>
+        <AppShell />
+      </AuthInitializer>
     </QueryClientProvider>
   );
 }
+
 
 
