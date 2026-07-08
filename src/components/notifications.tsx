@@ -147,6 +147,18 @@ export function NotificationBell() {
   const latest = items.slice(0, 5);
   const bump = useNotificationAlerts(count, items);
 
+  const qc = useQueryClient();
+  useEffect(() => {
+    const onVis = () => {
+      if (!document.hidden) {
+        qc.invalidateQueries({ queryKey: ["notifications", "unread-count"] });
+        qc.invalidateQueries({ queryKey: ["notifications"] });
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [qc]);
+
   useEffect(() => {
     if (!open) return;
     const onClick = (e: MouseEvent) => {
@@ -155,6 +167,7 @@ export function NotificationBell() {
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
+
 
   return (
     <div ref={ref} className="relative">
