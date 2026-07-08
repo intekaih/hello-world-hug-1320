@@ -27,7 +27,8 @@
     "readMore": "+ Đọc tiếp",
     "readLess": "— Thu gọn",
     "empty": "Chưa có dữ liệu",
-    "skipToContent": "Bỏ qua đến nội dung chính"
+    "skipToContent": "Bỏ qua đến nội dung chính",
+    "close": "Đóng"
   },
   "detail": {
     "hero": {
@@ -206,7 +207,72 @@
       "eyebrow": "Vũ trụ phim",
       "title": "Các phần khác"
     }
+  },
+  "player": {
+    "nowPlaying": "Đang phát",
+    "prevEpisode": "Tập trước",
+    "episodeShort": "Tập {{n}}",
+    "synopsisEyebrow": "Tóm tắt",
+    "aboutEpisode": "Về tập này",
+    "watchingEyebrow": "Đang xem",
+    "viewMovieDetails": "Xem chi tiết phim",
+    "controls": {
+      "episodes": "Danh sách tập",
+      "episodesShort": "Tập",
+      "fullscreen": "Toàn màn hình",
+      "exitFullscreen": "Thoát toàn màn hình",
+      "cinemaMode": "Chế độ rạp phim",
+      "exitCinema": "Thoát chế độ rạp",
+      "shortcuts": "Phím tắt"
+    },
+    "loading": {
+      "eyebrow": "Đang tải",
+      "title": "Đang chuẩn bị rạp phim của bạn…",
+      "label": "Đang tải video"
+    },
+    "error": {
+      "eyebrow": "Lỗi phát video",
+      "retry": "Thử lại",
+      "tryAnotherServer": "Thử server khác",
+      "network": {
+        "title": "Mất kết nối mạng",
+        "description": "Không thể tải nguồn video. Vui lòng kiểm tra kết nối và thử lại."
+      },
+      "media": {
+        "title": "Lỗi phát video",
+        "description": "Không thể giải mã video trên thiết bị này."
+      },
+      "source": {
+        "title": "Không có nguồn phát",
+        "description": "Tập phim này hiện chưa có nguồn video khả dụng."
+      },
+      "unavailable": {
+        "title": "Server không khả dụng",
+        "description": "Server đang chọn hiện đang offline. Hãy thử server khác bên dưới."
+      },
+      "unknown": {
+        "title": "Có lỗi xảy ra",
+        "description": "Trình phát gặp lỗi không xác định."
+      }
+    },
+    "shortcuts": {
+      "eyebrow": "Điều khiển rạp",
+      "title": "Phím tắt",
+      "playPause": "Phát / Tạm dừng",
+      "seek": "Tua ±10 giây",
+      "volume": "Tăng / giảm âm lượng",
+      "fullscreen": "Bật/tắt toàn màn hình",
+      "mute": "Tắt / bật tiếng",
+      "cinema": "Chế độ rạp phim",
+      "close": "Đóng các lớp phủ",
+      "help": "Hiển thị phím tắt"
+    },
+    "nextEpisode": {
+      "eyebrow": "Tiếp theo",
+      "short": "Tập tiếp",
+      "startsIn": "Tập tiếp bắt đầu sau {{seconds}}s",
+      "playNow": "Xem ngay",
+      "cancel": "Ở lại"
+    }
   }
 }
-
-

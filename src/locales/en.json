@@ -27,7 +27,8 @@
     "readMore": "+ Read more",
     "readLess": "— Collapse",
     "empty": "No data yet",
-    "skipToContent": "Skip to main content"
+    "skipToContent": "Skip to main content",
+    "close": "Close"
   },
   "detail": {
     "hero": {
@@ -206,7 +207,72 @@
       "eyebrow": "Universe",
       "title": "Other parts"
     }
+  },
+  "player": {
+    "nowPlaying": "Now Playing",
+    "prevEpisode": "Previous",
+    "episodeShort": "Episode {{n}}",
+    "synopsisEyebrow": "Synopsis",
+    "aboutEpisode": "About this episode",
+    "watchingEyebrow": "Watching",
+    "viewMovieDetails": "View movie details",
+    "controls": {
+      "episodes": "Episodes",
+      "episodesShort": "Eps",
+      "fullscreen": "Fullscreen",
+      "exitFullscreen": "Exit fullscreen",
+      "cinemaMode": "Cinema mode",
+      "exitCinema": "Exit cinema",
+      "shortcuts": "Keyboard shortcuts"
+    },
+    "loading": {
+      "eyebrow": "Loading",
+      "title": "Preparing your theater…",
+      "label": "Loading video"
+    },
+    "error": {
+      "eyebrow": "Playback error",
+      "retry": "Retry",
+      "tryAnotherServer": "Try another server",
+      "network": {
+        "title": "Network interrupted",
+        "description": "We couldn't reach the video source. Check your connection and try again."
+      },
+      "media": {
+        "title": "Playback error",
+        "description": "The media stream could not be decoded on this device."
+      },
+      "source": {
+        "title": "Video source missing",
+        "description": "This episode has no available video source right now."
+      },
+      "unavailable": {
+        "title": "Server unavailable",
+        "description": "The selected server is offline. Try another server below."
+      },
+      "unknown": {
+        "title": "Something went wrong",
+        "description": "The player ran into an unexpected error."
+      }
+    },
+    "shortcuts": {
+      "eyebrow": "Cinema controls",
+      "title": "Keyboard shortcuts",
+      "playPause": "Play / Pause",
+      "seek": "Seek ±10s",
+      "volume": "Volume up / down",
+      "fullscreen": "Toggle fullscreen",
+      "mute": "Mute / Unmute",
+      "cinema": "Toggle cinema mode",
+      "close": "Close overlays",
+      "help": "Show this help"
+    },
+    "nextEpisode": {
+      "eyebrow": "Up next",
+      "short": "Next",
+      "startsIn": "Next episode starts in {{seconds}}s",
+      "playNow": "Play now",
+      "cancel": "Cancel"
+    }
   }
 }
-
-

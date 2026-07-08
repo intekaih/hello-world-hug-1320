@@ -1,21 +1,24 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo } from "react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Monitor } from "lucide-react";
+import { useMemo, useState } from "react";
 import { z } from "zod";
+import { AnimatePresence, motion } from "motion/react";
 
 import {
   PlayerContainer,
   WatchActions,
   type ServerSource,
 } from "@/components/watch/player";
-import { Link } from "@tanstack/react-router";
+import { CinemaModeLayout } from "@/components/watch/cinema-mode-layout";
+import { AmbientTheaterBackground } from "@/components/watch/ambient-theater-background";
 import { RouteErrorBoundary, RouteNotFound } from "@/components/route-boundaries";
 import { buildPageMeta, SITE_NAME } from "@/lib/page-meta";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { thumbSrc } from "@/utils/thumbSrc";
-
+import { useTranslation } from "@/hooks/useTranslation";
+import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
   t: fallback(z.number(), 0).default(0),
@@ -49,21 +52,18 @@ export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   },
 });
 
-/* Fallback demo HLS sources if the API fails. */
 const FALLBACK_SERVERS: ServerSource[] = [
-  {
-    id: "vip1",
-    name: "VIP #1",
-    src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-  },
+  { id: "vip1", name: "VIP #1", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
 ];
 
 const TOTAL_EPISODES = 48;
 
 function WatchPage() {
   const { slug, episode } = Route.useParams();
-  const { t } = Route.useSearch();
+  const { t: tSearch } = Route.useSearch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [cinemaMode, setCinemaMode] = useState(false);
 
   const { data: epData } = useQuery({
     queryKey: ["episode", slug, episode],
@@ -105,10 +105,10 @@ function WatchPage() {
   });
 
   const initialTime = useMemo(() => {
-    if (t > 0) return t;
+    if (tSearch > 0) return tSearch;
     if (history && history.position > 5) return history.position;
     return 0;
-  }, [t, history]);
+  }, [tSearch, history]);
 
   const goToEpisode = (ep: number) => {
     navigate({
@@ -123,16 +123,13 @@ function WatchPage() {
     .map((s: string) => s[0]?.toUpperCase() + s.slice(1))
     .join(" ");
 
-  const posterUrl = movie?.poster_url
-    ? thumbSrc(movie.poster_url, { w: 1200 })
-    : undefined;
-
+  const posterUrl = movie?.poster_url ? thumbSrc(movie.poster_url, { w: 1200 }) : undefined;
   const backdropUrl = movie?.backdrop_url
     ? thumbSrc(movie.backdrop_url, { w: 1600 })
     : posterUrl;
 
   usePageMeta({
-    title: `Xem ${title} Tập ${episode} - ${SITE_NAME}`,
+    title: `${t("player.nowPlaying")} ${title} · ${t("player.episodeShort", { n: episode })}`,
     description:
       movie?.overview_vi ||
       movie?.overview ||
@@ -151,11 +148,7 @@ function WatchPage() {
       name: `${title} — Tập ${episode}`,
       episodeNumber: Number(episode) || undefined,
       image: posterUrl,
-      partOfSeries: {
-        "@type": "TVSeries",
-        name: title,
-        image: posterUrl,
-      },
+      partOfSeries: { "@type": "TVSeries", name: title, image: posterUrl },
       potentialAction: {
         "@type": "WatchAction",
         target: `/xem/${slug}/tap-${episode}`,
@@ -168,8 +161,10 @@ function WatchPage() {
   const canNext = epNum < TOTAL_EPISODES;
   const overview = movie?.overview_vi || movie?.overview;
 
+  const toggleCinema = () => setCinemaMode((v) => !v);
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <CinemaModeLayout>
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -177,47 +172,34 @@ function WatchPage() {
         />
       )}
 
-      {/* Ambient blurred backdrop */}
-      {backdropUrl && (
-        <>
-          <div
-            aria-hidden
-            className="pointer-events-none fixed inset-0 -z-10 opacity-40"
-            style={{
-              backgroundImage: `url(${backdropUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(80px) saturate(160%)",
-              transform: "scale(1.2)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgb(0_0_0/0.85)_100%)]"
-          />
-          <div
-            aria-hidden
-            className="grain pointer-events-none fixed inset-0 -z-10 opacity-30"
-          />
-        </>
-      )}
+      <AmbientTheaterBackground
+        backdrop={backdropUrl}
+        intensity={cinemaMode ? 0.28 : 0.45}
+      />
 
-      <div className="mx-auto max-w-7xl px-3 pt-4 sm:px-6 sm:pt-6">
-        {/* Top nav rail */}
+      <motion.div
+        animate={{
+          opacity: cinemaMode ? 0 : 1,
+          y: cinemaMode ? -12 : 0,
+          pointerEvents: cinemaMode ? "none" : "auto",
+        }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto max-w-7xl px-3 pt-4 sm:px-6 sm:pt-6"
+      >
         <div className="mb-4 flex items-center gap-3 sm:mb-6">
           <Link
             to="/phim/$slug"
             params={{ slug }}
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition hover:border-white/30 hover:bg-white/10 hover:text-white"
-            aria-label="Trở về"
+            aria-label={t("common.back")}
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Trở về
+            {t("common.back")}
           </Link>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/90">
               <span className="inline-block h-px w-5 bg-gradient-to-r from-primary to-transparent" />
-              Now Playing
+              {t("player.nowPlaying")}
             </div>
             <h1 className="mt-1 truncate font-display text-lg font-semibold tracking-tight sm:text-2xl">
               {title}
@@ -229,26 +211,42 @@ function WatchPage() {
             <span>{String(TOTAL_EPISODES).padStart(2, "0")}</span>
           </div>
         </div>
+      </motion.div>
 
-        {/* Player frame — cinematic */}
+      {/* Player frame */}
+      <motion.div
+        layout
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className={cn(
+          "relative mx-auto",
+          cinemaMode
+            ? "max-w-none px-0"
+            : "max-w-7xl px-3 sm:px-6",
+        )}
+      >
         <div
-          className="group relative overflow-hidden rounded-2xl ring-1 ring-white/10"
+          className={cn(
+            "group relative overflow-hidden ring-1 ring-white/10",
+            cinemaMode ? "rounded-none" : "rounded-2xl",
+          )}
           style={{
-            boxShadow:
-              "0 2px 10px rgba(0,0,0,0.4), 0 30px 60px -20px rgba(0,0,0,0.7), 0 60px 120px -40px oklch(0.68 0.24 25 / 0.35)",
+            boxShadow: cinemaMode
+              ? undefined
+              : "0 2px 10px rgba(0,0,0,0.4), 0 30px 60px -20px rgba(0,0,0,0.7), 0 60px 120px -40px oklch(0.68 0.24 25 / 0.35)",
           }}
         >
-          {/* Ambient glow ring */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -inset-px rounded-2xl opacity-60"
-            style={{
-              background:
-                "linear-gradient(135deg, oklch(0.68 0.24 25 / 0.3), transparent 40%, oklch(0.72 0.15 200 / 0.25))",
-              filter: "blur(2px)",
-              zIndex: -1,
-            }}
-          />
+          {!cinemaMode && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-px rounded-2xl opacity-60"
+              style={{
+                background:
+                  "linear-gradient(135deg, oklch(0.68 0.24 25 / 0.3), transparent 40%, oklch(0.72 0.15 200 / 0.25))",
+                filter: "blur(2px)",
+                zIndex: -1,
+              }}
+            />
+          )}
           <PlayerContainer
             slug={slug}
             episode={episode}
@@ -258,96 +256,123 @@ function WatchPage() {
             servers={servers}
             initialTime={initialTime}
             onChangeEpisode={goToEpisode}
+            cinemaMode={cinemaMode}
+            onToggleCinemaMode={toggleCinema}
           />
         </div>
+      </motion.div>
 
-        {/* Episode nav rail */}
-        <div className="mt-4 flex items-center justify-between gap-3 sm:mt-6">
-          <button
-            onClick={() => canPrev && goToEpisode(epNum - 1)}
-            disabled={!canPrev}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/85 backdrop-blur-md transition hover:border-white/30 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-white/5"
+      {/* Floating cinema exit — visible only in cinema mode */}
+      <AnimatePresence>
+        {cinemaMode && (
+          <motion.button
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            onClick={toggleCinema}
+            className="fixed right-4 top-4 z-40 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/85 backdrop-blur-xl transition hover:border-white/30 hover:text-white"
+            aria-label={t("player.controls.exitCinema")}
           >
-            <ChevronLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
-            <span className="hidden sm:inline">Tập trước</span>
-          </button>
-          <div className="flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_10px_oklch(0.68_0.24_25)]" />
-            Episode {String(epNum).padStart(2, "0")} · {String(TOTAL_EPISODES).padStart(2, "0")}
-          </div>
-          <button
-            onClick={() => canNext && goToEpisode(epNum + 1)}
-            disabled={!canNext}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/85 backdrop-blur-md transition hover:border-white/30 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-white/5"
+            <Monitor className="h-3.5 w-3.5" />
+            {t("player.controls.exitCinema")}
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!cinemaMode && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.4 }}
+            className="mx-auto max-w-7xl px-3 sm:px-6"
           >
-            <span className="hidden sm:inline">Tập tiếp</span>
-            <ChevronRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-          </button>
-        </div>
-
-        {/* Below-player content */}
-        <div className="mt-8 grid gap-6 pb-24 lg:grid-cols-[1fr_320px]">
-          <div className="space-y-6">
-            <WatchActions slug={slug} />
-
-            {overview && (
-              <section className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 backdrop-blur-xl">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full opacity-40"
-                  style={{
-                    background:
-                      "radial-gradient(circle, oklch(0.68 0.24 25 / 0.4), transparent 65%)",
-                  }}
-                />
-                <div className="relative">
-                  <div className="flex items-center gap-2.5">
-                    <span className="inline-block h-px w-6 bg-gradient-to-r from-primary to-transparent" />
-                    <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-primary/90">
-                      Synopsis
-                    </span>
-                  </div>
-                  <h2 className="mt-2 font-display text-xl font-semibold tracking-tight">
-                    Về tập này
-                  </h2>
-                  <p className="mt-3 text-[15px] leading-[1.85] text-white/80">
-                    {overview}
-                  </p>
-                </div>
-              </section>
-            )}
-          </div>
-
-          {/* Side rail — poster + info */}
-          {posterUrl && (
-            <aside className="space-y-4">
-              <div className="relative aspect-[2/3] overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]">
-                <img
-                  src={posterUrl}
-                  alt={title}
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/90">
-                    Watching
-                  </div>
-                  <div className="mt-1 line-clamp-2 font-display text-lg font-semibold leading-tight">
-                    {title}
-                  </div>
-                </div>
-              </div>
-              <Link
-                to="/phim/$slug"
-                params={{ slug }}
-                className="block rounded-xl border border-white/12 bg-white/5 px-4 py-3 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition hover:border-primary/40 hover:text-primary"
+            <div className="mt-4 flex items-center justify-between gap-3 sm:mt-6">
+              <button
+                onClick={() => canPrev && goToEpisode(epNum - 1)}
+                disabled={!canPrev}
+                className="group inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/85 backdrop-blur-md transition hover:border-white/30 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-white/5"
               >
-                Xem chi tiết phim →
-              </Link>
-            </aside>
-          )}
-        </div>
-      </div>
-    </div>
+                <ChevronLeft className="h-4 w-4 transition group-hover:-translate-x-0.5" />
+                <span className="hidden sm:inline">{t("player.prevEpisode")}</span>
+              </button>
+              <div className="flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_10px_oklch(0.68_0.24_25)]" />
+                {t("player.episodeShort", { n: String(epNum).padStart(2, "0") })} · {String(TOTAL_EPISODES).padStart(2, "0")}
+              </div>
+              <button
+                onClick={() => canNext && goToEpisode(epNum + 1)}
+                disabled={!canNext}
+                className="group inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-medium text-white/85 backdrop-blur-md transition hover:border-white/30 hover:bg-white/10 hover:text-white disabled:opacity-30 disabled:hover:bg-white/5"
+              >
+                <span className="hidden sm:inline">{t("player.nextEpisode.short")}</span>
+                <ChevronRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </button>
+            </div>
+
+            <div className="mt-8 grid gap-6 pb-24 lg:grid-cols-[1fr_320px]">
+              <div className="space-y-6">
+                <WatchActions slug={slug} />
+                {overview && (
+                  <section className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 backdrop-blur-xl">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full opacity-40"
+                      style={{
+                        background:
+                          "radial-gradient(circle, oklch(0.68 0.24 25 / 0.4), transparent 65%)",
+                      }}
+                    />
+                    <div className="relative">
+                      <div className="flex items-center gap-2.5">
+                        <span className="inline-block h-px w-6 bg-gradient-to-r from-primary to-transparent" />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.26em] text-primary/90">
+                          {t("player.synopsisEyebrow")}
+                        </span>
+                      </div>
+                      <h2 className="mt-2 font-display text-xl font-semibold tracking-tight">
+                        {t("player.aboutEpisode")}
+                      </h2>
+                      <p className="mt-3 text-[15px] leading-[1.85] text-white/80">
+                        {overview}
+                      </p>
+                    </div>
+                  </section>
+                )}
+              </div>
+
+              {posterUrl && (
+                <aside className="space-y-4">
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]">
+                    <img
+                      src={posterUrl}
+                      alt={title}
+                      className="h-full w-full object-cover"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-4">
+                      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/90">
+                        {t("player.watchingEyebrow")}
+                      </div>
+                      <div className="mt-1 line-clamp-2 font-display text-lg font-semibold leading-tight">
+                        {title}
+                      </div>
+                    </div>
+                  </div>
+                  <Link
+                    to="/phim/$slug"
+                    params={{ slug }}
+                    className="block rounded-xl border border-white/12 bg-white/5 px-4 py-3 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition hover:border-primary/40 hover:text-primary"
+                  >
+                    {t("player.viewMovieDetails")} →
+                  </Link>
+                </aside>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </CinemaModeLayout>
   );
 }
