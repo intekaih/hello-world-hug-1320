@@ -17,6 +17,7 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PhimSlugRouteImport } from './routes/phim.$slug'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
@@ -63,6 +64,11 @@ const BrowseRoute = BrowseRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhimSlugRoute = PhimSlugRouteImport.update({
+  id: '/phim/$slug',
+  path: '/phim/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTranslateRoute = ApiTranslateRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/translate': typeof ApiTranslateRoute
+  '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/translate': typeof ApiTranslateRoute
+  '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/translate': typeof ApiTranslateRoute
+  '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/translate'
+    | '/phim/$slug'
     | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/translate'
+    | '/phim/$slug'
     | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/translate'
+    | '/phim/$slug'
     | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   WatchlistRoute: typeof WatchlistRoute
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiTranslateRoute: typeof ApiTranslateRoute
+  PhimSlugRoute: typeof PhimSlugRoute
   ApiMoviesSlugRoute: typeof ApiMoviesSlugRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
   XemSlugTapChar123episodeChar125Route: typeof XemSlugTapChar123episodeChar125Route
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/phim/$slug': {
+      id: '/phim/$slug'
+      path: '/phim/$slug'
+      fullPath: '/phim/$slug'
+      preLoaderRoute: typeof PhimSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/translate': {
@@ -369,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   WatchlistRoute: WatchlistRoute,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiTranslateRoute: ApiTranslateRoute,
+  PhimSlugRoute: PhimSlugRoute,
   ApiMoviesSlugRoute: ApiMoviesSlugRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
   XemSlugTapChar123episodeChar125Route: XemSlugTapChar123episodeChar125Route,
