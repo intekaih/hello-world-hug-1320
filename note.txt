@@ -1,0 +1,88 @@
+# Smoke Test Report — movieCC
+Date: 2026-07-08
+Build: ✅ `bun run build` PASS (client + nitro/cloudflare-module, 0 errors)
+Dev server: ✅ chạy trên http://localhost:8080
+
+## ✅ Trang render OK (SSR + hydration, có tiêu đề chuẩn)
+- /                 → title "Stream — Premium Streaming"   (⚠ xem BUG-01)
+- /browse/phim-moi-cap-nhat   → OK, h1 "Phim mới cập nhật"
+- /search?q=avengers          → 200, nhưng thiếu h1        (BUG-05)
+- /login                      → OK, h1 "Chào mừng trở lại"
+- /lich-chieu                 → OK
+- /dien-vien                  → OK
+- /notifications              → OK (unread-count=4)
+- /favorites (RequireAuth)    → redirect về /login          (BUG-04)
+
+## ✅ API endpoints
+- GET /api/auth/me                     → 200 { user: null }
+- GET /api/notifications/unread-count  → 200 { count: 4 }
+- GET /api/search?q=avengers           → 200 nhưng 0 items  (BUG-02)
+- GET /api/suggest?q=av                → 200 nhưng 0 items  (BUG-02)
+- GET /api/movies/nguoi-nhen           → 404                (BUG-03: cần slug thật để test)
+
+===========================================================
+## 🐞 BUGS PHẢI FIX
+===========================================================
+
+### BUG-01 [HIGH] Home page là placeholder, không kết nối catalogue
+- File: src/routes/index.tsx
+- Triệu chứng:
+  * Title trang chủ là "Stream — Premium Streaming", KHÔNG khớp brand "movieCC"
+  * Nav sidebar hiển thị "Stream" (không phải movieCC)
+  * Hero hiển thị hard-code "Dune Part Two" thay vì data thật
+  * Không có bất kỳ link `/phim/:slug` hay `/xem/:slug/tap-...` nào trong DOM
+  * Click "Play" / "More info" không đi đâu cả (href="#")
+- Cần: thay index.tsx bằng HomePage thật:
+  * HeroCarousel lấy từ /api/movies/hot hoặc trending
+  * MovieRow: Tiếp tục xem, Phim bộ mới, Phim lẻ mới, Anime, Sắp chiếu…
+  * Mỗi MovieCard phải là <Link to="/phim/$slug">
+  * Nav: sửa brand "Stream" → "movieCC"
+
+### BUG-02 [HIGH] Search + Suggest không trả kết quả
+- Files: src/routes/api/search.ts, src/routes/api/suggest.ts
+- Triệu chứng: /api/search?q=avengers → { items: [], total: 0 }
+- Nguyên nhân khả nghi: chưa kết nối nguồn dữ liệu (KKPhim / phimapi) hoặc
+  filter sai. Cần kiểm tra fetch upstream + mapping response.
+
+### BUG-03 [MED] MovieDetail 404 với slug demo
+- File: src/routes/api/movies.$slug.ts
+- /api/movies/nguoi-nhen → 404 (có thể slug demo không tồn tại upstream)
+- Sau khi fix BUG-01 (có link phim thật), verify lại end-to-end:
+  home → click card → /phim/:slug → Play → /xem/:slug/tap-1
+
+### BUG-04 [MED] RequireAuth redirect param sai
+- Truy cập /favorites khi chưa login → URL trở thành
+  /login?redirect=%2Flogin  (đúng phải là redirect=%2Ffavorites)
+- File: RequireAuth guard (tìm nơi build redirect param)
+- Bug: đang lấy location.pathname SAU khi navigate thay vì trước.
+
+### BUG-05 [LOW] SearchPage thiếu <h1>
+- File: src/routes/search.tsx
+- DOM không có h1/h2 → SEO + accessibility yếu.
+- Thêm h1 "Kết quả tìm kiếm cho '{q}'" hoặc "Tìm kiếm".
+
+### BUG-06 [LOW / dev-only] Hydration mismatch data-tsd-source
+- Mọi trang log:
+  data-tsd-source="/src/routes/__root.tsx:118:10" (client)
+  vs      :122:5 (server)
+- Nguyên nhân: annotation từ Lovable dev-tool inject vào JSX ở thời điểm khác
+  nhau giữa server/client. Chỉ hiện trong dev, không ảnh hưởng production.
+- Có thể ignore, hoặc gate root JSX qua useHydrated để dập warning.
+
+===========================================================
+## 📌 CHƯA TEST ĐƯỢC (cần sau khi fix BUG-01/02)
+===========================================================
+- Click phim → MovieDetail hero/logo/backdrop
+- Play → HLS.js load .m3u8 (cần movie có episodes.link_m3u8)
+- Login flow end-to-end (POST /api/auth/login) — cần credentials test
+- Thêm Favorite/Watchlist với user đã login
+- SeriesPartsNav (multi-part)
+- Translate toggle overview
+
+## 🎯 Ưu tiên fix
+1. BUG-01 (Home) — blocker cho mọi luồng khám phá phim
+2. BUG-02 (Search/Suggest) — blocker cho luồng tìm kiếm
+3. BUG-04 (RequireAuth redirect)
+4. BUG-05 (SearchPage h1)
+5. BUG-03 verify sau
+6. BUG-06 optional
