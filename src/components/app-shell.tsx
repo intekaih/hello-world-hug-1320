@@ -1,4 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { motion } from "motion/react";
 import {
   Bell,
   Bookmark,
