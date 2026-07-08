@@ -10,6 +10,7 @@ import {
 import {
   EmptyState,
   PageHeader,
+  RequireAuth,
 } from "@/components/user-lists/shared";
 
 export const Route = createFileRoute("/notifications")({
@@ -17,9 +18,16 @@ export const Route = createFileRoute("/notifications")({
     meta: [
       { title: "Thông báo — movieCC" },
       { name: "description", content: "Các cập nhật mới nhất về phim của bạn." },
+      { property: "og:title", content: "Thông báo — movieCC" },
+      { property: "og:description", content: "Các cập nhật mới nhất về phim của bạn." },
+      { property: "og:type", content: "website" },
     ],
   }),
-  component: NotificationsPage,
+  component: () => (
+    <RequireAuth>
+      <NotificationsPage />
+    </RequireAuth>
+  ),
 });
 
 function NotificationsPage() {
