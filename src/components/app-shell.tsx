@@ -180,7 +180,8 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             variant="ghost"
             size="icon"
             onClick={toggle}
-            aria-label="Toggle theme"
+            aria-label={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+            title={isDark ? "Chế độ sáng" : "Chế độ tối"}
           >
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
