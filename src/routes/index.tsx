@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import {
   CategoryChips,
-  ContinueWatching,
   ContinueWatchingSkeleton,
   HeroBannerSkeleton,
   MovieRow,
@@ -15,10 +14,12 @@ import {
 } from "@/components/home";
 import { CinematicHero } from "@/components/home/cinematic-hero";
 import { CinematicScene } from "@/components/home/cinematic-scene";
+import { ContinueWatchingImmersive } from "@/components/home/continue-watching-immersive";
 import { GenreCosmos } from "@/components/home/genre-cosmos";
 import { SceneSection } from "@/components/home/scene-section";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
+
 
 export const Route = createFileRoute("/")({
   component: Home,
