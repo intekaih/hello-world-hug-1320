@@ -195,6 +195,7 @@ function SidebarPanel({
 
 function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
   const { isDark, toggle } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <header className="glass-strong sticky top-0 z-40 pt-safe-top">
@@ -205,7 +206,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             size="icon"
             className="md:hidden"
             onClick={onOpenMenu}
-            aria-label="Open menu"
+            aria-label={t("nav.home")}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -220,27 +221,32 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
             <Input
               type="search"
-              placeholder="Search movies, shows, actors…"
+              placeholder={t("nav.search")}
+              aria-label={t("nav.search")}
               className="h-10 rounded-full border-foreground/10 bg-surface-elevated pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
             />
           </div>
 
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <div className="hidden sm:block">
+              <LanguageSwitcher />
+            </div>
+
             <Button
               variant="ghost"
               size="icon"
               onClick={toggle}
-              aria-label={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
-              title={isDark ? "Chế độ sáng" : "Chế độ tối"}
+              aria-label={isDark ? "Light mode" : "Dark mode"}
+              title={isDark ? "Light mode" : "Dark mode"}
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <NotificationBell />
 
-            <Link to="/profile" aria-label="Profile" className="ml-1">
+            <Link to="/profile" aria-label={t("nav.profile")} className="ml-1">
               <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
-                <AvatarImage src="" alt="You" />
+                <AvatarImage src="" alt="" />
                 <AvatarFallback className="bg-primary/20 text-primary">
                   YO
                 </AvatarFallback>
