@@ -123,6 +123,90 @@
       "description": "Chưa có hành trình nào. Hãy bắt đầu một bộ phim và MovieCC sẽ lưu lại cho bạn.",
       "cta": "Khám phá phim"
     }
+  },
+  "movieDetail": {
+    "hero": {
+      "eyebrow": "{{genre}} · {{year}}",
+      "eyebrowFallback": "Feature Presentation",
+      "nowPlaying": "Đang chiếu",
+      "muteTrailer": "Tắt tiếng trailer",
+      "unmuteTrailer": "Bật tiếng trailer",
+      "closeTrailer": "Đóng trailer",
+      "playTrailerBackground": "Phát trailer nền"
+    },
+    "badges": {
+      "year": "Năm",
+      "runtime": "Thời lượng",
+      "quality": "Chất lượng",
+      "language": "Ngôn ngữ",
+      "rating": "Đánh giá",
+      "ageRating": "Phân loại",
+      "episodes": "Số tập",
+      "episodesCount": "{{n}} tập"
+    },
+    "actions": {
+      "watchNow": "Xem ngay",
+      "resume": "Tiếp tục xem",
+      "trailer": "Trailer",
+      "favorite": "Yêu thích",
+      "unfavorite": "Bỏ yêu thích",
+      "watchlist": "Xem sau",
+      "watchlistRemove": "Bỏ khỏi danh sách",
+      "share": "Chia sẻ",
+      "shared": "Đã sao chép link",
+      "report": "Báo lỗi",
+      "scrollToTop": "Về đầu trang"
+    },
+    "story": {
+      "eyebrow": "Câu chuyện",
+      "title": "Nội dung phim",
+      "translate": "Dịch tiếng Việt",
+      "showOriginal": "Bản gốc",
+      "translating": "Đang dịch…",
+      "expand": "Đọc tiếp",
+      "collapse": "Thu gọn",
+      "quote": "Một câu chuyện không thể bỏ lỡ."
+    },
+    "facts": {
+      "eyebrow": "Thông tin",
+      "title": "Sự thật về phim",
+      "director": "Đạo diễn",
+      "country": "Quốc gia",
+      "year": "Năm",
+      "language": "Ngôn ngữ",
+      "quality": "Chất lượng",
+      "episodes": "Số tập",
+      "rating": "Điểm đánh giá",
+      "empty": "Đang cập nhật"
+    },
+    "cast": {
+      "eyebrow": "Diễn viên",
+      "title": "Dàn diễn viên chính",
+      "character": "Vai diễn"
+    },
+    "episodes": {
+      "eyebrow": "Tập phim",
+      "title": "Danh sách tập",
+      "count": "{{n}} tập",
+      "server": "Nguồn phát",
+      "serverDefault": "Máy chủ chính",
+      "latest": "Mới nhất",
+      "watching": "Đang xem",
+      "watched": "Đã xem",
+      "continueFrom": "Tiếp tục từ tập {{n}}",
+      "prefix": "Tập",
+      "viewAll": "Xem tất cả tập"
+    },
+    "related": {
+      "eyebrow": "Khám phá thêm",
+      "title": "Phim liên quan",
+      "empty": "Chưa có gợi ý phù hợp."
+    },
+    "parts": {
+      "eyebrow": "Vũ trụ phim",
+      "title": "Các phần khác"
+    }
   }
 }
+
 
