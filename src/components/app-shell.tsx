@@ -284,6 +284,17 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
 export function AppShell() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // Immersive routes (video watch, etc.) render without sidebar/header/tabbar.
+  if (pathname.startsWith("/xem/")) {
+    return (
+      <div className="min-h-screen bg-black text-foreground">
+        <Outlet />
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-background text-foreground">
