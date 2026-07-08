@@ -208,7 +208,9 @@ function Home() {
             <ComingSoonScene movies={data.newMovies.slice().reverse()} />
           </SceneSection>
         </StaggerItem>
-      </Stagger>
+        </Stagger>
+      </div>
     </>
   );
 }
+
