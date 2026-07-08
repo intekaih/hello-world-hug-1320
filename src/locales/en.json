@@ -123,6 +123,90 @@
       "description": "No journeys yet. Start watching and MovieCC will remember your place.",
       "cta": "Explore movies"
     }
+  },
+  "movieDetail": {
+    "hero": {
+      "eyebrow": "{{genre}} · {{year}}",
+      "eyebrowFallback": "Feature Presentation",
+      "nowPlaying": "Now playing",
+      "muteTrailer": "Mute trailer",
+      "unmuteTrailer": "Unmute trailer",
+      "closeTrailer": "Close trailer",
+      "playTrailerBackground": "Play background trailer"
+    },
+    "badges": {
+      "year": "Year",
+      "runtime": "Runtime",
+      "quality": "Quality",
+      "language": "Language",
+      "rating": "Rating",
+      "ageRating": "Rated",
+      "episodes": "Episodes",
+      "episodesCount": "{{n}} episodes"
+    },
+    "actions": {
+      "watchNow": "Watch now",
+      "resume": "Resume",
+      "trailer": "Trailer",
+      "favorite": "Favorite",
+      "unfavorite": "Unfavorite",
+      "watchlist": "Watchlist",
+      "watchlistRemove": "Remove from list",
+      "share": "Share",
+      "shared": "Link copied",
+      "report": "Report issue",
+      "scrollToTop": "Back to top"
+    },
+    "story": {
+      "eyebrow": "Story",
+      "title": "The story",
+      "translate": "Translate to Vietnamese",
+      "showOriginal": "Original",
+      "translating": "Translating…",
+      "expand": "Read more",
+      "collapse": "Collapse",
+      "quote": "A story you can't afford to miss."
+    },
+    "facts": {
+      "eyebrow": "Facts",
+      "title": "The essentials",
+      "director": "Director",
+      "country": "Country",
+      "year": "Year",
+      "language": "Language",
+      "quality": "Quality",
+      "episodes": "Episodes",
+      "rating": "Rating",
+      "empty": "TBA"
+    },
+    "cast": {
+      "eyebrow": "Cast",
+      "title": "Leading cast",
+      "character": "as"
+    },
+    "episodes": {
+      "eyebrow": "Episodes",
+      "title": "Episode list",
+      "count": "{{n}} episodes",
+      "server": "Source",
+      "serverDefault": "Main server",
+      "latest": "Latest",
+      "watching": "Watching",
+      "watched": "Watched",
+      "continueFrom": "Continue from episode {{n}}",
+      "prefix": "EP",
+      "viewAll": "View all episodes"
+    },
+    "related": {
+      "eyebrow": "Discover more",
+      "title": "You might also like",
+      "empty": "No recommendations yet."
+    },
+    "parts": {
+      "eyebrow": "Universe",
+      "title": "Other parts"
+    }
   }
 }
+
 

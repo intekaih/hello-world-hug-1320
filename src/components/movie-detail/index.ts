@@ -1,0 +1,12 @@
+export { MovieDetailHero } from "./hero";
+export { MovieLogoReveal } from "./logo-reveal";
+export { MovieMetaBadges } from "./meta-badges";
+export { MovieActionCluster } from "./action-cluster";
+export { StoryBlock } from "./story-block";
+export { MovieFactRail } from "./fact-rail";
+export { CastCarousel } from "./cast-carousel";
+export { EpisodeSelector } from "./episode-selector";
+export { RelatedMovieRail } from "./related-rail";
+export { FloatingMovieActions } from "./floating-actions";
+export { SectionHeader } from "./section-header";
+export type { Movie, RelatedItem } from "./types";
