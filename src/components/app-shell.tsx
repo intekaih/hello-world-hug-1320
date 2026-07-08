@@ -7,6 +7,7 @@ import {
   History,
   Home,
   Menu,
+  PanelLeft,
   Moon,
   Search,
   Sun,
@@ -118,11 +119,28 @@ function Brand({ compact }: { compact?: boolean }) {
   );
 }
 
-function SidebarPanel({ collapsed = false }: { collapsed?: boolean }) {
+function SidebarPanel({
+  collapsed = false,
+  onToggle,
+}: {
+  collapsed?: boolean;
+  onToggle?: () => void;
+}) {
   return (
     <div className="flex h-full flex-col gap-6 p-4">
-      <div className="px-2">
+      <div className={cn("flex items-center gap-2 px-2", collapsed ? "justify-center" : "justify-between")}>
         <Brand compact={collapsed} />
+        {onToggle && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0 rounded-lg text-foreground-subtle hover:bg-white/5 hover:text-foreground"
+            onClick={onToggle}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <PanelLeft className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <nav className="flex flex-1 flex-col gap-1">
         {sidebarItems.map((item) => (
@@ -334,16 +352,10 @@ export function AppShell() {
           sidebarCollapsed ? "w-[76px]" : "w-[240px]",
         )}
       >
-        <SidebarPanel collapsed={sidebarCollapsed} />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute -right-4 top-20 hidden h-8 w-8 rounded-full border border-white/10 bg-surface-elevated md:inline-flex"
-          onClick={() => setSidebarCollapsed((v) => !v)}
-          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
+        <SidebarPanel
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed((v) => !v)}
+        />
       </aside>
 
       {/* Main column */}
