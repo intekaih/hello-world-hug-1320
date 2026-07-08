@@ -47,15 +47,15 @@ function SchedulePage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl font-bold text-white">Lịch chiếu</h1>
-          <p className="text-sm text-white/50">
+          <h1 className="font-display text-3xl font-bold text-foreground">Lịch chiếu</h1>
+          <p className="text-sm text-muted-foreground">
             Cập nhật phim đang chiếu, sắp ra mắt và các series đang phát sóng
           </p>
         </div>
       </div>
 
       {/* Segmented control */}
-      <div className="glass inline-flex rounded-full border border-white/10 p-1">
+      <div className="glass inline-flex rounded-full border border-foreground/10 p-1">
         {TABS.map((t) => {
           const Icon = t.icon;
           const active = tab === t.key;
@@ -64,7 +64,7 @@ function SchedulePage() {
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                active ? "text-white" : "text-white/60 hover:text-white"
+                active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {active && (
@@ -92,7 +92,7 @@ function SchedulePage() {
           {isLoading ? (
             <RowSkeleton />
           ) : items.length === 0 ? (
-            <div className="py-16 text-center text-white/50">Chưa có dữ liệu</div>
+            <div className="py-16 text-center text-muted-foreground">Chưa có dữ liệu</div>
           ) : tab === "upcoming" ? (
             <UpcomingList items={items} />
           ) : (
@@ -117,7 +117,7 @@ function MovieRow({ items, variant }: { items: Movie[]; variant: TabKey }) {
           <Link
             to="/phim/$slug"
             params={{ slug: m.slug }}
-            className="group block overflow-hidden rounded-xl border border-white/5 bg-elevated transition hover:border-primary/40"
+            className="group block overflow-hidden rounded-xl border border-foreground/10 bg-elevated transition hover:border-primary/40"
           >
             <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
               <img
@@ -135,22 +135,22 @@ function MovieRow({ items, variant }: { items: Movie[]; variant: TabKey }) {
                   <div className="flex items-center gap-1 text-accent">
                     <Radio className="h-3 w-3" /> {m.air_day} · {m.air_time}
                   </div>
-                  <div className="text-white/70">Tập mới: {m.next_episode}</div>
+                  <div className="text-foreground/70">Tập mới: {m.next_episode}</div>
                 </div>
               )}
               {variant === "now_playing" && (
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/90 shadow-2xl shadow-primary/50">
-                    <PlayCircle className="h-6 w-6 text-white" />
+                    <PlayCircle className="h-6 w-6 text-foreground" />
                   </div>
                 </div>
               )}
             </div>
             <div className="p-2.5">
-              <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+              <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
                 {m.title}
               </div>
-              <div className="truncate text-xs text-white/50">
+              <div className="truncate text-xs text-muted-foreground">
                 {m.origin_name} · {m.year}
               </div>
             </div>
@@ -176,11 +176,11 @@ function UpcomingList({ items }: { items: Movie[] }) {
             <Link
               to="/phim/$slug"
               params={{ slug: m.slug }}
-              className="glass group flex items-center gap-4 rounded-2xl border border-white/5 p-3 transition hover:border-primary/40"
+              className="glass group flex items-center gap-4 rounded-2xl border border-foreground/10 p-3 transition hover:border-primary/40"
             >
               {date && (
                 <div className="flex w-16 flex-col items-center rounded-xl border border-primary/40 bg-primary/10 py-2 text-center">
-                  <div className="text-2xl font-bold text-white">{date.getDate()}</div>
+                  <div className="text-2xl font-bold text-foreground">{date.getDate()}</div>
                   <div className="text-[10px] uppercase tracking-wide text-primary">
                     Th{date.getMonth() + 1}
                   </div>
@@ -196,18 +196,18 @@ function UpcomingList({ items }: { items: Movie[] }) {
                 <div className="mb-0.5 text-xs uppercase tracking-widest text-accent">
                   Sắp chiếu
                 </div>
-                <div className="truncate font-display text-lg font-semibold text-white group-hover:text-primary">
+                <div className="truncate font-display text-lg font-semibold text-foreground group-hover:text-primary">
                   {m.title}
                 </div>
-                <div className="truncate text-sm text-white/60">
+                <div className="truncate text-sm text-muted-foreground">
                   {m.origin_name} · {m.year}
                 </div>
-                <div className="mt-1 flex items-center gap-1 text-xs text-white/50">
+                <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                   <Star className="h-3 w-3 fill-accent text-accent" />
                   {m.rating.toFixed(1)}
                 </div>
               </div>
-              <CalendarClock className="hidden h-5 w-5 flex-shrink-0 text-white/40 sm:block" />
+              <CalendarClock className="hidden h-5 w-5 flex-shrink-0 text-muted-foreground sm:block" />
             </Link>
           </motion.div>
         );
@@ -221,9 +221,9 @@ function RowSkeleton() {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-6">
       {Array.from({ length: 12 }).map((_, i) => (
         <div key={i} className="space-y-2">
-          <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/5" />
-          <div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-          <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+          <div className="aspect-[2/3] animate-pulse rounded-xl bg-surface-elevated" />
+          <div className="h-3 w-3/4 animate-pulse rounded bg-surface-elevated" />
+          <div className="h-3 w-1/3 animate-pulse rounded bg-surface-elevated" />
         </div>
       ))}
     </div>

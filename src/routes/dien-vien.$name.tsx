@@ -55,7 +55,7 @@ function ActorMoviesPage() {
     <div className="space-y-8">
       <Link
         to="/dien-vien"
-        className="inline-flex items-center gap-1.5 text-sm text-white/60 transition hover:text-white"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" /> Tìm diễn viên khác
       </Link>
@@ -63,33 +63,33 @@ function ActorMoviesPage() {
       {/* Actor header */}
       {query.isLoading && !actor ? (
         <div className="flex flex-col items-center gap-4 md:flex-row md:items-end">
-          <div className="h-36 w-36 animate-pulse rounded-full bg-white/10" />
+          <div className="h-36 w-36 animate-pulse rounded-full bg-foreground/10" />
           <div className="flex-1 space-y-3">
-            <div className="h-6 w-1/3 animate-pulse rounded bg-white/10" />
-            <div className="h-4 w-2/3 animate-pulse rounded bg-white/10" />
+            <div className="h-6 w-1/3 animate-pulse rounded bg-foreground/10" />
+            <div className="h-4 w-2/3 animate-pulse rounded bg-foreground/10" />
           </div>
         </div>
       ) : !actor ? (
         <div className="py-24 text-center">
-          <p className="text-white/60">Không tìm thấy diễn viên này.</p>
+          <p className="text-muted-foreground">Không tìm thấy diễn viên này.</p>
         </div>
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass flex flex-col items-center gap-6 rounded-3xl border border-white/10 p-6 text-center md:flex-row md:items-end md:text-left"
+          className="glass flex flex-col items-center gap-6 rounded-3xl border border-foreground/10 p-6 text-center md:flex-row md:items-end md:text-left"
         >
           <img
             src={thumbSrc(actor.avatar_url,{w:400})}
             alt={actor.name}
-            className="h-36 w-36 rounded-full bg-white/10 object-cover ring-4 ring-primary/30 shadow-2xl shadow-primary/20"
+            className="h-36 w-36 rounded-full bg-foreground/10 object-cover ring-4 ring-primary/30 shadow-2xl shadow-primary/20"
           />
           <div className="flex-1 space-y-2">
             <div className="text-xs uppercase tracking-widest text-primary">Diễn viên</div>
-            <h1 className="font-display text-3xl font-bold text-white md:text-4xl">
+            <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
               {actor.name}
             </h1>
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-white/60 md:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground md:justify-start">
               <span className="inline-flex items-center gap-1">
                 <Film className="h-4 w-4 text-accent" /> {actor.movie_count} tác phẩm
               </span>
@@ -102,7 +102,7 @@ function ActorMoviesPage() {
       {/* Films grid */}
       {actor && (
         <div className="space-y-5">
-          <h2 className="font-display text-xl font-semibold text-white">Danh sách phim</h2>
+          <h2 className="font-display text-xl font-semibold text-foreground">Danh sách phim</h2>
           {query.isLoading && !items.length ? (
             <GridSkeleton />
           ) : (
@@ -117,7 +117,7 @@ function ActorMoviesPage() {
                   <Link
                     to="/phim/$slug"
                     params={{ slug: m.slug }}
-                    className="group block overflow-hidden rounded-xl border border-white/5 bg-elevated transition hover:border-primary/40"
+                    className="group block overflow-hidden rounded-xl border border-foreground/10 bg-elevated transition hover:border-primary/40"
                   >
                     <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
                       <img
@@ -132,10 +132,10 @@ function ActorMoviesPage() {
                       </div>
                     </div>
                     <div className="p-2.5">
-                      <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+                      <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
                         {m.title}
                       </div>
-                      <div className="text-xs text-white/50">{m.year}</div>
+                      <div className="text-xs text-muted-foreground">{m.year}</div>
                     </div>
                   </Link>
                 </motion.div>
@@ -154,7 +154,7 @@ function ActorMoviesPage() {
                     className={`h-9 min-w-9 rounded-full px-3 text-sm transition ${
                       p === page
                         ? "bg-primary text-white"
-                        : "border border-white/10 text-white/70 hover:border-primary/50"
+                        : "border border-foreground/10 text-foreground/70 hover:border-primary/50"
                     }`}
                   >
                     {p}
@@ -174,9 +174,9 @@ function GridSkeleton() {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-6">
       {Array.from({ length: 12 }).map((_, i) => (
         <div key={i} className="space-y-2">
-          <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/5" />
-          <div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-          <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+          <div className="aspect-[2/3] animate-pulse rounded-xl bg-surface-elevated" />
+          <div className="h-3 w-3/4 animate-pulse rounded bg-surface-elevated" />
+          <div className="h-3 w-1/3 animate-pulse rounded bg-surface-elevated" />
         </div>
       ))}
     </div>

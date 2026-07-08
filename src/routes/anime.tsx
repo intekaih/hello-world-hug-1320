@@ -17,10 +17,10 @@ export const Route = createFileRoute("/anime")({
 function AnimePage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <div className="glass rounded-3xl border border-white/5 p-8 text-center">
+      <div className="glass rounded-3xl border border-foreground/10 p-8 text-center">
         <Sparkles className="mx-auto mb-3 h-10 w-10 text-primary" />
-        <h1 className="font-display text-3xl font-bold text-white">Anime</h1>
-        <p className="mx-auto mt-2 max-w-xl text-white/60">
+        <h1 className="font-display text-3xl font-bold text-foreground">Anime</h1>
+        <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
           Kho anime Vietsub & thuyết minh được cập nhật liên tục. Chọn thể loại bên dưới để bắt đầu.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -34,7 +34,7 @@ function AnimePage() {
           <Link
             to="/browse/$type"
             params={{ type: "phim-moi" }}
-            className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-white/80 hover:border-primary/40 hover:text-white"
+            className="rounded-full border border-foreground/10 bg-surface-elevated px-5 py-2 text-sm text-foreground/80 hover:border-primary/40 hover:text-foreground"
           >
             Phim mới
           </Link>

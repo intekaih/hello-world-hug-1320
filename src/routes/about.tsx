@@ -19,8 +19,8 @@ function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header className="text-center">
-        <h1 className="font-display text-4xl font-bold text-white">Về movieCC</h1>
-        <p className="mt-3 text-white/70">
+        <h1 className="font-display text-4xl font-bold text-foreground">Về movieCC</h1>
+        <p className="mt-3 text-foreground/70">
           Nền tảng xem phim online miễn phí, hỗ trợ đa nền tảng — desktop, mobile web và Android.
         </p>
       </header>
@@ -32,10 +32,10 @@ function AboutPage() {
           { icon: Shield, title: "Bảo mật", desc: "Session-based auth, CSRF, không quảng cáo malware." },
           { icon: Heart, title: "Miễn phí", desc: "Toàn bộ nội dung miễn phí — chỉ cần đăng ký." },
         ].map((f) => (
-          <div key={f.title} className="glass rounded-2xl border border-white/5 p-5">
+          <div key={f.title} className="glass rounded-2xl border border-foreground/10 p-5">
             <f.icon className="mb-3 h-6 w-6 text-primary" />
-            <h3 className="font-semibold text-white">{f.title}</h3>
-            <p className="mt-1 text-sm text-white/60">{f.desc}</p>
+            <h3 className="font-semibold text-foreground">{f.title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
           </div>
         ))}
       </div>

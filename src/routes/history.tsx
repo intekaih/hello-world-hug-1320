@@ -91,7 +91,7 @@ function HistoryPage() {
               onClick={() => {
                 if (confirm("Xóa toàn bộ lịch sử xem?")) clearAll.mutate();
               }}
-              className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-primary/50 hover:text-white"
+              className="flex items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 py-2 text-sm text-foreground/80 transition hover:border-primary/50 hover:text-foreground"
             >
               <Trash2 className="h-4 w-4" /> Xóa tất cả
             </button>
@@ -143,7 +143,7 @@ function HistoryCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.4) }}
-      className="group relative overflow-hidden rounded-xl border border-white/5 bg-elevated"
+      className="group relative overflow-hidden rounded-xl border border-foreground/10 bg-elevated"
     >
       <Link
         to="/xem/$slug/tap-{$episode}"
@@ -164,7 +164,7 @@ function HistoryCard({
 
           <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/90 shadow-2xl shadow-primary/50">
-              <Play className="ml-0.5 h-6 w-6 fill-white text-white" />
+              <Play className="ml-0.5 h-6 w-6 fill-white text-foreground" />
             </div>
           </div>
 
@@ -176,11 +176,11 @@ function HistoryCard({
 
           {/* Progress bar */}
           <div className="absolute inset-x-0 bottom-0">
-            <div className="mx-2 mb-2 flex items-center justify-between text-[10px] text-white/70">
+            <div className="mx-2 mb-2 flex items-center justify-between text-[10px] text-foreground/70">
               <span>{Math.round(progress * 100)}%</span>
               <span>{remainingMin} phút còn lại</span>
             </div>
-            <div className="h-1 w-full bg-white/10">
+            <div className="h-1 w-full bg-foreground/10">
               <div
                 className="h-full bg-gradient-to-r from-primary to-accent"
                 style={{ width: `${progress * 100}%` }}
@@ -203,8 +203,8 @@ function HistoryCard({
       </button>
 
       <div className="p-2.5">
-        <div className="truncate text-sm font-medium text-white">{title}</div>
-        <div className="truncate text-xs text-white/50">{item.origin_name ?? ""}</div>
+        <div className="truncate text-sm font-medium text-foreground">{title}</div>
+        <div className="truncate text-xs text-muted-foreground">{item.origin_name ?? ""}</div>
       </div>
     </motion.div>
   );

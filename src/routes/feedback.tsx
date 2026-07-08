@@ -38,13 +38,13 @@ function FeedbackPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader title="Phản hồi" icon={<MessageSquare className="h-5 w-5" />} />
 
-      <div className="glass space-y-4 rounded-2xl border border-white/5 p-6">
+      <div className="glass space-y-4 rounded-2xl border border-foreground/10 p-6">
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">Loại phản hồi</span>
+          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted-foreground">Loại phản hồi</span>
           <select
             value={type}
             onChange={(e) => setType(e.target.value as typeof type)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white"
+            className="w-full rounded-lg border border-foreground/10 bg-surface-elevated px-3 py-2 text-foreground"
           >
             <option value="bug">Báo lỗi</option>
             <option value="feature">Đề xuất tính năng</option>
@@ -54,23 +54,23 @@ function FeedbackPage() {
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">Email (tuỳ chọn)</span>
+          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted-foreground">Email (tuỳ chọn)</span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white"
+            className="w-full rounded-lg border border-foreground/10 bg-surface-elevated px-3 py-2 text-foreground"
             placeholder="you@example.com"
           />
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">Nội dung</span>
+          <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted-foreground">Nội dung</span>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={6}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white"
+            className="w-full rounded-lg border border-foreground/10 bg-surface-elevated px-3 py-2 text-foreground"
             placeholder="Mô tả chi tiết..."
           />
         </label>

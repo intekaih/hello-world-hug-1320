@@ -233,7 +233,7 @@ function HeroSection({ movie }: { movie: Movie }) {
               <Star className="h-3 w-3 fill-current" />
               {movie.rating.toFixed(1)}
             </span>
-            <span className="rounded border border-white/25 px-1.5 py-0.5 text-[10px] font-semibold text-white/90">
+            <span className="rounded border border-white/25 px-1.5 py-0.5 text-[10px] font-semibold text-foreground/90">
               {movie.age_rating}
             </span>
             <span className="rounded bg-primary/20 px-2 py-0.5 text-xs font-semibold text-primary">
@@ -330,7 +330,7 @@ function ActionBar({ movie }: { movie: Movie }) {
           href={movie.trailer_url}
           target="_blank"
           rel="noreferrer"
-          className="glass inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-white/10"
+          className="glass inline-flex items-center gap-2 rounded-full border border-foreground/10 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-foreground/10"
         >
           <Film className="h-4 w-4" /> Trailer
         </a>
@@ -356,7 +356,7 @@ function ActionButton({
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-sm font-medium text-foreground-muted transition hover:bg-white/5 hover:text-foreground",
+        "inline-flex items-center gap-2 rounded-full border border-foreground/10 px-4 py-2.5 text-sm font-medium text-foreground-muted transition hover:bg-surface-elevated hover:text-foreground",
         active && activeClass,
       )}
     >
@@ -408,7 +408,7 @@ function Overview({ movie }: { movie: Movie }) {
         <button
           onClick={onToggle}
           disabled={loading}
-          className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium text-foreground-muted transition hover:bg-white/5 hover:text-foreground disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 px-3 py-1.5 text-xs font-medium text-foreground-muted transition hover:bg-surface-elevated hover:text-foreground disabled:opacity-50"
         >
           <Languages className="h-3.5 w-3.5" />
           {showVi ? "Original" : loading ? "Đang dịch…" : "Dịch tiếng Việt"}
@@ -536,7 +536,7 @@ function SeriesPartsNav({
                 "shrink-0 rounded-xl border px-4 py-3 text-sm font-medium transition",
                 active
                   ? "border-primary bg-primary/15 text-primary"
-                  : "border-white/10 text-foreground-muted hover:bg-white/5 hover:text-foreground",
+                  : "border-foreground/10 text-foreground-muted hover:bg-surface-elevated hover:text-foreground",
               )}
             >
               <div className="font-semibold">{p.label}</div>
