@@ -16,6 +16,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LichChieuRouteImport } from './routes/lich-chieu'
+import { Route as KhamPhaRouteImport } from './routes/kham-pha'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FeedbackRouteImport } from './routes/feedback'
@@ -36,6 +37,7 @@ import { Route as ApiScheduleRouteImport } from './routes/api/schedule'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
+import { Route as ApiDiscoverRouteImport } from './routes/api/discover'
 import { Route as ApiBrowseRouteImport } from './routes/api/browse'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
@@ -88,6 +90,11 @@ const LoginRoute = LoginRouteImport.update({
 const LichChieuRoute = LichChieuRouteImport.update({
   id: '/lich-chieu',
   path: '/lich-chieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KhamPhaRoute = KhamPhaRouteImport.update({
+  id: '/kham-pha',
+  path: '/kham-pha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -188,6 +195,11 @@ const ApiHistoryRoute = ApiHistoryRouteImport.update({
 const ApiFavoritesRoute = ApiFavoritesRouteImport.update({
   id: '/api/favorites',
   path: '/api/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDiscoverRoute = ApiDiscoverRouteImport.update({
+  id: '/api/discover',
+  path: '/api/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiBrowseRoute = ApiBrowseRouteImport.update({
@@ -293,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -301,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/browse': typeof ApiBrowseRoute
+  '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -340,6 +354,7 @@ export interface FileRoutesByTo {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -348,6 +363,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/browse': typeof ApiBrowseRoute
+  '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -388,6 +404,7 @@ export interface FileRoutesById {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -396,6 +413,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/browse': typeof ApiBrowseRoute
+  '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
@@ -437,6 +455,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -445,6 +464,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/browse'
+    | '/api/discover'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
@@ -484,6 +504,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -492,6 +513,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/browse'
+    | '/api/discover'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
@@ -531,6 +553,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -539,6 +562,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/browse'
+    | '/api/discover'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
@@ -579,6 +603,7 @@ export interface RootRouteChildren {
   FeedbackRoute: typeof FeedbackRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  KhamPhaRoute: typeof KhamPhaRoute
   LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -587,6 +612,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
   ApiBrowseRoute: typeof ApiBrowseRoute
+  ApiDiscoverRoute: typeof ApiDiscoverRoute
   ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
@@ -660,6 +686,13 @@ declare module '@tanstack/react-router' {
       path: '/lich-chieu'
       fullPath: '/lich-chieu'
       preLoaderRoute: typeof LichChieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kham-pha': {
+      id: '/kham-pha'
+      path: '/kham-pha'
+      fullPath: '/kham-pha'
+      preLoaderRoute: typeof KhamPhaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -800,6 +833,13 @@ declare module '@tanstack/react-router' {
       path: '/api/favorites'
       fullPath: '/api/favorites'
       preLoaderRoute: typeof ApiFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/discover': {
+      id: '/api/discover'
+      path: '/api/discover'
+      fullPath: '/api/discover'
+      preLoaderRoute: typeof ApiDiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/browse': {
@@ -1005,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeedbackRoute: FeedbackRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  KhamPhaRoute: KhamPhaRoute,
   LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
@@ -1013,6 +1054,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
   ApiBrowseRoute: ApiBrowseRoute,
+  ApiDiscoverRoute: ApiDiscoverRoute,
   ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
@@ -1039,13 +1081,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

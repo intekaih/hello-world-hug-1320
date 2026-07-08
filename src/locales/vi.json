@@ -7,8 +7,10 @@
   },
   "nav": {
     "home": "Trang chủ",
+    "discover": "Khám phá",
     "schedule": "Lịch chiếu",
     "browse": "Khám phá",
+    "library": "Thư viện",
     "history": "Lịch sử",
     "favorites": "Yêu thích",
     "watchlist": "Xem sau",
