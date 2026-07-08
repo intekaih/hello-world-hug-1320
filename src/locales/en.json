@@ -274,5 +274,93 @@
       "playNow": "Play now",
       "cancel": "Cancel"
     }
+  },
+  "search": {
+    "title": "Search — MovieCC",
+    "titleWithQuery": "Search: {{q}} — MovieCC",
+    "description": "Search movies, series, anime on MovieCC. Free HD Vietsub library.",
+    "heroEyebrow": "Discovery portal",
+    "heroTitle": "What world do you want to step into?",
+    "heroSubtitle": "Search movies, actors, genres — or a feeling.",
+    "placeholder": "Type a title, an actor, or a mood…",
+    "placeholderShort": "Search…",
+    "clear": "Clear search",
+    "submit": "Search",
+    "notSureCta": "Not sure what to watch? Explore today's trends.",
+    "recent": "Recent searches",
+    "clearRecent": "Clear all",
+    "trending": "Trending searches",
+    "moodPicks": "Pick a mood",
+    "genreUniverse": "Genre universe",
+    "topCountries": "Top countries",
+    "quickFilters": "Quick filters",
+    "hiddenGems": "Hidden gems",
+    "recentlyUpdated": "Recently updated",
+    "suggestions": "Suggestions",
+    "results": "Results",
+    "resultsFor": "Results for “{{q}}”",
+    "resultsCount": "{{n}} matches",
+    "resultsCountSr": "Found {{n}} results",
+    "noResults": "No matches found",
+    "noResultsHint": "Try a different keyword, remove filters, or explore the trends below.",
+    "loadMore": "Load more",
+    "loadingMore": "Loading…",
+    "endOfResults": "That's everything we found",
+    "loading": "Searching the library…",
+    "filters": {
+      "title": "Filters",
+      "clear": "Clear all",
+      "type": "Type",
+      "genre": "Genre",
+      "year": "Year",
+      "country": "Country",
+      "quality": "Quality",
+      "language": "Language",
+      "all": "All",
+      "activeCount": "{{n}} active",
+      "apply": "Show results"
+    },
+    "moods": {
+      "cozy": "Cozy night in",
+      "adrenaline": "Adrenaline rush",
+      "mindBender": "Mind-bender",
+      "heartfelt": "Heartfelt",
+      "darkTwisted": "Dark & twisted",
+      "epicJourney": "Epic journey"
+    },
+    "typeLabels": {
+      "phim-bo": "Series",
+      "phim-le": "Movies",
+      "hoat-hinh": "Anime",
+      "tv-shows": "TV Shows"
+    }
+  },
+  "browse": {
+    "titleSuffix": "MovieCC",
+    "description": "Browse the full catalog. Filter by genre, country, year.",
+    "featured": "Featured picks",
+    "featuredEyebrow": "Editor's picks",
+    "resultsCount": "{{n}} movies",
+    "loading": "Loading…",
+    "empty": "No movies match your filters",
+    "emptyHint": "Try loosening a filter or explore another category.",
+    "sortBy": "Sort by",
+    "openFilters": "Filters",
+    "closeFilters": "Close filters",
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "rating": "Highest rated",
+      "az": "A → Z"
+    },
+    "filters": {
+      "title": "Filters",
+      "year": "Year",
+      "genre": "Genre",
+      "country": "Country",
+      "all": "All",
+      "clear": "Clear filters",
+      "apply": "Apply"
+    }
   }
 }

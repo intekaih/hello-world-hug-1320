@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { POOL } from "./suggest";
+import { browsePool, slugify } from "./browse";
 
-const IMG = (path: string, size = "w500") =>
-  `https://image.tmdb.org/t/p/${size}${path}`;
+const PAGE_SIZE = 24;
 
-const PAGE_SIZE = 20;
-
-// Expand pool with variants to simulate many results
+// Expand pool with variants to simulate many results (deterministic).
 const EXPANDED = Array.from({ length: 4 }).flatMap((_, i) =>
-  POOL.map((m) => ({ ...m, id: m.id + i * 1000, title: i === 0 ? m.title : `${m.title} ${i + 1}` })),
+  browsePool.map((m) => ({
+    ...m,
+    id: m.id + i * 10000,
+    title: i === 0 ? m.title : `${m.title} ${i + 1}`,
+    slug: i === 0 ? m.slug : `${m.slug}-${i + 1}`,
+  })),
 );
 
 export const Route = createFileRoute("/api/search")({
@@ -18,25 +20,48 @@ export const Route = createFileRoute("/api/search")({
         const url = new URL(request.url);
         const q = (url.searchParams.get("q") ?? "").trim().toLowerCase();
         const page = Math.max(1, Number(url.searchParams.get("page") ?? "1") || 1);
-        // Simulate latency for skeleton demo
-        await new Promise((r) => setTimeout(r, 250));
-        if (!q) {
+        const type = url.searchParams.get("type") ?? "";
+        const category = url.searchParams.get("category") ?? "";
+        const country = url.searchParams.get("country") ?? "";
+        const year = url.searchParams.get("year") ?? "";
+        const quality = url.searchParams.get("quality") ?? "";
+        const language = url.searchParams.get("language") ?? "";
+
+        // Small latency so skeleton shows
+        await new Promise((r) => setTimeout(r, 220));
+
+        if (!q && !type && !category && !country && !year && !quality && !language) {
           return Response.json({ items: [], page, totalPages: 0, total: 0 });
         }
-        const matches = EXPANDED.filter((m) => m.title.toLowerCase().includes(q));
-        const total = matches.length;
+
+        let items = EXPANDED.slice();
+        if (q) items = items.filter((m) => m.title.toLowerCase().includes(q));
+        if (type) items = items.filter((m) => m.type === type);
+        if (category)
+          items = items.filter((m) => m.category.some((c) => slugify(c) === category));
+        if (country)
+          items = items.filter((m) => m.country.some((c) => slugify(c) === country));
+        if (year) items = items.filter((m) => String(m.year) === year);
+        if (quality) items = items.filter((m) => m.quality === quality);
+        if (language) items = items.filter((m) => m.language === language);
+
+        const total = items.length;
         const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
         const start = (page - 1) * PAGE_SIZE;
-        const items = matches.slice(start, start + PAGE_SIZE).map((m) => ({
+        const paged = items.slice(start, start + PAGE_SIZE).map((m) => ({
           id: m.id,
           title: m.title,
+          slug: m.slug,
           year: m.year,
+          rating: m.rating,
+          poster_url: m.poster_url,
           type: m.type,
-          rating: 7.5 + (m.id % 25) / 10,
-          poster_url: IMG(m.poster),
-          slug: m.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+          quality: m.quality,
+          language: m.language,
+          category: m.category,
+          country: m.country,
         }));
-        return Response.json({ items, page, totalPages, total });
+        return Response.json({ items: paged, page, totalPages, total });
       },
     },
   },
