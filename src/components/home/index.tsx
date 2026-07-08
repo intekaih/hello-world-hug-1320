@@ -351,11 +351,11 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
         className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
       >
         {movies.slice(0, 10).map((m, i) => (
-          <motion.a
+          <Link
             key={m.id}
-            href="#"
-            whileHover={{ y: -4 }}
-            className="group relative w-[160px] shrink-0 snap-start sm:w-[180px] lg:w-[200px]"
+            to="/phim/$slug"
+            params={{ slug: m.slug }}
+            className="group relative w-[160px] shrink-0 snap-start transition-transform duration-200 hover:-translate-y-1 sm:w-[180px] lg:w-[200px]"
           >
             <span
               aria-hidden
@@ -377,7 +377,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
             </div>
-          </motion.a>
+          </Link>
         ))}
       </div>
     </div>
