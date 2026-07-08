@@ -42,10 +42,55 @@ export function useUnreadCount() {
   return useQuery<{ count: number }>({
     queryKey: ["notifications", "unread-count"],
     queryFn: async () => (await fetch("/api/notifications/unread-count")).json(),
-    refetchInterval: 60_000,
+    refetchInterval: () => (typeof document !== "undefined" && document.hidden ? false : 60_000),
     refetchIntervalInBackground: false,
+    refetchOnWindowFocus: true,
   });
 }
+
+/**
+ * Watches the unread-count query and fires a toast + returns a "bump" pulse
+ * whenever the count increases (new notifications arrived while polling).
+ */
+function useNotificationAlerts(count: number, items: Notification[]) {
+  const prevRef = useRef<number | null>(null);
+  const navigate = useNavigate();
+  const [bump, setBump] = useState(0);
+
+  useEffect(() => {
+    const prev = prevRef.current;
+    prevRef.current = count;
+    if (prev == null) return; // first read — no baseline yet
+    if (count > prev) {
+      setBump((b) => b + 1);
+      const latest = items.find((n) => !n.read);
+      const title = latest ? `${latest.movie_name}` : "Bạn có thông báo mới";
+      const description = latest?.message ?? `${count} thông báo chưa đọc`;
+      toast(title, {
+        description,
+        action: latest
+          ? {
+              label: "Xem",
+              onClick: () => {
+                if (latest.episode) {
+                  navigate({
+                    to: "/xem/$slug/tap-{$episode}",
+                    params: { slug: latest.movie_slug, episode: latest.episode },
+                    search: { t: 0 },
+                  });
+                } else {
+                  navigate({ to: "/phim/$slug", params: { slug: latest.movie_slug } });
+                }
+              },
+            }
+          : undefined,
+      });
+    }
+  }, [count, items, navigate]);
+
+  return bump;
+}
+
 
 export function useMarkRead() {
   const qc = useQueryClient();
