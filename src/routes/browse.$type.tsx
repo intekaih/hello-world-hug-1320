@@ -1,5 +1,5 @@
 import { thumbSrc } from "@/utils/thumbSrc";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
@@ -11,7 +11,6 @@ const TYPE_LABELS: Record<string, string> = {
   "phim-bo": "Phim bộ",
   "phim-le": "Phim lẻ",
   "hoat-hinh": "Anime · Hoạt hình",
-  "phim-moi-cap-nhat": "Phim mới cập nhật",
 };
 
 const CATEGORIES = [
@@ -45,6 +44,11 @@ type BrowseMovie = {
 
 export const Route = createFileRoute("/browse/$type")({
   validateSearch: zodValidator(searchSchema),
+  beforeLoad: ({ params }) => {
+    if (params.type === "phim-moi-cap-nhat") {
+      throw redirect({ to: "/lich-chieu" });
+    }
+  },
   head: ({ params }) => ({
     meta: [
       { title: `${TYPE_LABELS[params.type] ?? decodeURIComponent(params.type)} — movieCC` },
