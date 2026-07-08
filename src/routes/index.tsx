@@ -76,7 +76,9 @@ function Home() {
       {/* Global cinematic backdrop — morphs colour as scenes come into focus. */}
       <SceneAtmosphere />
 
-      <Stagger>
+      <div className="relative z-10">
+        <Stagger>
+
         {/* SCENE 01 — Opening — cold cinematic blue */}
         <StaggerItem>
           <div data-scene-mood="hero">
