@@ -18,6 +18,7 @@ import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
+import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 
@@ -66,6 +67,12 @@ const ApiHistoryRoute = ApiHistoryRouteImport.update({
   path: '/api/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const XemSlugTapChar123episodeChar125Route =
+  XemSlugTapChar123episodeChar125RouteImport.update({
+    id: '/xem/$slug/tap-{$episode}',
+    path: '/xem/$slug/tap-{$episode}',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
@@ -88,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +109,7 @@ export interface FileRoutesByTo {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRoutesById {
@@ -115,6 +124,7 @@ export interface FileRoutesById {
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/movies/home'
+    | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/movies/home'
+    | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
   id:
     | '__root__'
@@ -156,6 +168,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/history'
     | '/api/movies/home'
+    | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +183,7 @@ export interface RootRouteChildren {
   WatchlistRoute: typeof WatchlistRoute
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
+  XemSlugTapChar123episodeChar125Route: typeof XemSlugTapChar123episodeChar125Route
 }
 
 declare module '@tanstack/react-router' {
@@ -237,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/xem/$slug/tap-{$episode}': {
+      id: '/xem/$slug/tap-{$episode}'
+      path: '/xem/$slug/tap-{$episode}'
+      fullPath: '/xem/$slug/tap-{$episode}'
+      preLoaderRoute: typeof XemSlugTapChar123episodeChar125RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/movies/home': {
       id: '/api/movies/home'
       path: '/api/movies/home'
@@ -277,6 +298,7 @@ const rootRouteChildren: RootRouteChildren = {
   WatchlistRoute: WatchlistRoute,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
+  XemSlugTapChar123episodeChar125Route: XemSlugTapChar123episodeChar125Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
