@@ -243,7 +243,7 @@ function SearchPage() {
             isFetching={resultsQuery.isFetching}
             canLoadMore={canLoadMore}
             onLoadMore={() =>
-              navigate({ search: (prev) => ({ ...prev, page: (prev.page ?? 1) + 1 }) })
+              navigate({ search: (prev: { q: string; page: number }) => ({ ...prev, page: (prev.page ?? 1) + 1 }) })
             }
           />
         )}

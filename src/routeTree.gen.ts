@@ -19,6 +19,8 @@ import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PhimSlugRouteImport } from './routes/phim.$slug'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
+import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
+import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
@@ -76,6 +78,16 @@ const ApiTranslateRoute = ApiTranslateRouteImport.update({
   path: '/api/translate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSuggestRoute = ApiSuggestRouteImport.update({
+  id: '/api/suggest',
+  path: '/api/suggest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSearchRoute = ApiSearchRouteImport.update({
+  id: '/api/search',
+  path: '/api/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiHistoryRoute = ApiHistoryRouteImport.update({
   id: '/api/history',
   path: '/api/history',
@@ -118,6 +130,8 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/search': typeof ApiSearchRoute
+  '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
@@ -136,6 +150,8 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/search': typeof ApiSearchRoute
+  '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
@@ -155,6 +171,8 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/search': typeof ApiSearchRoute
+  '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/phim/$slug': typeof PhimSlugRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
@@ -175,6 +193,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/search'
+    | '/api/suggest'
     | '/api/translate'
     | '/phim/$slug'
     | '/api/movies/$slug'
@@ -193,6 +213,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/search'
+    | '/api/suggest'
     | '/api/translate'
     | '/phim/$slug'
     | '/api/movies/$slug'
@@ -211,6 +233,8 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/search'
+    | '/api/suggest'
     | '/api/translate'
     | '/phim/$slug'
     | '/api/movies/$slug'
@@ -230,6 +254,8 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
+  ApiSearchRoute: typeof ApiSearchRoute
+  ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   PhimSlugRoute: typeof PhimSlugRoute
   ApiMoviesSlugRoute: typeof ApiMoviesSlugRouteWithChildren
@@ -307,6 +333,20 @@ declare module '@tanstack/react-router' {
       path: '/api/translate'
       fullPath: '/api/translate'
       preLoaderRoute: typeof ApiTranslateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/suggest': {
+      id: '/api/suggest'
+      path: '/api/suggest'
+      fullPath: '/api/suggest'
+      preLoaderRoute: typeof ApiSuggestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/search': {
+      id: '/api/search'
+      path: '/api/search'
+      fullPath: '/api/search'
+      preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/history': {
@@ -388,6 +428,8 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
+  ApiSearchRoute: ApiSearchRoute,
+  ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   PhimSlugRoute: PhimSlugRoute,
   ApiMoviesSlugRoute: ApiMoviesSlugRouteWithChildren,
