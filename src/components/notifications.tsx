@@ -270,8 +270,9 @@ export function NotificationBell() {
                         <img
                           src={thumbSrc(n.movie_thumb,{w:200})}
                           alt=""
-                          className="h-14 w-10 rounded-md object-cover"
+                          className="h-14 w-10 rounded-md bg-white/10 object-cover"
                           loading="lazy"
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg"; }}
                         />
                         {!n.read && (
                           <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-black" />
@@ -344,8 +345,9 @@ export function NotificationRow({
           <img
             src={thumbSrc(n.movie_thumb,{w:200})}
             alt=""
-            className="h-24 w-16 rounded-lg object-cover shadow-md sm:h-28 sm:w-20"
+            className="h-24 w-16 rounded-lg bg-white/10 object-cover shadow-md sm:h-28 sm:w-20"
             loading="lazy"
+            onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg"; }}
           />
           {!n.read && (
             <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-primary ring-2 ring-bg" />
