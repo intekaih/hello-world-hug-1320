@@ -136,17 +136,8 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             variants={{ hidden: { opacity: 0, y: 24, filter: "blur(14px)" }, show: { opacity: 1, y: 0, filter: "blur(0px)" } }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            {movie.logo_url ? (
-              <img
-                src={thumbSrc(movie.logo_url, { w: 640 })}
-                alt={movie.title}
-                className="max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)] sm:max-h-36"
-              />
-            ) : (
-              <h1 className="text-cinematic text-4xl text-foreground sm:text-6xl lg:text-7xl">
-                {movie.title}
-              </h1>
-            )}
+            <HeroTitle logo={movie.logo_url} title={movie.title} />
+
           </motion.div>
 
           {/* Meta rail */}
