@@ -387,10 +387,10 @@ export function MovieRow({
       )}
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {movies.map((m) => (
-          <MoviePoster key={m.id} movie={m} />
+          <ExperienceCard key={m.id} movie={m} />
         ))}
       </div>
     </div>
