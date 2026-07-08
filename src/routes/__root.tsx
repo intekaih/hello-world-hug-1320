@@ -134,10 +134,16 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    // Ensure a CSRF token cookie exists before any mutation fires.
+    import("@/hooks/useCsrfToken").then((m) => m.ensureCsrfToken());
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AppShell />
     </QueryClientProvider>
   );
 }
+
 
