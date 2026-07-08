@@ -24,11 +24,6 @@ const loginSchema = z.object({
     .max(128, "Mật khẩu quá dài"),
   remember: z.boolean().default(false),
 });
-    .string()
-    .min(6, "Mật khẩu tối thiểu 6 ký tự")
-    .max(128, "Mật khẩu quá dài"),
-  remember: z.boolean().optional().default(false),
-});
 
 type LoginForm = z.infer<typeof loginSchema>;
 
