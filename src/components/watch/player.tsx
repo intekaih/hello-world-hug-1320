@@ -460,7 +460,7 @@ export function PlayerContainer({
             e.stopPropagation();
             onChangeEpisode(epNum - 1);
           }}
-          className="glass absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 text-white hover:bg-white/10"
+          className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/15 bg-black/40 p-3 text-white backdrop-blur-md transition hover:scale-110 hover:border-primary/50 hover:bg-black/60"
           aria-label="Previous episode"
         >
           <ChevronLeft className="h-6 w-6" />
@@ -472,7 +472,7 @@ export function PlayerContainer({
             e.stopPropagation();
             onChangeEpisode(epNum + 1);
           }}
-          className="glass absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 text-white hover:bg-white/10"
+          className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/15 bg-black/40 p-3 text-white backdrop-blur-md transition hover:scale-110 hover:border-primary/50 hover:bg-black/60"
           aria-label="Next episode"
         >
           <ChevronRight className="h-6 w-6" />
