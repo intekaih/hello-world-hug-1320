@@ -14,8 +14,12 @@ import {
 } from "@/components/home";
 import { CinematicHero } from "@/components/home/cinematic-hero";
 import { CinematicScene } from "@/components/home/cinematic-scene";
+import { ComingSoonScene } from "@/components/home/coming-soon-scene";
 import { ContinueWatchingImmersive } from "@/components/home/continue-watching-immersive";
+import { EditorialScene } from "@/components/home/editorial-scene";
 import { GenreCosmos } from "@/components/home/genre-cosmos";
+import { MysteryScene } from "@/components/home/mystery-scene";
+import { SceneAtmosphere } from "@/components/home/scene-atmosphere";
 import { SceneSection } from "@/components/home/scene-section";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
@@ -68,115 +72,145 @@ function Home() {
   }
 
   return (
-    <Stagger>
-      {/* SCENE 01 — Cinematic opening */}
-      <StaggerItem>
-        <CinematicHero movies={data.heroMovies} />
-      </StaggerItem>
+    <>
+      {/* Global cinematic backdrop — morphs colour as scenes come into focus. */}
+      <SceneAtmosphere />
 
-      <StaggerItem>
-        <CategoryChips />
-      </StaggerItem>
+      <div className="relative z-10">
+        <Stagger>
 
-      {/* SCENE 02 — Continue Watching (indigo mood, personal) */}
-      {isLoggedIn && data.continueWatching.length > 0 && (
+        {/* SCENE 01 — Opening — cold cinematic blue */}
         <StaggerItem>
-          <SceneSection mood="indigo" intensity={0.9}>
-            <ContinueWatchingImmersive items={data.continueWatching} />
+          <div data-scene-mood="hero">
+            <CinematicHero movies={data.heroMovies} />
+          </div>
+        </StaggerItem>
+
+        <StaggerItem>
+          <CategoryChips />
+        </StaggerItem>
+
+        {/* SCENE 02 — Continue Watching — indigo, comfort, drift entrance */}
+        {isLoggedIn && data.continueWatching.length > 0 && (
+          <StaggerItem>
+            <SceneSection mood="indigo" intensity={0.9} entrance="drift" particles="dust">
+              <ContinueWatchingImmersive items={data.continueWatching} />
+            </SceneSection>
+          </StaggerItem>
+        )}
+
+        {/* SCENE 03 — Trending Today — ember, epic, iris entrance, huge numbers */}
+        <StaggerItem>
+          <SceneSection
+            mood="ember"
+            eyebrow="🔥 Trending Today"
+            entrance="iris"
+            particles="sparks"
+          >
+            <Top10Section movies={data.top10Movies} />
           </SceneSection>
         </StaggerItem>
-      )}
 
-
-      {/* SCENE 03 — Trending Today (ember, hot) */}
-      <StaggerItem>
-        <SceneSection mood="ember" eyebrow="🔥 Trending Today">
-          <Top10Section movies={data.top10Movies} />
-        </SceneSection>
-      </StaggerItem>
-
-      {/* SCENE 04 — Editor's Pick (amber, curated) */}
-      <StaggerItem>
-        <SceneSection
-          mood="amber"
-          eyebrow="✦ Editor's Pick"
-          title="Chọn lọc bởi biên tập"
-          subtitle="Những series đang được cả biên tập viên và người xem gọi tên trong tuần này."
-        >
-          <MovieRow movies={data.hotSeriesMovies} />
-        </SceneSection>
-      </StaggerItem>
-
-      {/* SCENE 05 — Feature Presentation (cinematic spotlight) */}
-      {data.heroMovies[1] && (
+        {/* SCENE 04 — Editor's Pick — amber, magazine editorial, focus entrance */}
         <StaggerItem>
-          <CinematicScene
-            movie={data.heroMovies[1]}
-            eyebrow="Feature Presentation"
-            kicker="In spotlight this week"
-          />
+          <SceneSection
+            mood="amber"
+            eyebrow="✦ Editor's Pick"
+            title="Chọn lọc bởi biên tập"
+            subtitle="Những series đang được cả biên tập viên và người xem gọi tên trong tuần này."
+            entrance="focus"
+          >
+            <EditorialScene movies={data.hotSeriesMovies} />
+          </SceneSection>
         </StaggerItem>
-      )}
 
-      {/* SCENE 06 — Because You Watched (violet, personal) */}
-      <StaggerItem>
-        <SceneSection
-          mood="violet"
-          eyebrow="✧ Because you watched"
-          title="Dành riêng cho bạn"
-          subtitle="Gợi ý dựa trên tâm trạng gần đây và những gì bạn đã lưu."
-        >
-          <MovieRow movies={data.newMovies} />
-        </SceneSection>
-      </StaggerItem>
+        {/* SCENE 05 — Feature Presentation — cinematic spotlight (own layout) */}
+        {data.heroMovies[1] && (
+          <StaggerItem>
+            <div data-scene-mood="gold">
+              <CinematicScene
+                movie={data.heroMovies[1]}
+                eyebrow="Feature Presentation"
+                kicker="In spotlight this week"
+              />
+            </div>
+          </StaggerItem>
+        )}
 
-      {/* SCENE 07 — Cinematic Collection (cyan, cool prestige) */}
-      <StaggerItem>
-        <SceneSection
-          mood="cyan"
-          eyebrow="◆ Cinematic Collection"
-          title="Đêm chiếu tại rạp nhà"
-          subtitle="Những bộ phim đáng xem trên màn hình lớn nhất trong nhà bạn."
-        >
-          <GenreCosmos />
-        </SceneSection>
-      </StaggerItem>
+        {/* SCENE 06 — Because You Watched — violet, sweep camera pan */}
+        <StaggerItem>
+          <SceneSection
+            mood="violet"
+            eyebrow="✧ Because you watched"
+            title="Dành riêng cho bạn"
+            subtitle="Gợi ý dựa trên tâm trạng gần đây và những gì bạn đã lưu."
+            entrance="sweep"
+          >
+            <MovieRow movies={data.newMovies} />
+          </SceneSection>
+        </StaggerItem>
 
-      {/* SCENE 08 — Anime spotlight (rose, human warmth) */}
-      <StaggerItem>
-        <SceneSection
-          mood="rose"
-          eyebrow="❀ Anime tuyển chọn"
-          title="Bộ sưu tập từ Nhật Bản"
-          subtitle="Từ shounen kịch tính đến slice-of-life dịu êm — cả một vũ trụ animation đang đợi."
-        >
-          <MovieRow movies={data.animeMovies} />
-        </SceneSection>
-      </StaggerItem>
+        {/* SCENE 07 — Cinematic Collection — cyan, focus entrance, GenreCosmos */}
+        <StaggerItem>
+          <SceneSection
+            mood="cyan"
+            eyebrow="◆ Cinematic Collection"
+            title="Đêm chiếu tại rạp nhà"
+            subtitle="Những bộ phim đáng xem trên màn hình lớn nhất trong nhà bạn."
+            entrance="focus"
+            particles="rain"
+          >
+            <GenreCosmos />
+          </SceneSection>
+        </StaggerItem>
 
-      {/* SCENE 09 — Hidden Gems (emerald, discovery) */}
-      <StaggerItem>
-        <SceneSection
-          mood="emerald"
-          eyebrow="◉ Hidden Gems"
-          title="Có thể bạn chưa biết"
-          subtitle="Những viên ngọc ít người xem nhưng đáng để dành một buổi tối."
-        >
-          <MovieRow movies={data.top10Movies.slice(2).concat(data.top10Movies.slice(0, 2))} />
-        </SceneSection>
-      </StaggerItem>
+        {/* SCENE 08 — Anime — rose, warm, drift with dust */}
+        <StaggerItem>
+          <SceneSection
+            mood="rose"
+            eyebrow="❀ Anime tuyển chọn"
+            title="Bộ sưu tập từ Nhật Bản"
+            subtitle="Từ shounen kịch tính đến slice-of-life dịu êm — cả một vũ trụ animation đang đợi."
+            entrance="drift"
+            particles="dust"
+          >
+            <MovieRow movies={data.animeMovies} />
+          </SceneSection>
+        </StaggerItem>
 
-      {/* SCENE 10 — Coming Soon (midnight, mystery) */}
-      <StaggerItem>
-        <SceneSection
-          mood="midnight"
-          eyebrow="◐ Coming Soon"
-          title="Sắp ra mắt"
-          subtitle="Đánh dấu lịch — những cái tên đang được chờ đợi nhất."
-        >
-          <MovieRow movies={data.newMovies.slice().reverse()} />
-        </SceneSection>
-      </StaggerItem>
-    </Stagger>
+        {/* SCENE 09 — Hidden Gems — emerald, heavy contrast, veiled mystery grid */}
+        <StaggerItem>
+          <SceneSection
+            mood="emerald"
+            eyebrow="◉ Hidden Gems"
+            title="Có thể bạn chưa biết"
+            subtitle="Những viên ngọc ít người xem nhưng đáng để dành một buổi tối."
+            entrance="focus"
+          >
+            <MysteryScene
+              movies={data.top10Movies
+                .slice(2)
+                .concat(data.top10Movies.slice(0, 2))}
+            />
+          </SceneSection>
+        </StaggerItem>
+
+        {/* SCENE 10 — Coming Soon — midnight, moving light beam, timeline layout */}
+        <StaggerItem>
+          <SceneSection
+            mood="midnight"
+            eyebrow="◐ Coming Soon"
+            title="Sắp ra mắt"
+            subtitle="Đánh dấu lịch — những cái tên đang được chờ đợi nhất."
+            entrance="drift"
+            particles="beam"
+          >
+            <ComingSoonScene movies={data.newMovies.slice().reverse()} />
+          </SceneSection>
+        </StaggerItem>
+        </Stagger>
+      </div>
+    </>
   );
 }
+
