@@ -13,6 +13,7 @@ import { Link } from "@tanstack/react-router";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { ExperienceCard } from "@/components/home/experience-card";
 import type {
   ContinueWatchingItem,
   HeroMovie,
