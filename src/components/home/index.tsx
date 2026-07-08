@@ -20,6 +20,24 @@ import type {
 } from "@/lib/home-queries";
 
 
+function HeroTitle({ logo, title }: { logo?: string; title: string }) {
+  const [ok, setOk] = useState(true);
+  if (logo && ok) {
+    return (
+      <img
+        src={thumbSrc(logo, { w: 640 })}
+        alt={title}
+        onError={() => setOk(false)}
+        className="max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)] sm:max-h-36"
+      />
+    );
+  }
+  return (
+    <h1 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.02em] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+      {title}
+    </h1>
+  );
+}
 
 /* -------------------------------------------------------------------------- */
 /*  HeroBanner                                                                */
@@ -56,7 +74,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   return (
     <section
       ref={sectionRef}
-      className="relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-[oklch(0.08_0.02_280)] sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
+      className="dark relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-black text-white sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
         setPaused(false);
@@ -136,17 +154,8 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             variants={{ hidden: { opacity: 0, y: 24, filter: "blur(14px)" }, show: { opacity: 1, y: 0, filter: "blur(0px)" } }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            {movie.logo_url ? (
-              <img
-                src={thumbSrc(movie.logo_url, { w: 640 })}
-                alt={movie.title}
-                className="max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)] sm:max-h-36"
-              />
-            ) : (
-              <h1 className="text-cinematic text-4xl text-foreground sm:text-6xl lg:text-7xl">
-                {movie.title}
-              </h1>
-            )}
+            <HeroTitle logo={movie.logo_url} title={movie.title} />
+
           </motion.div>
 
           {/* Meta rail */}
