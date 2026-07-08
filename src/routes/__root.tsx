@@ -80,18 +80,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover",
       },
-      { title: "Stream — Premium Streaming" },
+      { title: "movieCC — Xem phim online Vietsub, Thuyết minh chất lượng cao" },
       {
         name: "description",
         content:
-          "A premium cinematic streaming experience with curated collections and immersive playback.",
+          "movieCC — Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày. Xem online mượt trên mọi thiết bị.",
       },
       { name: "theme-color", content: "#0a0a12" },
-      { property: "og:title", content: "Stream — Premium Streaming" },
+      { property: "og:title", content: "movieCC — Xem phim online chất lượng cao" },
       {
         property: "og:description",
         content:
-          "A premium cinematic streaming experience with curated collections and immersive playback.",
+          "Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

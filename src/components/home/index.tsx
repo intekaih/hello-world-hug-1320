@@ -8,6 +8,7 @@ import {
   Star,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,8 @@ import type {
   HeroMovie,
   MovieCard,
 } from "@/lib/home-queries";
+
+
 
 /* -------------------------------------------------------------------------- */
 /*  HeroBanner                                                                */
@@ -99,12 +102,20 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           </p>
 
           <div className="flex flex-wrap items-center gap-2 pt-2">
-            <button className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90">
+            <Link
+              to="/xem/$slug/tap-{$episode}"
+              params={{ slug: movie.slug, episode: "1" }}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90"
+            >
               <Play className="h-4 w-4 fill-current" /> Play
-            </button>
-            <button className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-white/10">
+            </Link>
+            <Link
+              to="/phim/$slug"
+              params={{ slug: movie.slug }}
+              className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-white/10"
+            >
               <Info className="h-4 w-4" /> More info
-            </button>
+            </Link>
           </div>
         </motion.div>
       </div>
@@ -278,11 +289,10 @@ export function MovieRow({
 
 function MoviePoster({ movie }: { movie: MovieCard }) {
   return (
-    <motion.a
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.2 }}
-      href="#"
-      className="group relative w-[140px] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[160px] lg:w-[180px]"
+    <Link
+      to="/phim/$slug"
+      params={{ slug: movie.slug }}
+      className="group relative w-[140px] shrink-0 snap-start overflow-hidden rounded-xl transition-transform duration-200 hover:-translate-y-1 sm:w-[160px] lg:w-[180px]"
     >
       <div className="aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated">
         <img
@@ -301,7 +311,7 @@ function MoviePoster({ movie }: { movie: MovieCard }) {
           <span>{movie.year}</span>
         </div>
       </div>
-    </motion.a>
+    </Link>
   );
 }
 
@@ -341,11 +351,11 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
         className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
       >
         {movies.slice(0, 10).map((m, i) => (
-          <motion.a
+          <Link
             key={m.id}
-            href="#"
-            whileHover={{ y: -4 }}
-            className="group relative w-[160px] shrink-0 snap-start sm:w-[180px] lg:w-[200px]"
+            to="/phim/$slug"
+            params={{ slug: m.slug }}
+            className="group relative w-[160px] shrink-0 snap-start transition-transform duration-200 hover:-translate-y-1 sm:w-[180px] lg:w-[200px]"
           >
             <span
               aria-hidden
@@ -367,7 +377,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
             </div>
-          </motion.a>
+          </Link>
         ))}
       </div>
     </div>
@@ -409,11 +419,11 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
         className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {items.map((m) => (
-          <motion.a
+          <Link
             key={m.id}
-            href="#"
-            whileHover={{ y: -4 }}
-            className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-elevated sm:w-[300px]"
+            to="/xem/$slug/tap-{$episode}"
+            params={{ slug: m.slug, episode: "1" }}
+            className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-elevated transition-transform duration-200 hover:-translate-y-1 sm:w-[300px]"
           >
             <div className="relative aspect-video overflow-hidden">
               <img
@@ -444,14 +454,14 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
                   {m.remaining}
                 </p>
               </div>
-              <button
-                aria-label="Add to list"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
+              <span
+                aria-hidden
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-foreground-muted"
               >
                 <Plus className="h-4 w-4" />
-              </button>
+              </span>
             </div>
-          </motion.a>
+          </Link>
         ))}
       </div>
     </div>

@@ -104,15 +104,50 @@ const RELATED = [
   },
 ];
 
+// Fallback: derive a minimal movie from POOL so any slug on the site works.
+import { POOL } from "./suggest";
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 export const Route = createFileRoute("/api/movies/$slug")({
   server: {
     handlers: {
       GET: async ({ params }) => {
         const movie = MOVIES[params.slug];
-        if (!movie) {
-          return new Response("Not found", { status: 404 });
+        if (movie) return Response.json(movie);
+
+        const p = POOL.find((m) => slugify(m.title) === params.slug);
+        if (p) {
+          return Response.json({
+            slug: params.slug,
+            title: p.title,
+            original_title: p.title,
+            year: p.year,
+            duration: p.type === "Phim bộ" ? "45 phút/tập" : "1h 55m",
+            quality: "HD",
+            language: "Vietsub",
+            rating: 7.5 + (p.id % 25) / 10,
+            age_rating: "PG-13",
+            backdrop_url: `https://image.tmdb.org/t/p/original${p.poster}`,
+            poster_url: `https://image.tmdb.org/t/p/w500${p.poster}`,
+            logo_url: "",
+            trailer_url: "",
+            overview: `${p.title} — nội dung phim đang được cập nhật.`,
+            overview_vi: `${p.title} — nội dung phim đang được cập nhật.`,
+            categories: [p.type],
+            country: "US",
+            director: "",
+            cast: [],
+            total_episodes: p.type === "Phim bộ" ? 10 : 1,
+            parts: [],
+          });
         }
-        return Response.json(movie);
+        return new Response("Not found", { status: 404 });
       },
     },
   },

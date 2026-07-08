@@ -23,9 +23,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (!isLoading && !data?.user) {
-      navigate({ to: "/login", search: { redirect: pathname }, replace: true });
-    }
+    if (isLoading) return;
+    if (data?.user) return;
+    // Guard: don't loop when we've already been redirected to /login.
+    if (pathname === "/login" || pathname.startsWith("/login")) return;
+    navigate({ to: "/login", search: { redirect: pathname }, replace: true });
   }, [isLoading, data, navigate, pathname]);
 
   if (isLoading) {
@@ -36,13 +38,14 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     );
   }
   if (!data?.user) {
+    const target = pathname.startsWith("/login") ? "/" : pathname;
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
         <LogIn className="h-8 w-8 text-white/40" />
         <p className="text-white/70">Bạn cần đăng nhập để tiếp tục</p>
         <Link
           to="/login"
-          search={{ redirect: pathname }}
+          search={{ redirect: target }}
           className="rounded-full bg-primary px-6 py-2 text-sm font-semibold text-white"
         >
           Đăng nhập

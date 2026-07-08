@@ -151,6 +151,9 @@ function SearchPage() {
 
   return (
     <div className="-mx-4 -mt-4 md:-mx-6 md:-mt-6 lg:-mx-8 lg:-mt-8">
+      <h1 className="sr-only">
+        {q ? `Tìm kiếm phim: ${q}` : "Tìm kiếm phim"}
+      </h1>
       {/* Sticky search bar */}
       <div className="glass sticky top-0 z-30 border-b border-white/5 px-4 py-3 md:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
