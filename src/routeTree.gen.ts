@@ -17,9 +17,12 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
+import { Route as ApiMoviesSlugRouteImport } from './routes/api/movies.$slug'
+import { Route as ApiMoviesSlugRelatedRouteImport } from './routes/api/movies.$slug.related'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 
 const WatchlistRoute = WatchlistRouteImport.update({
@@ -62,6 +65,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTranslateRoute = ApiTranslateRouteImport.update({
+  id: '/api/translate',
+  path: '/api/translate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiHistoryRoute = ApiHistoryRouteImport.update({
   id: '/api/history',
   path: '/api/history',
@@ -77,6 +85,16 @@ const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMoviesSlugRoute = ApiMoviesSlugRouteImport.update({
+  id: '/api/movies/$slug',
+  path: '/api/movies/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMoviesSlugRelatedRoute = ApiMoviesSlugRelatedRouteImport.update({
+  id: '/related',
+  path: '/related',
+  getParentRoute: () => ApiMoviesSlugRoute,
 } as any)
 const ApiHistorySlugEpRoute = ApiHistorySlugEpRouteImport.update({
   id: '/$slug/$ep',
@@ -94,9 +112,12 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/translate': typeof ApiTranslateRoute
+  '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
+  '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,9 +129,12 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/translate': typeof ApiTranslateRoute
+  '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
+  '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,9 +147,12 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/translate': typeof ApiTranslateRoute
+  '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
+  '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,9 +166,12 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/translate'
+    | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
+    | '/api/movies/$slug/related'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,9 +183,12 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/translate'
+    | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
+    | '/api/movies/$slug/related'
   id:
     | '__root__'
     | '/'
@@ -167,9 +200,12 @@ export interface FileRouteTypes {
     | '/search'
     | '/watchlist'
     | '/api/history'
+    | '/api/translate'
+    | '/api/movies/$slug'
     | '/api/movies/home'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
+    | '/api/movies/$slug/related'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -182,6 +218,8 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
+  ApiTranslateRoute: typeof ApiTranslateRoute
+  ApiMoviesSlugRoute: typeof ApiMoviesSlugRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
   XemSlugTapChar123episodeChar125Route: typeof XemSlugTapChar123episodeChar125Route
 }
@@ -244,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/translate': {
+      id: '/api/translate'
+      path: '/api/translate'
+      fullPath: '/api/translate'
+      preLoaderRoute: typeof ApiTranslateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/history': {
       id: '/api/history'
       path: '/api/history'
@@ -264,6 +309,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/movies/home'
       preLoaderRoute: typeof ApiMoviesHomeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/movies/$slug': {
+      id: '/api/movies/$slug'
+      path: '/api/movies/$slug'
+      fullPath: '/api/movies/$slug'
+      preLoaderRoute: typeof ApiMoviesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/movies/$slug/related': {
+      id: '/api/movies/$slug/related'
+      path: '/related'
+      fullPath: '/api/movies/$slug/related'
+      preLoaderRoute: typeof ApiMoviesSlugRelatedRouteImport
+      parentRoute: typeof ApiMoviesSlugRoute
     }
     '/api/history/$slug/$ep': {
       id: '/api/history/$slug/$ep'
@@ -287,6 +346,18 @@ const ApiHistoryRouteWithChildren = ApiHistoryRoute._addFileChildren(
   ApiHistoryRouteChildren,
 )
 
+interface ApiMoviesSlugRouteChildren {
+  ApiMoviesSlugRelatedRoute: typeof ApiMoviesSlugRelatedRoute
+}
+
+const ApiMoviesSlugRouteChildren: ApiMoviesSlugRouteChildren = {
+  ApiMoviesSlugRelatedRoute: ApiMoviesSlugRelatedRoute,
+}
+
+const ApiMoviesSlugRouteWithChildren = ApiMoviesSlugRoute._addFileChildren(
+  ApiMoviesSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
@@ -297,6 +368,8 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
+  ApiTranslateRoute: ApiTranslateRoute,
+  ApiMoviesSlugRoute: ApiMoviesSlugRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
   XemSlugTapChar123episodeChar125Route: XemSlugTapChar123episodeChar125Route,
 }
