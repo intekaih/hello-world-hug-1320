@@ -90,17 +90,26 @@ function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }
     <Link
       to={item.to}
       className={cn(
-        "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
-        active
-          ? "bg-primary/15 text-primary"
-          : "text-foreground-muted hover:bg-surface-elevated hover:text-foreground",
+        "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+        active ? "text-primary" : "text-foreground-muted hover:text-foreground",
       )}
     >
       {active && (
-        <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-primary" />
+        <>
+          <motion.span
+            layoutId="sidebar-pill"
+            className="absolute inset-0 rounded-xl bg-primary/12"
+            transition={{ type: "spring", stiffness: 380, damping: 32 }}
+          />
+          <motion.span
+            layoutId="sidebar-rail"
+            className="absolute inset-y-2 left-0 w-[3px] rounded-r-full bg-primary shadow-[0_0_12px_var(--color-primary)]"
+            transition={{ type: "spring", stiffness: 380, damping: 32 }}
+          />
+        </>
       )}
-      <Icon className="h-5 w-5 shrink-0" />
-      {!collapsed && <span className="truncate">{item.label}</span>}
+      <Icon className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+      {!collapsed && <span className="relative truncate">{item.label}</span>}
     </Link>
   );
 }
