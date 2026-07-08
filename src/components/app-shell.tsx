@@ -17,6 +17,7 @@ import { useEffect, useState, type ComponentType } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { NotificationBell } from "@/components/notifications";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -168,16 +169,8 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
-          <Link
-            to="/notifications"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground"
-            aria-label="Notifications"
-          >
-            <Bell className="h-5 w-5" />
-            <Badge className="absolute -right-0.5 -top-0.5 h-4 min-w-4 justify-center rounded-full px-1 text-[10px] leading-none">
-              3
-            </Badge>
-          </Link>
+          <NotificationBell />
+
 
           <Link to="/profile" aria-label="Profile" className="ml-1">
             <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
