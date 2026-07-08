@@ -18,7 +18,7 @@ import type {
   MovieCard,
 } from "@/lib/home-queries";
 
-const MotionLink = motion.create(Link);
+
 
 /* -------------------------------------------------------------------------- */
 /*  HeroBanner                                                                */
