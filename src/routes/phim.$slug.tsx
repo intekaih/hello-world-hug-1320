@@ -2,6 +2,7 @@ import { thumbSrc } from "@/utils/thumbSrc";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  ArrowUp,
   Bookmark,
   Calendar,
   ChevronRight,
@@ -15,16 +16,19 @@ import {
   Star,
   User,
   Users,
+  Volume2,
+  VolumeX,
+  X,
 } from "lucide-react";
-import { motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { RouteErrorBoundary, RouteNotFound } from "@/components/route-boundaries";
 import { cn } from "@/lib/utils";
 import { buildPageMeta } from "@/lib/page-meta";
 import { usePageMeta } from "@/hooks/usePageMeta";
-
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Movie = {
   slug: string;
@@ -61,12 +65,7 @@ type RelatedItem = {
 export const Route = createFileRoute("/phim/$slug")({
   component: MovieDetailPage,
   errorComponent: RouteErrorBoundary,
-  notFoundComponent: () => (
-    <RouteNotFound
-      title="Không tìm thấy phim"
-      description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
-    />
-  ),
+  notFoundComponent: () => <NotFoundLocalized />,
   head: ({ params }) => {
     const nice = params.slug
       .split("-")
@@ -75,7 +74,7 @@ export const Route = createFileRoute("/phim/$slug")({
     return {
       meta: buildPageMeta({
         title: `${nice} - movieCC`,
-        description: `Xem phim ${nice} online Vietsub, thuyết minh, chất lượng HD miễn phí trên movieCC. Cập nhật tập mới nhanh nhất.`,
+        description: `Watch ${nice} online — Vietsub, HD, cinematic streaming on movieCC.`,
         url: `/phim/${params.slug}`,
         type: "video.movie",
       }),
@@ -84,9 +83,21 @@ export const Route = createFileRoute("/phim/$slug")({
   },
 });
 
+function NotFoundLocalized() {
+  const { t } = useTranslation();
+  return (
+    <RouteNotFound
+      title={t("detail.notFound.title")}
+      description={t("detail.notFound.description")}
+    />
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 
 function MovieDetailPage() {
   const { slug } = Route.useParams();
+  const { t } = useTranslation();
 
   const movieQ = useQuery({
     queryKey: ["movie", slug],
@@ -94,7 +105,7 @@ function MovieDetailPage() {
       const res = await fetch(`/api/movies/${slug}`);
       if (!res.ok) {
         const err = new Error(
-          res.status === 404 ? "Không tìm thấy phim" : `Lỗi tải phim (${res.status})`,
+          res.status === 404 ? t("detail.notFound.title") : `Error ${res.status}`,
         ) as Error & { status: number };
         err.status = res.status;
         throw err;
@@ -107,7 +118,6 @@ function MovieDetailPage() {
       return failureCount < 2;
     },
   });
-
 
   const relatedQ = useQuery({
     queryKey: ["movie", slug, "related"],
@@ -127,7 +137,7 @@ function MovieDetailPage() {
           description:
             movieData.overview_vi ||
             movieData.overview ||
-            `Xem phim ${movieData.title} online HD Vietsub trên movieCC.`,
+            `Watch ${movieData.title} online on movieCC.`,
           url: `/phim/${slug}`,
           image: thumbSrc(movieData.backdrop_url || movieData.poster_url, {
             w: 1200,
@@ -141,57 +151,42 @@ function MovieDetailPage() {
 
   if (movieQ.isError || !movieData) {
     const status = (movieQ.error as { status?: number } | null)?.status;
-    if (status === 404) {
-      return (
-        <RouteNotFound
-          title="Không tìm thấy phim"
-          description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
-        />
-      );
-    }
+    if (status === 404) return <NotFoundLocalized />;
     return (
       <RouteErrorBoundary
-        error={(movieQ.error as Error) ?? new Error("Không tải được phim")}
+        error={(movieQ.error as Error) ?? new Error("Failed")}
         reset={() => movieQ.refetch()}
       />
     );
   }
 
-
   const movie: Movie = movieData;
 
   return (
-    <div className="space-y-16 pb-8">
+    <div className="space-y-16 pb-24">
       <HeroSection movie={movie} />
 
-      <div className="space-y-14">
+      <div id="detail-body" className="space-y-14">
         <Overview movie={movie} />
-
         {movie.cast.length > 0 && <CastRail cast={movie.cast} />}
-
         <MetaInfo movie={movie} />
-
         <CategoryChips categories={movie.categories} />
-
         {movie.total_episodes > 1 && (
           <EpisodePreview slug={movie.slug} total={movie.total_episodes} />
         )}
-
         {movie.parts.length > 1 && (
           <SeriesPartsNav parts={movie.parts} currentSlug={movie.slug} />
         )}
-
-        <RelatedMovies
-          items={relatedQ.data ?? []}
-          loading={relatedQ.isLoading}
-        />
+        <RelatedMovies items={relatedQ.data ?? []} loading={relatedQ.isLoading} />
       </div>
+
+      <FloatingActions movie={movie} />
     </div>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Hero — Cinematic Chamber                                                  */
+/*  Hero — Cinematic Chamber (with optional trailer autoplay)                 */
 /* -------------------------------------------------------------------------- */
 
 function DetailHeroTitle({ logo, title }: { logo?: string; title: string }) {
@@ -213,13 +208,60 @@ function DetailHeroTitle({ logo, title }: { logo?: string; title: string }) {
   );
 }
 
+function youTubeEmbed(url: string, opts: { muted: boolean }): string | null {
+  try {
+    const u = new URL(url);
+    let id = "";
+    if (u.hostname.includes("youtu.be")) id = u.pathname.replace("/", "");
+    else if (u.hostname.includes("youtube.com")) id = u.searchParams.get("v") ?? "";
+    if (!id) return null;
+    const params = new URLSearchParams({
+      autoplay: "1",
+      mute: opts.muted ? "1" : "0",
+      controls: "0",
+      loop: "1",
+      playlist: id,
+      modestbranding: "1",
+      rel: "0",
+      playsinline: "1",
+    });
+    return `https://www.youtube.com/embed/${id}?${params}`;
+  } catch {
+    return null;
+  }
+}
 
 function HeroSection({ movie }: { movie: Movie }) {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement>(null);
+  const [trailerActive, setTrailerActive] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  const embed = useMemo(
+    () => (movie.trailer_url ? youTubeEmbed(movie.trailer_url, { muted }) : null),
+    [movie.trailer_url, muted],
+  );
+
+  // Delay autoplay a hair for a smoother reveal; respects reduced motion.
+  useEffect(() => {
+    if (!embed || reducedMotion) return;
+    const id = window.setTimeout(() => setTrailerActive(true), 900);
+    return () => window.clearTimeout(id);
+  }, [embed, reducedMotion]);
 
   const onMove = (e: React.MouseEvent) => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || reducedMotion) return;
     const r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
@@ -253,63 +295,101 @@ function HeroSection({ movie }: { movie: Movie }) {
         />
       </div>
 
-      {/* Aurora ambient tint */}
-      <div className="aurora pointer-events-none absolute inset-0 mix-blend-soft-light opacity-70" />
+      {/* Trailer video layer (fades in over backdrop) */}
+      <AnimatePresence>
+        {trailerActive && embed && (
+          <motion.div
+            key="trailer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="pointer-events-none absolute inset-0"
+            aria-hidden
+          >
+            <iframe
+              key={embed}
+              src={embed}
+              title={movie.title}
+              allow="autoplay; encrypted-media; picture-in-picture"
+              className="absolute left-1/2 top-1/2 h-[120%] w-[178%] -translate-x-1/2 -translate-y-1/2 border-0 sm:w-[130%]"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Cinematic vignette + gradient */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgb(0_0_0/0.55)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/90 via-background/30 to-transparent" />
-
-      {/* Film grain */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 to-transparent" />
       <div className="grain pointer-events-none absolute inset-0 opacity-40" />
+
+      {/* Trailer controls */}
+      {trailerActive && embed && (
+        <div className="absolute right-4 top-4 z-10 flex items-center gap-1.5 sm:right-6 sm:top-6">
+          <button
+            type="button"
+            onClick={() => setMuted((v) => !v)}
+            aria-label={muted ? t("detail.hero.unmuteTrailer") : t("detail.hero.muteTrailer")}
+            className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 text-white backdrop-blur-md transition hover:border-white/40 hover:bg-black/60"
+          >
+            {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTrailerActive(false)}
+            aria-label={t("detail.hero.closeTrailer")}
+            className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 text-white backdrop-blur-md transition hover:border-white/40 hover:bg-black/60"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* Content */}
       <div className="absolute inset-0 flex items-end">
         <div className="w-full p-6 sm:p-10 lg:p-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            {/* Left: title stack */}
             <div className="max-w-2xl space-y-5">
-              {/* Eyebrow */}
               <div className="flex items-center gap-3">
                 <span className="inline-block h-px w-8 bg-gradient-to-r from-primary to-transparent" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/90">
-                  {movie.categories[0] ?? "Feature"} · {movie.year}
+                  {t("detail.hero.eyebrow", {
+                    genre: movie.categories[0] ?? t("detail.hero.eyebrowFallback"),
+                    year: movie.year,
+                  })}
                 </span>
               </div>
 
-              {/* Title / Logo */}
               <DetailHeroTitle logo={movie.logo_url} title={movie.title} />
 
               {movie.original_title && movie.original_title !== movie.title && (
-                <p className="font-serif text-base italic text-foreground-subtle sm:text-lg">
+                <p className="font-serif text-base italic text-white/70 sm:text-lg">
                   “{movie.original_title}”
                 </p>
               )}
 
-              {/* Meta rail */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/90">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90">
                 <span className="inline-flex items-center gap-1.5 text-gold">
-                  <Star className="h-3.5 w-3.5 fill-current" />
+                  <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
                   {movie.rating.toFixed(1)}
                 </span>
                 <span aria-hidden className="text-primary/60">◆</span>
-                <span className="rounded-sm border border-foreground/30 px-1.5 py-0.5 text-[10px] text-foreground/90">
+                <span className="rounded-sm border border-white/30 px-1.5 py-0.5 text-[10px]">
                   {movie.age_rating}
                 </span>
                 <span aria-hidden className="text-primary/60">◆</span>
-                <span className="text-foreground-muted">{movie.quality}</span>
+                <span className="text-white/70">{movie.quality}</span>
                 <span aria-hidden className="text-primary/60">◆</span>
-                <span className="text-foreground-muted">{movie.language}</span>
+                <span className="text-white/70">{movie.language}</span>
                 <span aria-hidden className="text-primary/60">◆</span>
-                <span className="text-foreground-muted">{movie.duration}</span>
+                <span className="text-white/70">{movie.duration}</span>
               </div>
 
-              {/* Action bar */}
               <ActionBar movie={movie} />
             </div>
 
-            {/* Right: floating poster (desktop) */}
+            {/* Floating poster */}
             {movie.poster_url && (
               <motion.div
                 initial={{ opacity: 0, y: 30, rotate: -2 }}
@@ -320,7 +400,7 @@ function HeroSection({ movie }: { movie: Movie }) {
                 <div className="relative aspect-[2/3] w-64 overflow-hidden rounded-2xl shadow-[var(--shadow-cinematic)] ring-1 ring-white/10">
                   <img
                     src={thumbSrc(movie.poster_url, { w: 500 })}
-                    alt={movie.title}
+                    alt=""
                     className="h-full w-full object-cover"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/5" />
@@ -335,13 +415,12 @@ function HeroSection({ movie }: { movie: Movie }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Action bar                                                                */
+/*  Action bar (hero CTAs)                                                    */
 /* -------------------------------------------------------------------------- */
 
-function ActionBar({ movie }: { movie: Movie }) {
+function useBookmarkState(movie: Movie) {
   const [fav, setFav] = useState(false);
   const [wl, setWl] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     try {
@@ -357,15 +436,40 @@ function ActionBar({ movie }: { movie: Movie }) {
     } catch {}
   };
 
+  const toggleFav = () => {
+    const next = !fav;
+    setFav(next);
+    persist(`fav:${movie.slug}`, next);
+  };
+  const toggleWl = () => {
+    const next = !wl;
+    setWl(next);
+    persist(`wl:${movie.slug}`, next);
+  };
+  return { fav, wl, toggleFav, toggleWl };
+}
+
+function useShare(movie: Movie) {
+  const [copied, setCopied] = useState(false);
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
-      if (navigator.share) await navigator.share({ url, title: movie.title });
-      else await navigator.clipboard.writeText(url);
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ url, title: movie.title });
+      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+      }
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      setTimeout(() => setCopied(false), 1600);
     } catch {}
   };
+  return { copied, share };
+}
+
+function ActionBar({ movie }: { movie: Movie }) {
+  const { t } = useTranslation();
+  const { fav, wl, toggleFav, toggleWl } = useBookmarkState(movie);
+  const { copied, share } = useShare(movie);
 
   return (
     <div className="flex flex-wrap items-center gap-2.5 pt-3 sm:gap-3">
@@ -376,37 +480,29 @@ function ActionBar({ movie }: { movie: Movie }) {
         style={{ background: "var(--gradient-ember)" }}
       >
         <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-        <Play className="h-4 w-4 fill-current" />
-        <span className="tracking-wide">Xem ngay</span>
+        <Play className="h-4 w-4 fill-current" aria-hidden />
+        <span className="tracking-wide">{t("detail.actions.watchNow")}</span>
       </Link>
 
       <ActionButton
         active={fav}
-        onClick={() => {
-          const next = !fav;
-          setFav(next);
-          persist(`fav:${movie.slug}`, next);
-        }}
+        onClick={toggleFav}
         icon={Heart}
-        label="Yêu thích"
+        label={fav ? t("detail.actions.unfavorite") : t("detail.actions.favorite")}
         activeClass="text-primary border-primary/40 bg-primary/10"
       />
       <ActionButton
         active={wl}
-        onClick={() => {
-          const next = !wl;
-          setWl(next);
-          persist(`wl:${movie.slug}`, next);
-        }}
+        onClick={toggleWl}
         icon={Bookmark}
-        label="Xem sau"
+        label={wl ? t("detail.actions.watchlistRemove") : t("detail.actions.watchlist")}
         activeClass="text-cyan border-cyan/40 bg-cyan/10"
       />
       <ActionButton
         active={false}
         onClick={share}
         icon={Share2}
-        label={copied ? "Đã copy" : "Chia sẻ"}
+        label={copied ? t("detail.actions.shared") : t("detail.actions.share")}
         activeClass=""
       />
 
@@ -415,9 +511,9 @@ function ActionBar({ movie }: { movie: Movie }) {
           href={movie.trailer_url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-background/40 px-4 py-2.5 text-sm font-medium text-foreground backdrop-blur-md transition hover:border-foreground/30 hover:bg-foreground/10"
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2.5 text-sm font-medium text-white backdrop-blur-md transition hover:border-white/30 hover:bg-white/[0.12]"
         >
-          <Film className="h-4 w-4" /> Trailer
+          <Film className="h-4 w-4" aria-hidden /> {t("detail.actions.trailer")}
         </a>
       )}
     </div>
@@ -439,13 +535,16 @@ function ActionButton({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-background/40 px-4 py-2.5 text-sm font-medium text-foreground-muted backdrop-blur-md transition hover:border-foreground/30 hover:bg-foreground/10 hover:text-foreground",
+        "inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2.5 text-sm font-medium text-white/80 backdrop-blur-md transition hover:border-white/30 hover:bg-white/[0.12] hover:text-white",
         active && activeClass,
       )}
     >
-      <Icon className={cn("h-4 w-4", active && "fill-current")} />
+      <Icon className={cn("h-4 w-4", active && "fill-current")} aria-hidden />
       {label}
     </button>
   );
@@ -456,10 +555,19 @@ function ActionButton({
 /* -------------------------------------------------------------------------- */
 
 function Overview({ movie }: { movie: Movie }) {
-  const [translated, setTranslated] = useState<string | null>(null);
-  const [showVi, setShowVi] = useState(false);
+  const { t, i18n } = useTranslation();
+  const [translated, setTranslated] = useState<string | null>(
+    movie.overview_vi ?? null,
+  );
+  const [showVi, setShowVi] = useState(i18n.language === "vi" && !!movie.overview_vi);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
+
+  // When the UI language flips, prefer that reading direction if data exists.
+  useEffect(() => {
+    if (i18n.language === "vi" && translated) setShowVi(true);
+    if (i18n.language === "en") setShowVi(false);
+  }, [i18n.language, translated]);
 
   const onToggle = async () => {
     if (translated) {
@@ -493,16 +601,21 @@ function Overview({ movie }: { movie: Movie }) {
   return (
     <section className="space-y-4">
       <SectionHeader
-        eyebrow="Synopsis"
-        title="Nội dung phim"
+        eyebrow={t("detail.synopsis.eyebrow")}
+        title={t("detail.synopsis.title")}
         action={
           <button
+            type="button"
             onClick={onToggle}
             disabled={loading}
             className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-muted transition hover:border-primary/40 hover:text-primary disabled:opacity-50"
           >
-            <Languages className="h-3.5 w-3.5" />
-            {showVi ? "Original" : loading ? "Đang dịch…" : "Tiếng Việt"}
+            <Languages className="h-3.5 w-3.5" aria-hidden />
+            {loading
+              ? t("detail.synopsis.translating")
+              : showVi
+                ? t("detail.synopsis.showOriginal")
+                : t("detail.synopsis.translate")}
           </button>
         }
       />
@@ -520,10 +633,11 @@ function Overview({ movie }: { movie: Movie }) {
         </p>
         {long && (
           <button
+            type="button"
             onClick={() => setExpanded((v) => !v)}
             className="mt-3 font-mono text-[10px] uppercase tracking-[0.24em] text-primary transition hover:text-primary/80"
           >
-            {expanded ? "— Thu gọn" : "+ Đọc tiếp"}
+            {expanded ? t("common.readLess") : t("common.readMore")}
           </button>
         )}
       </div>
@@ -536,6 +650,7 @@ function Overview({ movie }: { movie: Movie }) {
 /* -------------------------------------------------------------------------- */
 
 function CastRail({ cast }: { cast: string[] }) {
+  const { t } = useTranslation();
   const initials = (name: string) =>
     name
       .split(" ")
@@ -554,7 +669,7 @@ function CastRail({ cast }: { cast: string[] }) {
 
   return (
     <section className="space-y-4">
-      <SectionHeader eyebrow="Cast" title="Diễn viên" />
+      <SectionHeader eyebrow={t("detail.cast.eyebrow")} title={t("detail.cast.title")} />
       <div className="scrollbar-none -mx-4 flex gap-4 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         {cast.map((name, i) => (
           <Link
@@ -568,6 +683,7 @@ function CastRail({ cast }: { cast: string[] }) {
               style={{
                 background: `linear-gradient(135deg, ${palette[i % palette.length]}, oklch(0.14 0.015 260))`,
               }}
+              aria-hidden
             >
               {initials(name)}
               <span className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition group-hover:opacity-100" />
@@ -587,30 +703,31 @@ function CastRail({ cast }: { cast: string[] }) {
 /* -------------------------------------------------------------------------- */
 
 function MetaInfo({ movie }: { movie: Movie }) {
+  const { t } = useTranslation();
   const rows: [typeof User, string, string][] = [
-    [User, "Đạo diễn", movie.director],
-    [Globe, "Quốc gia", movie.country],
-    [Calendar, "Năm sản xuất", String(movie.year)],
-    [Clock, "Thời lượng", movie.duration],
-    [Film, "Chất lượng", movie.quality],
-    [Users, "Ngôn ngữ", movie.language],
+    [User, t("detail.meta.director"), movie.director],
+    [Globe, t("detail.meta.country"), movie.country],
+    [Calendar, t("detail.meta.year"), String(movie.year)],
+    [Clock, t("detail.meta.duration"), movie.duration],
+    [Film, t("detail.meta.quality"), movie.quality],
+    [Users, t("detail.meta.language"), movie.language],
   ];
 
   return (
     <section className="space-y-4">
-      <SectionHeader eyebrow="Details" title="Thông tin" />
+      <SectionHeader eyebrow={t("detail.meta.eyebrow")} title={t("detail.meta.title")} />
       <dl className="grid divide-y divide-foreground/5 overflow-hidden rounded-2xl border border-foreground/8 bg-background/30 backdrop-blur-sm sm:grid-cols-2 sm:divide-y-0 sm:[&>*:nth-child(even)]:border-l sm:[&>*]:border-foreground/5 sm:[&>*:nth-child(n+3)]:border-t">
         {rows.map(([Icon, k, v]) => (
           <div key={k} className="flex items-start gap-4 p-5">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4 w-4" aria-hidden />
             </div>
             <div className="min-w-0 flex-1">
               <dt className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground-subtle">
                 {k}
               </dt>
               <dd className="mt-1 truncate text-sm font-medium text-foreground sm:text-base">
-                {v || "—"}
+                {v || t("detail.meta.empty")}
               </dd>
             </div>
           </div>
@@ -621,9 +738,10 @@ function MetaInfo({ movie }: { movie: Movie }) {
 }
 
 function CategoryChips({ categories }: { categories: string[] }) {
+  const { t } = useTranslation();
   return (
     <section className="space-y-4">
-      <SectionHeader eyebrow="Genres" title="Thể loại" />
+      <SectionHeader eyebrow={t("detail.genres.eyebrow")} title={t("detail.genres.title")} />
       <div className="flex flex-wrap gap-2">
         {categories.map((c) => (
           <Link
@@ -645,20 +763,21 @@ function CategoryChips({ categories }: { categories: string[] }) {
 /* -------------------------------------------------------------------------- */
 
 function EpisodePreview({ slug, total }: { slug: string; total: number }) {
+  const { t } = useTranslation();
   const preview = Array.from({ length: Math.min(12, total) }).map((_, i) => i + 1);
   return (
     <section className="space-y-4">
       <SectionHeader
-        eyebrow="Episodes"
-        title="Danh sách tập"
-        subtitle={`${total} tập`}
+        eyebrow={t("detail.episodes.eyebrow")}
+        title={t("detail.episodes.title")}
+        subtitle={t("detail.episodes.count", { n: total })}
         action={
           <Link
             to="/xem/$slug/tap-{$episode}"
             params={{ slug, episode: "1" }}
             className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-primary transition hover:text-primary/80"
           >
-            Xem tất cả <ChevronRight className="h-3.5 w-3.5" />
+            {t("common.viewAll")} <ChevronRight className="h-3.5 w-3.5" aria-hidden />
           </Link>
         }
       />
@@ -668,6 +787,7 @@ function EpisodePreview({ slug, total }: { slug: string; total: number }) {
             key={ep}
             to="/xem/$slug/tap-{$episode}"
             params={{ slug, episode: String(ep) }}
+            aria-label={`${t("detail.episodes.prefix")} ${ep}`}
             className="group relative overflow-hidden rounded-xl border border-foreground/10 bg-background/40 py-3.5 text-center font-mono text-sm font-semibold text-foreground-muted backdrop-blur-sm transition hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
           >
             <span className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition group-hover:opacity-100" />
@@ -680,7 +800,7 @@ function EpisodePreview({ slug, total }: { slug: string; total: number }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Series parts nav                                                          */
+/*  Series parts                                                              */
 /* -------------------------------------------------------------------------- */
 
 function SeriesPartsNav({
@@ -690,9 +810,10 @@ function SeriesPartsNav({
   parts: { slug: string; label: string; year: number }[];
   currentSlug: string;
 }) {
+  const { t } = useTranslation();
   return (
     <section className="space-y-4">
-      <SectionHeader eyebrow="Universe" title="Các phần khác" />
+      <SectionHeader eyebrow={t("detail.parts.eyebrow")} title={t("detail.parts.title")} />
       <div className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         {parts.map((p) => {
           const active = p.slug === currentSlug;
@@ -710,7 +831,12 @@ function SeriesPartsNav({
               style={active ? { background: "var(--gradient-ember)", color: "white" } : undefined}
             >
               <div className="font-display text-base font-semibold">{p.label}</div>
-              <div className={cn("mt-0.5 font-mono text-[10px] uppercase tracking-[0.2em]", active ? "text-white/70" : "text-foreground-subtle")}>
+              <div
+                className={cn(
+                  "mt-0.5 font-mono text-[10px] uppercase tracking-[0.2em]",
+                  active ? "text-white/70" : "text-foreground-subtle",
+                )}
+              >
                 {p.year}
               </div>
             </Link>
@@ -725,16 +851,11 @@ function SeriesPartsNav({
 /*  Related                                                                   */
 /* -------------------------------------------------------------------------- */
 
-function RelatedMovies({
-  items,
-  loading,
-}: {
-  items: RelatedItem[];
-  loading: boolean;
-}) {
+function RelatedMovies({ items, loading }: { items: RelatedItem[]; loading: boolean }) {
+  const { t } = useTranslation();
   return (
     <section className="space-y-4">
-      <SectionHeader eyebrow="Discover" title="Phim liên quan" />
+      <SectionHeader eyebrow={t("detail.related.eyebrow")} title={t("detail.related.title")} />
       {loading ? (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -743,6 +864,10 @@ function RelatedMovies({
               <Skeleton className="mt-2 h-4 w-3/4" />
             </div>
           ))}
+        </div>
+      ) : items.length === 0 ? (
+        <div className="py-10 text-center font-mono text-[11px] uppercase tracking-widest text-foreground-subtle">
+          {t("common.empty")}
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -763,9 +888,11 @@ function RelatedMovies({
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
               </div>
               <div className="mt-2.5 space-y-0.5">
-                <p className="truncate text-sm font-medium transition group-hover:text-primary">{m.title}</p>
+                <p className="truncate text-sm font-medium transition group-hover:text-primary">
+                  {m.title}
+                </p>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-foreground-subtle">
-                  <Star className="h-3 w-3 fill-gold text-gold" />
+                  <Star className="h-3 w-3 fill-gold text-gold" aria-hidden />
                   <span>{m.rating.toFixed(1)}</span>
                   <span aria-hidden>·</span>
                   <span>{m.year}</span>
@@ -776,6 +903,106 @@ function RelatedMovies({
         </div>
       )}
     </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Floating actions (sticky glass dock)                                      */
+/* -------------------------------------------------------------------------- */
+
+function FloatingActions({ movie }: { movie: Movie }) {
+  const { t } = useTranslation();
+  const { fav, wl, toggleFav, toggleWl } = useBookmarkState(movie);
+  const { copied, share } = useShare(movie);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.95 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 pb-safe-bottom"
+          role="toolbar"
+          aria-label={movie.title}
+        >
+          <div className="glass-strong flex items-center gap-1 rounded-full border border-white/12 p-1.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]">
+            <Link
+              to="/xem/$slug/tap-{$episode}"
+              params={{ slug: movie.slug, episode: "1" }}
+              aria-label={t("detail.actions.watchNow")}
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_20px_-6px_oklch(0.68_0.24_25/0.7)]"
+              style={{ background: "var(--gradient-ember)" }}
+            >
+              <Play className="h-4 w-4 fill-current" aria-hidden />
+              <span className="hidden sm:inline">{t("detail.actions.watchNow")}</span>
+            </Link>
+            <DockButton
+              onClick={toggleFav}
+              active={fav}
+              icon={<Heart className={cn("h-4 w-4", fav && "fill-current")} aria-hidden />}
+              label={fav ? t("detail.actions.unfavorite") : t("detail.actions.favorite")}
+            />
+            <DockButton
+              onClick={toggleWl}
+              active={wl}
+              icon={<Bookmark className={cn("h-4 w-4", wl && "fill-current")} aria-hidden />}
+              label={wl ? t("detail.actions.watchlistRemove") : t("detail.actions.watchlist")}
+            />
+            <DockButton
+              onClick={share}
+              active={false}
+              icon={<Share2 className="h-4 w-4" aria-hidden />}
+              label={copied ? t("detail.actions.shared") : t("detail.actions.share")}
+            />
+            <div className="mx-0.5 h-6 w-px bg-white/10" aria-hidden />
+            <DockButton
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              active={false}
+              icon={<ArrowUp className="h-4 w-4" aria-hidden />}
+              label={t("detail.actions.scrollToTop")}
+            />
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function DockButton({
+  onClick,
+  active,
+  icon,
+  label,
+}: {
+  onClick: () => void;
+  active: boolean;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
+      title={label}
+      className={cn(
+        "grid h-10 w-10 place-items-center rounded-full text-white/80 transition hover:bg-white/10 hover:text-white",
+        active && "bg-primary/15 text-primary",
+      )}
+    >
+      {icon}
+    </button>
   );
 }
 
@@ -806,17 +1033,13 @@ function SectionHeader({
         <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
           {title}
         </h2>
-        {subtitle && (
-          <p className="text-xs text-foreground-subtle">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-xs text-foreground-subtle">{subtitle}</p>}
       </div>
       {action}
     </div>
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Skeleton                                                                  */
 /* -------------------------------------------------------------------------- */
 
 function DetailSkeleton() {
