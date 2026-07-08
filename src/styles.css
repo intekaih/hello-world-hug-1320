@@ -234,26 +234,26 @@
   }
 }
 
-/* Glassmorphism */
+/* Glassmorphism — theme-aware */
 @utility glass {
-  background: oklch(1 0 0 / 0.05);
-  border: 1px solid oklch(1 0 0 / 0.08);
+  background: color-mix(in oklab, var(--surface-elevated) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
   backdrop-filter: blur(20px) saturate(140%);
 }
 
 @utility glass-strong {
-  background: oklch(0.14 0.02 280 / 0.7);
-  border: 1px solid oklch(1 0 0 / 0.12);
+  background: color-mix(in oklab, var(--surface-elevated) 78%, transparent);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
   backdrop-filter: blur(32px) saturate(160%);
 }
 
 @utility input-glass {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid oklch(1 0 0 / 0.1);
-  background: oklch(1 0 0 / 0.05);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
   padding: 0.5rem 0.75rem;
-  color: white;
+  color: var(--foreground);
   outline: none;
   transition: border-color 0.15s;
   &:focus {
