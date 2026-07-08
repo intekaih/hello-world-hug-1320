@@ -21,34 +21,36 @@ import { useEffect, useRef, useState, type ComponentType } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { NotificationBell } from "@/components/notifications";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useThemeStore } from "@/store/themeStore";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   to: string;
   icon: ComponentType<{ className?: string }>;
 };
 
 const sidebarItems: NavItem[] = [
-  { label: "Home", to: "/", icon: Home },
-  { label: "Lịch chiếu", to: "/lich-chieu", icon: CalendarClock },
-  { label: "Browse", to: "/browse", icon: Compass },
-  { label: "History", to: "/history", icon: History },
-  { label: "Favorites", to: "/favorites", icon: Heart },
-  { label: "Watchlist", to: "/watchlist", icon: Bookmark },
-  { label: "Notifications", to: "/notifications", icon: Bell },
-  { label: "Profile", to: "/profile", icon: User },
+  { labelKey: "nav.home", to: "/", icon: Home },
+  { labelKey: "nav.schedule", to: "/lich-chieu", icon: CalendarClock },
+  { labelKey: "nav.browse", to: "/browse", icon: Compass },
+  { labelKey: "nav.history", to: "/history", icon: History },
+  { labelKey: "nav.favorites", to: "/favorites", icon: Heart },
+  { labelKey: "nav.watchlist", to: "/watchlist", icon: Bookmark },
+  { labelKey: "nav.notifications", to: "/notifications", icon: Bell },
+  { labelKey: "nav.profile", to: "/profile", icon: User },
 ];
 
 const mobileTabs: NavItem[] = [
-  { label: "Home", to: "/", icon: Home },
-  { label: "Search", to: "/search", icon: Search },
-  { label: "History", to: "/history", icon: History },
-  { label: "Favorites", to: "/favorites", icon: Heart },
-  { label: "Profile", to: "/profile", icon: User },
+  { labelKey: "nav.home", to: "/", icon: Home },
+  { labelKey: "nav.search", to: "/search", icon: Search },
+  { labelKey: "nav.history", to: "/history", icon: History },
+  { labelKey: "nav.favorites", to: "/favorites", icon: Heart },
+  { labelKey: "nav.profile", to: "/profile", icon: User },
 ];
 
 function useIsActive(to: string) {
@@ -86,7 +88,9 @@ function useTheme() {
 
 function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }) {
   const active = useIsActive(item.to);
+  const { t } = useTranslation();
   const Icon = item.icon;
+  const label = t(item.labelKey);
 
   return (
     <Link
@@ -110,8 +114,8 @@ function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }
           />
         </>
       )}
-      <Icon className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-      {!collapsed && <span className="relative truncate">{item.label}</span>}
+      <Icon className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" aria-hidden />
+      {!collapsed && <span className="relative truncate">{label}</span>}
     </Link>
   );
 }
@@ -191,6 +195,7 @@ function SidebarPanel({
 
 function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
   const { isDark, toggle } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <header className="glass-strong sticky top-0 z-40 pt-safe-top">
@@ -201,7 +206,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             size="icon"
             className="md:hidden"
             onClick={onOpenMenu}
-            aria-label="Open menu"
+            aria-label={t("nav.home")}
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -216,27 +221,32 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
             <Input
               type="search"
-              placeholder="Search movies, shows, actors…"
+              placeholder={t("nav.search")}
+              aria-label={t("nav.search")}
               className="h-10 rounded-full border-foreground/10 bg-surface-elevated pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
             />
           </div>
 
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <div className="hidden sm:block">
+              <LanguageSwitcher />
+            </div>
+
             <Button
               variant="ghost"
               size="icon"
               onClick={toggle}
-              aria-label={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
-              title={isDark ? "Chế độ sáng" : "Chế độ tối"}
+              aria-label={isDark ? "Light mode" : "Dark mode"}
+              title={isDark ? "Light mode" : "Dark mode"}
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
             <NotificationBell />
 
-            <Link to="/profile" aria-label="Profile" className="ml-1">
+            <Link to="/profile" aria-label={t("nav.profile")} className="ml-1">
               <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
-                <AvatarImage src="" alt="You" />
+                <AvatarImage src="" alt="" />
                 <AvatarFallback className="bg-primary/20 text-primary">
                   YO
                 </AvatarFallback>
@@ -265,7 +275,9 @@ function BottomTabBar() {
 
 function MobileTab({ item }: { item: NavItem }) {
   const active = useIsActive(item.to);
+  const { t } = useTranslation();
   const Icon = item.icon;
+  const label = t(item.labelKey);
   return (
     <Link
       to={item.to}
@@ -273,6 +285,7 @@ function MobileTab({ item }: { item: NavItem }) {
         "relative flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
         active ? "text-primary" : "text-foreground-subtle hover:text-foreground",
       )}
+      aria-label={label}
     >
       <span className="relative grid h-8 w-12 place-items-center rounded-full">
         {active && (
@@ -282,9 +295,9 @@ function MobileTab({ item }: { item: NavItem }) {
             transition={{ type: "spring", stiffness: 380, damping: 32 }}
           />
         )}
-        <Icon className="relative h-5 w-5" />
+        <Icon className="relative h-5 w-5" aria-hidden />
       </span>
-      <span>{item.label}</span>
+      <span>{label}</span>
     </Link>
   );
 }

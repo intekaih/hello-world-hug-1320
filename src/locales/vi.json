@@ -1,0 +1,95 @@
+{
+  "language": {
+    "label": "Ngôn ngữ",
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "switchTo": "Chuyển sang {{name}}"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "schedule": "Lịch chiếu",
+    "browse": "Khám phá",
+    "history": "Lịch sử",
+    "favorites": "Yêu thích",
+    "watchlist": "Xem sau",
+    "notifications": "Thông báo",
+    "profile": "Hồ sơ",
+    "search": "Tìm kiếm"
+  },
+  "common": {
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "back": "Quay lại",
+    "backHome": "Về trang chủ",
+    "viewAll": "Xem tất cả",
+    "readMore": "+ Đọc tiếp",
+    "readLess": "— Thu gọn",
+    "empty": "Chưa có dữ liệu",
+    "skipToContent": "Bỏ qua đến nội dung chính"
+  },
+  "detail": {
+    "hero": {
+      "eyebrow": "{{genre}} · {{year}}",
+      "eyebrowFallback": "Feature",
+      "muteTrailer": "Tắt tiếng trailer",
+      "unmuteTrailer": "Bật tiếng trailer",
+      "closeTrailer": "Đóng trailer"
+    },
+    "actions": {
+      "watchNow": "Xem ngay",
+      "watchTrailer": "Xem trailer",
+      "favorite": "Yêu thích",
+      "unfavorite": "Bỏ yêu thích",
+      "watchlist": "Xem sau",
+      "watchlistRemove": "Bỏ khỏi danh sách",
+      "share": "Chia sẻ",
+      "shared": "Đã copy link",
+      "trailer": "Trailer",
+      "scrollToTop": "Về đầu trang"
+    },
+    "synopsis": {
+      "eyebrow": "Synopsis",
+      "title": "Nội dung phim",
+      "translate": "Dịch tiếng Việt",
+      "showOriginal": "Bản gốc",
+      "translating": "Đang dịch…"
+    },
+    "cast": {
+      "eyebrow": "Cast",
+      "title": "Diễn viên"
+    },
+    "meta": {
+      "eyebrow": "Details",
+      "title": "Thông tin",
+      "director": "Đạo diễn",
+      "country": "Quốc gia",
+      "year": "Năm sản xuất",
+      "duration": "Thời lượng",
+      "quality": "Chất lượng",
+      "language": "Ngôn ngữ",
+      "empty": "—"
+    },
+    "genres": {
+      "eyebrow": "Genres",
+      "title": "Thể loại"
+    },
+    "episodes": {
+      "eyebrow": "Episodes",
+      "title": "Danh sách tập",
+      "count": "{{n}} tập",
+      "prefix": "Tập"
+    },
+    "parts": {
+      "eyebrow": "Universe",
+      "title": "Các phần khác"
+    },
+    "related": {
+      "eyebrow": "Discover",
+      "title": "Phim liên quan"
+    },
+    "notFound": {
+      "title": "Không tìm thấy phim",
+      "description": "Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+    }
+  }
+}

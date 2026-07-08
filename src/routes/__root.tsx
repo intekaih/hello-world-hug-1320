@@ -12,24 +12,25 @@ import { AppShell } from "@/components/app-shell";
 import { AuthInitializer } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { OfflineBanner } from "@/components/offline-banner";
+import { I18nProvider } from "@/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Không tìm thấy trang</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Trang bạn tìm không tồn tại hoặc đã được di chuyển.
+          The page you're looking for doesn't exist or was moved.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Về trang chủ
+            Home
           </Link>
         </div>
       </div>
@@ -46,13 +47,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Đã có lỗi
+          Something went wrong
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Trang này không tải được. Bạn có thể thử lại hoặc quay về trang chủ.
+          This page failed to load. You can retry or return home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -62,13 +63,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Thử lại
+            Retry
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Về trang chủ
+            Home
           </a>
         </div>
 
@@ -130,7 +131,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         <a href="#main-content" className="skip-link">
-          Bỏ qua đến nội dung chính
+          Skip to main content
         </a>
         {children}
         <Scripts />
@@ -149,11 +150,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <OfflineBanner />
-      <AuthInitializer>
-        <AppShell />
-        <Toaster />
-      </AuthInitializer>
+      <I18nProvider>
+        <OfflineBanner />
+        <AuthInitializer>
+          <AppShell />
+          <Toaster />
+        </AuthInitializer>
+      </I18nProvider>
     </QueryClientProvider>
   );
 }
