@@ -129,17 +129,7 @@ function SidebarPanel({ collapsed = false }: { collapsed?: boolean }) {
           <SidebarLink key={item.to} item={item} collapsed={collapsed} />
         ))}
       </nav>
-      {!collapsed && (
-        <div className="glass rounded-2xl p-4">
-          <p className="font-display text-sm font-semibold">Go Premium</p>
-          <p className="mt-1 text-xs text-foreground-subtle">
-            Unlock 4K & ad-free streaming.
-          </p>
-          <Button size="sm" className="mt-3 w-full">
-            Upgrade
-          </Button>
-        </div>
-      )}
+      <div className="flex-1" />
     </div>
   );
 }
