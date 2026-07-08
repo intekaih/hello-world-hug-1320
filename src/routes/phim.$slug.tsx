@@ -20,9 +20,11 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { RouteErrorBoundary, RouteNotFound } from "@/components/route-boundaries";
 import { cn } from "@/lib/utils";
 import { buildPageMeta } from "@/lib/page-meta";
 import { usePageMeta } from "@/hooks/usePageMeta";
+
 
 type Movie = {
   slug: string;
