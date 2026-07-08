@@ -2,6 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 export type HeroMovie = {
   id: number;
+  slug: string;
   title: string;
   overview: string;
   backdrop_url: string;
@@ -14,6 +15,7 @@ export type HeroMovie = {
 
 export type MovieCard = {
   id: number;
+  slug: string;
   title: string;
   poster_url: string;
   year: number;
