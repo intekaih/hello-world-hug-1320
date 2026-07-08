@@ -74,6 +74,17 @@ function SearchPage() {
   const [accumulated, setAccumulated] = useState<SearchResult["items"]>([]);
   const lastQueryRef = useRef<string>("");
 
+  usePageMeta(
+    q.trim()
+      ? {
+          title: `Tìm kiếm: ${q} - movieCC`,
+          description: `Kết quả tìm kiếm cho "${q}" trên movieCC. Xem phim HD Vietsub, thuyết minh miễn phí.`,
+          url: `/search?q=${encodeURIComponent(q)}`,
+          noindex: true,
+        }
+      : null,
+  );
+
   useEffect(() => {
     setRecent(loadRecent());
     inputRef.current?.focus();
