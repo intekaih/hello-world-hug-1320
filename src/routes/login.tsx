@@ -62,18 +62,26 @@ function LoginPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify(values),
       });
-      const data = (await res.json()) as { success: boolean; error?: string };
-      if (!res.ok || !data.success) {
+      const data = (await res.json()) as {
+        success: boolean;
+        error?: string;
+        user?: import("@/store/authStore").AuthUser;
+      };
+      if (!res.ok || !data.success || !data.user) {
         setServerError(data.error ?? "Đăng nhập thất bại. Vui lòng thử lại.");
         return;
       }
+      // Hydrate store immediately so the next page sees the user.
+      (await import("@/store/authStore")).useAuthStore
+        .getState()
+        .setUser(data.user);
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
-      await queryClient.refetchQueries({ queryKey: ["auth", "me"] });
       navigate({ to: redirect || "/", replace: true });
     } catch {
       setServerError("Không thể kết nối máy chủ. Kiểm tra lại kết nối.");
     }
   };
+
 
   return (
     <div className="-mx-4 -my-4 min-h-[calc(100vh-4rem)] md:-mx-6 md:-my-6 lg:-mx-8 lg:-my-8">
