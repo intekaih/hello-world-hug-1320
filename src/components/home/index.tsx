@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { AnimatePresence, motion } from "motion/react";
 import {
   ChevronLeft,
