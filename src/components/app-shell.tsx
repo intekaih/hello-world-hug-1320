@@ -88,7 +88,9 @@ function useTheme() {
 
 function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }) {
   const active = useIsActive(item.to);
+  const { t } = useTranslation();
   const Icon = item.icon;
+  const label = t(item.labelKey);
 
   return (
     <Link
