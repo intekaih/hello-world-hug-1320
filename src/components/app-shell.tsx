@@ -21,34 +21,36 @@ import { useEffect, useRef, useState, type ComponentType } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { NotificationBell } from "@/components/notifications";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useThemeStore } from "@/store/themeStore";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   to: string;
   icon: ComponentType<{ className?: string }>;
 };
 
 const sidebarItems: NavItem[] = [
-  { label: "Home", to: "/", icon: Home },
-  { label: "Lịch chiếu", to: "/lich-chieu", icon: CalendarClock },
-  { label: "Browse", to: "/browse", icon: Compass },
-  { label: "History", to: "/history", icon: History },
-  { label: "Favorites", to: "/favorites", icon: Heart },
-  { label: "Watchlist", to: "/watchlist", icon: Bookmark },
-  { label: "Notifications", to: "/notifications", icon: Bell },
-  { label: "Profile", to: "/profile", icon: User },
+  { labelKey: "nav.home", to: "/", icon: Home },
+  { labelKey: "nav.schedule", to: "/lich-chieu", icon: CalendarClock },
+  { labelKey: "nav.browse", to: "/browse", icon: Compass },
+  { labelKey: "nav.history", to: "/history", icon: History },
+  { labelKey: "nav.favorites", to: "/favorites", icon: Heart },
+  { labelKey: "nav.watchlist", to: "/watchlist", icon: Bookmark },
+  { labelKey: "nav.notifications", to: "/notifications", icon: Bell },
+  { labelKey: "nav.profile", to: "/profile", icon: User },
 ];
 
 const mobileTabs: NavItem[] = [
-  { label: "Home", to: "/", icon: Home },
-  { label: "Search", to: "/search", icon: Search },
-  { label: "History", to: "/history", icon: History },
-  { label: "Favorites", to: "/favorites", icon: Heart },
-  { label: "Profile", to: "/profile", icon: User },
+  { labelKey: "nav.home", to: "/", icon: Home },
+  { labelKey: "nav.search", to: "/search", icon: Search },
+  { labelKey: "nav.history", to: "/history", icon: History },
+  { labelKey: "nav.favorites", to: "/favorites", icon: Heart },
+  { labelKey: "nav.profile", to: "/profile", icon: User },
 ];
 
 function useIsActive(to: string) {
