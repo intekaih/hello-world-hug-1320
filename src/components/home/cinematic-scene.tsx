@@ -29,7 +29,7 @@ export function CinematicScene({
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : ["-12%", "12%"]);
+  const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-12%", "12%"]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], reduce ? [1, 1, 1] : [1.15, 1.05, 1.15]);
   const textY = useTransform(scrollYProgress, [0, 0.5, 1], reduce ? [0, 0, 0] : [80, 0, -80]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.75, 1], [0, 1, 1, 0]);
