@@ -802,17 +802,18 @@ function ServerSelector({
   onChange: (id: string) => void;
 }) {
   return (
-    <div className="glass flex items-center gap-1 rounded-full p-1">
+    <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/40 p-1 backdrop-blur-xl">
       {servers.map((s) => (
         <button
           key={s.id}
           onClick={() => onChange(s.id)}
           className={cn(
-            "rounded-full px-2.5 py-1 text-xs font-medium text-white transition",
+            "rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/85 transition",
             value === s.id
-              ? "bg-primary text-primary-foreground"
+              ? "text-white shadow-[0_0_15px_oklch(0.68_0.24_25/0.5)]"
               : "hover:bg-white/10",
           )}
+          style={value === s.id ? { background: "var(--gradient-ember)" } : undefined}
         >
           {s.name}
         </button>
