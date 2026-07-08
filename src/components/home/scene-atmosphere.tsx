@@ -1,4 +1,6 @@
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+
 
 /**
  * SceneAtmosphere — a fixed backdrop that morphs colour as the user
