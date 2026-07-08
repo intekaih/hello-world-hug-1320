@@ -92,10 +92,22 @@ function MovieDetailPage() {
     queryKey: ["movie", slug],
     queryFn: async () => {
       const res = await fetch(`/api/movies/${slug}`);
-      if (!res.ok) throw new Error("Not found");
+      if (!res.ok) {
+        const err = new Error(
+          res.status === 404 ? "Không tìm thấy phim" : `Lỗi tải phim (${res.status})`,
+        ) as Error & { status: number };
+        err.status = res.status;
+        throw err;
+      }
       return res.json() as Promise<Movie>;
     },
+    retry: (failureCount, error) => {
+      const status = (error as { status?: number })?.status;
+      if (status && status >= 400 && status < 500) return false;
+      return failureCount < 2;
+    },
   });
+
 
   const relatedQ = useQuery({
     queryKey: ["movie", slug, "related"],
