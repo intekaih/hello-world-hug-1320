@@ -269,7 +269,9 @@ function BottomTabBar() {
 
 function MobileTab({ item }: { item: NavItem }) {
   const active = useIsActive(item.to);
+  const { t } = useTranslation();
   const Icon = item.icon;
+  const label = t(item.labelKey);
   return (
     <Link
       to={item.to}
@@ -277,6 +279,7 @@ function MobileTab({ item }: { item: NavItem }) {
         "relative flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
         active ? "text-primary" : "text-foreground-subtle hover:text-foreground",
       )}
+      aria-label={label}
     >
       <span className="relative grid h-8 w-12 place-items-center rounded-full">
         {active && (
@@ -286,9 +289,9 @@ function MobileTab({ item }: { item: NavItem }) {
             transition={{ type: "spring", stiffness: 380, damping: 32 }}
           />
         )}
-        <Icon className="relative h-5 w-5" />
+        <Icon className="relative h-5 w-5" aria-hidden />
       </span>
-      <span>{item.label}</span>
+      <span>{label}</span>
     </Link>
   );
 }
