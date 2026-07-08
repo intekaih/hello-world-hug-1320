@@ -185,6 +185,9 @@ export function SceneSection({
       {/* Subtle grid noise */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:22px_22px]" />
 
+      {/* Decorative particle overlay (per-scene flavour). */}
+      {particles && !reduce && <SceneParticles kind={particles} accent={tokens.accent} />}
+
       {/* Section header */}
       {(eyebrow || title || subtitle) && (
         <header
@@ -223,7 +226,140 @@ export function SceneSection({
         </header>
       )}
 
-      <div className="relative z-10">{children}</div>
+      <motion.div
+        initial={reduce ? false : entranceVariants.initial}
+        whileInView={entranceVariants.whileInView}
+        viewport={{ once: true, margin: "-15% 0px" }}
+        transition={entranceVariants.transition}
+        className="relative z-10"
+      >
+        {children}
+      </motion.div>
     </section>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Entrance grammar — each scene arrives with its own kinesthetic signature. */
+/* -------------------------------------------------------------------------- */
+
+type EntranceSpec = {
+  initial: Record<string, number | string>;
+  whileInView: Record<string, number | string>;
+  transition: { duration: number; ease: number[]; delay?: number };
+};
+
+function getEntranceVariants(
+  kind: "rise" | "focus" | "sweep" | "iris" | "drift",
+  reduce: boolean,
+): EntranceSpec {
+  const NONE: EntranceSpec = {
+    initial: { opacity: 1 },
+    whileInView: { opacity: 1 },
+    transition: { duration: 0, ease: [0.16, 1, 0.3, 1] },
+  };
+  if (reduce) return NONE;
+
+  switch (kind) {
+    case "focus":
+      // Camera "pulls focus" — starts blurred and defocused, snaps sharp.
+      return {
+        initial: { opacity: 0, filter: "blur(18px)", scale: 1.04 },
+        whileInView: { opacity: 1, filter: "blur(0px)", scale: 1 },
+        transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] },
+      };
+    case "sweep":
+      // Lateral camera pan across the scene.
+      return {
+        initial: { opacity: 0, x: -40 },
+        whileInView: { opacity: 1, x: 0 },
+        transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+      };
+    case "iris":
+      // Epic reveal — scale-in from a heavy, cinematic starting pose.
+      return {
+        initial: { opacity: 0, scale: 0.92, y: 20 },
+        whileInView: { opacity: 1, scale: 1, y: 0 },
+        transition: { duration: 1.05, ease: [0.16, 1, 0.3, 1] },
+      };
+    case "drift":
+      // Slow ambient drift — for coming-soon, floating-through-space vibe.
+      return {
+        initial: { opacity: 0, y: 40, filter: "blur(6px)" },
+        whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+        transition: { duration: 1.3, ease: [0.16, 1, 0.3, 1] },
+      };
+    case "rise":
+    default:
+      return {
+        initial: { opacity: 0, y: 24 },
+        whileInView: { opacity: 1, y: 0 },
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+      };
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Particle overlays — CSS-only, cheap, and paused when offscreen naturally  */
+/*  because they use transform-only keyframes with will-change hints.         */
+/* -------------------------------------------------------------------------- */
+
+function SceneParticles({
+  kind,
+  accent,
+}: {
+  kind: "dust" | "sparks" | "beam" | "rain";
+  accent: string;
+}) {
+  if (kind === "beam") {
+    return (
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div
+          className="absolute -left-1/3 top-0 h-full w-[60%] -skew-x-12 opacity-40 mix-blend-screen animate-[scene-beam_9s_linear_infinite]"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${accent}, transparent)`,
+            filter: "blur(28px)",
+          }}
+        />
+      </div>
+    );
+  }
+
+  const count = kind === "rain" ? 24 : kind === "sparks" ? 18 : 14;
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {Array.from({ length: count }).map((_, i) => {
+        const delay = ((i * 0.63) % 6).toFixed(2);
+        const dur = kind === "rain" ? 5 + ((i * 0.31) % 4) : 8 + ((i * 0.47) % 6);
+        const left = ((i * 137.5) % 100).toFixed(2);
+        const size = kind === "sparks" ? 3 : kind === "rain" ? 1.5 : 2;
+        return (
+          <span
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: `${left}%`,
+              bottom: "-10%",
+              width: `${size}px`,
+              height: kind === "rain" ? `${size * 6}px` : `${size}px`,
+              background:
+                kind === "sparks" ? accent : "rgba(255,255,255,0.55)",
+              boxShadow:
+                kind === "sparks" ? `0 0 8px ${accent}` : "0 0 4px rgba(255,255,255,0.4)",
+              animation: `scene-float ${dur}s linear ${delay}s infinite`,
+              opacity: 0.65,
+              willChange: "transform, opacity",
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
