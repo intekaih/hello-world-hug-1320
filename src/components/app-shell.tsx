@@ -268,17 +268,19 @@ function MobileTab({ item }: { item: NavItem }) {
     <Link
       to={item.to}
       className={cn(
-        "flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
+        "relative flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
         active ? "text-primary" : "text-foreground-subtle hover:text-foreground",
       )}
     >
-      <span
-        className={cn(
-          "grid h-8 w-12 place-items-center rounded-full transition-colors",
-          active && "bg-primary/15",
+      <span className="relative grid h-8 w-12 place-items-center rounded-full">
+        {active && (
+          <motion.span
+            layoutId="mobile-pill"
+            className="absolute inset-0 rounded-full bg-primary/15"
+            transition={{ type: "spring", stiffness: 380, damping: 32 }}
+          />
         )}
-      >
-        <Icon className="h-5 w-5" />
+        <Icon className="relative h-5 w-5" />
       </span>
       <span>{item.label}</span>
     </Link>
