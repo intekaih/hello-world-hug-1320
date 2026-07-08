@@ -153,7 +153,7 @@ function WatchlistCard({
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           <img
-            src={item.movie_thumb}
+            src={thumbSrc(item.movie_thumb,{w:400})}
             alt={item.movie_name}
             loading="lazy"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

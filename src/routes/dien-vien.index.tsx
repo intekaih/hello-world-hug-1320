@@ -1,3 +1,4 @@
+import { thumbSrc } from "@/utils/thumbSrc";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";

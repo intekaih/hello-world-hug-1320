@@ -80,7 +80,7 @@ function ActorMoviesPage() {
           className="glass flex flex-col items-center gap-6 rounded-3xl border border-white/10 p-6 text-center md:flex-row md:items-end md:text-left"
         >
           <img
-            src={actor.avatar_url}
+            src={thumbSrc(actor.avatar_url,{w:400})}
             alt={actor.name}
             className="h-36 w-36 rounded-full bg-white/10 object-cover ring-4 ring-primary/30 shadow-2xl shadow-primary/20"
           />
@@ -121,7 +121,7 @@ function ActorMoviesPage() {
                   >
                     <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
                       <img
-                        src={m.poster_url}
+                        src={thumbSrc(m.poster_url,{w:400})}
                         alt={m.title}
                         loading="lazy"
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

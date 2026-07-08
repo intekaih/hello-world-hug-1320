@@ -210,7 +210,7 @@ function SearchPage() {
                           className="flex w-full items-center gap-3 px-3 py-2 text-left transition hover:bg-white/5"
                         >
                           <img
-                            src={item.poster_url}
+                            src={thumbSrc(item.poster_url,{w:400})}
                             alt=""
                             className="h-14 w-10 flex-shrink-0 rounded-md object-cover"
                             loading="lazy"
@@ -407,7 +407,7 @@ function MovieCard({ item, index }: { item: SearchResult["items"][number]; index
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           <img
-            src={item.poster_url}
+            src={thumbSrc(item.poster_url,{w:400})}
             alt={item.title}
             loading="lazy"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
