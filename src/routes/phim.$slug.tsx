@@ -55,13 +55,19 @@ type RelatedItem = {
 
 export const Route = createFileRoute("/phim/$slug")({
   component: MovieDetailPage,
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug} — Stream` },
-      { name: "description", content: `Xem phim ${params.slug} miễn phí` },
-      { property: "og:title", content: `${params.slug} — Stream` },
-    ],
-  }),
+  head: ({ params }) => {
+    const nice = params.slug
+      .split("-")
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(" ");
+    return {
+      meta: [
+        { title: `${nice} — movieCC` },
+        { name: "description", content: `Xem phim ${nice} online Vietsub, chất lượng cao trên movieCC.` },
+        { property: "og:title", content: `${nice} — movieCC` },
+      ],
+    };
+  },
 });
 
 function MovieDetailPage() {
