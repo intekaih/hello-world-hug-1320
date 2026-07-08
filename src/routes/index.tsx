@@ -81,11 +81,12 @@ function Home() {
       {/* SCENE 02 — Continue Watching (indigo mood, personal) */}
       {isLoggedIn && data.continueWatching.length > 0 && (
         <StaggerItem>
-          <SceneSection mood="indigo" eyebrow="Đang xem · Resume" intensity={0.9}>
-            <ContinueWatching items={data.continueWatching} />
+          <SceneSection mood="indigo" intensity={0.9}>
+            <ContinueWatchingImmersive items={data.continueWatching} />
           </SceneSection>
         </StaggerItem>
       )}
+
 
       {/* SCENE 03 — Trending Today (ember, hot) */}
       <StaggerItem>
