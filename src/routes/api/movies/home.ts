@@ -3,6 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 const IMG = (path: string, size = "original") =>
   `https://image.tmdb.org/t/p/${size}${path}`;
 
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const heroMovies = [
   {
     id: 1,
@@ -64,7 +72,7 @@ const heroMovies = [
     rating: "R",
     genres: ["Action", "Adventure"],
   },
-];
+].map((m) => ({ ...m, slug: slugify(m.title) }));
 
 const makeCard = (
   id: number,
@@ -74,6 +82,7 @@ const makeCard = (
 ) => ({
   id,
   title,
+  slug: slugify(title.replace(/\s·\s.+$/, "")),
   poster_url: IMG(poster, "w500"),
   year: 2024,
   rating: 8.2,
