@@ -94,6 +94,20 @@ function Home() {
         />
       </StaggerItem>
 
+      {data.heroMovies[1] && (
+        <StaggerItem>
+          <CinematicScene
+            movie={data.heroMovies[1]}
+            eyebrow="Feature Presentation"
+            kicker="In spotlight this week"
+          />
+        </StaggerItem>
+      )}
+
+      <StaggerItem>
+        <GenreCosmos />
+      </StaggerItem>
+
       <StaggerItem>
         <MovieRow
           title="Mới cập nhật"
