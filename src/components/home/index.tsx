@@ -520,27 +520,29 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
             key={m.id}
             to="/phim/$slug"
             params={{ slug: m.slug }}
-            className="group relative w-[160px] shrink-0 snap-start transition-transform duration-200 hover:-translate-y-1 sm:w-[180px] lg:w-[200px]"
+            className="group relative w-[170px] shrink-0 snap-start transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 sm:w-[190px] lg:w-[210px]"
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute -left-8 bottom-0 select-none font-display text-[130px] font-black leading-[0.8] text-transparent [-webkit-text-stroke:2px_var(--color-primary)] sm:-left-10 sm:text-[160px] lg:text-[180px]"
+              className="pointer-events-none absolute -left-6 bottom-2 select-none font-display text-[170px] italic leading-[0.78] tracking-[-0.08em] text-transparent [font-variation-settings:'opsz'_144,'SOFT'_100] [-webkit-text-stroke:1.5px_var(--color-primary)] sm:-left-8 sm:text-[210px] lg:-left-10 lg:text-[240px]"
               style={{
                 background:
-                  "linear-gradient(180deg, oklch(0.65 0.22 15 / 0.9), oklch(0.65 0.22 15 / 0.1))",
+                  "linear-gradient(160deg, oklch(0.65 0.22 15 / 0.95) 0%, oklch(0.78 0.16 70 / 0.7) 45%, oklch(0.65 0.22 15 / 0.05) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
+                fontWeight: 900,
               }}
             >
               {i + 1}
             </span>
-            <div className="relative ml-6 aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated shadow-[var(--shadow-elevated)] sm:ml-8">
+            <div className="relative ml-8 aspect-[2/3] overflow-hidden rounded-2xl bg-surface-elevated shadow-[var(--shadow-cinematic)] transition-shadow duration-500 group-hover:shadow-[0_40px_100px_-20px_oklch(0.65_0.22_15/0.55)] sm:ml-10">
               <img
-                src={thumbSrc(m.poster_url,{w:400})}
+                src={thumbSrc(m.poster_url, { w: 400 })}
                 alt={m.title}
                 loading="lazy"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
               />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
             </div>
           </Link>
         ))}
