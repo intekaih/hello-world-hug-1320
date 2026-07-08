@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { buildPageMeta } from "@/lib/page-meta";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type Movie = {
   slug: string;
@@ -62,11 +64,13 @@ export const Route = createFileRoute("/phim/$slug")({
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(" ");
     return {
-      meta: [
-        { title: `${nice} — movieCC` },
-        { name: "description", content: `Xem phim ${nice} online Vietsub, chất lượng cao trên movieCC.` },
-        { property: "og:title", content: `${nice} — movieCC` },
-      ],
+      meta: buildPageMeta({
+        title: `${nice} - movieCC`,
+        description: `Xem phim ${nice} online Vietsub, thuyết minh, chất lượng HD miễn phí trên movieCC. Cập nhật tập mới nhanh nhất.`,
+        url: `/phim/${params.slug}`,
+        type: "video.movie",
+      }),
+      links: [{ rel: "canonical", href: `/phim/${params.slug}` }],
     };
   },
 });
