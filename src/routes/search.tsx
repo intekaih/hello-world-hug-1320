@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { Search as SearchIcon, X, Loader2, Clock, TrendingUp, Star } from "lucide-react";
 import { z } from "zod";
 
+import { buildPageMeta } from "@/lib/page-meta";
+import { usePageMeta } from "@/hooks/usePageMeta";
+
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   page: fallback(z.number().int(), 1).default(1),
@@ -49,21 +52,14 @@ function saveRecent(q: string) {
 
 export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
-  head: ({ search }) => {
-    const q = (search as { q?: string })?.q?.trim();
-    const title = q ? `Tìm kiếm: ${q} - movieCC` : "Tìm kiếm - movieCC";
-    const description = q
-      ? `Kết quả tìm kiếm cho "${q}" trên movieCC. Xem phim HD Vietsub, thuyết minh miễn phí.`
-      : "Tìm phim, series, anime bạn muốn xem trên movieCC. Kho phim HD Vietsub miễn phí.";
-    return {
-      meta: buildPageMeta({
-        title,
-        description,
-        url: q ? `/search?q=${encodeURIComponent(q)}` : "/search",
-        noindex: !!q,
-      }),
-    };
-  },
+  head: () => ({
+    meta: buildPageMeta({
+      title: "Tìm kiếm - movieCC",
+      description:
+        "Tìm phim, series, anime bạn muốn xem trên movieCC. Kho phim HD Vietsub miễn phí.",
+      url: "/search",
+    }),
+  }),
   component: SearchPage,
 });
 
