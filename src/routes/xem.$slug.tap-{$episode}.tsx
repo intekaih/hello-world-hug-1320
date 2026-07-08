@@ -254,7 +254,7 @@ function WatchPage() {
             episode={episode}
             totalEpisodes={TOTAL_EPISODES}
             title={title}
-            poster={posterUrl}
+            poster={backdropUrl}
             servers={servers}
             initialTime={initialTime}
             onChangeEpisode={goToEpisode}
