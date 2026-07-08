@@ -102,12 +102,20 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           </p>
 
           <div className="flex flex-wrap items-center gap-2 pt-2">
-            <button className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90">
+            <Link
+              to="/xem/$slug/tap-$episode"
+              params={{ slug: movie.slug, episode: "1" }}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90"
+            >
               <Play className="h-4 w-4 fill-current" /> Play
-            </button>
-            <button className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-white/10">
+            </Link>
+            <Link
+              to="/phim/$slug"
+              params={{ slug: movie.slug }}
+              className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-white/10"
+            >
               <Info className="h-4 w-4" /> More info
-            </button>
+            </Link>
           </div>
         </motion.div>
       </div>
