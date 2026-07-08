@@ -17,7 +17,9 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
+import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 
 const WatchlistRoute = WatchlistRouteImport.update({
   id: '/watchlist',
@@ -59,10 +61,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiHistoryRoute = ApiHistoryRouteImport.update({
+  id: '/api/history',
+  path: '/api/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHistorySlugEpRoute = ApiHistorySlugEpRouteImport.update({
+  id: '/$slug/$ep',
+  path: '/$slug/$ep',
+  getParentRoute: () => ApiHistoryRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -74,7 +86,9 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +99,9 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +113,9 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +128,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/history'
     | '/api/movies/home'
+    | '/api/history/$slug/$ep'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,7 +141,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/history'
     | '/api/movies/home'
+    | '/api/history/$slug/$ep'
   id:
     | '__root__'
     | '/'
@@ -132,7 +154,9 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/history'
     | '/api/movies/home'
+    | '/api/history/$slug/$ep'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,6 +168,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
 }
 
@@ -205,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/history': {
+      id: '/api/history'
+      path: '/api/history'
+      fullPath: '/api/history'
+      preLoaderRoute: typeof ApiHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/movies/home': {
       id: '/api/movies/home'
       path: '/api/movies/home'
@@ -212,8 +244,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMoviesHomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/history/$slug/$ep': {
+      id: '/api/history/$slug/$ep'
+      path: '/$slug/$ep'
+      fullPath: '/api/history/$slug/$ep'
+      preLoaderRoute: typeof ApiHistorySlugEpRouteImport
+      parentRoute: typeof ApiHistoryRoute
+    }
   }
 }
+
+interface ApiHistoryRouteChildren {
+  ApiHistorySlugEpRoute: typeof ApiHistorySlugEpRoute
+}
+
+const ApiHistoryRouteChildren: ApiHistoryRouteChildren = {
+  ApiHistorySlugEpRoute: ApiHistorySlugEpRoute,
+}
+
+const ApiHistoryRouteWithChildren = ApiHistoryRoute._addFileChildren(
+  ApiHistoryRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -224,6 +275,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
 }
 export const routeTree = rootRouteImport
