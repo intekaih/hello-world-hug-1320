@@ -62,8 +62,8 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             alt=""
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/15 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
