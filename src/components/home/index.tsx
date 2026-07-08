@@ -369,7 +369,7 @@ export function MovieRow({
   subtitle,
   movies,
 }: {
-  title: string;
+  title?: string;
   subtitle?: string;
   movies: MovieCard[];
 }) {
@@ -377,12 +377,14 @@ export function MovieRow({
 
   return (
     <div className="space-y-3">
-      <SectionHeader
-        title={title}
-        subtitle={subtitle}
-        onScrollLeft={() => scrollBy(-1)}
-        onScrollRight={() => scrollBy(1)}
-      />
+      {(title || subtitle) && (
+        <SectionHeader
+          title={title ?? ""}
+          subtitle={subtitle}
+          onScrollLeft={() => scrollBy(-1)}
+          onScrollRight={() => scrollBy(1)}
+        />
+      )}
       <div
         ref={ref}
         className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
