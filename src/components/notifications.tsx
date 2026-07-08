@@ -145,6 +145,7 @@ export function NotificationBell() {
   const count = countData?.count ?? 0;
   const items = data?.items ?? [];
   const latest = items.slice(0, 5);
+  const bump = useNotificationAlerts(count, items);
 
   useEffect(() => {
     if (!open) return;
@@ -160,17 +161,35 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label="Thông báo"
+        aria-label={count > 0 ? `Thông báo (${count} chưa đọc)` : "Thông báo"}
         aria-expanded={open}
         className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground"
       >
-        <Bell className="h-5 w-5" />
-        {count > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-white shadow-lg shadow-primary/40">
-            {count > 9 ? "9+" : count}
-          </span>
-        )}
+        <motion.span
+          key={bump}
+          animate={bump > 0 ? { rotate: [0, -15, 12, -8, 6, 0] } : { rotate: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="inline-flex"
+        >
+          <Bell className="h-5 w-5" />
+        </motion.span>
+        <AnimatePresence>
+          {count > 0 && (
+            <motion.span
+              key={`badge-${bump}`}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: [1, 1.35, 1], opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              aria-hidden="true"
+              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-white shadow-lg shadow-primary/40"
+            >
+              {count > 9 ? "9+" : count}
+            </motion.span>
+          )}
+        </AnimatePresence>
       </button>
+
 
       <AnimatePresence>
         {open && (
