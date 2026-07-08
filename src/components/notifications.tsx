@@ -176,7 +176,7 @@ export function NotificationBell() {
         onClick={() => setOpen((v) => !v)}
         aria-label={count > 0 ? `Thông báo (${count} chưa đọc)` : "Thông báo"}
         aria-expanded={open}
-        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-white/5 hover:text-foreground"
+        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
       >
         <motion.span
           key={bump}
@@ -211,11 +211,11 @@ export function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15 }}
-            className="glass-strong absolute right-0 top-[calc(100%+8px)] z-50 w-[92vw] max-w-sm overflow-hidden rounded-2xl border border-white/10 shadow-2xl"
+            className="glass-strong absolute right-0 top-[calc(100%+8px)] z-50 w-[92vw] max-w-sm overflow-hidden rounded-2xl border border-foreground/10 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-3">
               <div className="flex items-center gap-2">
-                <span className="font-display text-sm font-semibold text-white">
+                <span className="font-display text-sm font-semibold text-foreground">
                   Thông báo
                 </span>
                 {count > 0 && (
@@ -227,7 +227,7 @@ export function NotificationBell() {
               {count > 0 && (
                 <button
                   onClick={() => markRead.mutate({ all: true })}
-                  className="text-xs text-white/60 transition hover:text-primary"
+                  className="text-xs text-muted-foreground transition hover:text-primary"
                 >
                   Đọc tất cả
                 </button>
@@ -238,15 +238,15 @@ export function NotificationBell() {
               {isLoading ? (
                 Array.from({ length: 3 }).map((_, i) => (
                   <li key={i} className="flex gap-3 px-3 py-2.5">
-                    <div className="h-14 w-10 flex-shrink-0 animate-pulse rounded-md bg-white/5" />
+                    <div className="h-14 w-10 flex-shrink-0 animate-pulse rounded-md bg-surface-elevated" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 w-2/3 animate-pulse rounded bg-white/5" />
-                      <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+                      <div className="h-3 w-2/3 animate-pulse rounded bg-surface-elevated" />
+                      <div className="h-3 w-1/3 animate-pulse rounded bg-surface-elevated" />
                     </div>
                   </li>
                 ))
               ) : latest.length === 0 ? (
-                <li className="px-4 py-8 text-center text-sm text-white/50">
+                <li className="px-4 py-8 text-center text-sm text-muted-foreground">
                   Chưa có thông báo
                 </li>
               ) : (
@@ -264,13 +264,13 @@ export function NotificationBell() {
                         if (!n.read) markRead.mutate({ id: n.id });
                         setOpen(false);
                       }}
-                      className="flex gap-3 px-3 py-2.5 transition hover:bg-white/5"
+                      className="flex gap-3 px-3 py-2.5 transition hover:bg-surface-elevated"
                     >
                       <div className="relative flex-shrink-0">
                         <img
                           src={thumbSrc(n.movie_thumb,{w:200})}
                           alt=""
-                          className="h-14 w-10 rounded-md bg-white/10 object-cover"
+                          className="h-14 w-10 rounded-md bg-foreground/10 object-cover"
                           loading="lazy"
                           onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg"; }}
                         />
@@ -279,14 +279,14 @@ export function NotificationBell() {
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="truncate text-sm font-medium text-white">
+                        <div className="truncate text-sm font-medium text-foreground">
                           {n.movie_name}
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-white/60">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                           <PlayCircle className="h-3 w-3 text-accent" />
                           <span className="truncate">{n.message}</span>
                         </div>
-                        <div className="mt-0.5 text-[10px] text-white/40">
+                        <div className="mt-0.5 text-[10px] text-muted-foreground">
                           {formatRelative(n.createdAt)}
                         </div>
                       </div>
@@ -296,7 +296,7 @@ export function NotificationBell() {
               )}
             </ul>
 
-            <div className="border-t border-white/5">
+            <div className="border-t border-foreground/10">
               <Link
                 to="/notifications"
                 onClick={() => setOpen(false)}
@@ -345,7 +345,7 @@ export function NotificationRow({
           <img
             src={thumbSrc(n.movie_thumb,{w:200})}
             alt=""
-            className="h-24 w-16 rounded-lg bg-white/10 object-cover shadow-md sm:h-28 sm:w-20"
+            className="h-24 w-16 rounded-lg bg-foreground/10 object-cover shadow-md sm:h-28 sm:w-20"
             loading="lazy"
             onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg"; }}
           />
@@ -360,18 +360,18 @@ export function NotificationRow({
                 Tập mới
               </span>
             )}
-            <span className="text-xs text-white/40">{formatRelative(n.createdAt)}</span>
+            <span className="text-xs text-muted-foreground">{formatRelative(n.createdAt)}</span>
           </div>
-          <div className="font-medium text-white group-hover:text-primary">
+          <div className="font-medium text-foreground group-hover:text-primary">
             {n.movie_name}
           </div>
-          <p className="mt-0.5 text-sm text-white/60">{n.message}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{n.message}</p>
         </div>
       </Link>
       {!n.read && (
         <button
           onClick={onMarkRead}
-          className="flex flex-shrink-0 items-center gap-1 rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/70 transition hover:border-primary/50 hover:text-white"
+          className="flex flex-shrink-0 items-center gap-1 rounded-full border border-foreground/10 px-3 py-1.5 text-xs text-foreground/70 transition hover:border-primary/50 hover:text-foreground"
         >
           <Check className="h-3.5 w-3.5" /> Đã đọc
         </button>

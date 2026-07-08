@@ -92,7 +92,7 @@ function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }
         "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
         active
           ? "bg-primary/15 text-primary"
-          : "text-foreground-muted hover:bg-white/5 hover:text-foreground",
+          : "text-foreground-muted hover:bg-surface-elevated hover:text-foreground",
       )}
     >
       {active && (
@@ -137,12 +137,12 @@ function SidebarPanel({
         ))}
       </nav>
       {onToggle && (
-        <div className={cn("mt-auto border-t border-white/5 pt-3", collapsed ? "flex justify-center" : "px-1")}>
+        <div className={cn("mt-auto border-t border-foreground/10 pt-3", collapsed ? "flex justify-center" : "px-1")}>
           <Button
             variant="ghost"
             size={collapsed ? "icon" : "sm"}
             className={cn(
-              "text-foreground-subtle hover:bg-white/5 hover:text-foreground",
+              "text-foreground-subtle hover:bg-surface-elevated hover:text-foreground",
               collapsed ? "h-9 w-9 rounded-lg" : "w-full justify-start gap-2 rounded-lg",
             )}
             onClick={onToggle}
@@ -185,7 +185,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
             <Input
               type="search"
               placeholder="Search movies, shows, actors…"
-              className="h-10 rounded-full border-white/10 bg-white/5 pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
+              className="h-10 rounded-full border-foreground/10 bg-surface-elevated pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
             />
           </div>
 
@@ -219,7 +219,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
 
 function BottomTabBar() {
   return (
-    <nav className="glass-strong fixed inset-x-0 bottom-0 z-40 border-t border-white/5 pb-safe-bottom md:hidden">
+    <nav className="glass-strong fixed inset-x-0 bottom-0 z-40 border-t border-foreground/10 pb-safe-bottom md:hidden">
       <ul className="grid grid-cols-5">
         {mobileTabs.map((item) => (
           <li key={item.to}>

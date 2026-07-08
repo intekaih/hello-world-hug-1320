@@ -113,7 +113,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             <Link
               to="/phim/$slug"
               params={{ slug: movie.slug }}
-              className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-white/10"
+              className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10"
             >
               <Info className="h-4 w-4" /> More info
             </Link>
@@ -227,14 +227,14 @@ export function SectionHeader({
         <button
           onClick={onScrollLeft}
           aria-label="Scroll left"
-          className="glass grid h-9 w-9 place-items-center rounded-full transition hover:bg-white/10"
+          className="glass grid h-9 w-9 place-items-center rounded-full transition hover:bg-foreground/10"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
         <button
           onClick={onScrollRight}
           aria-label="Scroll right"
-          className="glass grid h-9 w-9 place-items-center rounded-full transition hover:bg-white/10"
+          className="glass grid h-9 w-9 place-items-center rounded-full transition hover:bg-foreground/10"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -457,7 +457,7 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
               </div>
               <span
                 aria-hidden
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-foreground-muted"
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-foreground/10 text-foreground-muted"
               >
                 <Plus className="h-4 w-4" />
               </span>
