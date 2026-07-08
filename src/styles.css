@@ -189,6 +189,43 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
+
+  /* WCAG 2.2 — visible keyboard focus for every interactive element */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Skip link — hidden until focused */
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -120%);
+    z-index: 200;
+    padding: 0.6rem 1.1rem;
+    border-radius: 0 0 0.75rem 0.75rem;
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    font-weight: 600;
+    box-shadow: var(--shadow-elevated);
+    transition: transform 0.2s ease-out;
+  }
+  .skip-link:focus-visible {
+    transform: translate(-50%, 0);
+    outline: none;
+  }
+
+  /* Respect user motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 /* Glassmorphism */
