@@ -41,6 +41,7 @@ import { Route as ApiNotificationsMarkReadRouteImport } from './routes/api/notif
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 import { Route as ApiMoviesSlugRouteImport } from './routes/api/movies.$slug'
 import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.toggle'
+import { Route as ApiAuthRegisterRouteImport } from './routes/api/auth/register'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthForgotPasswordRouteImport } from './routes/api/auth/forgot-password'
@@ -48,6 +49,7 @@ import { Route as ApiActorsSearchRouteImport } from './routes/api/actors.search'
 import { Route as ApiActorsNameRouteImport } from './routes/api/actors.$name'
 import { Route as ApiMoviesSlugRelatedRouteImport } from './routes/api/movies.$slug.related'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
+import { Route as ApiMoviesSlugEpisodeTapChar123epChar125RouteImport } from './routes/api/movies.$slug.episode.tap-{$ep}'
 
 const WatchlistRoute = WatchlistRouteImport.update({
   id: '/watchlist',
@@ -212,6 +214,11 @@ const ApiFavoritesToggleRoute = ApiFavoritesToggleRouteImport.update({
   path: '/toggle',
   getParentRoute: () => ApiFavoritesRoute,
 } as any)
+const ApiAuthRegisterRoute = ApiAuthRegisterRouteImport.update({
+  id: '/api/auth/register',
+  path: '/api/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
   id: '/api/auth/me',
   path: '/api/auth/me',
@@ -247,6 +254,12 @@ const ApiHistorySlugEpRoute = ApiHistorySlugEpRouteImport.update({
   path: '/$slug/$ep',
   getParentRoute: () => ApiHistoryRoute,
 } as any)
+const ApiMoviesSlugEpisodeTapChar123epChar125Route =
+  ApiMoviesSlugEpisodeTapChar123epChar125RouteImport.update({
+    id: '/episode/tap-{$ep}',
+    path: '/episode/tap-{$ep}',
+    getParentRoute: () => ApiMoviesSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -278,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
@@ -288,6 +302,7 @@ export interface FileRoutesByFullPath {
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
+  '/api/movies/$slug/episode/tap-{$ep}': typeof ApiMoviesSlugEpisodeTapChar123epChar125Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -319,6 +334,7 @@ export interface FileRoutesByTo {
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
@@ -329,6 +345,7 @@ export interface FileRoutesByTo {
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
+  '/api/movies/$slug/episode/tap-{$ep}': typeof ApiMoviesSlugEpisodeTapChar123epChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -361,6 +378,7 @@ export interface FileRoutesById {
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/auth/register': typeof ApiAuthRegisterRoute
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
@@ -371,6 +389,7 @@ export interface FileRoutesById {
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
+  '/api/movies/$slug/episode/tap-{$ep}': typeof ApiMoviesSlugEpisodeTapChar123epChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -404,6 +423,7 @@ export interface FileRouteTypes {
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/auth/register'
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
@@ -414,6 +434,7 @@ export interface FileRouteTypes {
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
+    | '/api/movies/$slug/episode/tap-{$ep}'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -445,6 +466,7 @@ export interface FileRouteTypes {
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/auth/register'
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
@@ -455,6 +477,7 @@ export interface FileRouteTypes {
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
+    | '/api/movies/$slug/episode/tap-{$ep}'
   id:
     | '__root__'
     | '/'
@@ -486,6 +509,7 @@ export interface FileRouteTypes {
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/auth/register'
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
@@ -496,6 +520,7 @@ export interface FileRouteTypes {
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
+    | '/api/movies/$slug/episode/tap-{$ep}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -528,6 +553,7 @@ export interface RootRouteChildren {
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
+  ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiMoviesSlugRoute: typeof ApiMoviesSlugRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
   XemSlugTapChar123episodeChar125Route: typeof XemSlugTapChar123episodeChar125Route
@@ -759,6 +785,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFavoritesToggleRouteImport
       parentRoute: typeof ApiFavoritesRoute
     }
+    '/api/auth/register': {
+      id: '/api/auth/register'
+      path: '/api/auth/register'
+      fullPath: '/api/auth/register'
+      preLoaderRoute: typeof ApiAuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/me': {
       id: '/api/auth/me'
       path: '/api/auth/me'
@@ -807,6 +840,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/history/$slug/$ep'
       preLoaderRoute: typeof ApiHistorySlugEpRouteImport
       parentRoute: typeof ApiHistoryRoute
+    }
+    '/api/movies/$slug/episode/tap-{$ep}': {
+      id: '/api/movies/$slug/episode/tap-{$ep}'
+      path: '/episode/tap-{$ep}'
+      fullPath: '/api/movies/$slug/episode/tap-{$ep}'
+      preLoaderRoute: typeof ApiMoviesSlugEpisodeTapChar123epChar125RouteImport
+      parentRoute: typeof ApiMoviesSlugRoute
     }
   }
 }
@@ -864,10 +904,13 @@ const ApiWatchlistRouteWithChildren = ApiWatchlistRoute._addFileChildren(
 
 interface ApiMoviesSlugRouteChildren {
   ApiMoviesSlugRelatedRoute: typeof ApiMoviesSlugRelatedRoute
+  ApiMoviesSlugEpisodeTapChar123epChar125Route: typeof ApiMoviesSlugEpisodeTapChar123epChar125Route
 }
 
 const ApiMoviesSlugRouteChildren: ApiMoviesSlugRouteChildren = {
   ApiMoviesSlugRelatedRoute: ApiMoviesSlugRelatedRoute,
+  ApiMoviesSlugEpisodeTapChar123epChar125Route:
+    ApiMoviesSlugEpisodeTapChar123epChar125Route,
 }
 
 const ApiMoviesSlugRouteWithChildren = ApiMoviesSlugRoute._addFileChildren(
@@ -904,6 +947,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
+  ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiMoviesSlugRoute: ApiMoviesSlugRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
   XemSlugTapChar123episodeChar125Route: XemSlugTapChar123episodeChar125Route,
@@ -911,13 +955,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

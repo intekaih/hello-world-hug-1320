@@ -27,22 +27,12 @@ export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   }),
 });
 
-/* Demo HLS sources per server. Replace with real API. */
-const SERVERS: ServerSource[] = [
+/* Fallback demo HLS sources if the API fails. */
+const FALLBACK_SERVERS: ServerSource[] = [
   {
     id: "vip1",
     name: "VIP #1",
     src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-  },
-  {
-    id: "vip2",
-    name: "VIP #2",
-    src: "https://test-streams.mux.dev/pts_shift/master.m3u8",
-  },
-  {
-    id: "bk",
-    name: "Backup",
-    src: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
   },
 ];
 
@@ -52,6 +42,18 @@ function WatchPage() {
   const { slug, episode } = Route.useParams();
   const { t } = Route.useSearch();
   const navigate = useNavigate();
+
+  // Episode source: servers[] from backend.
+  const { data: epData } = useQuery({
+    queryKey: ["episode", slug, episode],
+    queryFn: async () => {
+      const res = await fetch(`/api/movies/${slug}/episode/tap-${episode}`);
+      if (!res.ok) return null;
+      return res.json() as Promise<{ servers: ServerSource[] }>;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+  const servers = epData?.servers?.length ? epData.servers : FALLBACK_SERVERS;
 
   // Resume position: URL ?t=... wins over saved progress.
   const { data: history } = useQuery({
@@ -64,6 +66,7 @@ function WatchPage() {
     staleTime: 0,
     gcTime: 0,
   });
+
 
   const initialTime = useMemo(() => {
     if (t > 0) return t;
@@ -93,7 +96,7 @@ function WatchPage() {
           episode={episode}
           totalEpisodes={TOTAL_EPISODES}
           title={title}
-          servers={SERVERS}
+          servers={servers}
           initialTime={initialTime}
           onChangeEpisode={goToEpisode}
         />
