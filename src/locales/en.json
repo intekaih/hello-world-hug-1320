@@ -7,8 +7,10 @@
   },
   "nav": {
     "home": "Home",
+    "discover": "Discover",
     "schedule": "Schedule",
     "browse": "Browse",
+    "library": "Library",
     "history": "History",
     "favorites": "Favorites",
     "watchlist": "Watchlist",
