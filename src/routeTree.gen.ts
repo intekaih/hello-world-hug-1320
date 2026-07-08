@@ -24,11 +24,14 @@ import { Route as ApiWatchlistRouteImport } from './routes/api/watchlist'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
+import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
 import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
+import { Route as ApiNotificationsUnreadCountRouteImport } from './routes/api/notifications.unread-count'
+import { Route as ApiNotificationsMarkReadRouteImport } from './routes/api/notifications.mark-read'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 import { Route as ApiMoviesSlugRouteImport } from './routes/api/movies.$slug'
 import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.toggle'
@@ -113,6 +116,11 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
+  id: '/api/notifications',
+  path: '/api/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiHistoryRoute = ApiHistoryRouteImport.update({
   id: '/api/history',
   path: '/api/history',
@@ -139,6 +147,18 @@ const ApiWatchlistNoteRoute = ApiWatchlistNoteRouteImport.update({
   path: '/note',
   getParentRoute: () => ApiWatchlistRoute,
 } as any)
+const ApiNotificationsUnreadCountRoute =
+  ApiNotificationsUnreadCountRouteImport.update({
+    id: '/unread-count',
+    path: '/unread-count',
+    getParentRoute: () => ApiNotificationsRoute,
+  } as any)
+const ApiNotificationsMarkReadRoute =
+  ApiNotificationsMarkReadRouteImport.update({
+    id: '/mark-read',
+    path: '/mark-read',
+    getParentRoute: () => ApiNotificationsRoute,
+  } as any)
 const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
@@ -193,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/watchlist': typeof WatchlistRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
@@ -204,6 +225,8 @@ export interface FileRoutesByFullPath {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
+  '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
   '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -223,6 +246,7 @@ export interface FileRoutesByTo {
   '/watchlist': typeof WatchlistRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
@@ -234,6 +258,8 @@ export interface FileRoutesByTo {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
+  '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
   '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -254,6 +280,7 @@ export interface FileRoutesById {
   '/watchlist': typeof WatchlistRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
+  '/api/notifications': typeof ApiNotificationsRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
@@ -265,6 +292,8 @@ export interface FileRoutesById {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
+  '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
   '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
@@ -286,6 +315,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/favorites'
     | '/api/history'
+    | '/api/notifications'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
@@ -297,6 +327,8 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/notifications/mark-read'
+    | '/api/notifications/unread-count'
     | '/api/watchlist/note'
     | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
@@ -316,6 +348,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/favorites'
     | '/api/history'
+    | '/api/notifications'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
@@ -327,6 +360,8 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/notifications/mark-read'
+    | '/api/notifications/unread-count'
     | '/api/watchlist/note'
     | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
@@ -346,6 +381,7 @@ export interface FileRouteTypes {
     | '/watchlist'
     | '/api/favorites'
     | '/api/history'
+    | '/api/notifications'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
@@ -357,6 +393,8 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/notifications/mark-read'
+    | '/api/notifications/unread-count'
     | '/api/watchlist/note'
     | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
@@ -377,6 +415,7 @@ export interface RootRouteChildren {
   WatchlistRoute: typeof WatchlistRoute
   ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
+  ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
@@ -497,6 +536,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/notifications': {
+      id: '/api/notifications'
+      path: '/api/notifications'
+      fullPath: '/api/notifications'
+      preLoaderRoute: typeof ApiNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/history': {
       id: '/api/history'
       path: '/api/history'
@@ -531,6 +577,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/watchlist/note'
       preLoaderRoute: typeof ApiWatchlistNoteRouteImport
       parentRoute: typeof ApiWatchlistRoute
+    }
+    '/api/notifications/unread-count': {
+      id: '/api/notifications/unread-count'
+      path: '/unread-count'
+      fullPath: '/api/notifications/unread-count'
+      preLoaderRoute: typeof ApiNotificationsUnreadCountRouteImport
+      parentRoute: typeof ApiNotificationsRoute
+    }
+    '/api/notifications/mark-read': {
+      id: '/api/notifications/mark-read'
+      path: '/mark-read'
+      fullPath: '/api/notifications/mark-read'
+      preLoaderRoute: typeof ApiNotificationsMarkReadRouteImport
+      parentRoute: typeof ApiNotificationsRoute
     }
     '/api/movies/home': {
       id: '/api/movies/home'
@@ -615,6 +675,19 @@ const ApiHistoryRouteWithChildren = ApiHistoryRoute._addFileChildren(
   ApiHistoryRouteChildren,
 )
 
+interface ApiNotificationsRouteChildren {
+  ApiNotificationsMarkReadRoute: typeof ApiNotificationsMarkReadRoute
+  ApiNotificationsUnreadCountRoute: typeof ApiNotificationsUnreadCountRoute
+}
+
+const ApiNotificationsRouteChildren: ApiNotificationsRouteChildren = {
+  ApiNotificationsMarkReadRoute: ApiNotificationsMarkReadRoute,
+  ApiNotificationsUnreadCountRoute: ApiNotificationsUnreadCountRoute,
+}
+
+const ApiNotificationsRouteWithChildren =
+  ApiNotificationsRoute._addFileChildren(ApiNotificationsRouteChildren)
+
 interface ApiWatchlistRouteChildren {
   ApiWatchlistNoteRoute: typeof ApiWatchlistNoteRoute
   ApiWatchlistToggleRoute: typeof ApiWatchlistToggleRoute
@@ -654,6 +727,7 @@ const rootRouteChildren: RootRouteChildren = {
   WatchlistRoute: WatchlistRoute,
   ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
+  ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
