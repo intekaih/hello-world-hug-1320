@@ -79,6 +79,23 @@ function WatchPage() {
     gcTime: 0,
   });
 
+  // Movie meta for og:image + JSON-LD.
+  const { data: movie } = useQuery({
+    queryKey: ["movie", slug, "meta"],
+    queryFn: async () => {
+      const res = await fetch(`/api/movies/${slug}`);
+      if (!res.ok) return null;
+      return res.json() as Promise<{
+        title: string;
+        poster_url: string;
+        backdrop_url: string;
+        year?: number;
+        overview?: string;
+        overview_vi?: string;
+      }>;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   const initialTime = useMemo(() => {
     if (t > 0) return t;
@@ -94,10 +111,46 @@ function WatchPage() {
     });
   };
 
-  const title = slug
+  const title = movie?.title ?? slug
     .split("-")
     .map((s: string) => s[0]?.toUpperCase() + s.slice(1))
     .join(" ");
+
+  const posterUrl = movie?.poster_url
+    ? thumbSrc(movie.poster_url, { w: 1200 })
+    : undefined;
+
+  usePageMeta({
+    title: `Xem ${title} Tập ${episode} - ${SITE_NAME}`,
+    description:
+      movie?.overview_vi ||
+      movie?.overview ||
+      `Xem ${title} tập ${episode} online HD Vietsub, thuyết minh miễn phí trên ${SITE_NAME}.`,
+    url: `/xem/${slug}/tap-${episode}`,
+    image: posterUrl,
+    type: "video.episode",
+    noindex: true,
+  });
+
+  const jsonLd = useMemo(() => {
+    if (!movie) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "TVEpisode",
+      name: `${title} — Tập ${episode}`,
+      episodeNumber: Number(episode) || undefined,
+      image: posterUrl,
+      partOfSeries: {
+        "@type": "TVSeries",
+        name: title,
+        image: posterUrl,
+      },
+      potentialAction: {
+        "@type": "WatchAction",
+        target: `/xem/${slug}/tap-${episode}`,
+      },
+    };
+  }, [movie, title, episode, slug, posterUrl]);
 
   return (
     <div className="min-h-screen bg-black">
