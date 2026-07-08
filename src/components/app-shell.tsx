@@ -352,16 +352,10 @@ export function AppShell() {
           sidebarCollapsed ? "w-[76px]" : "w-[240px]",
         )}
       >
-        <SidebarPanel collapsed={sidebarCollapsed} />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute -right-4 top-20 hidden h-8 w-8 rounded-full border border-white/10 bg-surface-elevated md:inline-flex"
-          onClick={() => setSidebarCollapsed((v) => !v)}
-          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
+        <SidebarPanel
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed((v) => !v)}
+        />
       </aside>
 
       {/* Main column */}
