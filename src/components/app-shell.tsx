@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import {
   Bell,
   Bookmark,
+  CalendarClock,
   Compass,
   Heart,
   History,
