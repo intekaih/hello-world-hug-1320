@@ -70,62 +70,62 @@
   --shadow-elevated: 0 20px 60px -20px oklch(0 0 0 / 0.6);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.65 0.22 15), oklch(0.78 0.16 70));
-  --gradient-hero: linear-gradient(180deg, transparent 0%, oklch(0.06 0.02 280 / 0.9) 80%, oklch(0.06 0.02 280) 100%);
+  --gradient-hero: linear-gradient(180deg, transparent 0%, var(--background) 92%, var(--background) 100%);
 }
 
 :root {
   --radius: 0.75rem;
 
-  /* Light palette (default) — #FFFFFF base, #F5F5F8 elevated */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.14 0.02 280);
-  --surface: oklch(1 0 0);
-  --surface-elevated: oklch(0.97 0.005 280);
+  /* Light palette — warm off-white, not sterile pure white */
+  --background: oklch(0.975 0.006 80);
+  --foreground: oklch(0.18 0.02 280);
+  --surface: oklch(0.985 0.004 80);
+  --surface-elevated: oklch(0.955 0.008 80);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0.02 280);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.02 280);
+  --card: oklch(0.99 0.004 80);
+  --card-foreground: oklch(0.18 0.02 280);
+  --popover: oklch(0.99 0.004 80);
+  --popover-foreground: oklch(0.18 0.02 280);
 
   /* #E94560 — same primary in light & dark */
   --primary: oklch(0.65 0.22 15);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.95 0.01 280);
-  --secondary-foreground: oklch(0.14 0.02 280);
+  --secondary: oklch(0.93 0.008 280);
+  --secondary-foreground: oklch(0.18 0.02 280);
 
-  --muted: oklch(0.95 0.01 280);
-  --muted-foreground: oklch(0.14 0.02 280 / 0.6);
+  --muted: oklch(0.93 0.008 280);
+  --muted-foreground: oklch(0.18 0.02 280 / 0.65);
 
   --accent: oklch(0.78 0.16 70);
-  --accent-foreground: oklch(0.14 0.02 280);
+  --accent-foreground: oklch(0.18 0.02 280);
   --gold: oklch(0.72 0.17 70);
-  --cyan: oklch(0.72 0.14 210);
+  --cyan: oklch(0.55 0.14 210);
 
   --destructive: oklch(0.6 0.24 25);
   --destructive-foreground: oklch(1 0 0);
   --success: oklch(0.62 0.17 155);
   --success-foreground: oklch(1 0 0);
   --warning: oklch(0.72 0.17 70);
-  --warning-foreground: oklch(0.14 0.02 280);
+  --warning-foreground: oklch(0.18 0.02 280);
 
-  --border: oklch(0.14 0.02 280 / 0.1);
-  --input: oklch(0.14 0.02 280 / 0.12);
+  --border: oklch(0.18 0.02 280 / 0.09);
+  --input: oklch(0.18 0.02 280 / 0.12);
   --ring: oklch(0.65 0.22 15);
 
   --chart-1: oklch(0.65 0.22 15);
   --chart-2: oklch(0.72 0.17 70);
-  --chart-3: oklch(0.62 0.14 210);
+  --chart-3: oklch(0.55 0.14 210);
   --chart-4: oklch(0.55 0.2 300);
   --chart-5: oklch(0.6 0.18 140);
 
-  --sidebar: oklch(0.97 0.005 280);
-  --sidebar-foreground: oklch(0.14 0.02 280);
+  --sidebar: oklch(0.955 0.008 80);
+  --sidebar-foreground: oklch(0.18 0.02 280);
   --sidebar-primary: oklch(0.65 0.22 15);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.93 0.01 280);
-  --sidebar-accent-foreground: oklch(0.14 0.02 280);
-  --sidebar-border: oklch(0.14 0.02 280 / 0.08);
+  --sidebar-accent: oklch(0.92 0.01 280);
+  --sidebar-accent-foreground: oklch(0.18 0.02 280);
+  --sidebar-border: oklch(0.18 0.02 280 / 0.08);
   --sidebar-ring: oklch(0.65 0.22 15);
 }
 
@@ -234,26 +234,26 @@
   }
 }
 
-/* Glassmorphism */
+/* Glassmorphism — theme-aware */
 @utility glass {
-  background: oklch(1 0 0 / 0.05);
-  border: 1px solid oklch(1 0 0 / 0.08);
+  background: color-mix(in oklab, var(--surface-elevated) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
   backdrop-filter: blur(20px) saturate(140%);
 }
 
 @utility glass-strong {
-  background: oklch(0.14 0.02 280 / 0.7);
-  border: 1px solid oklch(1 0 0 / 0.12);
+  background: color-mix(in oklab, var(--surface-elevated) 78%, transparent);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
   backdrop-filter: blur(32px) saturate(160%);
 }
 
 @utility input-glass {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid oklch(1 0 0 / 0.1);
-  background: oklch(1 0 0 / 0.05);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
   padding: 0.5rem 0.75rem;
-  color: white;
+  color: var(--foreground);
   outline: none;
   transition: border-color 0.15s;
   &:focus {
@@ -289,11 +289,11 @@
 
 /* Text opacity helpers matching the palette spec */
 @utility text-foreground-muted {
-  color: oklch(1 0 0 / 0.75);
+  color: color-mix(in oklab, var(--foreground) 75%, transparent);
 }
 
 @utility text-foreground-subtle {
-  color: oklch(1 0 0 / 0.5);
+  color: color-mix(in oklab, var(--foreground) 50%, transparent);
 }
 
 /* Skeleton shimmer + cross-fade */
