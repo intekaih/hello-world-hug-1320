@@ -1,5 +1,5 @@
 import { thumbSrc } from "@/utils/thumbSrc";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
