@@ -147,7 +147,7 @@ function HeroSection({ movie }: { movie: Movie }) {
   return (
     <section className="relative -mx-4 h-[60vh] min-h-[440px] overflow-hidden sm:-mx-6 sm:h-[70vh] lg:-mx-8 lg:rounded-3xl">
       <img
-        src={movie.backdrop_url}
+        src={thumbSrc(movie.backdrop_url,{w:1600})}
         alt=""
         className="h-full w-full object-cover"
       />
@@ -163,7 +163,7 @@ function HeroSection({ movie }: { movie: Movie }) {
         <div className="max-w-2xl space-y-3">
           {movie.logo_url ? (
             <img
-              src={movie.logo_url}
+              src={thumbSrc(movie.logo_url,{w:500})}
               alt={movie.title}
               className="max-h-24 w-auto max-w-[70%] object-contain drop-shadow-2xl sm:max-h-32"
             />
@@ -534,7 +534,7 @@ function RelatedMovies({
             >
               <div className="aspect-[2/3] overflow-hidden rounded-xl bg-surface-elevated">
                 <img
-                  src={m.poster_url}
+                  src={thumbSrc(m.poster_url,{w:400})}
                   alt={m.title}
                   loading="lazy"
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
