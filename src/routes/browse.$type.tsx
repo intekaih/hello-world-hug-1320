@@ -11,7 +11,6 @@ const TYPE_LABELS: Record<string, string> = {
   "phim-bo": "Phim bộ",
   "phim-le": "Phim lẻ",
   "hoat-hinh": "Anime · Hoạt hình",
-  "phim-moi-cap-nhat": "Phim mới cập nhật",
 };
 
 const CATEGORIES = [
