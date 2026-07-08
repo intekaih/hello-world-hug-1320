@@ -28,112 +28,205 @@ import type {
 export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (paused || movies.length <= 1) return;
     const id = window.setInterval(
       () => setIndex((i) => (i + 1) % movies.length),
-      5000,
+      6000,
     );
     return () => window.clearInterval(id);
-  }, [paused, movies.length]);
+  }, [paused, movies.length, index]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setMouse({
+      x: (e.clientX - rect.left) / rect.width - 0.5,
+      y: (e.clientY - rect.top) / rect.height - 0.5,
+    });
+  };
 
   const movie = movies[index];
   if (!movie) return null;
 
   return (
     <section
-      className="relative -mx-4 h-[62vh] min-h-[420px] overflow-hidden sm:-mx-6 sm:h-[70vh] lg:-mx-8 lg:rounded-3xl"
+      ref={sectionRef}
+      className="relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-[oklch(0.08_0.02_280)] sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseLeave={() => {
+        setPaused(false);
+        setMouse({ x: 0, y: 0 });
+      }}
+      onMouseMove={handleMouseMove}
       aria-roledescription="carousel"
     >
+      {/* Backdrop — parallax + Ken Burns */}
       <AnimatePresence mode="sync">
         <motion.div
           key={movie.id}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0"
         >
-          <img
-            src={thumbSrc(movie.backdrop_url,{w:1600})}
-            alt=""
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/30 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/15 to-transparent" />
+          <div
+            className="absolute inset-0 will-change-transform"
+            style={{
+              transform: `translate3d(${mouse.x * -18}px, ${mouse.y * -12}px, 0)`,
+              transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+          >
+            <img
+              src={thumbSrc(movie.backdrop_url, { w: 1920 })}
+              alt=""
+              className="ken-burns h-[112%] w-[108%] -translate-x-[4%] -translate-y-[6%] object-cover"
+            />
+          </div>
+
+          {/* Cinematic color grade */}
+          <div className="pointer-events-none absolute inset-0 aurora opacity-70 mix-blend-soft-light" />
+
+          {/* Bottom-up cinematic scrim */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+          {/* Left-to-right darkening for text legibility */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/85 via-background/20 to-transparent" />
+          {/* Vignette */}
+          <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_45%,oklch(0_0_0/0.55)_100%)]" />
+          {/* Film grain */}
+          <div className="grain" />
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 flex items-end p-4 sm:p-8 lg:p-12">
+      {/* Content */}
+      <div className="absolute inset-0 flex items-end p-5 sm:p-10 lg:p-14">
         <motion.div
           key={`content-${movie.id}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-xl space-y-4"
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+          }}
+          className="max-w-2xl space-y-5"
+          style={{
+            transform: `translate3d(${mouse.x * 8}px, ${mouse.y * 5}px, 0)`,
+            transition: "transform 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
         >
-          {movie.logo_url ? (
-            <img
-              src={thumbSrc(movie.logo_url,{w:500})}
-              alt={movie.title}
-              className="max-h-24 w-auto max-w-[70%] object-contain drop-shadow-2xl sm:max-h-32"
-            />
-          ) : (
-            <h1 className="font-display text-3xl font-bold sm:text-5xl">
-              {movie.title}
-            </h1>
-          )}
+          {/* Genre eyebrow */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-3"
+          >
+            <span className="h-px w-8 bg-primary" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/70">
+              {movie.genres[0] ?? "Feature"} · Now streaming
+            </span>
+          </motion.div>
 
-          <div className="flex flex-wrap items-center gap-2 text-xs text-foreground-muted sm:text-sm">
-            <span className="rounded border border-foreground/20 px-1.5 py-0.5 text-[10px] font-semibold">
+          {/* Title / logo */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 24, filter: "blur(14px)" }, show: { opacity: 1, y: 0, filter: "blur(0px)" } }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {movie.logo_url ? (
+              <img
+                src={thumbSrc(movie.logo_url, { w: 640 })}
+                alt={movie.title}
+                className="max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)] sm:max-h-36"
+              />
+            ) : (
+              <h1 className="text-cinematic text-4xl text-foreground sm:text-6xl lg:text-7xl">
+                {movie.title}
+              </h1>
+            )}
+          </motion.div>
+
+          {/* Meta rail */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-[0.2em] text-foreground/75"
+          >
+            <span className="rounded-sm border border-foreground/30 px-1.5 py-0.5 text-[10px]">
               {movie.rating}
             </span>
             <span>{movie.year}</span>
-            <span aria-hidden>·</span>
+            <span aria-hidden className="text-primary">◆</span>
             <span>{movie.runtime}</span>
-            <span aria-hidden>·</span>
-            <span>{movie.genres.join(" • ")}</span>
-          </div>
+            <span aria-hidden className="text-primary">◆</span>
+            <span>{movie.genres.join(" · ")}</span>
+          </motion.div>
 
-          <p className="line-clamp-2 text-sm text-foreground-muted sm:line-clamp-3 sm:text-base">
+          {/* Overview */}
+          <motion.p
+            variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.6 }}
+            className="max-w-xl text-[15px] leading-relaxed text-foreground/85 sm:text-base"
+          >
             {movie.overview}
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap items-center gap-2 pt-2">
+          {/* CTA */}
+          <motion.div
+            variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-wrap items-center gap-3 pt-2"
+          >
             <Link
               to="/xem/$slug/tap-{$episode}"
               params={{ slug: movie.slug, episode: "1" }}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90"
+              className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              <Play className="h-4 w-4 fill-current" /> Play
+              <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full" />
+              <Play className="h-4 w-4 fill-current" />
+              <span>Xem ngay</span>
             </Link>
             <Link
               to="/phim/$slug"
               params={{ slug: movie.slug }}
-              className="glass inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-foreground/10"
+              className="glass inline-flex items-center gap-2 rounded-full px-5 py-3 text-[13px] font-medium uppercase tracking-[0.14em] text-foreground transition hover:bg-foreground/10"
             >
-              <Info className="h-4 w-4" /> More info
+              <Info className="h-4 w-4" /> Chi tiết
             </Link>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* Dots */}
-      <div className="absolute bottom-4 right-4 z-10 flex gap-1.5 sm:bottom-6 sm:right-8">
-        {movies.map((m, i) => (
-          <button
-            key={m.id}
-            onClick={() => setIndex(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            className={cn(
-              "h-1.5 rounded-full transition-all",
-              i === index ? "w-8 bg-primary" : "w-4 bg-white/30 hover:bg-white/60",
-            )}
-          />
-        ))}
+      {/* Progress rail — cinematic pagination */}
+      <div className="absolute bottom-5 right-5 z-10 flex items-center gap-4 sm:bottom-8 sm:right-10">
+        <span className="font-mono text-[11px] tracking-[0.24em] text-foreground/60">
+          {String(index + 1).padStart(2, "0")}
+          <span className="mx-1.5 text-foreground/30">/</span>
+          {String(movies.length).padStart(2, "0")}
+        </span>
+        <div className="flex gap-2">
+          {movies.map((m, i) => (
+            <button
+              key={m.id}
+              onClick={() => setIndex(i)}
+              aria-label={`Slide ${i + 1}`}
+              className="group relative h-[3px] w-10 overflow-hidden rounded-full bg-foreground/15"
+            >
+              <span
+                className={cn(
+                  "absolute inset-y-0 left-0 bg-primary",
+                  i < index && "w-full",
+                  i === index && !paused && "hero-rail w-full",
+                  i === index && paused && "w-full",
+                  i > index && "w-0",
+                )}
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

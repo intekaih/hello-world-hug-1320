@@ -61,15 +61,24 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-display: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Be Vietnam Pro", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Times New Roman", ui-serif, serif;
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --shadow-glow-primary: 0 0 40px oklch(0.65 0.22 15 / 0.35);
   --shadow-glow-gold: 0 0 40px oklch(0.78 0.16 70 / 0.35);
   --shadow-glow-cyan: 0 0 40px oklch(0.82 0.14 210 / 0.35);
   --shadow-elevated: 0 20px 60px -20px oklch(0 0 0 / 0.6);
+  --shadow-cinematic:
+    0 2px 4px oklch(0 0 0 / 0.4),
+    0 20px 40px -12px oklch(0 0 0 / 0.5),
+    0 60px 120px -30px oklch(0.65 0.22 15 / 0.35);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.65 0.22 15), oklch(0.78 0.16 70));
+  --gradient-ember: linear-gradient(135deg, oklch(0.68 0.24 25), oklch(0.78 0.18 55));
+  --gradient-aurora: radial-gradient(ellipse at 20% 30%, oklch(0.65 0.22 15 / 0.35), transparent 55%),
+                     radial-gradient(ellipse at 80% 20%, oklch(0.55 0.2 300 / 0.25), transparent 60%),
+                     radial-gradient(ellipse at 50% 90%, oklch(0.78 0.16 70 / 0.2), transparent 55%);
   --gradient-hero: linear-gradient(180deg, transparent 0%, var(--background) 92%, var(--background) 100%);
 }
 
@@ -327,3 +336,94 @@
   animation: content-fade-in 0.4s ease-out both;
 }
 
+
+/* ============================================================
+ * Cinematic OS — signature utilities
+ * ============================================================ */
+
+/* Film grain overlay — SVG turbulence. Use as absolutely positioned layer. */
+@utility grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+
+@utility grain-strong {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.11;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+
+@utility aurora {
+  background: var(--gradient-aurora);
+}
+
+/* Slow cinematic Ken Burns pan+zoom for hero backdrops */
+@keyframes ken-burns {
+  0%   { transform: scale(1.08) translate3d(-1%, -1%, 0); }
+  50%  { transform: scale(1.14) translate3d(1%, 1%, 0); }
+  100% { transform: scale(1.08) translate3d(-1%, -1%, 0); }
+}
+
+@utility ken-burns {
+  animation: ken-burns 24s ease-in-out infinite;
+}
+
+/* Cinematic title reveal — mask up + blur to sharp */
+@keyframes title-reveal {
+  0%   { opacity: 0; transform: translateY(28px); filter: blur(14px); letter-spacing: 0.02em; }
+  100% { opacity: 1; transform: translateY(0);    filter: blur(0);    letter-spacing: -0.03em; }
+}
+
+@utility title-reveal {
+  animation: title-reveal 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Ambient pulsing glow for CTA / logo */
+@keyframes ambient-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.05); }
+}
+
+@utility ambient-pulse {
+  animation: ambient-pulse 4s ease-in-out infinite;
+}
+
+/* Light sweep (used on card hover, CTA hover) */
+@keyframes light-sweep {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%)  skewX(-20deg); }
+}
+
+@utility light-sweep {
+  animation: light-sweep 900ms ease-out;
+}
+
+/* Cinematic display heading — Fraunces variable, dramatic axes */
+@utility text-cinematic {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+/* Progress rail for hero carousel */
+@keyframes hero-rail {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@utility hero-rail {
+  transform-origin: left;
+  animation: hero-rail 5s linear both;
+}
