@@ -93,5 +93,36 @@
       "title": "Movie not found",
       "description": "The movie you're looking for doesn't exist or has been removed."
     }
+  },
+  "continueWatching": {
+    "eyebrow": "Unfinished journeys",
+    "title": "Continue Your Journey",
+    "subtitle": "Stories still waiting for you to come back.",
+    "resume": "Resume",
+    "resumeFrom": "Resume from {{time}}",
+    "remainingMinutes": "{{minutes}} minutes left in this episode",
+    "nextEpisodeWaiting": "Next episode is waiting",
+    "pickUpWhereLeft": "Pick up right where you left off",
+    "episode": "Episode {{n}}",
+    "lastWatched": {
+      "justNow": "Just now",
+      "minutesAgo": "{{n}} min ago",
+      "hoursAgo": "{{n}}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{{n}} days ago"
+    },
+    "percentWatched": "{{n}}% watched",
+    "quality": {
+      "hd": "HD",
+      "fullHd": "Full HD",
+      "uhd": "4K HDR"
+    },
+    "empty": {
+      "eyebrow": "No journey yet",
+      "title": "Your journey starts here",
+      "description": "No journeys yet. Start watching and MovieCC will remember your place.",
+      "cta": "Explore movies"
+    }
   }
 }
+
