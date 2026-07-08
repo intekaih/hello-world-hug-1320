@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WatchlistRouteImport } from './routes/watchlist'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LichChieuRouteImport } from './routes/lich-chieu'
@@ -66,6 +67,11 @@ const SearchRoute = SearchRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
@@ -328,6 +335,7 @@ export interface FileRoutesByTo {
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
@@ -374,6 +382,7 @@ export interface FileRoutesById {
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
     | '/lich-chieu'
     | '/login'
     | '/notifications'
+    | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
@@ -466,6 +476,7 @@ export interface FileRouteTypes {
     | '/lich-chieu'
     | '/login'
     | '/notifications'
+    | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
@@ -511,6 +522,7 @@ export interface FileRouteTypes {
     | '/lich-chieu'
     | '/login'
     | '/notifications'
+    | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
@@ -557,6 +569,7 @@ export interface RootRouteChildren {
   LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
@@ -606,6 +619,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -967,6 +987,7 @@ const rootRouteChildren: RootRouteChildren = {
   LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
