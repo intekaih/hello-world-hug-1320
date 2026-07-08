@@ -173,6 +173,9 @@
   }
 
   html {
+    color-scheme: light;
+  }
+  html.dark {
     color-scheme: dark;
   }
 
@@ -182,6 +185,10 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color 200ms ease-out,
+      color 200ms ease-out,
+      border-color 200ms ease-out;
   }
 
   h1, h2, h3, h4, h5, h6 {
