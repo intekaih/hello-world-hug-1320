@@ -274,5 +274,93 @@
       "playNow": "Xem ngay",
       "cancel": "Ở lại"
     }
+  },
+  "search": {
+    "title": "Tìm kiếm — MovieCC",
+    "titleWithQuery": "Tìm kiếm: {{q}} — MovieCC",
+    "description": "Tìm phim, series, anime bạn muốn xem trên MovieCC. Kho phim HD Vietsub miễn phí.",
+    "heroEyebrow": "Cổng khám phá",
+    "heroTitle": "Bạn muốn bước vào thế giới nào?",
+    "heroSubtitle": "Tìm phim, diễn viên, thể loại hoặc một cảm xúc.",
+    "placeholder": "Nhập tên phim, diễn viên hoặc một cảm xúc…",
+    "placeholderShort": "Tìm kiếm…",
+    "clear": "Xóa tìm kiếm",
+    "submit": "Tìm",
+    "notSureCta": "Không chắc xem gì? Hãy khám phá các xu hướng hôm nay.",
+    "recent": "Tìm gần đây",
+    "clearRecent": "Xóa tất cả",
+    "trending": "Đang tìm nhiều",
+    "moodPicks": "Chọn theo cảm xúc",
+    "genreUniverse": "Vũ trụ thể loại",
+    "topCountries": "Quốc gia nổi bật",
+    "quickFilters": "Lọc nhanh",
+    "hiddenGems": "Viên ngọc ẩn",
+    "recentlyUpdated": "Vừa cập nhật",
+    "suggestions": "Gợi ý",
+    "results": "Kết quả",
+    "resultsFor": "Kết quả cho “{{q}}”",
+    "resultsCount": "{{n}} phim",
+    "resultsCountSr": "Tìm thấy {{n}} kết quả",
+    "noResults": "Không tìm thấy kết quả",
+    "noResultsHint": "Thử từ khóa khác, bỏ bớt bộ lọc, hoặc khám phá xu hướng bên dưới.",
+    "loadMore": "Xem thêm",
+    "loadingMore": "Đang tải…",
+    "endOfResults": "Đã hết kết quả",
+    "loading": "Đang tìm trong kho phim…",
+    "filters": {
+      "title": "Bộ lọc",
+      "clear": "Xóa tất cả",
+      "type": "Loại phim",
+      "genre": "Thể loại",
+      "year": "Năm",
+      "country": "Quốc gia",
+      "quality": "Chất lượng",
+      "language": "Ngôn ngữ",
+      "all": "Tất cả",
+      "activeCount": "{{n}} đang chọn",
+      "apply": "Xem kết quả"
+    },
+    "moods": {
+      "cozy": "Ấm áp buổi tối",
+      "adrenaline": "Bùng nổ adrenaline",
+      "mindBender": "Đánh đố trí óc",
+      "heartfelt": "Chạm đến trái tim",
+      "darkTwisted": "Tối tăm và xoắn não",
+      "epicJourney": "Hành trình sử thi"
+    },
+    "typeLabels": {
+      "phim-bo": "Phim bộ",
+      "phim-le": "Phim lẻ",
+      "hoat-hinh": "Anime",
+      "tv-shows": "TV Shows"
+    }
+  },
+  "browse": {
+    "titleSuffix": "MovieCC",
+    "description": "Duyệt kho phim đầy đủ, lọc theo thể loại, quốc gia, năm.",
+    "featured": "Lựa chọn nổi bật",
+    "featuredEyebrow": "Editor's picks",
+    "resultsCount": "{{n}} phim",
+    "loading": "Đang tải…",
+    "empty": "Không có phim khớp bộ lọc",
+    "emptyHint": "Thử bỏ bớt một bộ lọc hoặc khám phá thể loại khác.",
+    "sortBy": "Sắp xếp",
+    "openFilters": "Bộ lọc",
+    "closeFilters": "Đóng bộ lọc",
+    "sort": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất",
+      "rating": "Điểm cao",
+      "az": "A → Z"
+    },
+    "filters": {
+      "title": "Bộ lọc",
+      "year": "Năm",
+      "genre": "Thể loại",
+      "country": "Quốc gia",
+      "all": "Tất cả",
+      "clear": "Xóa bộ lọc",
+      "apply": "Áp dụng"
+    }
   }
 }
