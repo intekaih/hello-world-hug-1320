@@ -37,7 +37,7 @@ function NotificationsPage() {
   const unread = items.filter((n) => !n.read).length;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Thông báo"
         count={isLoading ? undefined : items.length}
