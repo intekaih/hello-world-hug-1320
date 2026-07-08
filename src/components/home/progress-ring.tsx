@@ -79,8 +79,9 @@ export function ProgressRing({
               : { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
           }
           style={{
-            filter: "drop-shadow(0 0 6px oklch(var(--color-primary) / 0.75))",
+            filter: "drop-shadow(0 0 6px var(--color-primary))",
           }}
+
         />
         <defs>
           <linearGradient id="ring-grad" x1="0" x2="1" y1="0" y2="1">
