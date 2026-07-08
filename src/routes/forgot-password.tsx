@@ -78,21 +78,21 @@ function ForgotPasswordPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="glass-strong w-full max-w-md rounded-3xl border border-white/10 p-8 shadow-2xl"
+          className="glass-strong w-full max-w-md rounded-3xl border border-foreground/10 p-8 shadow-2xl"
         >
           <Link
             to="/login"
-            className="mb-6 inline-flex items-center gap-1.5 text-sm text-white/60 transition hover:text-white"
+            className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
           >
             <ArrowLeft className="h-4 w-4" /> Quay lại đăng nhập
           </Link>
 
           <div className="mb-8 flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-primary">
-              <Film className="h-6 w-6 text-white" />
+              <Film className="h-6 w-6 text-foreground" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-white">Quên mật khẩu?</h1>
-            <p className="text-sm text-white/60">
+            <h1 className="font-display text-2xl font-bold text-foreground">Quên mật khẩu?</h1>
+            <p className="text-sm text-muted-foreground">
               Nhập email hoặc tên đăng nhập, chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu.
             </p>
           </div>
@@ -110,9 +110,9 @@ function ForgotPasswordPage() {
                   <CheckCircle2 className="h-7 w-7 text-accent" />
                 </div>
                 <div>
-                  <p className="font-medium text-white">Đã gửi yêu cầu</p>
-                  <p className="mt-1 text-sm text-white/60">
-                    Nếu <span className="text-white">{getValues("identifier")}</span> tồn tại trong hệ thống,
+                  <p className="font-medium text-foreground">Đã gửi yêu cầu</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Nếu <span className="text-foreground">{getValues("identifier")}</span> tồn tại trong hệ thống,
                     chúng tôi đã gửi hướng dẫn đặt lại mật khẩu. Kiểm tra hộp thư của bạn.
                   </p>
                 </div>
@@ -144,11 +144,11 @@ function ForgotPasswordPage() {
                 )}
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-white/80">
+                  <label className="mb-1.5 block text-sm font-medium text-foreground/80">
                     Email hoặc tên đăng nhập
                   </label>
                   <div className="relative">
-                    <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                    <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <input
                       {...register("identifier")}
                       type="text"

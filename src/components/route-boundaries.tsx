@@ -54,7 +54,7 @@ export function RouteNotFound({
 }) {
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 text-center">
-      <div className="grid h-14 w-14 place-items-center rounded-full bg-white/5 text-foreground-muted">
+      <div className="grid h-14 w-14 place-items-center rounded-full bg-surface-elevated text-foreground-muted">
         <FileQuestion className="h-7 w-7" aria-hidden="true" />
       </div>
       <h1 className="mt-4 text-xl font-semibold text-foreground">{title}</h1>

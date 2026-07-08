@@ -47,11 +47,11 @@ function ActorSearchPage() {
       <div className="mx-auto max-w-2xl space-y-4 text-center">
         <div className="flex justify-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30">
-            <User className="h-7 w-7 text-white" />
+            <User className="h-7 w-7 text-foreground" />
           </div>
         </div>
-        <h1 className="font-display text-3xl font-bold text-white">Tìm phim theo diễn viên</h1>
-        <p className="text-white/60">
+        <h1 className="font-display text-3xl font-bold text-foreground">Tìm phim theo diễn viên</h1>
+        <p className="text-muted-foreground">
           Nhập tên diễn viên và khám phá toàn bộ tác phẩm của họ.
         </p>
 
@@ -68,7 +68,7 @@ function ActorSearchPage() {
           }}
           className="relative"
         >
-          <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
+          <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
           <input
             ref={inputRef}
             value={input}
@@ -94,26 +94,26 @@ function ActorSearchPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: Math.min(i * 0.03, 0.3) }}
-              className="glass group flex flex-col items-center gap-2 rounded-2xl border border-white/5 p-4 text-center transition hover:border-primary/50"
+              className="glass group flex flex-col items-center gap-2 rounded-2xl border border-foreground/10 p-4 text-center transition hover:border-primary/50"
             >
               <img
                 src={thumbSrc((a as Actor).avatar_url,{w:200})}
                 alt=""
                 loading="lazy"
-                className="h-20 w-20 rounded-full bg-white/10 object-cover ring-2 ring-white/10 transition group-hover:ring-primary/60"
+                className="h-20 w-20 rounded-full bg-foreground/10 object-cover ring-2 ring-white/10 transition group-hover:ring-primary/60"
               />
-              <div className="text-sm font-medium text-white group-hover:text-primary">
+              <div className="text-sm font-medium text-foreground group-hover:text-primary">
                 {(a as Actor).name}
               </div>
-              <div className="line-clamp-2 text-[11px] text-white/50">
+              <div className="line-clamp-2 text-[11px] text-muted-foreground">
                 {(a as Actor).known_for.join(" · ")}
               </div>
             </motion.button>
           ) : (
-            <div key={i} className="glass space-y-2 rounded-2xl border border-white/5 p-4">
-              <div className="mx-auto h-20 w-20 animate-pulse rounded-full bg-white/10" />
-              <div className="mx-auto h-3 w-2/3 animate-pulse rounded bg-white/10" />
-              <div className="mx-auto h-3 w-1/2 animate-pulse rounded bg-white/10" />
+            <div key={i} className="glass space-y-2 rounded-2xl border border-foreground/10 p-4">
+              <div className="mx-auto h-20 w-20 animate-pulse rounded-full bg-foreground/10" />
+              <div className="mx-auto h-3 w-2/3 animate-pulse rounded bg-foreground/10" />
+              <div className="mx-auto h-3 w-1/2 animate-pulse rounded bg-foreground/10" />
             </div>
           ),
         )}
@@ -121,7 +121,7 @@ function ActorSearchPage() {
 
       {!query.isLoading && items.length === 0 && (
         <div className="py-16 text-center">
-          <p className="text-white/60">Không tìm thấy diễn viên nào.</p>
+          <p className="text-muted-foreground">Không tìm thấy diễn viên nào.</p>
           <Link to="/browse/$type" params={{ type: "phim-moi-cap-nhat" }} className="mt-3 inline-block text-sm text-primary hover:underline">
             Duyệt phim mới cập nhật →
           </Link>

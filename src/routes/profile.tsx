@@ -79,23 +79,23 @@ function ProfilePage() {
         actions={
           <button
             onClick={() => logout.mutate()}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-destructive/60 hover:text-white"
+            className="flex items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 py-2 text-sm text-foreground/80 transition hover:border-destructive/60 hover:text-foreground"
           >
             <LogOut className="h-4 w-4" /> Đăng xuất
           </button>
         }
       />
 
-      <section className="glass rounded-2xl border border-white/5 p-6">
+      <section className="glass rounded-2xl border border-foreground/10 p-6">
         <div className="flex items-center gap-4">
           <img
             src={avatar || "/placeholder.svg"}
             alt={name}
-            className="h-20 w-20 rounded-full border border-white/10 object-cover"
+            className="h-20 w-20 rounded-full border border-foreground/10 object-cover"
           />
           <div>
-            <div className="text-lg font-semibold text-white">{user?.name}</div>
-            <div className="text-sm text-white/50">@{user?.username}</div>
+            <div className="text-lg font-semibold text-foreground">{user?.name}</div>
+            <div className="text-sm text-muted-foreground">@{user?.username}</div>
           </div>
         </div>
 
@@ -128,8 +128,8 @@ function ProfilePage() {
         </div>
       </section>
 
-      <section className="glass rounded-2xl border border-white/5 p-6">
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+      <section className="glass rounded-2xl border border-foreground/10 p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
           <KeyRound className="h-5 w-5 text-primary" /> Đổi mật khẩu
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -185,7 +185,7 @@ function ProfilePage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">
+      <span className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
       {children}

@@ -172,10 +172,10 @@ function SearchPage() {
         {q ? `Tìm kiếm phim: ${q}` : "Tìm kiếm phim"}
       </h1>
       {/* Sticky search bar */}
-      <div className="glass sticky top-0 z-30 border-b border-white/5 px-4 py-3 md:px-6 lg:px-8">
+      <div className="glass sticky top-0 z-30 border-b border-foreground/10 px-4 py-3 md:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="relative">
-            <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
+            <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <input
               ref={inputRef}
               value={input}
@@ -200,7 +200,7 @@ function SearchPage() {
                   setInput("");
                   inputRef.current?.focus();
                 }}
-                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition hover:bg-foreground/10 hover:text-foreground"
                 aria-label="Xóa"
               >
                 <X className="h-4 w-4" />
@@ -215,7 +215,7 @@ function SearchPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.15 }}
-                  className="glass-strong absolute left-0 right-0 top-[calc(100%+8px)] overflow-hidden rounded-2xl border border-white/10 shadow-2xl"
+                  className="glass-strong absolute left-0 right-0 top-[calc(100%+8px)] overflow-hidden rounded-2xl border border-foreground/10 shadow-2xl"
                 >
                   <ul className="max-h-[70vh] overflow-y-auto py-2">
                     {suggestQuery.data!.items.map((item) => (
@@ -223,7 +223,7 @@ function SearchPage() {
                         <button
                           onMouseDown={(e) => e.preventDefault()}
                           onClick={() => submit(item.title)}
-                          className="flex w-full items-center gap-3 px-3 py-2 text-left transition hover:bg-white/5"
+                          className="flex w-full items-center gap-3 px-3 py-2 text-left transition hover:bg-surface-elevated"
                         >
                           <img
                             src={thumbSrc(item.poster_url,{w:400})}
@@ -232,12 +232,12 @@ function SearchPage() {
                             loading="lazy"
                           />
                           <div className="min-w-0 flex-1">
-                            <div className="truncate font-medium text-white">{item.title}</div>
-                            <div className="text-xs text-white/50">
+                            <div className="truncate font-medium text-foreground">{item.title}</div>
+                            <div className="text-xs text-muted-foreground">
                               {item.type} · {item.year}
                             </div>
                           </div>
-                          <SearchIcon className="h-4 w-4 flex-shrink-0 text-white/30" />
+                          <SearchIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
                         </button>
                       </li>
                     ))}
@@ -286,12 +286,12 @@ function EmptyState({
       {recent.length > 0 && (
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-white">
-              <Clock className="h-4 w-4 text-white/60" /> Tìm gần đây
+            <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-foreground">
+              <Clock className="h-4 w-4 text-muted-foreground" /> Tìm gần đây
             </h2>
             <button
               onClick={onClearRecent}
-              className="text-xs text-white/50 transition hover:text-primary"
+              className="text-xs text-muted-foreground transition hover:text-primary"
             >
               Xóa tất cả
             </button>
@@ -301,7 +301,7 @@ function EmptyState({
               <button
                 key={r}
                 onClick={() => onPick(r)}
-                className="glass rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:border-primary/50 hover:text-white"
+                className="glass rounded-full border border-foreground/10 px-4 py-2 text-sm text-foreground/80 transition hover:border-primary/50 hover:text-foreground"
               >
                 {r}
               </button>
@@ -311,7 +311,7 @@ function EmptyState({
       )}
 
       <section>
-        <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold text-white">
+        <h2 className="mb-3 flex items-center gap-2 font-display text-lg font-semibold text-foreground">
           <TrendingUp className="h-4 w-4 text-accent" /> Xu hướng
         </h2>
         <div className="flex flex-wrap gap-2">
@@ -329,9 +329,9 @@ function EmptyState({
 
       <div className="flex flex-col items-center gap-3 pt-12 text-center">
         <div className="glass flex h-16 w-16 items-center justify-center rounded-2xl">
-          <SearchIcon className="h-8 w-8 text-white/40" />
+          <SearchIcon className="h-8 w-8 text-muted-foreground" />
         </div>
-        <p className="text-white/60">Nhập tên phim, series hoặc diễn viên để bắt đầu</p>
+        <p className="text-muted-foreground">Nhập tên phim, series hoặc diễn viên để bắt đầu</p>
       </div>
     </div>
   );
@@ -362,12 +362,12 @@ function ResultsSection({
     return (
       <div className="flex flex-col items-center gap-3 py-24 text-center">
         <div className="glass flex h-16 w-16 items-center justify-center rounded-2xl">
-          <SearchIcon className="h-8 w-8 text-white/40" />
+          <SearchIcon className="h-8 w-8 text-muted-foreground" />
         </div>
-        <p className="font-display text-lg font-semibold text-white">
+        <p className="font-display text-lg font-semibold text-foreground">
           Không tìm thấy kết quả nào
         </p>
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-muted-foreground">
           Không có phim nào khớp với “{q}”. Thử từ khóa khác nhé.
         </p>
       </div>
@@ -377,10 +377,10 @@ function ResultsSection({
   return (
     <div className="space-y-6">
       <div className="flex items-baseline justify-between">
-        <h2 className="font-display text-xl font-bold text-white">
+        <h2 className="font-display text-xl font-bold text-foreground">
           Kết quả cho “<span className="text-primary">{q}</span>”
         </h2>
-        <span className="text-sm text-white/50">{total} phim</span>
+        <span className="text-sm text-muted-foreground">{total} phim</span>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
@@ -398,11 +398,11 @@ function ResultsSection({
             Xem thêm
           </button>
         ) : isFetching ? (
-          <div className="flex items-center gap-2 text-sm text-white/60">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Đang tải...
           </div>
         ) : items.length > 0 ? (
-          <span className="text-sm text-white/40">Đã hết kết quả</span>
+          <span className="text-sm text-muted-foreground">Đã hết kết quả</span>
         ) : null}
       </div>
     </div>
@@ -419,7 +419,7 @@ function MovieCard({ item, index }: { item: SearchResult["items"][number]; index
       <Link
         to="/phim/$slug"
         params={{ slug: item.slug }}
-        className="group block overflow-hidden rounded-xl border border-white/5 bg-elevated transition hover:border-primary/40"
+        className="group block overflow-hidden rounded-xl border border-foreground/10 bg-elevated transition hover:border-primary/40"
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           <img
@@ -438,10 +438,10 @@ function MovieCard({ item, index }: { item: SearchResult["items"][number]; index
           </div>
         </div>
         <div className="p-2.5">
-          <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+          <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
             {item.title}
           </div>
-          <div className="text-xs text-white/50">{item.year}</div>
+          <div className="text-xs text-muted-foreground">{item.year}</div>
         </div>
       </Link>
     </motion.div>
@@ -451,13 +451,13 @@ function MovieCard({ item, index }: { item: SearchResult["items"][number]; index
 function ResultsSkeleton() {
   return (
     <div className="space-y-6">
-      <div className="h-6 w-64 animate-pulse rounded bg-white/5" />
+      <div className="h-6 w-64 animate-pulse rounded bg-surface-elevated" />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="space-y-2">
-            <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/5" />
-            <div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-            <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+            <div className="aspect-[2/3] animate-pulse rounded-xl bg-surface-elevated" />
+            <div className="h-3 w-3/4 animate-pulse rounded bg-surface-elevated" />
+            <div className="h-3 w-1/3 animate-pulse rounded bg-surface-elevated" />
           </div>
         ))}
       </div>

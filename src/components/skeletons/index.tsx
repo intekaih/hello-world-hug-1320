@@ -100,7 +100,7 @@ export function PageLoader({ label = "Đang tải..." }: { label?: string }) {
       >
         <div className="absolute inset-0 -z-10 rounded-3xl bg-primary/30 blur-2xl" />
         <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-[var(--shadow-glow-primary)]">
-          <Film className="h-8 w-8 text-white" />
+          <Film className="h-8 w-8 text-foreground" />
         </div>
       </motion.div>
       <div className="flex items-center gap-2 text-sm text-foreground-muted">

@@ -144,7 +144,7 @@ function WatchlistCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.4) }}
-      className="group relative overflow-hidden rounded-xl border border-white/5 bg-elevated"
+      className="group relative overflow-hidden rounded-xl border border-foreground/10 bg-elevated"
     >
       <Link
         to="/phim/$slug"
@@ -170,14 +170,14 @@ function WatchlistCard({
           )}
         </div>
         <div className="p-2.5">
-          <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+          <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
             {item.movie_name}
           </div>
-          <div className="truncate text-xs text-white/50">{item.movie_origin_name}</div>
+          <div className="truncate text-xs text-muted-foreground">{item.movie_origin_name}</div>
         </div>
       </Link>
 
-      <div className="flex items-center gap-1 border-t border-white/5 px-2 py-1.5">
+      <div className="flex items-center gap-1 border-t border-foreground/10 px-2 py-1.5">
         {editing ? (
           <>
             <input
@@ -206,7 +206,7 @@ function WatchlistCard({
               e.preventDefault();
               setEditing(true);
             }}
-            className="flex flex-1 items-center gap-1.5 rounded-md px-1.5 py-1 text-xs text-white/60 transition hover:bg-white/5 hover:text-white"
+            className="flex flex-1 items-center gap-1.5 rounded-md px-1.5 py-1 text-xs text-muted-foreground transition hover:bg-surface-elevated hover:text-foreground"
           >
             <StickyNote className="h-3.5 w-3.5" />
             {item.note ? "Sửa ghi chú" : "Thêm ghi chú"}
