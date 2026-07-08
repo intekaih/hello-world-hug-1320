@@ -56,7 +56,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   return (
     <section
       ref={sectionRef}
-      className="relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-[oklch(0.08_0.02_280)] sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
+      className="dark relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-black text-white sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
         setPaused(false);
