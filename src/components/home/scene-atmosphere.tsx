@@ -53,7 +53,7 @@ export function SceneAtmosphere() {
       }
       if (!best) return;
       const m = best.getAttribute("data-scene-mood") as Mood | null;
-      if (!m || !PALETTES[m]) return;
+      if (!m || !scenes[m]) return;
       setCurrent((prev) => {
         if (prev === m) return prev;
         setPrevious(prev);
