@@ -93,5 +93,36 @@
       "title": "Không tìm thấy phim",
       "description": "Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
     }
+  },
+  "continueWatching": {
+    "eyebrow": "Hành trình chưa hoàn tất",
+    "title": "Tiếp tục hành trình",
+    "subtitle": "Những câu chuyện còn đang đợi bạn quay lại.",
+    "resume": "Tiếp tục xem",
+    "resumeFrom": "Tiếp tục từ {{time}}",
+    "remainingMinutes": "Bạn còn {{minutes}} phút để hoàn thành tập này",
+    "nextEpisodeWaiting": "Tập tiếp theo đang chờ",
+    "pickUpWhereLeft": "Tiếp tục từ nơi bạn dừng lại",
+    "episode": "Tập {{n}}",
+    "lastWatched": {
+      "justNow": "Vừa xem",
+      "minutesAgo": "{{n}} phút trước",
+      "hoursAgo": "{{n}} giờ trước",
+      "yesterday": "Hôm qua",
+      "daysAgo": "{{n}} ngày trước"
+    },
+    "percentWatched": "{{n}}% đã xem",
+    "quality": {
+      "hd": "HD",
+      "fullHd": "Full HD",
+      "uhd": "4K HDR"
+    },
+    "empty": {
+      "eyebrow": "Chưa có hành trình",
+      "title": "Hành trình của bạn bắt đầu tại đây",
+      "description": "Chưa có hành trình nào. Hãy bắt đầu một bộ phim và MovieCC sẽ lưu lại cho bạn.",
+      "cta": "Khám phá phim"
+    }
   }
 }
+

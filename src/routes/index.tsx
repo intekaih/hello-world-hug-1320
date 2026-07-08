@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import {
   CategoryChips,
-  ContinueWatching,
   ContinueWatchingSkeleton,
   HeroBannerSkeleton,
   MovieRow,
@@ -15,10 +14,12 @@ import {
 } from "@/components/home";
 import { CinematicHero } from "@/components/home/cinematic-hero";
 import { CinematicScene } from "@/components/home/cinematic-scene";
+import { ContinueWatchingImmersive } from "@/components/home/continue-watching-immersive";
 import { GenreCosmos } from "@/components/home/genre-cosmos";
 import { SceneSection } from "@/components/home/scene-section";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
+
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -80,11 +81,12 @@ function Home() {
       {/* SCENE 02 — Continue Watching (indigo mood, personal) */}
       {isLoggedIn && data.continueWatching.length > 0 && (
         <StaggerItem>
-          <SceneSection mood="indigo" eyebrow="Đang xem · Resume" intensity={0.9}>
-            <ContinueWatching items={data.continueWatching} />
+          <SceneSection mood="indigo" intensity={0.9}>
+            <ContinueWatchingImmersive items={data.continueWatching} />
           </SceneSection>
         </StaggerItem>
       )}
+
 
       {/* SCENE 03 — Trending Today (ember, hot) */}
       <StaggerItem>
