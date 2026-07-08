@@ -114,8 +114,8 @@ function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }
           />
         </>
       )}
-      <Icon className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-      {!collapsed && <span className="relative truncate">{item.label}</span>}
+      <Icon className="relative h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110" aria-hidden />
+      {!collapsed && <span className="relative truncate">{label}</span>}
     </Link>
   );
 }
