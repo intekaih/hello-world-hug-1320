@@ -279,13 +279,18 @@ export function CategoryChips() {
             key={c}
             onClick={() => setActive(c)}
             className={cn(
-              "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all",
-              isActive
-                ? "bg-primary text-primary-foreground shadow-[var(--shadow-glow-primary)]"
-                : "glass text-foreground-muted hover:text-foreground",
+              "relative shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-colors",
+              isActive ? "text-primary-foreground" : "text-foreground/70 hover:text-foreground",
             )}
           >
-            {c}
+            {isActive && (
+              <motion.span
+                layoutId="chip-pill"
+                className="absolute inset-0 rounded-full bg-[var(--gradient-ember)] shadow-[0_10px_30px_-10px_var(--color-primary)]"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            <span className="relative">{c}</span>
           </button>
         );
       })}
