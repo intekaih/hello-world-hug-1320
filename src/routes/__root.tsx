@@ -10,6 +10,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { AuthInitializer } from "@/hooks/useAuth";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -147,6 +148,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthInitializer>
         <AppShell />
+        <Toaster />
       </AuthInitializer>
     </QueryClientProvider>
   );
