@@ -154,6 +154,12 @@ function WatchPage() {
 
   return (
     <div className="min-h-screen bg-black">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       <div className="mx-auto max-w-6xl">
         {/* Video area — no padding */}
         <PlayerContainer
