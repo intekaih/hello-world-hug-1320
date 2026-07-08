@@ -9,6 +9,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
+import { AuthInitializer } from "@/hooks/useAuth";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -141,9 +142,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell />
+      <AuthInitializer>
+        <AppShell />
+      </AuthInitializer>
     </QueryClientProvider>
   );
 }
+
 
 

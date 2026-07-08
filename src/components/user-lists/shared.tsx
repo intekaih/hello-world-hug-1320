@@ -1,43 +1,46 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { Loader2, LogIn } from "lucide-react";
 
-type Me = { user: { id: string; username: string; name: string; avatar_url: string } | null };
+import {
+  useAuthStore,
+  selectIsAuthenticated,
+  selectIsAuthenticating,
+} from "@/store/authStore";
 
+/** Backwards-compat shim: returns a shape close to the old React Query result. */
 export function useAuth() {
-  return useQuery<Me>({
-    queryKey: ["auth", "me"],
-    queryFn: async () => {
-      const res = await fetch("/api/auth/me");
-      return (await res.json()) as Me;
-    },
-    staleTime: 30_000,
-  });
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticating = useAuthStore(selectIsAuthenticating);
+  return {
+    data: { user },
+    isLoading: isAuthenticating,
+    isAuthenticated: !!user,
+  };
 }
 
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const { data, isLoading } = useAuth();
+  const isAuthenticating = useAuthStore(selectIsAuthenticating);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (isLoading) return;
-    if (data?.user) return;
-    // Guard: don't loop when we've already been redirected to /login.
+    if (isAuthenticating) return;
+    if (isAuthenticated) return;
     if (pathname === "/login" || pathname.startsWith("/login")) return;
     navigate({ to: "/login", search: { redirect: pathname }, replace: true });
-  }, [isLoading, data, navigate, pathname]);
+  }, [isAuthenticating, isAuthenticated, navigate, pathname]);
 
-  if (isLoading) {
+  if (isAuthenticating) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
   }
-  if (!data?.user) {
+  if (!isAuthenticated) {
     const target = pathname.startsWith("/login") ? "/" : pathname;
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
@@ -55,6 +58,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   }
   return <>{children}</>;
 }
+
 
 export function PageHeader({
   title,
