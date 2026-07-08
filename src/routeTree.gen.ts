@@ -14,19 +14,25 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LichChieuRouteImport } from './routes/lich-chieu'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FavoritesRouteImport } from './routes/favorites'
-import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DienVienIndexRouteImport } from './routes/dien-vien.index'
+import { Route as BrowseIndexRouteImport } from './routes/browse.index'
 import { Route as PhimSlugRouteImport } from './routes/phim.$slug'
+import { Route as DienVienNameRouteImport } from './routes/dien-vien.$name'
+import { Route as BrowseTypeRouteImport } from './routes/browse.$type'
 import { Route as ApiWatchlistRouteImport } from './routes/api/watchlist'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
+import { Route as ApiScheduleRouteImport } from './routes/api/schedule'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
+import { Route as ApiBrowseRouteImport } from './routes/api/browse'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
 import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
@@ -38,6 +44,8 @@ import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.t
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthForgotPasswordRouteImport } from './routes/api/auth/forgot-password'
+import { Route as ApiActorsSearchRouteImport } from './routes/api/actors.search'
+import { Route as ApiActorsNameRouteImport } from './routes/api/actors.$name'
 import { Route as ApiMoviesSlugRelatedRouteImport } from './routes/api/movies.$slug.related'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 
@@ -66,6 +74,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LichChieuRoute = LichChieuRouteImport.update({
+  id: '/lich-chieu',
+  path: '/lich-chieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -81,19 +94,34 @@ const FavoritesRoute = FavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BrowseRoute = BrowseRouteImport.update({
-  id: '/browse',
-  path: '/browse',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DienVienIndexRoute = DienVienIndexRouteImport.update({
+  id: '/dien-vien/',
+  path: '/dien-vien/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseIndexRoute = BrowseIndexRouteImport.update({
+  id: '/browse/',
+  path: '/browse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhimSlugRoute = PhimSlugRouteImport.update({
   id: '/phim/$slug',
   path: '/phim/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DienVienNameRoute = DienVienNameRouteImport.update({
+  id: '/dien-vien/$name',
+  path: '/dien-vien/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseTypeRoute = BrowseTypeRouteImport.update({
+  id: '/browse/$type',
+  path: '/browse/$type',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiWatchlistRoute = ApiWatchlistRouteImport.update({
@@ -116,6 +144,11 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiScheduleRoute = ApiScheduleRouteImport.update({
+  id: '/api/schedule',
+  path: '/api/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
   id: '/api/notifications',
   path: '/api/notifications',
@@ -129,6 +162,11 @@ const ApiHistoryRoute = ApiHistoryRouteImport.update({
 const ApiFavoritesRoute = ApiFavoritesRouteImport.update({
   id: '/api/favorites',
   path: '/api/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBrowseRoute = ApiBrowseRouteImport.update({
+  id: '/api/browse',
+  path: '/api/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const XemSlugTapChar123episodeChar125Route =
@@ -189,6 +227,16 @@ const ApiAuthForgotPasswordRoute = ApiAuthForgotPasswordRouteImport.update({
   path: '/api/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiActorsSearchRoute = ApiActorsSearchRouteImport.update({
+  id: '/api/actors/search',
+  path: '/api/actors/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiActorsNameRoute = ApiActorsNameRouteImport.update({
+  id: '/api/actors/$name',
+  path: '/api/actors/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMoviesSlugRelatedRoute = ApiMoviesSlugRelatedRouteImport.update({
   id: '/related',
   path: '/related',
@@ -202,23 +250,31 @@ const ApiHistorySlugEpRoute = ApiHistorySlugEpRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/browse': typeof BrowseRoute
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse/': typeof BrowseIndexRoute
+  '/dien-vien/': typeof DienVienIndexRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -235,23 +291,31 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/browse': typeof BrowseRoute
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse': typeof BrowseIndexRoute
+  '/dien-vien': typeof DienVienIndexRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -269,23 +333,31 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/browse': typeof BrowseRoute
   '/favorites': typeof FavoritesRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
+  '/browse/$type': typeof BrowseTypeRoute
+  '/dien-vien/$name': typeof DienVienNameRoute
   '/phim/$slug': typeof PhimSlugRoute
+  '/browse/': typeof BrowseIndexRoute
+  '/dien-vien/': typeof DienVienIndexRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -304,23 +376,31 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/browse'
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse/'
+    | '/dien-vien/'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -337,23 +417,31 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/browse'
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse'
+    | '/dien-vien'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -370,23 +458,31 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/browse'
     | '/favorites'
     | '/forgot-password'
     | '/history'
+    | '/lich-chieu'
     | '/login'
     | '/notifications'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
+    | '/browse/$type'
+    | '/dien-vien/$name'
     | '/phim/$slug'
+    | '/browse/'
+    | '/dien-vien/'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -404,23 +500,31 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BrowseRoute: typeof BrowseRoute
   FavoritesRoute: typeof FavoritesRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  ApiBrowseRoute: typeof ApiBrowseRoute
   ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
+  ApiScheduleRoute: typeof ApiScheduleRoute
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   ApiWatchlistRoute: typeof ApiWatchlistRouteWithChildren
+  BrowseTypeRoute: typeof BrowseTypeRoute
+  DienVienNameRoute: typeof DienVienNameRoute
   PhimSlugRoute: typeof PhimSlugRoute
+  BrowseIndexRoute: typeof BrowseIndexRoute
+  DienVienIndexRoute: typeof DienVienIndexRoute
+  ApiActorsNameRoute: typeof ApiActorsNameRoute
+  ApiActorsSearchRoute: typeof ApiActorsSearchRoute
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
@@ -466,6 +570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lich-chieu': {
+      id: '/lich-chieu'
+      path: '/lich-chieu'
+      fullPath: '/lich-chieu'
+      preLoaderRoute: typeof LichChieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
@@ -487,13 +598,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/browse': {
-      id: '/browse'
-      path: '/browse'
-      fullPath: '/browse'
-      preLoaderRoute: typeof BrowseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -501,11 +605,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dien-vien/': {
+      id: '/dien-vien/'
+      path: '/dien-vien'
+      fullPath: '/dien-vien/'
+      preLoaderRoute: typeof DienVienIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/': {
+      id: '/browse/'
+      path: '/browse'
+      fullPath: '/browse/'
+      preLoaderRoute: typeof BrowseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/phim/$slug': {
       id: '/phim/$slug'
       path: '/phim/$slug'
       fullPath: '/phim/$slug'
       preLoaderRoute: typeof PhimSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dien-vien/$name': {
+      id: '/dien-vien/$name'
+      path: '/dien-vien/$name'
+      fullPath: '/dien-vien/$name'
+      preLoaderRoute: typeof DienVienNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/$type': {
+      id: '/browse/$type'
+      path: '/browse/$type'
+      fullPath: '/browse/$type'
+      preLoaderRoute: typeof BrowseTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/watchlist': {
@@ -536,6 +668,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/schedule': {
+      id: '/api/schedule'
+      path: '/api/schedule'
+      fullPath: '/api/schedule'
+      preLoaderRoute: typeof ApiScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/notifications': {
       id: '/api/notifications'
       path: '/api/notifications'
@@ -555,6 +694,13 @@ declare module '@tanstack/react-router' {
       path: '/api/favorites'
       fullPath: '/api/favorites'
       preLoaderRoute: typeof ApiFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/browse': {
+      id: '/api/browse'
+      path: '/api/browse'
+      fullPath: '/api/browse'
+      preLoaderRoute: typeof ApiBrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/xem/$slug/tap-{$episode}': {
@@ -632,6 +778,20 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/forgot-password'
       fullPath: '/api/auth/forgot-password'
       preLoaderRoute: typeof ApiAuthForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/actors/search': {
+      id: '/api/actors/search'
+      path: '/api/actors/search'
+      fullPath: '/api/actors/search'
+      preLoaderRoute: typeof ApiActorsSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/actors/$name': {
+      id: '/api/actors/$name'
+      path: '/api/actors/$name'
+      fullPath: '/api/actors/$name'
+      preLoaderRoute: typeof ApiActorsNameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/movies/$slug/related': {
@@ -716,23 +876,31 @@ const ApiMoviesSlugRouteWithChildren = ApiMoviesSlugRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BrowseRoute: BrowseRoute,
   FavoritesRoute: FavoritesRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  ApiBrowseRoute: ApiBrowseRoute,
   ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
+  ApiScheduleRoute: ApiScheduleRoute,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   ApiWatchlistRoute: ApiWatchlistRouteWithChildren,
+  BrowseTypeRoute: BrowseTypeRoute,
+  DienVienNameRoute: DienVienNameRoute,
   PhimSlugRoute: PhimSlugRoute,
+  BrowseIndexRoute: BrowseIndexRoute,
+  DienVienIndexRoute: DienVienIndexRoute,
+  ApiActorsNameRoute: ApiActorsNameRoute,
+  ApiActorsSearchRoute: ApiActorsSearchRoute,
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
