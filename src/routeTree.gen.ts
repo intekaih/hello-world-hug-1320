@@ -16,6 +16,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LichChieuRouteImport } from './routes/lich-chieu'
+import { Route as KhamPhaRouteImport } from './routes/kham-pha'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FeedbackRouteImport } from './routes/feedback'
@@ -89,6 +90,11 @@ const LoginRoute = LoginRouteImport.update({
 const LichChieuRoute = LichChieuRouteImport.update({
   id: '/lich-chieu',
   path: '/lich-chieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KhamPhaRoute = KhamPhaRouteImport.update({
+  id: '/kham-pha',
+  path: '/kham-pha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -299,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -347,6 +354,7 @@ export interface FileRoutesByTo {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -396,6 +404,7 @@ export interface FileRoutesById {
   '/feedback': typeof FeedbackRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
@@ -446,6 +455,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -494,6 +504,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -542,6 +553,7 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/forgot-password'
     | '/history'
+    | '/kham-pha'
     | '/lich-chieu'
     | '/login'
     | '/notifications'
@@ -591,6 +603,7 @@ export interface RootRouteChildren {
   FeedbackRoute: typeof FeedbackRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  KhamPhaRoute: typeof KhamPhaRoute
   LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
@@ -673,6 +686,13 @@ declare module '@tanstack/react-router' {
       path: '/lich-chieu'
       fullPath: '/lich-chieu'
       preLoaderRoute: typeof LichChieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kham-pha': {
+      id: '/kham-pha'
+      path: '/kham-pha'
+      fullPath: '/kham-pha'
+      preLoaderRoute: typeof KhamPhaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -1025,6 +1045,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeedbackRoute: FeedbackRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  KhamPhaRoute: KhamPhaRoute,
   LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
