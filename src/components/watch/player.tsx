@@ -345,8 +345,22 @@ export function PlayerContainer({
 
   /* ---------------------------- Keyboard --------------------------------- */
   useEffect(() => {
+    const bumpVolume = (delta: number) => {
+      const v = videoRef.current;
+      if (!v) return;
+      const next = Math.max(0, Math.min(1, (v.muted ? 0 : v.volume) + delta));
+      v.muted = next === 0;
+      v.volume = next;
+    };
     const onKey = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement) return;
+      const t = e.target as HTMLElement | null;
+      if (
+        t instanceof HTMLInputElement ||
+        t instanceof HTMLTextAreaElement ||
+        (t && t.isContentEditable)
+      ) {
+        return;
+      }
       switch (e.key) {
         case " ":
         case "k":
@@ -354,15 +368,28 @@ export function PlayerContainer({
           togglePlay();
           break;
         case "ArrowLeft":
+          e.preventDefault();
           seekBy(-10);
           break;
         case "ArrowRight":
+          e.preventDefault();
           seekBy(10);
           break;
+        case "ArrowUp":
+          e.preventDefault();
+          bumpVolume(0.05);
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          bumpVolume(-0.05);
+          break;
         case "f":
+        case "F":
+          e.preventDefault();
           toggleFullscreen();
           break;
         case "m":
+        case "M":
           if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
           break;
       }
