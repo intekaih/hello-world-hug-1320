@@ -120,7 +120,16 @@ function Brand({ compact }: { compact?: boolean }) {
           <span className="font-display text-[19px] font-medium italic tracking-[-0.03em] text-foreground [font-variation-settings:'opsz'_144,'SOFT'_50]">
             movie
           </span>
-          <span className="font-display text-[19px] font-semibold italic tracking-[-0.04em] [background:var(--gradient-ember)] [-webkit-background-clip:text] [background-clip:text] [color:transparent] [font-variation-settings:'opsz'_144,'SOFT'_80]">
+          <span
+            className="font-display text-[19px] font-semibold italic tracking-[-0.04em] [font-variation-settings:'opsz'_144,'SOFT'_80]"
+            style={{
+              background: "var(--gradient-ember)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              color: "transparent",
+            }}
+          >
             cc
           </span>
           <span aria-hidden className="ml-0.5 h-1 w-1 rounded-full bg-primary ambient-pulse" />
