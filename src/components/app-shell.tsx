@@ -13,7 +13,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -225,17 +225,17 @@ function MobileTab({ item }: { item: NavItem }) {
 }
 
 function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const panelRef = useState<HTMLElement | null>(null);
-  const [, setPanel] = panelRef;
-  const restoreRef = useState<HTMLElement | null>(null);
-  const [, setRestore] = restoreRef;
+  const panelRef = useRef<HTMLElement | null>(null);
+  const restoreRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
-    // Remember what to restore focus to on close
-    setRestore(document.activeElement as HTMLElement | null);
+    restoreRef.current = document.activeElement as HTMLElement | null;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Focus the panel so keyboard users start inside the dialog
+    panelRef.current?.focus();
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -248,11 +248,9 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
     return () => {
       document.body.style.overflow = original;
       document.removeEventListener("keydown", onKey);
-      // Restore focus after unmount
-      restoreRef[0]?.focus?.();
+      restoreRef.current?.focus?.();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, onClose]);
 
   return (
     <div
