@@ -20,6 +20,24 @@ import type {
 } from "@/lib/home-queries";
 
 
+function HeroTitle({ logo, title }: { logo?: string; title: string }) {
+  const [ok, setOk] = useState(true);
+  if (logo && ok) {
+    return (
+      <img
+        src={thumbSrc(logo, { w: 640 })}
+        alt={title}
+        onError={() => setOk(false)}
+        className="max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)] sm:max-h-36"
+      />
+    );
+  }
+  return (
+    <h1 className="font-display text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.02em] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+      {title}
+    </h1>
+  );
+}
 
 /* -------------------------------------------------------------------------- */
 /*  HeroBanner                                                                */
