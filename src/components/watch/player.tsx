@@ -669,23 +669,23 @@ function SeekBar({
       }}
       onPointerLeave={() => setHoverX(null)}
     >
-      <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-white/20 transition group-hover:h-1.5">
+      <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 overflow-hidden rounded-full bg-white/15 transition-all duration-200 group-hover:h-1.5">
         <div
-          className="absolute inset-y-0 left-0 rounded-full bg-white/40"
+          className="absolute inset-y-0 left-0 rounded-full bg-white/30"
           style={{ width: `${bufPct}%` }}
         />
         <div
-          className="absolute inset-y-0 left-0 rounded-full bg-primary"
-          style={{ width: `${pct}%` }}
+          className="absolute inset-y-0 left-0 rounded-full shadow-[0_0_12px_oklch(0.68_0.24_25/0.7)]"
+          style={{ width: `${pct}%`, background: "var(--gradient-ember)" }}
         />
       </div>
       <div
-        className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary shadow opacity-0 transition group-hover:opacity-100"
+        className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-[0_0_16px_oklch(0.68_0.24_25/0.9),0_2px_6px_rgba(0,0,0,0.5)] ring-2 ring-primary transition-opacity duration-200 group-hover:opacity-100"
         style={{ left: `${pct}%` }}
       />
       {hoverX !== null && ref.current && duration > 0 && (
         <div
-          className="pointer-events-none absolute -top-7 -translate-x-1/2 rounded bg-black/80 px-1.5 py-0.5 text-[10px] font-medium text-white"
+          className="pointer-events-none absolute -top-8 -translate-x-1/2 rounded-md border border-white/15 bg-black/90 px-2 py-1 font-mono text-[10px] font-medium tabular-nums text-white backdrop-blur-md"
           style={{ left: hoverX }}
         >
           {formatTime((hoverX / ref.current.clientWidth) * duration)}
