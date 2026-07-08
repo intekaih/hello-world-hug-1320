@@ -235,7 +235,7 @@ function SearchExperiencePage() {
       setRecent(loadRecent());
       setFocused(false);
       inputRef.current?.blur();
-      navigate({ search: (prev) => ({ ...prev, q: trimmed, page: 1 }) });
+      navigate({ search: (prev: SearchParams) => ({ ...prev, q: trimmed, page: 1 }) });
     },
     [navigate],
   );
@@ -247,7 +247,7 @@ function SearchExperiencePage() {
 
   const setFilter = useCallback(
     (patch: Partial<SearchParams>) =>
-      navigate({ search: (prev) => ({ ...prev, ...patch, page: 1 }) }),
+      navigate({ search: (prev: SearchParams) => ({ ...prev, ...patch, page: 1 }) }),
     [navigate],
   );
 
@@ -290,7 +290,7 @@ function SearchExperiencePage() {
             isFetching={resultsQuery.isFetching}
             canLoadMore={canLoadMore}
             onLoadMore={() =>
-              navigate({ search: (prev) => ({ ...prev, page: (prev.page ?? 1) + 1 }) })
+              navigate({ search: (prev: SearchParams) => ({ ...prev, page: (prev.page ?? 1) + 1 }) })
             }
           />
         ) : (
