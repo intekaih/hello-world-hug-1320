@@ -192,6 +192,15 @@
   backdrop-filter: blur(32px) saturate(160%);
 }
 
+/* Hide scrollbars while keeping scroll functional */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Safe-area utilities for mobile notches / home indicators */
 @utility pt-safe-top {
   padding-top: env(safe-area-inset-top);

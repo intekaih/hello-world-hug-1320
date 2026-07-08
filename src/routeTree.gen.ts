@@ -17,6 +17,7 @@ import { Route as HistoryRouteImport } from './routes/history'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 
 const WatchlistRoute = WatchlistRouteImport.update({
   id: '/watchlist',
@@ -58,6 +59,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
+  id: '/api/movies/home',
+  path: '/api/movies/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/movies/home': typeof ApiMoviesHomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/movies/home': typeof ApiMoviesHomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/movies/home': typeof ApiMoviesHomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/movies/home'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/movies/home'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/movies/home'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/movies/home': {
+      id: '/api/movies/home'
+      path: '/api/movies/home'
+      fullPath: '/api/movies/home'
+      preLoaderRoute: typeof ApiMoviesHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  ApiMoviesHomeRoute: ApiMoviesHomeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
