@@ -14,6 +14,8 @@ import {
   Top10Section,
   Top10Skeleton,
 } from "@/components/home";
+import { CinematicScene } from "@/components/home/cinematic-scene";
+import { GenreCosmos } from "@/components/home/genre-cosmos";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
 
