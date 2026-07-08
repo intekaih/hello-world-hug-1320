@@ -268,7 +268,8 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
         onClick={onClose}
       />
       <aside
-        ref={(el) => setPanel(el)}
+        ref={panelRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label="Menu chính"
