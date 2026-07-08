@@ -99,7 +99,7 @@ export function SceneAtmosphere() {
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={transition.cinematic}
             className="absolute inset-0"
             style={{ background: layerBg(previous) }}
           />
