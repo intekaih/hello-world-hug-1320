@@ -1,41 +1,101 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Play } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+
+import {
+  CategoryChips,
+  ContinueWatching,
+  ContinueWatchingSkeleton,
+  HeroBanner,
+  HeroBannerSkeleton,
+  MovieRow,
+  MovieRowSkeleton,
+  Stagger,
+  StaggerItem,
+  Top10Section,
+  Top10Skeleton,
+} from "@/components/home";
+import { homeQueryOptions } from "@/lib/home-queries";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
-function Home() {
-  return (
-    <div className="space-y-8">
-      <section className="glass-strong relative overflow-hidden rounded-3xl p-6 sm:p-10">
-        <div className="max-w-xl space-y-4">
-          <span className="inline-flex rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-            Featured
-          </span>
-          <h1 className="font-display text-3xl font-bold leading-tight sm:text-5xl">
-            Cinematic nights, curated for you.
-          </h1>
-          <p className="text-foreground-muted">
-            Discover blockbusters, indie gems, and originals in stunning 4K.
-          </p>
-          <button className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-primary)] transition hover:brightness-110">
-            <Play className="h-4 w-4 fill-current" /> Watch trailer
-          </button>
-        </div>
-      </section>
+// Toggle to `false` to hide the "Continue watching" row.
+const isLoggedIn = true;
 
-      <section className="space-y-4">
-        <h2 className="font-display text-xl font-semibold">Trending now</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div
-              key={i}
-              className="aspect-[2/3] rounded-xl bg-gradient-to-br from-surface-elevated to-white/5"
-            />
-          ))}
-        </div>
-      </section>
-    </div>
+function Home() {
+  const { data, isLoading, isError, refetch } = useQuery(homeQueryOptions);
+
+  if (isError) {
+    return (
+      <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
+        <p className="text-foreground-muted">Không tải được trang chủ.</p>
+        <button
+          onClick={() => refetch()}
+          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+        >
+          Thử lại
+        </button>
+      </div>
+    );
+  }
+
+  if (isLoading || !data) {
+    return (
+      <div className="space-y-10">
+        <HeroBannerSkeleton />
+        <ContinueWatchingSkeleton />
+        <Top10Skeleton />
+        <MovieRowSkeleton />
+        <MovieRowSkeleton />
+        <MovieRowSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <Stagger>
+      <StaggerItem>
+        <HeroBanner movies={data.heroMovies} />
+      </StaggerItem>
+
+      <StaggerItem>
+        <CategoryChips />
+      </StaggerItem>
+
+      {isLoggedIn && (
+        <StaggerItem>
+          <ContinueWatching items={data.continueWatching} />
+        </StaggerItem>
+      )}
+
+      <StaggerItem>
+        <Top10Section movies={data.top10Movies} />
+      </StaggerItem>
+
+      <StaggerItem>
+        <MovieRow
+          title="Phim bộ đang hot"
+          subtitle="Series được xem nhiều"
+          movies={data.hotSeriesMovies}
+        />
+      </StaggerItem>
+
+      <StaggerItem>
+        <MovieRow
+          title="Mới cập nhật"
+          subtitle="Vừa lên sóng tuần này"
+          movies={data.newMovies}
+        />
+      </StaggerItem>
+
+      <StaggerItem>
+        <MovieRow
+          title="Anime tuyển chọn"
+          subtitle="Bộ sưu tập từ Nhật Bản"
+          movies={data.animeMovies}
+        />
+      </StaggerItem>
+    </Stagger>
   );
 }
