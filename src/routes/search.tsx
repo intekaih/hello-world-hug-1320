@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { Search as SearchIcon, X, Loader2, Clock, TrendingUp, Star } from "lucide-react";
 import { z } from "zod";
 
+import { buildPageMeta } from "@/lib/page-meta";
+import { usePageMeta } from "@/hooks/usePageMeta";
+
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   page: fallback(z.number().int(), 1).default(1),
@@ -50,10 +53,12 @@ function saveRecent(q: string) {
 export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
-    meta: [
-      { title: "Tìm kiếm — movieCC" },
-      { name: "description", content: "Tìm phim, series, anime bạn muốn xem." },
-    ],
+    meta: buildPageMeta({
+      title: "Tìm kiếm - movieCC",
+      description:
+        "Tìm phim, series, anime bạn muốn xem trên movieCC. Kho phim HD Vietsub miễn phí.",
+      url: "/search",
+    }),
   }),
   component: SearchPage,
 });
@@ -68,6 +73,17 @@ function SearchPage() {
   const [recent, setRecent] = useState<string[]>([]);
   const [accumulated, setAccumulated] = useState<SearchResult["items"]>([]);
   const lastQueryRef = useRef<string>("");
+
+  usePageMeta(
+    q.trim()
+      ? {
+          title: `Tìm kiếm: ${q} - movieCC`,
+          description: `Kết quả tìm kiếm cho "${q}" trên movieCC. Xem phim HD Vietsub, thuyết minh miễn phí.`,
+          url: `/search?q=${encodeURIComponent(q)}`,
+          noindex: true,
+        }
+      : null,
+  );
 
   useEffect(() => {
     setRecent(loadRecent());

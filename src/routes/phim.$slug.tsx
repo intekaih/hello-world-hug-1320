@@ -21,6 +21,8 @@ import { useEffect, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { buildPageMeta } from "@/lib/page-meta";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type Movie = {
   slug: string;
@@ -62,11 +64,13 @@ export const Route = createFileRoute("/phim/$slug")({
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(" ");
     return {
-      meta: [
-        { title: `${nice} — movieCC` },
-        { name: "description", content: `Xem phim ${nice} online Vietsub, chất lượng cao trên movieCC.` },
-        { property: "og:title", content: `${nice} — movieCC` },
-      ],
+      meta: buildPageMeta({
+        title: `${nice} - movieCC`,
+        description: `Xem phim ${nice} online Vietsub, thuyết minh, chất lượng HD miễn phí trên movieCC. Cập nhật tập mới nhanh nhất.`,
+        url: `/phim/${params.slug}`,
+        type: "video.movie",
+      }),
+      links: [{ rel: "canonical", href: `/phim/${params.slug}` }],
     };
   },
 });
@@ -93,9 +97,27 @@ function MovieDetailPage() {
     enabled: movieQ.isSuccess,
   });
 
+  const movieData = movieQ.data;
+  usePageMeta(
+    movieData
+      ? {
+          title: `${movieData.title} - movieCC`,
+          description:
+            movieData.overview_vi ||
+            movieData.overview ||
+            `Xem phim ${movieData.title} online HD Vietsub trên movieCC.`,
+          url: `/phim/${slug}`,
+          image: thumbSrc(movieData.backdrop_url || movieData.poster_url, {
+            w: 1200,
+          }),
+          type: "video.movie",
+        }
+      : null,
+  );
+
   if (movieQ.isLoading) return <DetailSkeleton />;
 
-  if (movieQ.isError || !movieQ.data) {
+  if (movieQ.isError || !movieData) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
         <p className="text-foreground-muted">Không tìm thấy phim này.</p>
@@ -109,7 +131,7 @@ function MovieDetailPage() {
     );
   }
 
-  const movie = movieQ.data;
+  const movie: Movie = movieData;
 
   return (
     <div className="space-y-10">

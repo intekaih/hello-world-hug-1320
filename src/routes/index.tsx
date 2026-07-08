@@ -15,9 +15,20 @@ import {
   Top10Skeleton,
 } from "@/components/home";
 import { homeQueryOptions } from "@/lib/home-queries";
+import { buildPageMeta } from "@/lib/page-meta";
 
 export const Route = createFileRoute("/")({
   component: Home,
+  head: () => ({
+    meta: buildPageMeta({
+      title: "movieCC - Xem phim HD miễn phí",
+      description:
+        "movieCC - Xem phim online HD Vietsub, thuyết minh. Kho phim bộ, phim lẻ, anime, TV shows mới nhất cập nhật hằng ngày, xem miễn phí không quảng cáo.",
+      url: "/",
+      type: "website",
+    }),
+    links: [{ rel: "canonical", href: "/" }],
+  }),
 });
 
 // Toggle to `false` to hide the "Continue watching" row.
