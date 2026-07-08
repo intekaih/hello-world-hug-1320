@@ -10,6 +10,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { AuthInitializer } from "@/hooks/useAuth";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -120,11 +121,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="vi" className="dark">
       <head>
         <HeadContent />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Bỏ qua đến nội dung chính
+        </a>
         {children}
         <Scripts />
       </body>
@@ -144,6 +148,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthInitializer>
         <AppShell />
+        <Toaster />
       </AuthInitializer>
     </QueryClientProvider>
   );
