@@ -860,24 +860,30 @@ export function EpisodePanel({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="glass-strong absolute inset-x-0 bottom-0 z-40 max-h-[70%] overflow-y-auto rounded-t-2xl p-4"
+            className="absolute inset-x-0 bottom-0 z-40 max-h-[75%] overflow-y-auto rounded-t-3xl border-t border-white/10 bg-black/85 p-5 backdrop-blur-2xl"
           >
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30" />
+            <div className="mx-auto mb-4 h-1 w-12 rounded-full bg-white/25" />
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold text-white">
-                Danh sách tập
-              </h3>
+              <div>
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.26em] text-primary/90">
+                  <span className="inline-block h-px w-5 bg-gradient-to-r from-primary to-transparent" />
+                  Episodes
+                </div>
+                <h3 className="mt-1 font-display text-xl font-semibold text-white">
+                  Danh sách tập
+                </h3>
+              </div>
               <button
                 onClick={onClose}
-                className="rounded-md p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
+                className="rounded-full border border-white/10 p-2 text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="mt-3 space-y-2">
-              <p className="text-xs uppercase tracking-wider text-white/60">
+            <div className="mt-5 space-y-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/60">
                 Server
               </p>
               <div className="flex flex-wrap gap-2">
@@ -886,11 +892,16 @@ export function EpisodePanel({
                     key={s.id}
                     onClick={() => onSelectServer(s.id)}
                     className={cn(
-                      "rounded-full border px-3 py-1 text-xs font-medium text-white transition",
+                      "rounded-full border px-3.5 py-1.5 text-xs font-medium text-white transition",
                       currentServer === s.id
-                        ? "border-primary bg-primary/20 text-primary"
-                        : "border-white/15 hover:bg-white/10",
+                        ? "border-primary/50 text-white shadow-[0_0_20px_oklch(0.68_0.24_25/0.4)]"
+                        : "border-white/15 hover:border-white/30 hover:bg-white/10",
                     )}
+                    style={
+                      currentServer === s.id
+                        ? { background: "var(--gradient-ember)" }
+                        : undefined
+                    }
                   >
                     {s.name}
                   </button>
@@ -898,9 +909,9 @@ export function EpisodePanel({
               </div>
             </div>
 
-            <div className="mt-4 space-y-2">
-              <p className="text-xs uppercase tracking-wider text-white/60">
-                Tập ({totalEpisodes})
+            <div className="mt-5 space-y-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/60">
+                Tập · {totalEpisodes}
               </p>
               <div className="grid grid-cols-6 gap-2 sm:grid-cols-8 lg:grid-cols-10">
                 {Array.from({ length: totalEpisodes }).map((_, i) => {
@@ -911,13 +922,18 @@ export function EpisodePanel({
                       key={ep}
                       onClick={() => onSelectEpisode(ep)}
                       className={cn(
-                        "rounded-lg py-2 text-sm font-semibold transition",
+                        "group relative overflow-hidden rounded-lg border py-2.5 font-mono text-sm font-semibold transition",
                         active
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-white/5 text-white hover:bg-white/10",
+                          ? "border-primary/50 text-white shadow-[0_0_20px_oklch(0.68_0.24_25/0.4)]"
+                          : "border-white/10 bg-white/5 text-white/85 hover:border-primary/40 hover:text-primary",
                       )}
+                      style={
+                        active
+                          ? { background: "var(--gradient-ember)" }
+                          : undefined
+                      }
                     >
-                      {ep}
+                      {String(ep).padStart(2, "0")}
                     </button>
                   );
                 })}
