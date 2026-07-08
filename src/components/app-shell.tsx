@@ -106,13 +106,24 @@ function SidebarLink({ item, collapsed }: { item: NavItem; collapsed?: boolean }
 
 function Brand({ compact }: { compact?: boolean }) {
   return (
-    <Link to="/" className="flex items-center gap-2">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-glow-primary)]">
-        <span className="font-display text-lg font-bold">M</span>
+    <Link to="/" className="group relative flex items-center gap-2.5">
+      <span className="relative grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl">
+        <span aria-hidden className="absolute inset-0 bg-[var(--gradient-ember)]" />
+        <span aria-hidden className="absolute inset-0 opacity-70 mix-blend-overlay [background:conic-gradient(from_140deg,oklch(0.78_0.18_55/0.9),transparent_60%,oklch(0.55_0.2_300/0.6))]" />
+        <span aria-hidden className="grain-strong rounded-xl" />
+        <span className="relative font-display text-[19px] font-semibold italic text-white [font-variation-settings:'opsz'_144,'SOFT'_60] [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
+          m
+        </span>
       </span>
       {!compact && (
-        <span className="font-display text-lg font-bold tracking-tight">
-          movieCC
+        <span className="flex items-baseline gap-[1px] leading-none">
+          <span className="font-display text-[19px] font-medium italic tracking-[-0.03em] text-foreground [font-variation-settings:'opsz'_144,'SOFT'_50]">
+            movie
+          </span>
+          <span className="font-display text-[19px] font-semibold italic tracking-[-0.04em] [background:var(--gradient-ember)] [-webkit-background-clip:text] [background-clip:text] [color:transparent] [font-variation-settings:'opsz'_144,'SOFT'_80]">
+            cc
+          </span>
+          <span aria-hidden className="ml-0.5 h-1 w-1 rounded-full bg-primary ambient-pulse" />
         </span>
       )}
     </Link>
