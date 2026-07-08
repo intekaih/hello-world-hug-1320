@@ -149,8 +149,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <OfflineBanner />
       <AuthInitializer>
-        <OfflineBanner />
         <AppShell />
         <Toaster />
       </AuthInitializer>
