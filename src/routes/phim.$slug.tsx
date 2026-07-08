@@ -58,6 +58,13 @@ type RelatedItem = {
 
 export const Route = createFileRoute("/phim/$slug")({
   component: MovieDetailPage,
+  errorComponent: RouteErrorBoundary,
+  notFoundComponent: () => (
+    <RouteNotFound
+      title="Không tìm thấy phim"
+      description="Phim bạn tìm không tồn tại hoặc đã bị gỡ khỏi hệ thống."
+    />
+  ),
   head: ({ params }) => {
     const nice = params.slug
       .split("-")
@@ -74,6 +81,7 @@ export const Route = createFileRoute("/phim/$slug")({
     };
   },
 });
+
 
 function MovieDetailPage() {
   const { slug } = Route.useParams();
