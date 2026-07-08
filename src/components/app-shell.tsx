@@ -225,13 +225,33 @@ function MobileTab({ item }: { item: NavItem }) {
 }
 
 function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const panelRef = useState<HTMLElement | null>(null);
+  const [, setPanel] = panelRef;
+  const restoreRef = useState<HTMLElement | null>(null);
+  const [, setRestore] = restoreRef;
+
   useEffect(() => {
     if (!open) return;
+    // Remember what to restore focus to on close
+    setRestore(document.activeElement as HTMLElement | null);
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+
     return () => {
       document.body.style.overflow = original;
+      document.removeEventListener("keydown", onKey);
+      // Restore focus after unmount
+      restoreRef[0]?.focus?.();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
@@ -250,6 +270,10 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
         onClick={onClose}
       />
       <aside
+        ref={(el) => setPanel(el)}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu chính"
         className={cn(
           "glass-strong absolute inset-y-0 left-0 w-72 max-w-[85vw] transition-transform duration-300 pt-safe-top pb-safe-bottom",
           open ? "translate-x-0" : "-translate-x-full",
@@ -261,7 +285,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
             variant="ghost"
             size="icon"
             onClick={onClose}
-            aria-label="Close menu"
+            aria-label="Đóng menu"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -325,7 +349,7 @@ export function AppShell() {
         )}
       >
         <TopBar onOpenMenu={() => setDrawerOpen(true)} />
-        <main className="flex-1 px-4 pb-24 pt-4 sm:px-6 md:pb-8 lg:px-8">
+        <main id="main-content" tabIndex={-1} className="flex-1 px-4 pb-24 pt-4 focus:outline-none sm:px-6 md:pb-8 lg:px-8">
           <Outlet />
         </main>
       </div>
