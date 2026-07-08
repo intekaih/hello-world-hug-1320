@@ -103,7 +103,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
 
           <div className="flex flex-wrap items-center gap-2 pt-2">
             <Link
-              to="/xem/$slug/tap-$episode"
+              to="/xem/$slug/tap-{$episode}"
               params={{ slug: movie.slug, episode: "1" }}
               className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-90"
             >
@@ -421,7 +421,7 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
         {items.map((m) => (
           <Link
             key={m.id}
-            to="/xem/$slug/tap-$episode"
+            to="/xem/$slug/tap-{$episode}"
             params={{ slug: m.slug, episode: "1" }}
             className="group relative w-[260px] shrink-0 snap-start overflow-hidden rounded-xl bg-surface-elevated transition-transform duration-200 hover:-translate-y-1 sm:w-[300px]"
           >
