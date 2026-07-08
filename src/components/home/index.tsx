@@ -8,6 +8,7 @@ import {
   Star,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,8 @@ import type {
   HeroMovie,
   MovieCard,
 } from "@/lib/home-queries";
+
+const MotionLink = motion.create(Link);
 
 /* -------------------------------------------------------------------------- */
 /*  HeroBanner                                                                */
