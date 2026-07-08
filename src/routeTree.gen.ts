@@ -20,13 +20,18 @@ import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PhimSlugRouteImport } from './routes/phim.$slug'
+import { Route as ApiWatchlistRouteImport } from './routes/api/watchlist'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
+import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
+import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
+import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 import { Route as ApiMoviesSlugRouteImport } from './routes/api/movies.$slug'
+import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.toggle'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthForgotPasswordRouteImport } from './routes/api/auth/forgot-password'
@@ -88,6 +93,11 @@ const PhimSlugRoute = PhimSlugRouteImport.update({
   path: '/phim/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWatchlistRoute = ApiWatchlistRouteImport.update({
+  id: '/api/watchlist',
+  path: '/api/watchlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTranslateRoute = ApiTranslateRouteImport.update({
   id: '/api/translate',
   path: '/api/translate',
@@ -108,12 +118,27 @@ const ApiHistoryRoute = ApiHistoryRouteImport.update({
   path: '/api/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiFavoritesRoute = ApiFavoritesRouteImport.update({
+  id: '/api/favorites',
+  path: '/api/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const XemSlugTapChar123episodeChar125Route =
   XemSlugTapChar123episodeChar125RouteImport.update({
     id: '/xem/$slug/tap-{$episode}',
     path: '/xem/$slug/tap-{$episode}',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiWatchlistToggleRoute = ApiWatchlistToggleRouteImport.update({
+  id: '/toggle',
+  path: '/toggle',
+  getParentRoute: () => ApiWatchlistRoute,
+} as any)
+const ApiWatchlistNoteRoute = ApiWatchlistNoteRouteImport.update({
+  id: '/note',
+  path: '/note',
+  getParentRoute: () => ApiWatchlistRoute,
+} as any)
 const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
@@ -123,6 +148,11 @@ const ApiMoviesSlugRoute = ApiMoviesSlugRouteImport.update({
   id: '/api/movies/$slug',
   path: '/api/movies/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiFavoritesToggleRoute = ApiFavoritesToggleRouteImport.update({
+  id: '/toggle',
+  path: '/toggle',
+  getParentRoute: () => ApiFavoritesRoute,
 } as any)
 const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
   id: '/api/auth/me',
@@ -161,16 +191,21 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/watchlist/note': typeof ApiWatchlistNoteRoute
+  '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
@@ -186,16 +221,21 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/watchlist/note': typeof ApiWatchlistNoteRoute
+  '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
@@ -212,16 +252,21 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
+  '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
+  '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/watchlist/note': typeof ApiWatchlistNoteRoute
+  '/api/watchlist/toggle': typeof ApiWatchlistToggleRoute
   '/xem/$slug/tap-{$episode}': typeof XemSlugTapChar123episodeChar125Route
   '/api/history/$slug/$ep': typeof ApiHistorySlugEpRoute
   '/api/movies/$slug/related': typeof ApiMoviesSlugRelatedRoute
@@ -239,16 +284,21 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/favorites'
     | '/api/history'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
+    | '/api/watchlist'
     | '/phim/$slug'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/watchlist/note'
+    | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
@@ -264,16 +314,21 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/favorites'
     | '/api/history'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
+    | '/api/watchlist'
     | '/phim/$slug'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/watchlist/note'
+    | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
@@ -289,16 +344,21 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/favorites'
     | '/api/history'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
+    | '/api/watchlist'
     | '/phim/$slug'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
+    | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/watchlist/note'
+    | '/api/watchlist/toggle'
     | '/xem/$slug/tap-{$episode}'
     | '/api/history/$slug/$ep'
     | '/api/movies/$slug/related'
@@ -315,10 +375,12 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
+  ApiWatchlistRoute: typeof ApiWatchlistRouteWithChildren
   PhimSlugRoute: typeof PhimSlugRoute
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
@@ -407,6 +469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhimSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/watchlist': {
+      id: '/api/watchlist'
+      path: '/api/watchlist'
+      fullPath: '/api/watchlist'
+      preLoaderRoute: typeof ApiWatchlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/translate': {
       id: '/api/translate'
       path: '/api/translate'
@@ -435,12 +504,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/favorites': {
+      id: '/api/favorites'
+      path: '/api/favorites'
+      fullPath: '/api/favorites'
+      preLoaderRoute: typeof ApiFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/xem/$slug/tap-{$episode}': {
       id: '/xem/$slug/tap-{$episode}'
       path: '/xem/$slug/tap-{$episode}'
       fullPath: '/xem/$slug/tap-{$episode}'
       preLoaderRoute: typeof XemSlugTapChar123episodeChar125RouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/watchlist/toggle': {
+      id: '/api/watchlist/toggle'
+      path: '/toggle'
+      fullPath: '/api/watchlist/toggle'
+      preLoaderRoute: typeof ApiWatchlistToggleRouteImport
+      parentRoute: typeof ApiWatchlistRoute
+    }
+    '/api/watchlist/note': {
+      id: '/api/watchlist/note'
+      path: '/note'
+      fullPath: '/api/watchlist/note'
+      preLoaderRoute: typeof ApiWatchlistNoteRouteImport
+      parentRoute: typeof ApiWatchlistRoute
     }
     '/api/movies/home': {
       id: '/api/movies/home'
@@ -455,6 +545,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/movies/$slug'
       preLoaderRoute: typeof ApiMoviesSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/favorites/toggle': {
+      id: '/api/favorites/toggle'
+      path: '/toggle'
+      fullPath: '/api/favorites/toggle'
+      preLoaderRoute: typeof ApiFavoritesToggleRouteImport
+      parentRoute: typeof ApiFavoritesRoute
     }
     '/api/auth/me': {
       id: '/api/auth/me'
@@ -494,6 +591,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ApiFavoritesRouteChildren {
+  ApiFavoritesToggleRoute: typeof ApiFavoritesToggleRoute
+}
+
+const ApiFavoritesRouteChildren: ApiFavoritesRouteChildren = {
+  ApiFavoritesToggleRoute: ApiFavoritesToggleRoute,
+}
+
+const ApiFavoritesRouteWithChildren = ApiFavoritesRoute._addFileChildren(
+  ApiFavoritesRouteChildren,
+)
+
 interface ApiHistoryRouteChildren {
   ApiHistorySlugEpRoute: typeof ApiHistorySlugEpRoute
 }
@@ -504,6 +613,20 @@ const ApiHistoryRouteChildren: ApiHistoryRouteChildren = {
 
 const ApiHistoryRouteWithChildren = ApiHistoryRoute._addFileChildren(
   ApiHistoryRouteChildren,
+)
+
+interface ApiWatchlistRouteChildren {
+  ApiWatchlistNoteRoute: typeof ApiWatchlistNoteRoute
+  ApiWatchlistToggleRoute: typeof ApiWatchlistToggleRoute
+}
+
+const ApiWatchlistRouteChildren: ApiWatchlistRouteChildren = {
+  ApiWatchlistNoteRoute: ApiWatchlistNoteRoute,
+  ApiWatchlistToggleRoute: ApiWatchlistToggleRoute,
+}
+
+const ApiWatchlistRouteWithChildren = ApiWatchlistRoute._addFileChildren(
+  ApiWatchlistRouteChildren,
 )
 
 interface ApiMoviesSlugRouteChildren {
@@ -529,10 +652,12 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
+  ApiWatchlistRoute: ApiWatchlistRouteWithChildren,
   PhimSlugRoute: PhimSlugRoute,
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
