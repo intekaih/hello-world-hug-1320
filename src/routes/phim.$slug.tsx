@@ -97,17 +97,19 @@ function MovieDetailPage() {
     enabled: movieQ.isSuccess,
   });
 
-  const movie = movieQ.data;
+  const movieData = movieQ.data;
   usePageMeta(
-    movie
+    movieData
       ? {
-          title: `${movie.title} - movieCC`,
+          title: `${movieData.title} - movieCC`,
           description:
-            movie.overview_vi ||
-            movie.overview ||
-            `Xem phim ${movie.title} online HD Vietsub trên movieCC.`,
+            movieData.overview_vi ||
+            movieData.overview ||
+            `Xem phim ${movieData.title} online HD Vietsub trên movieCC.`,
           url: `/phim/${slug}`,
-          image: thumbSrc(movie.backdrop_url || movie.poster_url, { w: 1200 }),
+          image: thumbSrc(movieData.backdrop_url || movieData.poster_url, {
+            w: 1200,
+          }),
           type: "video.movie",
         }
       : null,
@@ -115,7 +117,7 @@ function MovieDetailPage() {
 
   if (movieQ.isLoading) return <DetailSkeleton />;
 
-  if (movieQ.isError || !movieQ.data) {
+  if (movieQ.isError || !movieData) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
         <p className="text-foreground-muted">Không tìm thấy phim này.</p>
@@ -129,7 +131,7 @@ function MovieDetailPage() {
     );
   }
 
-  const loadedMovie: Movie = movieQ.data;
+  const movie: Movie = movieData;
 
   return (
     <div className="space-y-10">
