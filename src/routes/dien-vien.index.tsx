@@ -97,7 +97,7 @@ function ActorSearchPage() {
               className="glass group flex flex-col items-center gap-2 rounded-2xl border border-white/5 p-4 text-center transition hover:border-primary/50"
             >
               <img
-                src={(a as Actor).avatar_url}
+                src={thumbSrc((a as Actor).avatar_url,{w:200})}
                 alt=""
                 loading="lazy"
                 className="h-20 w-20 rounded-full bg-white/10 object-cover ring-2 ring-white/10 transition group-hover:ring-primary/60"
