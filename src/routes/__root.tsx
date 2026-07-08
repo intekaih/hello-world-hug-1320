@@ -12,6 +12,7 @@ import { AppShell } from "@/components/app-shell";
 import { AuthInitializer } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { OfflineBanner } from "@/components/offline-banner";
+import { I18nProvider } from "@/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
