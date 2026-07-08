@@ -194,6 +194,26 @@ function MovieDetailPage() {
 /*  Hero — Cinematic Chamber                                                  */
 /* -------------------------------------------------------------------------- */
 
+function DetailHeroTitle({ logo, title }: { logo?: string; title: string }) {
+  const [ok, setOk] = useState(true);
+  if (logo && ok) {
+    return (
+      <img
+        src={thumbSrc(logo, { w: 600 })}
+        alt={title}
+        onError={() => setOk(false)}
+        className="title-reveal max-h-28 w-auto max-w-[80%] object-contain drop-shadow-[0_10px_40px_rgba(0,0,0,0.6)] sm:max-h-40"
+      />
+    );
+  }
+  return (
+    <h1 className="title-reveal font-display text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.02em] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+      {title}
+    </h1>
+  );
+}
+
+
 function HeroSection({ movie }: { movie: Movie }) {
   const ref = useRef<HTMLDivElement>(null);
 
