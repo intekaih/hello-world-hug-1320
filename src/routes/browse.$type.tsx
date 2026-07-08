@@ -44,6 +44,11 @@ type BrowseMovie = {
 
 export const Route = createFileRoute("/browse/$type")({
   validateSearch: zodValidator(searchSchema),
+  beforeLoad: ({ params }) => {
+    if (params.type === "phim-moi-cap-nhat") {
+      throw redirect({ to: "/lich-chieu" });
+    }
+  },
   head: ({ params }) => ({
     meta: [
       { title: `${TYPE_LABELS[params.type] ?? decodeURIComponent(params.type)} — movieCC` },
