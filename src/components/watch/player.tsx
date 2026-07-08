@@ -486,16 +486,19 @@ export function PlayerContainer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between bg-gradient-to-b from-black/50 via-transparent to-black/70"
+            transition={{ duration: 0.25 }}
+            className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between bg-gradient-to-b from-black/60 via-transparent to-black/80"
           >
             {/* Top */}
-            <div className="pointer-events-auto flex items-center gap-3 p-3 sm:p-4">
+            <div className="pointer-events-auto flex items-center gap-3 p-4 sm:p-5">
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-white sm:text-base">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/90">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_8px_oklch(0.68_0.24_25)]" />
+                  Live · EP {String(Number(episode) || 1).padStart(2, "0")}
+                </div>
+                <p className="mt-1 truncate font-display text-base font-semibold text-white sm:text-lg">
                   {title}
                 </p>
-                <p className="text-xs text-white/60">Tập {episode}</p>
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <ServerSelector
@@ -512,18 +515,19 @@ export function PlayerContainer({
                 e.stopPropagation();
                 togglePlay();
               }}
-              className="pointer-events-auto mx-auto grid h-16 w-16 place-items-center rounded-full bg-black/40 text-white backdrop-blur transition hover:scale-110 hover:bg-black/60"
+              className="pointer-events-auto mx-auto grid h-20 w-20 place-items-center rounded-full text-white shadow-[0_10px_40px_-10px_oklch(0.68_0.24_25/0.7),0_0_60px_oklch(0.68_0.24_25/0.3)] ring-1 ring-white/25 backdrop-blur-md transition hover:scale-110 sm:h-24 sm:w-24"
+              style={{ background: "var(--gradient-ember)" }}
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? (
-                <Pause className="h-7 w-7 fill-current" />
+                <Pause className="h-8 w-8 fill-current sm:h-10 sm:w-10" />
               ) : (
-                <Play className="h-7 w-7 fill-current" />
+                <Play className="h-8 w-8 fill-current sm:h-10 sm:w-10" />
               )}
             </button>
 
-            {/* Bottom */}
-            <div className="pointer-events-auto space-y-2 p-3 sm:p-4">
+            {/* Bottom — floating glass bar */}
+            <div className="pointer-events-auto space-y-3 p-3 sm:p-5">
               <SeekBar
                 current={currentTime}
                 duration={duration}
@@ -532,10 +536,10 @@ export function PlayerContainer({
                   if (videoRef.current) videoRef.current.currentTime = t;
                 }}
               />
-              <div className="flex items-center gap-2 text-white">
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-2 text-white backdrop-blur-xl sm:gap-3 sm:px-4">
                 <button
                   onClick={togglePlay}
-                  className="rounded-md p-1.5 hover:bg-white/10"
+                  className="rounded-full p-1.5 transition hover:bg-white/10"
                   aria-label={playing ? "Pause" : "Play"}
                 >
                   {playing ? (
@@ -560,8 +564,10 @@ export function PlayerContainer({
                   }}
                 />
 
-                <span className="text-xs tabular-nums text-white/80">
-                  {formatTime(currentTime)} / {formatTime(duration)}
+                <span className="font-mono text-[11px] tabular-nums tracking-wider text-white/85">
+                  <span className="text-white">{formatTime(currentTime)}</span>
+                  <span className="mx-1 text-white/40">/</span>
+                  <span className="text-white/60">{formatTime(duration)}</span>
                 </span>
 
                 <div className="ml-auto flex items-center gap-1">
@@ -578,15 +584,15 @@ export function PlayerContainer({
                   />
                   <button
                     onClick={() => setEpisodePanelOpen(true)}
-                    className="flex items-center gap-1.5 rounded-md p-1.5 text-sm hover:bg-white/10"
+                    className="flex items-center gap-1.5 rounded-full p-1.5 text-sm transition hover:bg-white/10"
                     aria-label="Episodes"
                   >
                     <ListVideo className="h-5 w-5" />
-                    <span className="hidden sm:inline">Tập</span>
+                    <span className="hidden font-mono text-[11px] uppercase tracking-[0.18em] sm:inline">Tập</span>
                   </button>
                   <button
                     onClick={toggleFullscreen}
-                    className="rounded-md p-1.5 hover:bg-white/10"
+                    className="rounded-full p-1.5 transition hover:bg-white/10"
                     aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                   >
                     {isFullscreen ? (
