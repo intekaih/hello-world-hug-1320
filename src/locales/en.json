@@ -1,0 +1,95 @@
+{
+  "language": {
+    "label": "Language",
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "switchTo": "Switch to {{name}}"
+  },
+  "nav": {
+    "home": "Home",
+    "schedule": "Schedule",
+    "browse": "Browse",
+    "history": "History",
+    "favorites": "Favorites",
+    "watchlist": "Watchlist",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "search": "Search"
+  },
+  "common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "back": "Back",
+    "backHome": "Back to home",
+    "viewAll": "View all",
+    "readMore": "+ Read more",
+    "readLess": "— Collapse",
+    "empty": "No data yet",
+    "skipToContent": "Skip to main content"
+  },
+  "detail": {
+    "hero": {
+      "eyebrow": "{{genre}} · {{year}}",
+      "eyebrowFallback": "Feature",
+      "muteTrailer": "Mute trailer",
+      "unmuteTrailer": "Unmute trailer",
+      "closeTrailer": "Close trailer"
+    },
+    "actions": {
+      "watchNow": "Watch now",
+      "watchTrailer": "Watch trailer",
+      "favorite": "Favorite",
+      "unfavorite": "Unfavorite",
+      "watchlist": "Watchlist",
+      "watchlistRemove": "Remove from list",
+      "share": "Share",
+      "shared": "Link copied",
+      "trailer": "Trailer",
+      "scrollToTop": "Scroll to top"
+    },
+    "synopsis": {
+      "eyebrow": "Synopsis",
+      "title": "Storyline",
+      "translate": "Translate to Vietnamese",
+      "showOriginal": "Original",
+      "translating": "Translating…"
+    },
+    "cast": {
+      "eyebrow": "Cast",
+      "title": "Cast & crew"
+    },
+    "meta": {
+      "eyebrow": "Details",
+      "title": "Information",
+      "director": "Director",
+      "country": "Country",
+      "year": "Release year",
+      "duration": "Runtime",
+      "quality": "Quality",
+      "language": "Language",
+      "empty": "—"
+    },
+    "genres": {
+      "eyebrow": "Genres",
+      "title": "Genres"
+    },
+    "episodes": {
+      "eyebrow": "Episodes",
+      "title": "Episode list",
+      "count": "{{n}} episodes",
+      "prefix": "EP"
+    },
+    "parts": {
+      "eyebrow": "Universe",
+      "title": "Other parts"
+    },
+    "related": {
+      "eyebrow": "Discover",
+      "title": "You may also like"
+    },
+    "notFound": {
+      "title": "Movie not found",
+      "description": "The movie you're looking for doesn't exist or has been removed."
+    }
+  }
+}
