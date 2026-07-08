@@ -345,16 +345,11 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Desktop sidebar (>=1024px) */}
-      <aside className="glass-strong fixed inset-y-0 left-0 z-30 hidden w-[260px] border-r border-white/5 lg:block">
-        <SidebarPanel />
-      </aside>
-
-      {/* Tablet sidebar (768-1023px), collapsible */}
+      {/* Desktop + tablet sidebar (>=768px), collapsible */}
       <aside
         className={cn(
-          "glass-strong fixed inset-y-0 left-0 z-30 hidden border-r border-white/5 transition-[width] duration-300 md:block lg:hidden",
-          sidebarCollapsed ? "w-[76px]" : "w-[240px]",
+          "glass-strong fixed inset-y-0 left-0 z-30 hidden border-r border-foreground/5 transition-[width] duration-300 md:block",
+          sidebarCollapsed ? "w-[76px]" : "w-[260px]",
         )}
       >
         <SidebarPanel
@@ -367,11 +362,10 @@ export function AppShell() {
       <div
         className={cn(
           "flex min-h-screen flex-col transition-[padding] duration-300",
-          "lg:pl-[260px]",
-          sidebarCollapsed ? "md:pl-[76px]" : "md:pl-[240px]",
-          "lg:!pl-[260px]",
+          sidebarCollapsed ? "md:pl-[76px]" : "md:pl-[260px]",
         )}
       >
+
         <TopBar onOpenMenu={() => setDrawerOpen(true)} />
         <main id="main-content" tabIndex={-1} className="flex-1 px-4 pb-24 pt-4 focus:outline-none sm:px-6 md:pb-8 lg:px-8">
           <Outlet />

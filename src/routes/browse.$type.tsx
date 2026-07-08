@@ -87,10 +87,10 @@ function BrowsePage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-white md:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">
             {TYPE_LABELS[type] ?? decodeURIComponent(type)}
           </h1>
-          <p className="text-sm text-white/50">
+          <p className="text-sm text-muted-foreground">
             {query.isLoading ? "Đang tải..." : `${query.data?.total ?? 0} phim`}
           </p>
         </div>
@@ -98,7 +98,7 @@ function BrowsePage() {
           <select
             value={search.sort}
             onChange={(e) => setFilter({ sort: e.target.value })}
-            className="h-10 rounded-full border border-white/10 bg-black/40 px-4 text-sm text-white outline-none focus:border-primary/60"
+            className="h-10 rounded-full border border-foreground/10 bg-surface-elevated px-4 text-sm text-foreground outline-none focus:border-primary/60"
           >
             {SORTS.map((s) => (
               <option key={s.value} value={s.value} className="bg-elevated">
@@ -108,7 +108,7 @@ function BrowsePage() {
           </select>
           <button
             onClick={() => setMobileOpen(true)}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white lg:hidden"
+            className="flex items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 py-2 text-sm text-foreground lg:hidden"
           >
             <SlidersHorizontal className="h-4 w-4" /> Lọc
             {activeFilters > 0 && (
@@ -138,8 +138,8 @@ function BrowsePage() {
               className="glass-strong relative ml-auto flex h-full w-72 flex-col overflow-y-auto border-l border-white/10 p-4"
             >
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="font-display text-lg font-semibold text-white">Bộ lọc</h3>
-                <button onClick={() => setMobileOpen(false)} className="text-white/60">
+                <h3 className="font-display text-lg font-semibold text-foreground">Bộ lọc</h3>
+                <button onClick={() => setMobileOpen(false)} className="text-muted-foreground">
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -153,8 +153,8 @@ function BrowsePage() {
             <GridSkeleton />
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-24 text-center">
-              <Filter className="h-8 w-8 text-white/40" />
-              <p className="text-white/60">Không có phim khớp bộ lọc</p>
+              <Filter className="h-8 w-8 text-muted-foreground" />
+              <p className="text-muted-foreground">Không có phim khớp bộ lọc</p>
             </div>
           ) : (
             <>
@@ -186,7 +186,7 @@ function FiltersPanel({
   onChange: (patch: Partial<z.infer<typeof searchSchema>>) => void;
 }) {
   return (
-    <div className="glass sticky top-20 space-y-5 rounded-2xl border border-white/10 p-4">
+    <div className="glass sticky top-20 space-y-5 rounded-2xl border border-foreground/10 p-4">
       <FilterGroup label="Năm">
         <div className="flex flex-wrap gap-1.5">
           <Chip active={!search.year} onClick={() => onChange({ year: "" })}>
@@ -243,7 +243,7 @@ function FiltersPanel({
       {(search.year || search.category || search.country) && (
         <button
           onClick={() => onChange({ year: "", category: "", country: "" })}
-          className="w-full rounded-full border border-white/10 py-2 text-sm text-white/70 transition hover:border-primary/50 hover:text-white"
+          className="w-full rounded-full border border-foreground/10 py-2 text-sm text-muted-foreground transition hover:border-primary/50 hover:text-foreground"
         >
           Xóa bộ lọc
         </button>
@@ -255,7 +255,7 @@ function FiltersPanel({
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/50">
+      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </div>
       {children}
@@ -271,8 +271,8 @@ function Chip({
       onClick={onClick}
       className={`rounded-full border px-3 py-1 text-xs transition ${
         active
-          ? "border-primary bg-primary/20 text-white"
-          : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
+          ? "border-primary bg-primary/15 text-primary"
+          : "border-foreground/10 bg-surface-elevated text-foreground/80 hover:border-foreground/20 hover:text-foreground"
       }`}
     >
       {children}
@@ -290,7 +290,7 @@ function MovieCard({ item, index }: { item: BrowseMovie; index: number }) {
       <Link
         to="/phim/$slug"
         params={{ slug: item.slug }}
-        className="group block overflow-hidden rounded-xl border border-white/5 bg-elevated transition hover:border-primary/40"
+        className="group block overflow-hidden rounded-xl border border-foreground/10 bg-surface-elevated transition hover:border-primary/40"
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           <img
@@ -311,10 +311,10 @@ function MovieCard({ item, index }: { item: BrowseMovie; index: number }) {
           </div>
         </div>
         <div className="p-2.5">
-          <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+          <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
             {item.title}
           </div>
-          <div className="truncate text-xs text-white/50">
+          <div className="truncate text-xs text-muted-foreground">
             {item.origin_name} · {item.year}
           </div>
         </div>
@@ -328,9 +328,9 @@ function GridSkeleton() {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
       {Array.from({ length: 12 }).map((_, i) => (
         <div key={i} className="space-y-2">
-          <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/5" />
-          <div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-          <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+          <div className="aspect-[2/3] animate-pulse rounded-xl bg-muted" />
+          <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
         </div>
       ))}
     </div>
@@ -355,21 +355,21 @@ function Pagination({
       <button
         disabled={page <= 1}
         onClick={() => onChange(page - 1)}
-        className="rounded-full border border-white/10 px-3 py-1.5 text-sm text-white/80 transition hover:border-primary/50 disabled:opacity-40"
+        className="rounded-full border border-foreground/10 px-3 py-1.5 text-sm text-muted-foreground transition hover:border-primary/50 hover:text-foreground disabled:opacity-40"
       >
         ‹
       </button>
       {pages.map((p, i) =>
         p === "…" ? (
-          <span key={i} className="px-1 text-white/40">…</span>
+          <span key={i} className="px-1 text-muted-foreground">…</span>
         ) : (
           <button
             key={i}
             onClick={() => onChange(p)}
             className={`h-9 min-w-9 rounded-full px-3 text-sm transition ${
               p === page
-                ? "bg-primary text-white"
-                : "border border-white/10 text-white/80 hover:border-primary/50"
+                ? "bg-primary text-primary-foreground"
+                : "border border-foreground/10 text-foreground/80 hover:border-primary/50"
             }`}
           >
             {p}
@@ -379,7 +379,7 @@ function Pagination({
       <button
         disabled={page >= totalPages}
         onClick={() => onChange(page + 1)}
-        className="rounded-full border border-white/10 px-3 py-1.5 text-sm text-white/80 transition hover:border-primary/50 disabled:opacity-40"
+        className="rounded-full border border-foreground/10 px-3 py-1.5 text-sm text-muted-foreground transition hover:border-primary/50 hover:text-foreground disabled:opacity-40"
       >
         ›
       </button>

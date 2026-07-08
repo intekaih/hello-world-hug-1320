@@ -132,10 +132,10 @@ function FavoriteCard({
           </div>
         </div>
         <div className="p-2.5">
-          <div className="truncate text-sm font-medium text-white group-hover:text-primary">
+          <div className="truncate text-sm font-medium text-foreground group-hover:text-primary">
             {item.movie_name}
           </div>
-          <div className="truncate text-xs text-white/50">{item.movie_origin_name}</div>
+          <div className="truncate text-xs text-muted-foreground">{item.movie_origin_name}</div>
         </div>
       </Link>
 

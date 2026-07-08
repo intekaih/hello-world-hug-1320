@@ -111,8 +111,8 @@ function LoginPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent">
               <Film className="h-6 w-6 text-white" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-white">Chào mừng trở lại</h1>
-            <p className="text-sm text-white/60">Đăng nhập để tiếp tục xem phim yêu thích</p>
+            <h1 className="font-display text-2xl font-bold text-foreground">Chào mừng trở lại</h1>
+            <p className="text-sm text-muted-foreground">Đăng nhập để tiếp tục xem phim yêu thích</p>
           </div>
 
           <AnimatePresence>
@@ -143,7 +143,7 @@ function LoginPage() {
                 autoFocus
                 placeholder="demo"
                 disabled={isSubmitting}
-                className="h-12 w-full rounded-xl border border-white/10 bg-black/40 pl-10 pr-3 text-white placeholder:text-white/30 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
+                className="h-12 w-full rounded-xl border border-foreground/10 bg-surface-elevated pl-10 pr-3 text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
                 aria-invalid={!!errors.username}
               />
             </Field>
@@ -155,7 +155,7 @@ function LoginPage() {
                 autoComplete="current-password"
                 placeholder="••••••••"
                 disabled={isSubmitting}
-                className="h-12 w-full rounded-xl border border-white/10 bg-black/40 pl-10 pr-11 text-white placeholder:text-white/30 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
+                className="h-12 w-full rounded-xl border border-foreground/10 bg-surface-elevated pl-10 pr-11 text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
                 aria-invalid={!!errors.password}
               />
               <button
@@ -163,14 +163,14 @@ function LoginPage() {
                 onClick={() => setShowPassword((v) => !v)}
                 tabIndex={-1}
                 aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white"
+                className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-foreground/10 hover:text-foreground"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </Field>
 
             <div className="flex items-center justify-between pt-1">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-white/70">
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
                 <input
                   {...register("remember")}
                   type="checkbox"
@@ -202,8 +202,8 @@ function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-xs text-white/40">
-            Demo: <span className="text-white/70">demo / demo1234</span>
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            Demo: <span className="text-foreground/80">demo / demo1234</span>
           </p>
         </motion.div>
       </div>
@@ -224,9 +224,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium text-white/80">{label}</label>
+      <label className="mb-1.5 block text-sm font-medium text-foreground/80">{label}</label>
       <div className="relative">
-        <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/40">
+        <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
           {icon}
         </div>
         {children}

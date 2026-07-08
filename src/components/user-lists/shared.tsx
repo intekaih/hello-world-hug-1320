@@ -80,9 +80,9 @@ export function PageHeader({
           </div>
         )}
         <div>
-          <h1 className="font-display text-2xl font-bold text-white md:text-3xl">{title}</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">{title}</h1>
           {typeof count === "number" && (
-            <p className="text-sm text-white/50">{count} phim</p>
+            <p className="text-sm text-muted-foreground">{count} phim</p>
           )}
         </div>
       </div>
@@ -104,9 +104,9 @@ export function GridSkeleton({ count = 10 }: { count?: number }) {
     <MovieGrid>
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="space-y-2">
-          <div className="aspect-[2/3] animate-pulse rounded-xl bg-white/5" />
-          <div className="h-3 w-3/4 animate-pulse rounded bg-white/5" />
-          <div className="h-3 w-1/3 animate-pulse rounded bg-white/5" />
+          <div className="aspect-[2/3] animate-pulse rounded-xl bg-muted" />
+          <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
+          <div className="h-3 w-1/3 animate-pulse rounded bg-muted" />
         </div>
       ))}
     </MovieGrid>
@@ -130,12 +130,12 @@ export function EmptyState({
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center gap-4 py-20 text-center"
     >
-      <div className="glass flex h-20 w-20 items-center justify-center rounded-3xl text-white/50">
+      <div className="glass flex h-20 w-20 items-center justify-center rounded-3xl text-muted-foreground">
         {icon}
       </div>
       <div>
-        <p className="font-display text-lg font-semibold text-white">{title}</p>
-        <p className="mt-1 max-w-sm text-sm text-white/50">{description}</p>
+        <p className="font-display text-lg font-semibold text-foreground">{title}</p>
+        <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
       </div>
       {cta && (
         <Link
