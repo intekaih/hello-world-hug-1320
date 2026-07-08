@@ -114,25 +114,37 @@ export function PlayerContainer({
     let cancelled = false;
     setLoading(true);
 
-    const isNative = video.canPlayType("application/vnd.apple.mpegurl");
+    const isNative = !!video.canPlayType("application/vnd.apple.mpegurl");
 
     const attach = async () => {
+      // Safari (native HLS) — set src directly, no hls.js needed.
       if (isNative) {
         video.src = currentSrc;
+        video.load();
         return;
       }
+
       const HlsMod = (await import("hls.js")).default;
       if (cancelled) return;
 
+      // Fallback: some Chromium builds w/ MSE disabled — try native.
       if (!HlsMod.isSupported()) {
         video.src = currentSrc;
+        video.load();
         return;
       }
 
-      const hls = new HlsMod({ enableWorker: true, lowLatencyMode: false });
+      const hls = new HlsMod({
+        enableWorker: true,
+        lowLatencyMode: false,
+        // Small resilience knobs
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+      });
       hlsRef.current = hls;
       hls.loadSource(currentSrc);
       hls.attachMedia(video);
+
       hls.on(HlsMod.Events.MANIFEST_PARSED, () => {
         setLevels(
           hls.levels.map((l, i) => ({
@@ -145,15 +157,48 @@ export function PlayerContainer({
       hls.on(HlsMod.Events.LEVEL_SWITCHED, (_e, data) => {
         setCurrentLevel(data.level);
       });
+
+      // Auto-recover on fatal errors
+      hls.on(HlsMod.Events.ERROR, (_e, data) => {
+        if (!data.fatal) return;
+        switch (data.type) {
+          case HlsMod.ErrorTypes.NETWORK_ERROR:
+            console.warn("[hls] fatal network error, retrying loadSource", data);
+            hls.startLoad();
+            break;
+          case HlsMod.ErrorTypes.MEDIA_ERROR:
+            console.warn("[hls] fatal media error, recovering", data);
+            hls.recoverMediaError();
+            break;
+          default:
+            console.error("[hls] unrecoverable error, destroying", data);
+            hls.destroy();
+            hlsRef.current = null;
+            break;
+        }
+      });
     };
 
     attach();
+
     return () => {
       cancelled = true;
-      hlsRef.current?.destroy();
-      hlsRef.current = null;
+      const hls = hlsRef.current;
+      if (hls) {
+        hls.destroy();
+        hlsRef.current = null;
+      }
+      // Detach source so a new attach doesn't collide with old buffers.
+      try {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      } catch {
+        /* ignore */
+      }
     };
   }, [currentSrc]);
+
 
   /* ---------------------------- Resume position --------------------------- */
   useEffect(() => {
