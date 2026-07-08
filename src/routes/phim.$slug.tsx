@@ -17,12 +17,12 @@ import {
   FloatingMovieActions,
   MovieDetailHero,
   MovieFactRail,
-  RelatedMovieRail,
   SectionHeader,
   StoryBlock,
   type Movie,
   type RelatedItem,
 } from "@/components/movie-detail";
+
 
 // Related rail lives below the fold — code-split it.
 const LazyRelatedRail = lazy(() =>
