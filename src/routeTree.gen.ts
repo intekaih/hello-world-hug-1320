@@ -23,9 +23,11 @@ import { Route as ApiWatchlistRouteImport } from './routes/api/watchlist'
 import { Route as ApiTranslateRouteImport } from './routes/api/translate'
 import { Route as ApiSuggestRouteImport } from './routes/api/suggest'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
+import { Route as ApiScheduleRouteImport } from './routes/api/schedule'
 import { Route as ApiNotificationsRouteImport } from './routes/api/notifications'
 import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
+import { Route as ApiBrowseRouteImport } from './routes/api/browse'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
 import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
@@ -37,6 +39,8 @@ import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.t
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthForgotPasswordRouteImport } from './routes/api/auth/forgot-password'
+import { Route as ApiActorsSearchRouteImport } from './routes/api/actors.search'
+import { Route as ApiActorsNameRouteImport } from './routes/api/actors.$name'
 import { Route as ApiMoviesSlugRelatedRouteImport } from './routes/api/movies.$slug.related'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 
@@ -110,6 +114,11 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiScheduleRoute = ApiScheduleRouteImport.update({
+  id: '/api/schedule',
+  path: '/api/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiNotificationsRoute = ApiNotificationsRouteImport.update({
   id: '/api/notifications',
   path: '/api/notifications',
@@ -123,6 +132,11 @@ const ApiHistoryRoute = ApiHistoryRouteImport.update({
 const ApiFavoritesRoute = ApiFavoritesRouteImport.update({
   id: '/api/favorites',
   path: '/api/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBrowseRoute = ApiBrowseRouteImport.update({
+  id: '/api/browse',
+  path: '/api/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
 const XemSlugTapChar123episodeChar125Route =
@@ -183,6 +197,16 @@ const ApiAuthForgotPasswordRoute = ApiAuthForgotPasswordRouteImport.update({
   path: '/api/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiActorsSearchRoute = ApiActorsSearchRouteImport.update({
+  id: '/api/actors/search',
+  path: '/api/actors/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiActorsNameRoute = ApiActorsNameRouteImport.update({
+  id: '/api/actors/$name',
+  path: '/api/actors/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMoviesSlugRelatedRoute = ApiMoviesSlugRelatedRouteImport.update({
   id: '/related',
   path: '/related',
@@ -204,14 +228,18 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -236,14 +264,18 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -269,14 +301,18 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/api/browse': typeof ApiBrowseRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
   '/api/history': typeof ApiHistoryRouteWithChildren
   '/api/notifications': typeof ApiNotificationsRouteWithChildren
+  '/api/schedule': typeof ApiScheduleRoute
   '/api/search': typeof ApiSearchRoute
   '/api/suggest': typeof ApiSuggestRoute
   '/api/translate': typeof ApiTranslateRoute
   '/api/watchlist': typeof ApiWatchlistRouteWithChildren
   '/phim/$slug': typeof PhimSlugRoute
+  '/api/actors/$name': typeof ApiActorsNameRoute
+  '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/me': typeof ApiAuthMeRoute
@@ -303,14 +339,18 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
     | '/phim/$slug'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -335,14 +375,18 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
     | '/phim/$slug'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -367,14 +411,18 @@ export interface FileRouteTypes {
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/api/browse'
     | '/api/favorites'
     | '/api/history'
     | '/api/notifications'
+    | '/api/schedule'
     | '/api/search'
     | '/api/suggest'
     | '/api/translate'
     | '/api/watchlist'
     | '/phim/$slug'
+    | '/api/actors/$name'
+    | '/api/actors/search'
     | '/api/auth/forgot-password'
     | '/api/auth/login'
     | '/api/auth/me'
@@ -400,14 +448,18 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  ApiBrowseRoute: typeof ApiBrowseRoute
   ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
   ApiHistoryRoute: typeof ApiHistoryRouteWithChildren
   ApiNotificationsRoute: typeof ApiNotificationsRouteWithChildren
+  ApiScheduleRoute: typeof ApiScheduleRoute
   ApiSearchRoute: typeof ApiSearchRoute
   ApiSuggestRoute: typeof ApiSuggestRoute
   ApiTranslateRoute: typeof ApiTranslateRoute
   ApiWatchlistRoute: typeof ApiWatchlistRouteWithChildren
   PhimSlugRoute: typeof PhimSlugRoute
+  ApiActorsNameRoute: typeof ApiActorsNameRoute
+  ApiActorsSearchRoute: typeof ApiActorsSearchRoute
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
@@ -516,6 +568,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/schedule': {
+      id: '/api/schedule'
+      path: '/api/schedule'
+      fullPath: '/api/schedule'
+      preLoaderRoute: typeof ApiScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/notifications': {
       id: '/api/notifications'
       path: '/api/notifications'
@@ -535,6 +594,13 @@ declare module '@tanstack/react-router' {
       path: '/api/favorites'
       fullPath: '/api/favorites'
       preLoaderRoute: typeof ApiFavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/browse': {
+      id: '/api/browse'
+      path: '/api/browse'
+      fullPath: '/api/browse'
+      preLoaderRoute: typeof ApiBrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/xem/$slug/tap-{$episode}': {
@@ -612,6 +678,20 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/forgot-password'
       fullPath: '/api/auth/forgot-password'
       preLoaderRoute: typeof ApiAuthForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/actors/search': {
+      id: '/api/actors/search'
+      path: '/api/actors/search'
+      fullPath: '/api/actors/search'
+      preLoaderRoute: typeof ApiActorsSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/actors/$name': {
+      id: '/api/actors/$name'
+      path: '/api/actors/$name'
+      fullPath: '/api/actors/$name'
+      preLoaderRoute: typeof ApiActorsNameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/movies/$slug/related': {
@@ -704,14 +784,18 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  ApiBrowseRoute: ApiBrowseRoute,
   ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
   ApiHistoryRoute: ApiHistoryRouteWithChildren,
   ApiNotificationsRoute: ApiNotificationsRouteWithChildren,
+  ApiScheduleRoute: ApiScheduleRoute,
   ApiSearchRoute: ApiSearchRoute,
   ApiSuggestRoute: ApiSuggestRoute,
   ApiTranslateRoute: ApiTranslateRoute,
   ApiWatchlistRoute: ApiWatchlistRouteWithChildren,
   PhimSlugRoute: PhimSlugRoute,
+  ApiActorsNameRoute: ApiActorsNameRoute,
+  ApiActorsSearchRoute: ApiActorsSearchRoute,
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
