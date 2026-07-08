@@ -34,6 +34,7 @@ type NavItem = {
 
 const sidebarItems: NavItem[] = [
   { label: "Home", to: "/", icon: Home },
+  { label: "Lịch chiếu", to: "/lich-chieu", icon: CalendarClock },
   { label: "Browse", to: "/browse", icon: Compass },
   { label: "History", to: "/history", icon: History },
   { label: "Favorites", to: "/favorites", icon: Heart },
