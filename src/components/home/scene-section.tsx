@@ -97,6 +97,8 @@ export function SceneSection({
   subtitle,
   align = "left",
   intensity = 1,
+  entrance = "rise",
+  particles,
   className,
 }: {
   children: ReactNode;
@@ -106,6 +108,14 @@ export function SceneSection({
   subtitle?: string;
   align?: "left" | "center";
   intensity?: number;
+  /**
+   * Entrance motion language — each scene should feel arrived at, not
+   * scrolled past. `rise` is the default; other values create distinct
+   * kinesthetic signatures per scene.
+   */
+  entrance?: "rise" | "focus" | "sweep" | "iris" | "drift";
+  /** Optional decorative particle overlay flavour. */
+  particles?: "dust" | "sparks" | "beam" | "rain";
   className?: string;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -128,9 +138,14 @@ export function SceneSection({
     [0, intensity, intensity, 0],
   );
 
+  const entranceVariants = getEntranceVariants(entrance, !!reduce);
+
   return (
     <section
       ref={ref}
+      data-mood={mood}
+      data-scene-mood={mood}
+      data-entrance={entrance}
       className={cn(
         "relative -mx-4 overflow-hidden px-4 py-14 sm:-mx-6 sm:px-6 sm:py-20 lg:-mx-8 lg:px-8",
         className,
@@ -140,8 +155,8 @@ export function SceneSection({
           "--scene-accent": tokens.accent,
         } as CSSProperties
       }
-      data-mood={mood}
     >
+
       {/* Ambient tint wash */}
       <motion.div
         aria-hidden
