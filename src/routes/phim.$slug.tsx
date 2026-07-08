@@ -218,7 +218,7 @@ function HeroSection({ movie }: { movie: Movie }) {
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="relative -mx-4 h-[90vh] min-h-[640px] overflow-hidden sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
+      className="dark relative -mx-4 h-[90vh] min-h-[640px] overflow-hidden bg-black text-white sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
       style={{ ["--px" as string]: "0px", ["--py" as string]: "0px" }}
     >
       {/* Backdrop with Ken Burns + mouse parallax */}
