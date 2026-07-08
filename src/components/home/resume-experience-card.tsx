@@ -253,10 +253,13 @@ export function ResumeExperienceCard({
               <div className="flex flex-wrap items-center gap-2">
                 <RemainingTimeLabel label={item.remaining} />
                 <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">
-                  · <AnimatedPercent value={item.progress} /> {" "}
-                  <span className="text-white/45">{t("continueWatching.percentWatched", { n: "" }).replace(/\{\{n\}\}%?\s*/g, "").trim()}</span>
+                  <AnimatedPercent value={item.progress} />
+                  <span className="ml-1 text-white/45">
+                    {t("continueWatching.percentWatched", { n: pct }).replace(/^\d+%\s*/, "")}
+                  </span>
                 </span>
               </div>
+
 
               {/* Emotional resume line */}
               <motion.p
