@@ -144,8 +144,9 @@ export function SceneAtmosphere() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
+
       {/* Base current layer — always on. */}
       <div
         className="absolute inset-0"
