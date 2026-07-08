@@ -427,3 +427,21 @@
   transform-origin: left;
   animation: hero-rail 5s linear both;
 }
+
+/* Ambient cinematic particles — drifting dust motes in the hero */
+@keyframes cine-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1);   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 0px), -80vh, 0) scale(0.6); opacity: 0; }
+}
+
+@utility cine-particle {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, oklch(1 0 0 / 0.9), oklch(1 0 0 / 0) 70%);
+  filter: blur(0.5px);
+  animation: cine-drift linear infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
