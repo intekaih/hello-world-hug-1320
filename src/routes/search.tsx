@@ -49,12 +49,21 @@ function saveRecent(q: string) {
 
 export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(searchSchema),
-  head: () => ({
-    meta: [
-      { title: "Tìm kiếm — movieCC" },
-      { name: "description", content: "Tìm phim, series, anime bạn muốn xem." },
-    ],
-  }),
+  head: ({ search }) => {
+    const q = (search as { q?: string })?.q?.trim();
+    const title = q ? `Tìm kiếm: ${q} - movieCC` : "Tìm kiếm - movieCC";
+    const description = q
+      ? `Kết quả tìm kiếm cho "${q}" trên movieCC. Xem phim HD Vietsub, thuyết minh miễn phí.`
+      : "Tìm phim, series, anime bạn muốn xem trên movieCC. Kho phim HD Vietsub miễn phí.";
+    return {
+      meta: buildPageMeta({
+        title,
+        description,
+        url: q ? `/search?q=${encodeURIComponent(q)}` : "/search",
+        noindex: !!q,
+      }),
+    };
+  },
   component: SearchPage,
 });
 
