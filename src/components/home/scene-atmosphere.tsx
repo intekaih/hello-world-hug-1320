@@ -1,6 +1,11 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-
+import {
+  sceneBackground,
+  scenes,
+  type SceneMood,
+} from "@/lib/design/scene-tokens";
+import { transition } from "@/lib/design/motion-tokens";
 
 /**
  * SceneAtmosphere — a fixed backdrop that morphs colour as the user
@@ -9,81 +14,15 @@ import { useEffect, useState } from "react";
  * changes, so section boundaries dissolve into one continuous
  * cinematic environment.
  *
+ * Palette + accent + grain come from the shared scene DNA
+ * (`@/lib/design/scene-tokens`) — no palette lives in this file.
  * Only opacity animates → GPU-friendly, 60 FPS.
  */
 
-type Mood =
-  | "hero"
-  | "indigo"
-  | "ember"
-  | "amber"
-  | "violet"
-  | "cyan"
-  | "gold"
-  | "rose"
-  | "emerald"
-  | "midnight";
-
-const PALETTES: Record<Mood, { a: string; b: string; base: string }> = {
-  hero: {
-    a: "oklch(0.14 0.03 260 / 0.9)",
-    b: "oklch(0.10 0.04 25 / 0.75)",
-    base: "oklch(0.05 0.02 260)",
-  },
-  indigo: {
-    a: "oklch(0.18 0.10 265 / 0.85)",
-    b: "oklch(0.11 0.05 280 / 0.7)",
-    base: "oklch(0.06 0.03 265)",
-  },
-  ember: {
-    a: "oklch(0.22 0.14 25 / 0.75)",
-    b: "oklch(0.14 0.08 15 / 0.7)",
-    base: "oklch(0.06 0.03 20)",
-  },
-  amber: {
-    a: "oklch(0.22 0.10 70 / 0.7)",
-    b: "oklch(0.14 0.06 60 / 0.7)",
-    base: "oklch(0.06 0.02 65)",
-  },
-  violet: {
-    a: "oklch(0.20 0.12 300 / 0.8)",
-    b: "oklch(0.12 0.07 320 / 0.7)",
-    base: "oklch(0.06 0.03 300)",
-  },
-  cyan: {
-    a: "oklch(0.18 0.09 210 / 0.75)",
-    b: "oklch(0.11 0.05 230 / 0.7)",
-    base: "oklch(0.05 0.02 220)",
-  },
-  gold: {
-    a: "oklch(0.22 0.10 85 / 0.7)",
-    b: "oklch(0.13 0.05 70 / 0.7)",
-    base: "oklch(0.06 0.03 80)",
-  },
-  rose: {
-    a: "oklch(0.20 0.10 10 / 0.7)",
-    b: "oklch(0.13 0.06 350 / 0.7)",
-    base: "oklch(0.06 0.03 10)",
-  },
-  emerald: {
-    a: "oklch(0.18 0.08 160 / 0.7)",
-    b: "oklch(0.11 0.05 170 / 0.7)",
-    base: "oklch(0.05 0.02 160)",
-  },
-  midnight: {
-    a: "oklch(0.15 0.07 240 / 0.85)",
-    b: "oklch(0.08 0.04 260 / 0.75)",
-    base: "oklch(0.04 0.02 250)",
-  },
-};
+type Mood = SceneMood;
 
 function layerBg(mood: Mood): string {
-  const { a, b, base } = PALETTES[mood];
-  return [
-    `radial-gradient(1400px 900px at 18% 12%, ${a}, transparent 62%)`,
-    `radial-gradient(1100px 800px at 82% 88%, ${b}, transparent 60%)`,
-    base,
-  ].join(", ");
+  return sceneBackground(mood);
 }
 
 export function SceneAtmosphere() {
