@@ -97,6 +97,22 @@ function MovieDetailPage() {
     enabled: movieQ.isSuccess,
   });
 
+  const movie = movieQ.data;
+  usePageMeta(
+    movie
+      ? {
+          title: `${movie.title} - movieCC`,
+          description:
+            movie.overview_vi ||
+            movie.overview ||
+            `Xem phim ${movie.title} online HD Vietsub trên movieCC.`,
+          url: `/phim/${slug}`,
+          image: thumbSrc(movie.backdrop_url || movie.poster_url, { w: 1200 }),
+          type: "video.movie",
+        }
+      : null,
+  );
+
   if (movieQ.isLoading) return <DetailSkeleton />;
 
   if (movieQ.isError || !movieQ.data) {
