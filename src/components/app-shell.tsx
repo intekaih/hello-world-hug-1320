@@ -128,26 +128,31 @@ function SidebarPanel({
 }) {
   return (
     <div className="flex h-full flex-col gap-6 p-4">
-      <div className={cn("flex items-center gap-2 px-2", collapsed ? "justify-center" : "justify-between")}>
+      <div className={cn("flex items-center px-2", collapsed ? "flex-col gap-3" : "justify-between gap-2")}>
         <Brand compact={collapsed} />
-        {onToggle && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 shrink-0 rounded-lg text-foreground-subtle hover:bg-white/5 hover:text-foreground"
-            onClick={onToggle}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            <PanelLeft className="h-4 w-4" />
-          </Button>
-        )}
       </div>
       <nav className="flex flex-1 flex-col gap-1">
         {sidebarItems.map((item) => (
           <SidebarLink key={item.to} item={item} collapsed={collapsed} />
         ))}
       </nav>
-      <div className="flex-1" />
+      {onToggle && (
+        <div className={cn("mt-auto border-t border-white/5 pt-3", collapsed ? "flex justify-center" : "px-1")}>
+          <Button
+            variant="ghost"
+            size={collapsed ? "icon" : "sm"}
+            className={cn(
+              "text-foreground-subtle hover:bg-white/5 hover:text-foreground",
+              collapsed ? "h-9 w-9 rounded-lg" : "w-full justify-start gap-2 rounded-lg",
+            )}
+            onClick={onToggle}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <PanelLeft className="h-4 w-4" />
+            {!collapsed && <span className="text-sm">Collapse</span>}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
