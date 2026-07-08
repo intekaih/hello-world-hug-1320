@@ -156,37 +156,38 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
           <Brand compact />
         </div>
 
-        <div className="relative ml-auto max-w-md flex-1 md:ml-0">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
-          <Input
-            type="search"
-            placeholder="Search movies, shows, actors…"
-            className="h-10 rounded-full border-white/10 bg-white/5 pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
-          />
-        </div>
+        <div className="ml-auto flex flex-1 items-center justify-end gap-2 sm:gap-3">
+          <div className="relative w-full max-w-md">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-subtle" />
+            <Input
+              type="search"
+              placeholder="Search movies, shows, actors…"
+              className="h-10 rounded-full border-white/10 bg-white/5 pl-10 text-sm placeholder:text-foreground-subtle focus-visible:ring-primary/40"
+            />
+          </div>
 
-        <div className="flex items-center gap-1 sm:gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggle}
-            aria-label={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
-            title={isDark ? "Chế độ sáng" : "Chế độ tối"}
-          >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggle}
+              aria-label={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+              title={isDark ? "Chế độ sáng" : "Chế độ tối"}
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
 
-          <NotificationBell />
+            <NotificationBell />
 
-
-          <Link to="/profile" aria-label="Profile" className="ml-1">
-            <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
-              <AvatarImage src="" alt="You" />
-              <AvatarFallback className="bg-primary/20 text-primary">
-                YO
-              </AvatarFallback>
-            </Avatar>
-          </Link>
+            <Link to="/profile" aria-label="Profile" className="ml-1">
+              <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
+                <AvatarImage src="" alt="You" />
+                <AvatarFallback className="bg-primary/20 text-primary">
+                  YO
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          </div>
         </div>
       </div>
     </header>
