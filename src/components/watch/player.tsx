@@ -3,10 +3,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Heart,
+  Keyboard,
   ListVideo,
-  Loader2,
   Maximize,
   Minimize,
+  Monitor,
   Pause,
   Play,
   Plus,
@@ -28,6 +29,14 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
+import { PlayerLoadingState } from "./player-loading-state";
+import {
+  PlayerErrorState,
+  type PlayerErrorKind,
+} from "./player-error-state";
+import { ShortcutOverlay } from "./shortcut-overlay";
+import { NextEpisodePrompt } from "./next-episode-prompt";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -48,6 +57,8 @@ type Props = {
   servers: ServerSource[];
   initialTime?: number;
   onChangeEpisode: (ep: number) => void;
+  cinemaMode?: boolean;
+  onToggleCinemaMode?: () => void;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -76,7 +87,10 @@ export function PlayerContainer({
   servers,
   initialTime = 0,
   onChangeEpisode,
+  cinemaMode = false,
+  onToggleCinemaMode,
 }: Props) {
+  const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const hlsRef = useRef<Hls | null>(null);
@@ -94,10 +108,13 @@ export function PlayerContainer({
   const [duration, setDuration] = useState(0);
   const [buffered, setBuffered] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [fatalError, setFatalError] = useState<PlayerErrorKind | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [episodePanelOpen, setEpisodePanelOpen] = useState(false);
   const [qualityOpen, setQualityOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [nextPromptOpen, setNextPromptOpen] = useState(false);
   const [levels, setLevels] = useState<
     { index: number; height: number; bitrate: number }[]
   >([]);
@@ -105,6 +122,14 @@ export function PlayerContainer({
   const [seekFeedback, setSeekFeedback] = useState<null | "back" | "fwd">(null);
 
   const initialTimeRef = useRef(initialTime);
+  const reloadTokenRef = useRef(0);
+  const [reloadToken, setReloadToken] = useState(0);
+  const retryPlayback = useCallback(() => {
+    setFatalError(null);
+    setLoading(true);
+    reloadTokenRef.current += 1;
+    setReloadToken(reloadTokenRef.current);
+  }, []);
 
   /* ---------------------------- HLS attachment ---------------------------- */
   useEffect(() => {
@@ -113,6 +138,7 @@ export function PlayerContainer({
 
     let cancelled = false;
     setLoading(true);
+    setFatalError(null);
 
     const isNative = !!video.canPlayType("application/vnd.apple.mpegurl");
 
@@ -163,15 +189,18 @@ export function PlayerContainer({
         if (!data.fatal) return;
         switch (data.type) {
           case HlsMod.ErrorTypes.NETWORK_ERROR:
-            console.warn("[hls] fatal network error, retrying loadSource", data);
-            hls.startLoad();
+            console.warn("[hls] fatal network error", data);
+            setFatalError("network");
+            hls.destroy();
+            hlsRef.current = null;
             break;
           case HlsMod.ErrorTypes.MEDIA_ERROR:
             console.warn("[hls] fatal media error, recovering", data);
             hls.recoverMediaError();
             break;
           default:
-            console.error("[hls] unrecoverable error, destroying", data);
+            console.error("[hls] unrecoverable error", data);
+            setFatalError("media");
             hls.destroy();
             hlsRef.current = null;
             break;
@@ -197,7 +226,7 @@ export function PlayerContainer({
         /* ignore */
       }
     };
-  }, [currentSrc]);
+  }, [currentSrc, reloadToken]);
 
 
   /* ---------------------------- Resume position --------------------------- */
@@ -257,12 +286,12 @@ export function PlayerContainer({
     };
   }, []);
 
-  /* -------------------------- Save progress /5s --------------------------- */
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      const video = videoRef.current;
-      if (!video || !video.duration) return;
-      if (video.paused && video.currentTime < 1) return;
+  /* -------------------------- Save progress ------------------------------- */
+  const saveProgress = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || !video.duration) return;
+    if (video.currentTime < 1) return;
+    try {
       fetch("/api/history", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -274,9 +303,61 @@ export function PlayerContainer({
           duration: video.duration,
         }),
       }).catch(() => {});
+    } catch {
+      /* ignore */
+    }
+  }, [slug, episode]);
+
+  // every 5s while playing
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const video = videoRef.current;
+      if (!video || video.paused) return;
+      saveProgress();
     }, 5000);
     return () => window.clearInterval(id);
-  }, [slug, episode]);
+  }, [saveProgress]);
+
+  // save on pause + before unload
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onPause = () => saveProgress();
+    const onUnload = () => saveProgress();
+    video.addEventListener("pause", onPause);
+    window.addEventListener("beforeunload", onUnload);
+    window.addEventListener("pagehide", onUnload);
+    return () => {
+      video.removeEventListener("pause", onPause);
+      window.removeEventListener("beforeunload", onUnload);
+      window.removeEventListener("pagehide", onUnload);
+      saveProgress();
+    };
+  }, [saveProgress]);
+
+  // pause video when tab hidden
+  useEffect(() => {
+    const onVis = () => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (document.hidden && !video.paused) video.pause();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  /* -------------------------- Next episode prompt ------------------------- */
+  useEffect(() => {
+    if (!duration) return;
+    const remaining = duration - currentTime;
+    const canNextEp = Number(episode) < totalEpisodes;
+    if (canNextEp && remaining > 0 && remaining <= 30 && !nextPromptOpen) {
+      setNextPromptOpen(true);
+    }
+    if (remaining > 40 && nextPromptOpen) setNextPromptOpen(false);
+  }, [currentTime, duration, episode, totalEpisodes, nextPromptOpen]);
+
+
 
   /* ---------------------------- Fullscreen -------------------------------- */
   useEffect(() => {
@@ -392,12 +473,26 @@ export function PlayerContainer({
         case "M":
           if (videoRef.current) videoRef.current.muted = !videoRef.current.muted;
           break;
+        case "c":
+        case "C":
+          onToggleCinemaMode?.();
+          break;
+        case "?":
+        case "/":
+          e.preventDefault();
+          setShortcutsOpen((v) => !v);
+          break;
+        case "Escape":
+          setShortcutsOpen(false);
+          setEpisodePanelOpen(false);
+          setQualityOpen(false);
+          break;
       }
       showControls();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [togglePlay, seekBy, toggleFullscreen, showControls]);
+  }, [togglePlay, seekBy, toggleFullscreen, showControls, onToggleCinemaMode]);
 
   const epNum = Number(episode);
   const canPrev = epNum > 1;
@@ -426,11 +521,21 @@ export function PlayerContainer({
         onPointerUp={onSurfacePointerUp}
       />
 
-      {/* Loading spinner */}
-      {loading && (
-        <div className="pointer-events-none absolute inset-0 grid place-items-center">
-          <Loader2 className="h-10 w-10 animate-spin text-white/70" />
-        </div>
+      {/* Loading */}
+      {loading && !fatalError && <PlayerLoadingState poster={poster} />}
+
+      {/* Fatal error surface */}
+      {fatalError && (
+        <PlayerErrorState
+          kind={fatalError}
+          servers={servers}
+          currentServer={serverId}
+          onRetry={retryPlayback}
+          onChangeServer={(id) => {
+            setFatalError(null);
+            setServerId(id);
+          }}
+        />
       )}
 
       {/* Seek feedback */}
@@ -585,15 +690,41 @@ export function PlayerContainer({
                   <button
                     onClick={() => setEpisodePanelOpen(true)}
                     className="flex items-center gap-1.5 rounded-full p-1.5 text-sm transition hover:bg-white/10"
-                    aria-label="Episodes"
+                    aria-label={t("player.controls.episodes")}
                   >
                     <ListVideo className="h-5 w-5" />
-                    <span className="hidden font-mono text-[11px] uppercase tracking-[0.18em] sm:inline">Tập</span>
+                    <span className="hidden font-mono text-[11px] uppercase tracking-[0.18em] sm:inline">
+                      {t("player.controls.episodesShort")}
+                    </span>
+                  </button>
+                  {onToggleCinemaMode && (
+                    <button
+                      onClick={onToggleCinemaMode}
+                      className={cn(
+                        "hidden rounded-full p-1.5 transition hover:bg-white/10 sm:inline-flex",
+                        cinemaMode && "text-primary",
+                      )}
+                      aria-label={t("player.controls.cinemaMode")}
+                      aria-pressed={cinemaMode}
+                    >
+                      <Monitor className="h-5 w-5" />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShortcutsOpen(true)}
+                    className="hidden rounded-full p-1.5 transition hover:bg-white/10 sm:inline-flex"
+                    aria-label={t("player.controls.shortcuts")}
+                  >
+                    <Keyboard className="h-5 w-5" />
                   </button>
                   <button
                     onClick={toggleFullscreen}
                     className="rounded-full p-1.5 transition hover:bg-white/10"
-                    aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                    aria-label={
+                      isFullscreen
+                        ? t("player.controls.exitFullscreen")
+                        : t("player.controls.fullscreen")
+                    }
                   >
                     {isFullscreen ? (
                       <Minimize className="h-5 w-5" />
@@ -620,6 +751,21 @@ export function PlayerContainer({
           onChangeEpisode(n);
         }}
         onSelectServer={setServerId}
+      />
+
+      <NextEpisodePrompt
+        visible={nextPromptOpen && canNext}
+        seconds={Math.max(1, Math.round(duration - currentTime))}
+        onCancel={() => setNextPromptOpen(false)}
+        onPlayNow={() => {
+          setNextPromptOpen(false);
+          onChangeEpisode(epNum + 1);
+        }}
+      />
+
+      <ShortcutOverlay
+        open={shortcutsOpen}
+        onClose={() => setShortcutsOpen(false)}
       />
     </div>
   );
