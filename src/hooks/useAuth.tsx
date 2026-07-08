@@ -29,11 +29,14 @@ export function useAuthBootstrap() {
     if (status !== "idle") return;
     setStatus("loading");
 
-    let cancelled = false;
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 8_000);
+
     (async () => {
       try {
-        const data = await apiGet<MeResponse>("/api/auth/me");
-        if (cancelled) return;
+        const data = await apiGet<MeResponse>("/api/auth/me", {
+          signal: controller.signal,
+        });
         if (data.user) {
           const exp = data.expires_at
             ? data.expires_at < 1e12
@@ -45,19 +48,16 @@ export function useAuthBootstrap() {
           reset();
         }
       } catch (err) {
-        if (cancelled) return;
         if (err instanceof ApiError && err.status === 401) {
           reset();
         } else {
           console.warn("[auth] /me failed", err);
           reset();
         }
+      } finally {
+        window.clearTimeout(timeoutId);
       }
     })();
-
-    return () => {
-      cancelled = true;
-    };
   }, [status, setStatus, setUser, reset]);
 }
 
