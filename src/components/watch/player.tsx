@@ -460,7 +460,7 @@ export function PlayerContainer({
             e.stopPropagation();
             onChangeEpisode(epNum - 1);
           }}
-          className="glass absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 text-white hover:bg-white/10"
+          className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/15 bg-black/40 p-3 text-white backdrop-blur-md transition hover:scale-110 hover:border-primary/50 hover:bg-black/60"
           aria-label="Previous episode"
         >
           <ChevronLeft className="h-6 w-6" />
@@ -472,7 +472,7 @@ export function PlayerContainer({
             e.stopPropagation();
             onChangeEpisode(epNum + 1);
           }}
-          className="glass absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full p-2 text-white hover:bg-white/10"
+          className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/15 bg-black/40 p-3 text-white backdrop-blur-md transition hover:scale-110 hover:border-primary/50 hover:bg-black/60"
           aria-label="Next episode"
         >
           <ChevronRight className="h-6 w-6" />
@@ -486,16 +486,19 @@ export function PlayerContainer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between bg-gradient-to-b from-black/50 via-transparent to-black/70"
+            transition={{ duration: 0.25 }}
+            className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between bg-gradient-to-b from-black/60 via-transparent to-black/80"
           >
             {/* Top */}
-            <div className="pointer-events-auto flex items-center gap-3 p-3 sm:p-4">
+            <div className="pointer-events-auto flex items-center gap-3 p-4 sm:p-5">
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-white sm:text-base">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.24em] text-primary/90">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_8px_oklch(0.68_0.24_25)]" />
+                  Live · EP {String(Number(episode) || 1).padStart(2, "0")}
+                </div>
+                <p className="mt-1 truncate font-display text-base font-semibold text-white sm:text-lg">
                   {title}
                 </p>
-                <p className="text-xs text-white/60">Tập {episode}</p>
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <ServerSelector
@@ -512,18 +515,19 @@ export function PlayerContainer({
                 e.stopPropagation();
                 togglePlay();
               }}
-              className="pointer-events-auto mx-auto grid h-16 w-16 place-items-center rounded-full bg-black/40 text-white backdrop-blur transition hover:scale-110 hover:bg-black/60"
+              className="pointer-events-auto mx-auto grid h-20 w-20 place-items-center rounded-full text-white shadow-[0_10px_40px_-10px_oklch(0.68_0.24_25/0.7),0_0_60px_oklch(0.68_0.24_25/0.3)] ring-1 ring-white/25 backdrop-blur-md transition hover:scale-110 sm:h-24 sm:w-24"
+              style={{ background: "var(--gradient-ember)" }}
               aria-label={playing ? "Pause" : "Play"}
             >
               {playing ? (
-                <Pause className="h-7 w-7 fill-current" />
+                <Pause className="h-8 w-8 fill-current sm:h-10 sm:w-10" />
               ) : (
-                <Play className="h-7 w-7 fill-current" />
+                <Play className="h-8 w-8 fill-current sm:h-10 sm:w-10" />
               )}
             </button>
 
-            {/* Bottom */}
-            <div className="pointer-events-auto space-y-2 p-3 sm:p-4">
+            {/* Bottom — floating glass bar */}
+            <div className="pointer-events-auto space-y-3 p-3 sm:p-5">
               <SeekBar
                 current={currentTime}
                 duration={duration}
@@ -532,10 +536,10 @@ export function PlayerContainer({
                   if (videoRef.current) videoRef.current.currentTime = t;
                 }}
               />
-              <div className="flex items-center gap-2 text-white">
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-2 text-white backdrop-blur-xl sm:gap-3 sm:px-4">
                 <button
                   onClick={togglePlay}
-                  className="rounded-md p-1.5 hover:bg-white/10"
+                  className="rounded-full p-1.5 transition hover:bg-white/10"
                   aria-label={playing ? "Pause" : "Play"}
                 >
                   {playing ? (
@@ -560,8 +564,10 @@ export function PlayerContainer({
                   }}
                 />
 
-                <span className="text-xs tabular-nums text-white/80">
-                  {formatTime(currentTime)} / {formatTime(duration)}
+                <span className="font-mono text-[11px] tabular-nums tracking-wider text-white/85">
+                  <span className="text-white">{formatTime(currentTime)}</span>
+                  <span className="mx-1 text-white/40">/</span>
+                  <span className="text-white/60">{formatTime(duration)}</span>
                 </span>
 
                 <div className="ml-auto flex items-center gap-1">
@@ -578,15 +584,15 @@ export function PlayerContainer({
                   />
                   <button
                     onClick={() => setEpisodePanelOpen(true)}
-                    className="flex items-center gap-1.5 rounded-md p-1.5 text-sm hover:bg-white/10"
+                    className="flex items-center gap-1.5 rounded-full p-1.5 text-sm transition hover:bg-white/10"
                     aria-label="Episodes"
                   >
                     <ListVideo className="h-5 w-5" />
-                    <span className="hidden sm:inline">Tập</span>
+                    <span className="hidden font-mono text-[11px] uppercase tracking-[0.18em] sm:inline">Tập</span>
                   </button>
                   <button
                     onClick={toggleFullscreen}
-                    className="rounded-md p-1.5 hover:bg-white/10"
+                    className="rounded-full p-1.5 transition hover:bg-white/10"
                     aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                   >
                     {isFullscreen ? (
@@ -663,23 +669,23 @@ function SeekBar({
       }}
       onPointerLeave={() => setHoverX(null)}
     >
-      <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-white/20 transition group-hover:h-1.5">
+      <div className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 overflow-hidden rounded-full bg-white/15 transition-all duration-200 group-hover:h-1.5">
         <div
-          className="absolute inset-y-0 left-0 rounded-full bg-white/40"
+          className="absolute inset-y-0 left-0 rounded-full bg-white/30"
           style={{ width: `${bufPct}%` }}
         />
         <div
-          className="absolute inset-y-0 left-0 rounded-full bg-primary"
-          style={{ width: `${pct}%` }}
+          className="absolute inset-y-0 left-0 rounded-full shadow-[0_0_12px_oklch(0.68_0.24_25/0.7)]"
+          style={{ width: `${pct}%`, background: "var(--gradient-ember)" }}
         />
       </div>
       <div
-        className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary shadow opacity-0 transition group-hover:opacity-100"
+        className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-[0_0_16px_oklch(0.68_0.24_25/0.9),0_2px_6px_rgba(0,0,0,0.5)] ring-2 ring-primary transition-opacity duration-200 group-hover:opacity-100"
         style={{ left: `${pct}%` }}
       />
       {hoverX !== null && ref.current && duration > 0 && (
         <div
-          className="pointer-events-none absolute -top-7 -translate-x-1/2 rounded bg-black/80 px-1.5 py-0.5 text-[10px] font-medium text-white"
+          className="pointer-events-none absolute -top-8 -translate-x-1/2 rounded-md border border-white/15 bg-black/90 px-2 py-1 font-mono text-[10px] font-medium tabular-nums text-white backdrop-blur-md"
           style={{ left: hoverX }}
         >
           {formatTime((hoverX / ref.current.clientWidth) * duration)}
@@ -796,17 +802,18 @@ function ServerSelector({
   onChange: (id: string) => void;
 }) {
   return (
-    <div className="glass flex items-center gap-1 rounded-full p-1">
+    <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/40 p-1 backdrop-blur-xl">
       {servers.map((s) => (
         <button
           key={s.id}
           onClick={() => onChange(s.id)}
           className={cn(
-            "rounded-full px-2.5 py-1 text-xs font-medium text-white transition",
+            "rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/85 transition",
             value === s.id
-              ? "bg-primary text-primary-foreground"
+              ? "text-white shadow-[0_0_15px_oklch(0.68_0.24_25/0.5)]"
               : "hover:bg-white/10",
           )}
+          style={value === s.id ? { background: "var(--gradient-ember)" } : undefined}
         >
           {s.name}
         </button>
@@ -854,24 +861,30 @@ export function EpisodePanel({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="glass-strong absolute inset-x-0 bottom-0 z-40 max-h-[70%] overflow-y-auto rounded-t-2xl p-4"
+            className="absolute inset-x-0 bottom-0 z-40 max-h-[75%] overflow-y-auto rounded-t-3xl border-t border-white/10 bg-black/85 p-5 backdrop-blur-2xl"
           >
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30" />
+            <div className="mx-auto mb-4 h-1 w-12 rounded-full bg-white/25" />
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-lg font-semibold text-white">
-                Danh sách tập
-              </h3>
+              <div>
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.26em] text-primary/90">
+                  <span className="inline-block h-px w-5 bg-gradient-to-r from-primary to-transparent" />
+                  Episodes
+                </div>
+                <h3 className="mt-1 font-display text-xl font-semibold text-white">
+                  Danh sách tập
+                </h3>
+              </div>
               <button
                 onClick={onClose}
-                className="rounded-md p-1.5 text-white/70 hover:bg-white/10 hover:text-white"
+                className="rounded-full border border-white/10 p-2 text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
                 aria-label="Close"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="mt-3 space-y-2">
-              <p className="text-xs uppercase tracking-wider text-white/60">
+            <div className="mt-5 space-y-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/60">
                 Server
               </p>
               <div className="flex flex-wrap gap-2">
@@ -880,11 +893,16 @@ export function EpisodePanel({
                     key={s.id}
                     onClick={() => onSelectServer(s.id)}
                     className={cn(
-                      "rounded-full border px-3 py-1 text-xs font-medium text-white transition",
+                      "rounded-full border px-3.5 py-1.5 text-xs font-medium text-white transition",
                       currentServer === s.id
-                        ? "border-primary bg-primary/20 text-primary"
-                        : "border-white/15 hover:bg-white/10",
+                        ? "border-primary/50 text-white shadow-[0_0_20px_oklch(0.68_0.24_25/0.4)]"
+                        : "border-white/15 hover:border-white/30 hover:bg-white/10",
                     )}
+                    style={
+                      currentServer === s.id
+                        ? { background: "var(--gradient-ember)" }
+                        : undefined
+                    }
                   >
                     {s.name}
                   </button>
@@ -892,9 +910,9 @@ export function EpisodePanel({
               </div>
             </div>
 
-            <div className="mt-4 space-y-2">
-              <p className="text-xs uppercase tracking-wider text-white/60">
-                Tập ({totalEpisodes})
+            <div className="mt-5 space-y-2.5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/60">
+                Tập · {totalEpisodes}
               </p>
               <div className="grid grid-cols-6 gap-2 sm:grid-cols-8 lg:grid-cols-10">
                 {Array.from({ length: totalEpisodes }).map((_, i) => {
@@ -905,13 +923,18 @@ export function EpisodePanel({
                       key={ep}
                       onClick={() => onSelectEpisode(ep)}
                       className={cn(
-                        "rounded-lg py-2 text-sm font-semibold transition",
+                        "group relative overflow-hidden rounded-lg border py-2.5 font-mono text-sm font-semibold transition",
                         active
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-white/5 text-white hover:bg-white/10",
+                          ? "border-primary/50 text-white shadow-[0_0_20px_oklch(0.68_0.24_25/0.4)]"
+                          : "border-white/10 bg-white/5 text-white/85 hover:border-primary/40 hover:text-primary",
                       )}
+                      style={
+                        active
+                          ? { background: "var(--gradient-ember)" }
+                          : undefined
+                      }
                     >
-                      {ep}
+                      {String(ep).padStart(2, "0")}
                     </button>
                   );
                 })}
