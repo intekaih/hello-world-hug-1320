@@ -80,7 +80,7 @@ function BrowsePage() {
   const activeFilters = [search.year, search.category, search.country].filter(Boolean).length;
 
   const setFilter = (patch: Partial<typeof search>) =>
-    navigate({ search: (prev) => ({ ...prev, ...patch, page: 1 }) });
+    navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, ...patch, page: 1 }) });
 
   return (
     <div className="space-y-6">
@@ -166,7 +166,7 @@ function BrowsePage() {
                 <Pagination
                   page={search.page}
                   totalPages={totalPages}
-                  onChange={(p) => navigate({ search: (prev) => ({ ...prev, page: p }) })}
+                  onChange={(p) => navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, page: p }) })}
                 />
               )}
             </>
