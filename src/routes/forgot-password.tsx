@@ -68,7 +68,7 @@ function ForgotPasswordPage() {
               "url(https://image.tmdb.org/t/p/original/pbrkL804c8yAv3zBZR4QPEafpAR.jpg)",
           }}
         />
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-bg via-bg/90 to-bg" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-background/90 to-background" />
         <div
           aria-hidden
           className="absolute -top-40 left-1/2 -z-10 h-96 w-96 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl"
@@ -89,7 +89,7 @@ function ForgotPasswordPage() {
 
           <div className="mb-8 flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-primary">
-              <Film className="h-6 w-6 text-foreground" />
+              <Film className="h-6 w-6 text-primary-foreground" />
             </div>
             <h1 className="font-display text-2xl font-bold text-foreground">Quên mật khẩu?</h1>
             <p className="text-sm text-muted-foreground">
@@ -118,7 +118,7 @@ function ForgotPasswordPage() {
                 </div>
                 <Link
                   to="/login"
-                  className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/80 font-semibold text-white shadow-lg shadow-primary/30 transition"
+                  className="flex h-11 w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary/80 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition"
                 >
                   Về trang đăng nhập
                 </Link>
@@ -156,7 +156,7 @@ function ForgotPasswordPage() {
                       autoComplete="username"
                       placeholder="you@example.com"
                       disabled={isSubmitting}
-                      className="h-12 w-full rounded-xl border border-white/10 bg-black/40 pl-10 pr-3 text-white placeholder:text-white/60 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
+                      className="h-12 w-full rounded-xl border border-border bg-surface-elevated pl-10 pr-3 text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
                       aria-invalid={!!errors.identifier}
                     />
                   </div>
@@ -168,7 +168,7 @@ function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/80 font-semibold text-white shadow-lg shadow-primary/30 transition hover:shadow-primary/50 disabled:cursor-not-allowed disabled:opacity-70"
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/80 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:shadow-primary/50 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isSubmitting ? (
                     <>

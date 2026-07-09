@@ -47,7 +47,7 @@ function ActorSearchPage() {
       <div className="mx-auto max-w-2xl space-y-4 text-center">
         <div className="flex justify-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30">
-            <User className="h-7 w-7 text-foreground" />
+            <User className="h-7 w-7 text-primary-foreground" />
           </div>
         </div>
         <h1 className="font-display text-3xl font-bold text-foreground">Tìm phim theo diễn viên</h1>
@@ -74,11 +74,11 @@ function ActorSearchPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="VD: Timothée Chalamet, Zendaya..."
-            className="h-14 w-full rounded-full border border-white/10 bg-black/40 pl-12 pr-32 text-base text-white placeholder:text-white/60 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
+            className="h-14 w-full rounded-full border border-border bg-surface-elevated pl-12 pr-32 text-base text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
           />
           <button
             type="submit"
-            className="absolute right-2 top-1/2 h-10 -translate-y-1/2 rounded-full bg-gradient-to-r from-primary to-primary/80 px-5 text-sm font-semibold text-white shadow-lg shadow-primary/30"
+            className="absolute right-2 top-1/2 h-10 -translate-y-1/2 rounded-full bg-gradient-to-r from-primary to-primary/80 px-5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30"
           >
             Tìm
           </button>
