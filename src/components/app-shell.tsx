@@ -38,7 +38,7 @@ const sidebarItems: NavItem[] = [
   { labelKey: "nav.home", to: "/", icon: Home },
   { labelKey: "nav.discover", to: "/kham-pha", icon: Compass },
   { labelKey: "nav.schedule", to: "/lich-chieu", icon: CalendarClock },
-  { labelKey: "nav.library", to: "/browse", icon: Bookmark },
+  
   { labelKey: "nav.history", to: "/history", icon: History },
   { labelKey: "nav.favorites", to: "/favorites", icon: Heart },
   { labelKey: "nav.watchlist", to: "/watchlist", icon: Bookmark },
