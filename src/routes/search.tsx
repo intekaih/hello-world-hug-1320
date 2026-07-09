@@ -1149,22 +1149,47 @@ function SearchResultsGrid({ items }: { items: ResultItem[] }) {
   );
 }
 
-function SearchEmptyState() {
+function SearchEmptyState({
+  q,
+  setFilter,
+}: {
+  q: string;
+  setFilter: (patch: Partial<SearchParams>) => void;
+}) {
   const { t } = useTranslation();
+  const recoveries: { label: string; patch: Partial<SearchParams> }[] = [
+    { label: t("search.recovery.action"), patch: { q: "", category: slugify("Hành động") } },
+    { label: t("search.recovery.lateNight"), patch: { q: "", category: slugify("Kinh dị") } },
+    { label: t("search.recovery.under2h"), patch: { q: "", type: "phim-le" } },
+    { label: t("search.recovery.topRated"), patch: { q: "", year: "2024" } },
+  ];
   return (
-    <div className="flex flex-col items-center gap-3 py-24 text-center">
+    <div className="flex flex-col items-center gap-3 py-16 text-center">
       <div className="glass grid h-16 w-16 place-items-center rounded-2xl">
         <SearchIcon className="h-8 w-8 text-muted-foreground" />
       </div>
       <p className="font-display text-lg font-semibold text-foreground">
-        {t("search.noResults")}
+        {q
+          ? t("search.noResultsWithQuery", { q })
+          : t("search.noResults")}
       </p>
       <p className="max-w-sm text-sm text-muted-foreground">
-        {t("search.noResultsHint")}
+        {t("search.recovery.hint")}
       </p>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {recoveries.map((r) => (
+          <button
+            key={r.label}
+            onClick={() => setFilter(r.patch)}
+            className="rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/70 hover:bg-primary/20"
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
       <Link
         to="/kham-pha"
-        className="mt-3 rounded-full border border-primary/40 bg-primary/10 px-6 py-2 text-sm font-medium text-foreground transition hover:border-primary/70 hover:bg-primary/20"
+        className="mt-2 text-xs text-muted-foreground underline-offset-4 transition hover:text-primary hover:underline"
       >
         {t("continueWatching.empty.cta")}
       </Link>
