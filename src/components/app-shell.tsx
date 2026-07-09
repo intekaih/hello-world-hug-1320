@@ -290,9 +290,6 @@ function AuthHeaderSlot() {
   );
 }
 
-function _EndAuthHeaderSlot() {
-  return null;
-}
 
 function BottomTabBar() {
   return (
