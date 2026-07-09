@@ -33,6 +33,8 @@ import { track } from "@/lib/track";
  * in under two seconds.
  */
 
+const SLIDE_MS = 8500;
+
 export type HeroResume = {
   slug: string;
   title?: string;
