@@ -22,6 +22,7 @@ import { playWhoosh } from "@/lib/ui-sound";
 /* -------------------------------------------------------------------------- */
 
 export function useBookmarkState(movie: Movie) {
+  const { t } = useTranslation();
   const [fav, setFav] = useState(false);
   const [wl, setWl] = useState(false);
 
@@ -39,6 +40,37 @@ export function useBookmarkState(movie: Movie) {
     } catch {}
   };
 
+  const setWatchlist = (next: boolean) => {
+    setWl(next);
+    persist(`wl:${movie.slug}`, next);
+    // Best-effort server sync so the /watchlist page reflects the change.
+    try {
+      if (next) {
+        void fetch("/api/watchlist/toggle", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            movie_slug: movie.slug,
+            movie_name: movie.title,
+            movie_origin_name: movie.original_title,
+            movie_thumb: movie.poster_url ?? "",
+            runtime: movie.runtime,
+          }),
+        });
+      } else {
+        void fetch("/api/watchlist/toggle", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            movie_slug: movie.slug,
+            movie_name: movie.title,
+            movie_thumb: movie.poster_url ?? "",
+          }),
+        });
+      }
+    } catch {}
+  };
+
   return {
     fav,
     wl,
@@ -46,14 +78,30 @@ export function useBookmarkState(movie: Movie) {
       const next = !fav;
       setFav(next);
       persist(`fav:${movie.slug}`, next);
-      // Confirmation cue only on ADD — silent on remove to avoid nagging.
       if (next) playWhoosh();
     },
     toggleWl: () => {
       const next = !wl;
-      setWl(next);
-      persist(`wl:${movie.slug}`, next);
-      if (next) playWhoosh();
+      setWatchlist(next);
+      if (next) {
+        playWhoosh();
+        // Loss-aversion + safety: 5s window to undo an add.
+        toast(t("watchlist.addedToast"), {
+          duration: 5000,
+          action: {
+            label: t("watchlist.undo"),
+            onClick: () => setWatchlist(false),
+          },
+        });
+      } else {
+        toast(t("watchlist.removedToast"), {
+          duration: 5000,
+          action: {
+            label: t("watchlist.undo"),
+            onClick: () => setWatchlist(true),
+          },
+        });
+      }
     },
   };
 }
