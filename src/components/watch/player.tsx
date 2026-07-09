@@ -870,10 +870,22 @@ export function PlayerContainer({
       <NextEpisodePrompt
         visible={nextPromptOpen && canNext}
         seconds={Math.max(1, Math.round(duration - currentTime))}
+        nextEpisodeNumber={epNum + 1}
+        posterUrl={poster}
         onCancel={() => setNextPromptOpen(false)}
         onPlayNow={() => {
           setNextPromptOpen(false);
           onChangeEpisode(epNum + 1);
+        }}
+      />
+
+      <SeasonCompleteOverlay
+        visible={completeOpen && isLastEp}
+        slug={slug}
+        title={title}
+        onDismiss={() => {
+          setCompleteOpen(false);
+          setCompleteDismissed(true);
         }}
       />
 
