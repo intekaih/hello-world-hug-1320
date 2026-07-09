@@ -482,6 +482,14 @@
     "count": "{{n}} đang xem",
     "clearAll": "Xóa tất cả",
     "confirmClear": "Xóa toàn bộ lịch sử xem?",
+    "clear": {
+      "title": "Xóa toàn bộ lịch sử xem",
+      "description": "Hành động này không thể hoàn tác. Gõ {{word}} để xác nhận.",
+      "inputLabel": "Gõ {{word}} để tiếp tục",
+      "hint": "Bạn có thể huỷ bất cứ lúc nào — không có gì bị xoá cho đến khi bạn xác nhận.",
+      "cancel": "Huỷ",
+      "confirm": "Xoá lịch sử"
+    },
     "remove": "Xóa khỏi lịch sử",
     "continue": "Xem tiếp",
     "remaining": "còn {{n}} phút",
@@ -734,5 +742,11 @@
       "three": "Bộ này đáng xem đấy.",
       "four": "Xem cái này rồi lại nghĩ đến bạn."
     }
+  },
+  "wellness": {
+    "title": "Bạn đã xem khá lâu rồi",
+    "body": "Hôm nay bạn đã xem khoảng {{m}} phút — nghỉ ngơi 5 phút, uống nước, rồi quay lại nhé?",
+    "continue": "Tiếp tục xem",
+    "break": "Nghỉ 5 phút"
   }
 }

@@ -482,6 +482,14 @@
     "count": "{{n}} in progress",
     "clearAll": "Clear all",
     "confirmClear": "Clear your entire watch history?",
+    "clear": {
+      "title": "Clear all watch history",
+      "description": "This can't be undone. Type {{word}} to confirm.",
+      "inputLabel": "Type {{word}} to continue",
+      "hint": "You can cancel any time — nothing is removed until you confirm.",
+      "cancel": "Cancel",
+      "confirm": "Clear history"
+    },
     "remove": "Remove from history",
     "continue": "Continue",
     "remaining": "{{n}} min left",
@@ -734,5 +742,11 @@
       "three": "This one's worth it.",
       "four": "Saw this and thought of you."
     }
+  },
+  "wellness": {
+    "title": "You've been watching for a while",
+    "body": "About {{m}} minutes today — how about a 5-minute break, some water, then back to it?",
+    "continue": "Keep watching",
+    "break": "Take 5"
   }
 }
