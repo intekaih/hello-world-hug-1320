@@ -118,10 +118,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.gstatic.com",
         crossOrigin: "anonymous",
       },
+      // Preconnect to image CDNs used by movie posters/backdrops (LCP path).
+      { rel: "preconnect", href: "https://phimimg.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://wsrv.nl", crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: "https://phimapi.com" },
+      { rel: "dns-prefetch", href: "https://image.tmdb.org" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..900,0..100&family=Geist:wght@300..800&family=Geist+Mono:wght@400;500;600&display=swap",
       },
+
     ],
   }),
   shellComponent: RootShell,
