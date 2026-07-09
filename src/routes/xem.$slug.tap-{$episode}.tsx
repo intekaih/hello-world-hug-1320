@@ -178,8 +178,9 @@ function WatchPage() {
   }, [movie, title, episode, slug, posterUrl]);
 
   const epNum = Number(episode) || 1;
+  const totalEpisodes = movie?.total_episodes ?? FALLBACK_TOTAL_EPISODES;
   const canPrev = epNum > 1;
-  const canNext = epNum < TOTAL_EPISODES;
+  const canNext = epNum < totalEpisodes;
   const overview = movie?.overview_vi || movie?.overview;
 
   const toggleCinema = () => setCinemaMode((v) => !v);
