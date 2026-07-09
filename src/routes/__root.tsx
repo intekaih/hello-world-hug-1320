@@ -9,7 +9,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
-import { AuthInitializer } from "@/hooks/useAuth";
+import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { AppOnboardingHost } from "@/components/onboarding/app-onboarding-host";
 
@@ -160,13 +160,13 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <OfflineBanner />
-        <AuthInitializer>
+        <AuthProvider>
           <ShareProvider>
             <AppShell />
           </ShareProvider>
           <AppOnboardingHost />
           <Toaster />
-        </AuthInitializer>
+        </AuthProvider>
       </I18nProvider>
 
     </QueryClientProvider>
