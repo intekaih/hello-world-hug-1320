@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 import { AppShell } from "@/components/app-shell";
 import { AuthInitializer } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
+import { AppOnboardingHost } from "@/components/onboarding/app-onboarding-host";
+
 import { OfflineBanner } from "@/components/offline-banner";
 import { I18nProvider } from "@/i18n";
 import { ShareProvider } from "@/lib/share/use-share-movie";
