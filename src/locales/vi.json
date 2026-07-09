@@ -320,7 +320,9 @@
       "title": "Cài đặt player",
       "autoNextLabel": "Tự phát tập sau",
       "autoNextExplain": "Tự động chuyển sang tập kế tiếp sau đoạn credits. Có thể tắt bất cứ lúc nào.",
-      "resumeNow": "Bật lại ngay"
+      "resumeNow": "Bật lại ngay",
+      "soundLabel": "Âm báo giao diện",
+      "soundExplain": "Phát tiếng nhẹ khi thêm vào danh sách hoặc xem xong tập. Mặc định tắt."
     }
   },
   "search": {

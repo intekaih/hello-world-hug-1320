@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Movie } from "./types";
 import { useShareMovie } from "@/lib/share/use-share-movie";
+import { playWhoosh } from "@/lib/ui-sound";
 
 /* -------------------------------------------------------------------------- */
 /*  Persisted client-side bookmark state — matches the previous behaviour     */
@@ -44,11 +45,14 @@ export function useBookmarkState(movie: Movie) {
       const next = !fav;
       setFav(next);
       persist(`fav:${movie.slug}`, next);
+      // Confirmation cue only on ADD — silent on remove to avoid nagging.
+      if (next) playWhoosh();
     },
     toggleWl: () => {
       const next = !wl;
       setWl(next);
       persist(`wl:${movie.slug}`, next);
+      if (next) playWhoosh();
     },
   };
 }

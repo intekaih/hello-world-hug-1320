@@ -46,6 +46,8 @@ import {
   useSeasonProgress,
 } from "@/hooks/useSeasonProgress";
 import { isAutoplayActive, usePlayerStore } from "@/store/playerStore";
+import { useUIStore } from "@/store/uiStore";
+import { playTick, playWhoosh } from "@/lib/ui-sound";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -474,7 +476,11 @@ export function PlayerContainer({
     if (ratio >= 0.92 && markedRef.current !== key) {
       markedRef.current = key;
       const n = Number(episode);
-      if (Number.isFinite(n)) markEpisodeWatchedLocal(slug, n);
+      if (Number.isFinite(n)) {
+        markEpisodeWatchedLocal(slug, n);
+        // Discrete confirmation tick — no-op unless user opted in.
+        playTick();
+      }
     }
   }, [currentTime, duration, slug, episode]);
 
@@ -1540,6 +1546,8 @@ function PlayerSettingsSheet({
   const pauseUntil = usePlayerStore((s) => s.pauseAutoplayUntil);
   const resumeAutoplay = usePlayerStore((s) => s.resumeAutoplay);
   const paused = !!pauseUntil && Date.now() < pauseUntil;
+  const soundEnabled = useUIStore((s) => s.soundEnabled);
+  const setSoundEnabled = useUIStore((s) => s.setSoundEnabled);
 
   return (
     <AnimatePresence>
@@ -1611,6 +1619,45 @@ function PlayerSettingsSheet({
                     className={cn(
                       "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow transition-all",
                       autoNext ? "left-[22px]" : "left-[2px]",
+                    )}
+                  />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-white">
+                    {t("player.settings.soundLabel")}
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-white/65">
+                    {t("player.settings.soundExplain")}
+                  </p>
+                </div>
+                <button
+                  role="switch"
+                  aria-checked={soundEnabled}
+                  aria-label={t("player.settings.soundLabel")}
+                  onClick={() => {
+                    const next = !soundEnabled;
+                    setSoundEnabled(next);
+                    // Preview cue right after enabling so the user knows what
+                    // they just opted into. `playWhoosh` re-reads the store,
+                    // so we schedule after the state commit.
+                    if (next) setTimeout(playWhoosh, 30);
+                  }}
+                  className={cn(
+                    "relative h-6 w-11 shrink-0 rounded-full border transition",
+                    soundEnabled
+                      ? "border-primary/40 bg-primary/70"
+                      : "border-white/15 bg-white/10",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow transition-all",
+                      soundEnabled ? "left-[22px]" : "left-[2px]",
                     )}
                   />
                 </button>
