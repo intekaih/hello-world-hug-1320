@@ -100,7 +100,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             className="absolute inset-0 will-change-transform"
             style={{
               transform: `translate3d(${mouse.x * -18}px, ${mouse.y * -12}px, 0)`,
-              transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "transform 600ms var(--ease-out-soft)",
             }}
           >
             <img
