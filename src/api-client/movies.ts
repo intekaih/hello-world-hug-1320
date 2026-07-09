@@ -108,6 +108,25 @@ export function toHero(m: BeMovie): HeroMovie {
   };
 }
 
+function pickKind(m: BeMovie): "series" | "single" | "anime" {
+  const t = (m.type ?? "").toLowerCase();
+  if (t === "hoathinh" || t === "anime") return "anime";
+  if (t === "series" || t === "tvshow") return "series";
+  return "single";
+}
+
+function pickEpisodeLabel(m: BeMovie): string | undefined {
+  const cur = (m.episode_current ?? "").trim();
+  const tot = (m.episode_total ?? "").trim();
+  if (!cur && !tot) return undefined;
+  if (/full|hoàn tất|hoan tat/i.test(cur)) return "Full";
+  if (cur && tot && cur !== tot) {
+    const n = cur.match(/\d+/)?.[0];
+    return n ? `Tập ${n}/${tot}` : cur;
+  }
+  return cur || tot;
+}
+
 export function toCard(m: BeMovie): MovieCard {
   return {
     id: pickId(m),
@@ -116,6 +135,9 @@ export function toCard(m: BeMovie): MovieCard {
     poster_url: pickPoster(m),
     year: m.year ?? 0,
     rating: m.tmdb?.vote_average ?? m.rating ?? 0,
+    quality: m.quality || undefined,
+    episodeLabel: pickEpisodeLabel(m),
+    kind: pickKind(m),
   };
 }
 
