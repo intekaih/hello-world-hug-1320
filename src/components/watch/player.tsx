@@ -340,21 +340,22 @@ export function PlayerContainer({
     if (!video || !video.duration) return;
     if (video.currentTime < 1) return;
     try {
-      fetch("/api/history", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        keepalive: true,
-        body: JSON.stringify({
-          slug,
+      void import("@/api-client/history").then(({ saveProgressBeacon }) => {
+        saveProgressBeacon({
+          movieSlug: slug,
+          movieName: title,
+          posterUrl: poster ?? "",
           episode,
+          episodeSlug: `tap-${episode}`,
           position: video.currentTime,
           duration: video.duration,
-        }),
-      }).catch(() => {});
+        });
+      });
     } catch {
       /* ignore */
     }
-  }, [slug, episode]);
+  }, [slug, episode, title, poster]);
+
 
   // every 5s while playing
   useEffect(() => {
