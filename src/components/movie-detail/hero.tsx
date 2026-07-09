@@ -236,9 +236,10 @@ function ControlButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 text-white backdrop-blur-md transition hover:border-white/40 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60"
+      className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur-md transition-[background,border-color,color,transform] duration-200 ease-out hover:-translate-y-px hover:border-white/40 hover:bg-black/60 hover:text-white active:translate-y-0 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
-      {children}
+      <span className="grid place-items-center [&_svg]:h-4 [&_svg]:w-4">{children}</span>
+
     </button>
   );
 }
