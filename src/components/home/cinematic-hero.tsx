@@ -89,6 +89,9 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (reduce) return;
+      // Skip on touch devices — no hover, wastes CPU on every scroll.
+      if (typeof window !== "undefined" &&
+          !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
       const el = sectionRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
