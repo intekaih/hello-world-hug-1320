@@ -1,4 +1,5 @@
 import { ensureCsrfToken } from "@/hooks/useCsrfToken";
+import { ensureBeCsrfToken, getCachedCsrfToken } from "./csrf";
 
 // Backend Express API base URL — phải set trong .env Lovable:
 // VITE_API_BASE_URL=http://localhost:3000
@@ -44,7 +45,15 @@ export async function apiFetch<T = unknown>(path: string, init: ApiInit = {}): P
   }
 
   if (method !== "GET" && method !== "HEAD") {
-    const token = ensureCsrfToken();
+    // Prefer BE-issued token (cross-origin cookie). Fallback to local cookie.
+    let token = getCachedCsrfToken();
+    if (!token) {
+      try {
+        token = await ensureBeCsrfToken();
+      } catch {
+        token = ensureCsrfToken();
+      }
+    }
     if (token && !headers.has("X-CSRF-Token")) headers.set("X-CSRF-Token", token);
   }
 

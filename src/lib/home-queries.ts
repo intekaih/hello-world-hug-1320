@@ -59,9 +59,9 @@ export type HomeData = {
 export const homeQueryOptions = queryOptions({
   queryKey: ["home"] as const,
   queryFn: async (): Promise<HomeData> => {
-    const res = await fetch("/api/movies/home");
-    if (!res.ok) throw new Error("Failed to load home");
-    return res.json();
+    // Real BE (Express) — see API_REFERENCE.md.
+    const { fetchHomeData } = await import("@/api-client/movies");
+    return fetchHomeData();
   },
   staleTime: 60_000,
 });
