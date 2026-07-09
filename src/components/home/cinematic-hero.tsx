@@ -261,9 +261,9 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             className="pointer-events-none absolute inset-x-0 bottom-0 bg-black"
           />
 
-          {/* Scrims for text legibility */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/90 via-background/25 to-transparent" />
+          {/* Scrims for text legibility — always dark so white content stays readable in both themes */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/85 via-black/35 to-transparent" />
           <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,oklch(0_0_0/0.6)_100%)]" />
           <div className="grain" />
         </motion.div>
@@ -295,7 +295,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
                 Tiếp tục · Còn {resume.remaining}
               </span>
             ) : (
-              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-foreground/70">
+              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-white/75">
                 Feature Presentation · Ep 01
               </span>
             )}
@@ -314,9 +314,9 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.6 }}
-            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/80"
+            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.22em] text-white/85"
           >
-            <span className="rounded-sm border border-foreground/30 px-1.5 py-0.5 text-[10px]">
+            <span className="rounded-sm border border-white/40 px-1.5 py-0.5 text-[10px]">
               {movie.rating}
             </span>
             <span>{movie.year}</span>
@@ -329,7 +329,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.7 }}
-            className="max-w-xl text-[15px] leading-relaxed text-foreground/85 sm:text-base"
+            className="max-w-xl text-[15px] leading-relaxed text-white/90 sm:text-base"
           >
             {movie.overview}
           </motion.p>
@@ -392,7 +392,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             <Link
               to="/phim/$slug"
               params={{ slug: resumeValid && resume ? resume.slug : movie.slug }}
-              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/10"
+              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium uppercase tracking-[0.16em] text-white transition hover:bg-white/15"
             >
               <Info className="h-4 w-4" /> Chi tiết
             </Link>
