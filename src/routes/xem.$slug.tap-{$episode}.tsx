@@ -67,21 +67,23 @@ function WatchPage() {
   const [cinemaMode, setCinemaMode] = useState(false);
 
   const { data: epData } = useQuery({
-    queryKey: ["episode", slug, episode],
+    queryKey: ["be-episode", slug, episode],
     queryFn: async () => {
-      const res = await fetch(`/api/movies/${slug}/episode/tap-${episode}`);
-      if (!res.ok) return null;
-      return res.json() as Promise<{
-        servers: ServerSource[];
-        introEndSec?: number;
-        recapEndSec?: number;
-      }>;
+      try {
+        const { fetchEpisode } = await import("@/api-client/movie-detail");
+        const ep = await fetchEpisode(slug, episode);
+        return {
+          servers: ep.servers.map((s) => ({ id: s.id, name: s.name, src: s.src })),
+        };
+      } catch {
+        return null;
+      }
     },
     staleTime: 5 * 60 * 1000,
   });
   const servers = epData?.servers?.length ? epData.servers : FALLBACK_SERVERS;
-  const introEndSec = epData?.introEndSec;
-  const recapEndSec = epData?.recapEndSec;
+  const introEndSec: number | undefined = undefined;
+  const recapEndSec: number | undefined = undefined;
 
   const { data: history } = useQuery({
     queryKey: ["history", slug, episode],
@@ -95,21 +97,26 @@ function WatchPage() {
   });
 
   const { data: movie } = useQuery({
-    queryKey: ["movie", slug, "meta"],
+    queryKey: ["be-movie-meta", slug],
     queryFn: async () => {
-      const res = await fetch(`/api/movies/${slug}`);
-      if (!res.ok) return null;
-      return res.json() as Promise<{
-        title: string;
-        poster_url: string;
-        backdrop_url: string;
-        year?: number;
-        overview?: string;
-        overview_vi?: string;
-      }>;
+      try {
+        const { fetchMovieDetail } = await import("@/api-client/movie-detail");
+        const { movie: m } = await fetchMovieDetail(slug);
+        return {
+          title: m.title,
+          poster_url: m.poster_url,
+          backdrop_url: m.backdrop_url,
+          year: m.year,
+          overview: m.overview,
+          overview_vi: m.overview_vi,
+        };
+      } catch {
+        return null;
+      }
     },
     staleTime: 5 * 60 * 1000,
   });
+
 
   const initialTime = useMemo(() => {
     if (tSearch > 0) return tSearch;
