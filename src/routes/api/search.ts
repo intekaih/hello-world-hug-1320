@@ -1,17 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { browsePool, slugify } from "./browse";
+import { POOL as SUGGEST_POOL } from "./suggest";
 
 const PAGE_SIZE = 24;
 
+/** Fold suggest-only titles (e.g. Twisters, Furiosa) into the main pool so
+ *  suggestions never point at a search that returns zero rows. Matched by
+ *  case-insensitive title. */
+const MERGED = (() => {
+  const known = new Set(browsePool.map((m) => m.title.toLowerCase()));
+  const extras = SUGGEST_POOL.filter(
+    (s) => !known.has(s.title.toLowerCase()),
+  ).map((s, i) => ({
+    id: 90000 + i,
+    slug: s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+    title: s.title,
+    origin_name: s.title,
+    poster_url: `https://image.tmdb.org/t/p/w500${s.poster}`,
+    year: s.year,
+    rating: 7.5,
+    quality: "FHD" as const,
+    language: "Vietsub" as const,
+    category: ["Chính kịch"],
+    country: ["Mỹ"],
+    type:
+      s.type === "Phim bộ"
+        ? ("phim-bo" as const)
+        : s.type === "Anime"
+          ? ("hoat-hinh" as const)
+          : ("phim-le" as const),
+  }));
+  return [...browsePool, ...extras];
+})();
+
 // Expand pool with variants to simulate many results (deterministic).
 const EXPANDED = Array.from({ length: 4 }).flatMap((_, i) =>
-  browsePool.map((m) => ({
+  MERGED.map((m) => ({
     ...m,
     id: m.id + i * 10000,
     title: i === 0 ? m.title : `${m.title} ${i + 1}`,
     slug: i === 0 ? m.slug : `${m.slug}-${i + 1}`,
   })),
 );
+
 
 export const Route = createFileRoute("/api/search")({
   server: {
