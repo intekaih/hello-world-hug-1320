@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { KeyRound, LogOut, Save, User as UserIcon } from "lucide-react";
@@ -8,8 +8,8 @@ import { RequireAuth, PageHeader } from "@/components/user-lists/shared";
 import { LibrarySummary } from "@/components/library-summary";
 import { TastePreferencesCard } from "@/components/onboarding/taste-preferences-card";
 import { TasteBadge } from "@/components/profile/taste-badge";
-import { useAuthStore } from "@/store/authStore";
-import { apiPost } from "@/api-client";
+import { useAuth } from "@/lib/auth-context";
+import { changePassword, updateProfile } from "@/api-client/auth";
 import { useTranslation } from "@/hooks/useTranslation";
 
 
@@ -32,9 +32,9 @@ export const Route = createFileRoute("/profile")({
 });
 
 function ProfilePage() {
-  const user = useAuthStore((s) => s.user);
-  const reset = useAuthStore((s) => s.reset);
+  const { user, logout: doLogout } = useAuth();
   const qc = useQueryClient();
+  const navigate = useNavigate();
 
   const [name, setName] = useState(user?.name ?? "");
   const [avatar, setAvatar] = useState(user?.avatar_url ?? "");
@@ -43,36 +43,33 @@ function ProfilePage() {
   const [confirmPw, setConfirmPw] = useState("");
 
   const saveProfile = useMutation({
-    mutationFn: () =>
-      apiPost("/api/auth/update-profile", { json: { name, avatar_url: avatar } }),
+    mutationFn: () => updateProfile(name),
     onSuccess: () => {
       toast.success("Đã cập nhật hồ sơ");
       qc.invalidateQueries({ queryKey: ["auth", "me"] });
-      if (user) useAuthStore.getState().setUser({ ...user, name, avatar_url: avatar });
     },
-    onError: () => toast.error("Không lưu được. Vui lòng thử lại."),
+    onError: (err: unknown) =>
+      toast.error(err instanceof Error ? err.message : "Không lưu được. Vui lòng thử lại."),
   });
 
   const changePw = useMutation({
-    mutationFn: () =>
-      apiPost("/api/auth/change-password", {
-        json: { old_password: oldPw, new_password: newPw },
-      }),
+    mutationFn: () => changePassword(oldPw, newPw),
     onSuccess: () => {
       toast.success("Đã đổi mật khẩu");
       setOldPw("");
       setNewPw("");
       setConfirmPw("");
     },
-    onError: () => toast.error("Đổi mật khẩu thất bại"),
+    onError: (err: unknown) =>
+      toast.error(err instanceof Error ? err.message : "Đổi mật khẩu thất bại"),
   });
 
   const logout = useMutation({
-    mutationFn: () => apiPost("/api/auth/logout"),
-    onSettled: () => {
-      reset();
+    mutationFn: () => doLogout(),
+    onSettled: async () => {
+      await qc.cancelQueries();
       qc.clear();
-      window.location.href = "/";
+      navigate({ to: "/", replace: true });
     },
   });
 
