@@ -119,13 +119,19 @@ export function PlayerContainer({
   cinemaMode = false,
   onToggleCinemaMode,
   onServerChange,
+  serverId: controlledServerId,
 }: Props) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
-  const [serverId, setServerId] = useState(servers[0]?.id ?? "");
+  const [serverId, setServerId] = useState(controlledServerId ?? servers[0]?.id ?? "");
+  useEffect(() => {
+    if (controlledServerId && controlledServerId !== serverId) {
+      setServerId(controlledServerId);
+    }
+  }, [controlledServerId, serverId]);
   useEffect(() => {
     onServerChange?.(serverId);
   }, [serverId, onServerChange]);
