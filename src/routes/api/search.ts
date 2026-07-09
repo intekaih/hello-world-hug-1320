@@ -58,8 +58,8 @@ export const Route = createFileRoute("/api/search")({
         const quality = url.searchParams.get("quality") ?? "";
         const language = url.searchParams.get("language") ?? "";
 
-        // Small latency so skeleton shows
-        await new Promise((r) => setTimeout(r, 220));
+        // Small latency so skeleton has a chance to show
+        await new Promise((r) => setTimeout(r, 120));
 
         if (!q && !type && !category && !country && !year && !quality && !language) {
           return Response.json({ items: [], page, totalPages: 0, total: 0 });
