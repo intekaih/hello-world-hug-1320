@@ -98,6 +98,32 @@ export function ExperienceCard({
   const rootRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
+  const navigate = useNavigate();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const resumeEpisode = episode?.match(/E(\d+)/i)?.[1] ?? "1";
+  const watchTo = "/xem/$slug/tap-{$episode}" as const;
+  const watchParams = { slug: movie.slug, episode: resumeEpisode };
+
+  const prefetchedRef = useRef(false);
+  const prefetchDetail = useCallback(() => {
+    if (prefetchedRef.current) return;
+    prefetchedRef.current = true;
+    // Warm TanStack Router route + underlying detail API.
+    void router.preloadRoute({ to: "/phim/$slug", params: { slug: movie.slug } }).catch(() => {});
+    void queryClient
+      .prefetchQuery({
+        queryKey: ["movie", movie.slug],
+        queryFn: async () => {
+          const r = await fetch(`/api/movies/${movie.slug}`);
+          if (!r.ok) throw new Error(String(r.status));
+          return r.json();
+        },
+        staleTime: 5 * 60_000,
+      })
+      .catch(() => {});
+  }, [movie.slug, queryClient, router]);
 
   // Hover stage tracking — timers advance through the four stages.
   const [hovered, setHovered] = useState(false);
