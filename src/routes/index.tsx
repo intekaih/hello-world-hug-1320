@@ -82,7 +82,22 @@ function Home() {
         {/* SCENE 01 — Opening — cold cinematic blue */}
         <StaggerItem>
           <div data-scene-mood="hero">
-            <CinematicHero movies={data.heroMovies} />
+            {(() => {
+              const cw = data.continueWatching.find(
+                (c) => c.progress > 0.05 && c.progress < 0.95,
+              );
+              const epMatch = cw?.title.match(/Ep\s*(\d+)/i);
+              const resume = cw
+                ? {
+                    slug: cw.slug,
+                    title: cw.title,
+                    progress: cw.progress,
+                    remaining: cw.remaining,
+                    episode: epMatch?.[1],
+                  }
+                : undefined;
+              return <CinematicHero movies={data.heroMovies} resume={resume} />;
+            })()}
           </div>
         </StaggerItem>
 
