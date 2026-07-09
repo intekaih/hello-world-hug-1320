@@ -8,7 +8,7 @@ import { ease } from "@/lib/design";
 
 /**
  * ComingSoonScene — vertical release timeline. Each row is a wide banner:
- *  · left column: bold mono date badge (fake countdown feeling)
+ *  · left column: honest "SOON" badge + real year (no fabricated dates)
  *  · right column: masked backdrop with a light-sweep on hover
  * A subtle vertical rail (the "future line") threads all entries together.
  *
@@ -19,10 +19,6 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
   if (!movies.length) return null;
 
   const items = movies.slice(0, 6);
-
-  // Fake future dates that feel like "next 6 weeks".
-  const now = new Date();
-  const fmtMonth = new Intl.DateTimeFormat("en", { month: "short" });
 
   return (
     <div className="relative">
@@ -42,11 +38,7 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
         }}
         className="space-y-4"
       >
-        {items.map((m, i) => {
-          const d = new Date(now.getTime() + (i + 1) * 7 * 24 * 60 * 60 * 1000);
-          const day = String(d.getDate()).padStart(2, "0");
-          const mon = fmtMonth.format(d).toUpperCase();
-
+        {items.map((m) => {
           return (
             <motion.li
               key={m.id}
@@ -65,17 +57,17 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
                 params={{ slug: m.slug }}
                 className="group relative flex items-stretch gap-4 overflow-hidden rounded-2xl border border-white/8 bg-black/25 p-3 backdrop-blur-sm transition hover:border-white/25 sm:gap-5 sm:p-4"
               >
-                {/* Date badge */}
+                {/* Honest "soon" badge — no fake dates */}
                 <div className="relative z-10 flex w-[76px] shrink-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/50 py-3 text-center">
                   <Calendar
                     className="mb-1 h-3.5 w-3.5 text-white/50"
                     aria-hidden
                   />
-                  <div className="font-display text-2xl font-semibold leading-none text-white">
-                    {day}
+                  <div className="font-display text-base font-semibold leading-none text-white">
+                    SOON
                   </div>
-                  <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50">
-                    {mon}
+                  <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50">
+                    {m.year || "TBA"}
                   </div>
                 </div>
 
