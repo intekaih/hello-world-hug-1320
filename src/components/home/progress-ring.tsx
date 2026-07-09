@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { ease } from "@/lib/design";
 
 type Props = {
   progress: number; // 0..1
@@ -76,7 +77,7 @@ export function ProgressRing({
           transition={
             reduce
               ? { duration: 0 }
-              : { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
+              : { duration: 1.1, ease: ease.outSoft }
           }
           style={{
             filter: "drop-shadow(0 0 6px var(--color-primary))",

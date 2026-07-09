@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
+import { ease } from "@/lib/design";
 
 /**
  * EditorialScene — magazine-inspired layout: one dominant feature poster on
@@ -26,7 +27,7 @@ export function EditorialScene({ movies }: { movies: MovieCard[] }) {
         initial={reduce ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.9, ease: ease.outSoft }}
         className="lg:col-span-7"
       >
         <Link
@@ -77,7 +78,7 @@ export function EditorialScene({ movies }: { movies: MovieCard[] }) {
             key={m.id}
             variants={{
               hidden: { opacity: 0, x: 30 },
-              show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+              show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: ease.outSoft } },
             }}
           >
             <Link

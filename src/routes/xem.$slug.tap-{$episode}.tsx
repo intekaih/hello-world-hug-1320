@@ -19,6 +19,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { thumbSrc } from "@/utils/thumbSrc";
 import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 const searchSchema = z.object({
   t: fallback(z.number(), 0).default(0),
@@ -183,7 +184,7 @@ function WatchPage() {
           y: cinemaMode ? -12 : 0,
           pointerEvents: cinemaMode ? "none" : "auto",
         }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.4, ease: ease.out }}
         className="mx-auto max-w-7xl px-3 pt-4 sm:px-6 sm:pt-6"
       >
         <div className="mb-4 flex items-center gap-3 sm:mb-6">
@@ -216,7 +217,7 @@ function WatchPage() {
       {/* Player frame */}
       <motion.div
         layout
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: ease.out }}
         className={cn(
           "relative mx-auto",
           cinemaMode

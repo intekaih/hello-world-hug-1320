@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { ContinueWatchingItem } from "@/lib/home-queries";
 import { ResumeExperienceCard } from "./resume-experience-card";
+import { ease } from "@/lib/design";
 
 /* -------------------------------------------------------------------------- */
 /*  Empty state                                                                */
@@ -14,7 +15,7 @@ import { ResumeExperienceCard } from "./resume-experience-card";
 function ContinueWatchingEmpty() {
   const { t } = useTranslation();
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[oklch(0.18_0.05_270)] via-[oklch(0.13_0.04_280)] to-[oklch(0.10_0.03_290)] px-8 py-14 text-center sm:px-14 sm:py-20">
+    <div className="scene-y relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[oklch(0.18_0.05_270)] via-[oklch(0.13_0.04_280)] to-[oklch(0.10_0.03_290)] px-8 text-center sm:px-14">
       <span
         aria-hidden
         className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[520px] -translate-x-1/2 rounded-full bg-primary/30 blur-3xl"
@@ -67,7 +68,7 @@ export function ContinueWatchingImmersive({
         initial={reduce ? false : { opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: ease.outSoft }}
         className="flex items-end justify-between gap-4"
       >
         <div className="min-w-0 space-y-2">
@@ -108,7 +109,7 @@ export function ContinueWatchingImmersive({
           <motion.div
             variants={{
               hidden: { opacity: 0, y: 24 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+              show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: ease.outSoft } },
             }}
             className="flex"
           >
@@ -123,7 +124,7 @@ export function ContinueWatchingImmersive({
                 show: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+                  transition: { duration: 0.55, ease: ease.outSoft },
                 },
               }}
               className="flex"

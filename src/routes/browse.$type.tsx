@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ExperienceCard } from "@/components/home/experience-card";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 const TYPE_LABEL_KEYS: Record<string, string> = {
   "phim-bo": "phim-bo",
@@ -141,7 +142,7 @@ function BrowseDiscoveryBoard() {
             </div>
             <button
               onClick={() => setMobileOpen(true)}
-              className="flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-sm text-foreground backdrop-blur transition hover:border-white/25 lg:hidden"
+              className="glass flex items-center gap-1.5 rounded-full px-4 py-2 text-sm text-foreground transition hover:border-white/25 lg:hidden"
               aria-label={t("browse.openFilters")}
             >
               <SlidersHorizontal className="h-4 w-4" /> {t("browse.openFilters")}
@@ -182,7 +183,7 @@ function BrowseDiscoveryBoard() {
                       transition={{
                         duration: 0.4,
                         delay: Math.min(i * 0.025, 0.4),
-                        ease: [0.16, 1, 0.3, 1],
+                        ease: ease.outSoft,
                       }}
                     >
                       <ExperienceCard

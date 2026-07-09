@@ -30,6 +30,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ExperienceCard } from "@/components/home/experience-card";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 /* ─────────────────────────────────────────────────────────────────── */
 /*  Route + schema                                                       */
@@ -386,7 +387,7 @@ function CinematicSearchHero({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, ease: ease.outSoft }}
             className="mb-8 text-center"
           >
             <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.32em] text-primary/80">
@@ -415,8 +416,8 @@ function CinematicSearchHero({
                 ? "0 30px 80px -30px oklch(0.55 0.22 15 / 0.5), 0 0 0 1px oklch(0.65 0.22 15 / 0.4)"
                 : "0 10px 30px -20px oklch(0 0 0 / 0.6), 0 0 0 1px oklch(1 0 0 / 0.08)",
             }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative overflow-hidden rounded-full bg-black/40 backdrop-blur-xl"
+            transition={{ duration: 0.35, ease: ease.outSoft }}
+            className="glass relative overflow-hidden rounded-full"
           >
             <SearchIcon
               className={cn(
@@ -528,8 +529,8 @@ function SearchSuggestionPanel({
           initial={{ opacity: 0, y: -6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.98 }}
-          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl border border-white/10 bg-black/80 shadow-2xl backdrop-blur-2xl"
+          transition={{ duration: 0.18, ease: ease.outSoft }}
+          className="glass-strong absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-white/5 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             {t("search.suggestions")}
@@ -662,7 +663,7 @@ function DiscoveryPortal({
             <button
               key={m.key}
               onClick={() => setFilter({ q: "", category: slugify(m.query) })}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-4 text-left backdrop-blur transition hover:-translate-y-0.5 hover:border-white/25"
+              className="glass group relative overflow-hidden rounded-2xl p-4 text-left transition hover:-translate-y-0.5 hover:border-white/25"
             >
               <div
                 aria-hidden
@@ -757,7 +758,7 @@ function DiscoverySection({
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, ease: ease.outSoft }}
     >
       <div className="mb-4 flex items-end justify-between">
         <div>
@@ -1051,7 +1052,7 @@ function SearchResultsGrid({ items }: { items: ResultItem[] }) {
           transition={{
             duration: 0.45,
             delay: Math.min(i * 0.03, 0.5),
-            ease: [0.16, 1, 0.3, 1],
+            ease: ease.outSoft,
           }}
         >
           <ExperienceCard

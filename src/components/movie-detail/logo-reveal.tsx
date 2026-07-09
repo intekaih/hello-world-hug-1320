@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
+import { ease } from "@/lib/design";
 
 /**
  * Cinematic title reveal — vertical rise + blur clear.
@@ -26,7 +27,7 @@ export function MovieLogoReveal({
       <motion.img
         initial={false}
         animate={rise}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+        transition={{ duration: 1.1, ease: ease.outSoft, delay: 0.15 }}
         src={thumbSrc(logo, { w: 640 })}
         alt={title}
         onError={() => setOk(false)}
@@ -39,7 +40,7 @@ export function MovieLogoReveal({
     <motion.h1
       initial={false}
       animate={rise}
-      transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+      transition={{ duration: 1.1, ease: ease.outSoft, delay: 0.15 }}
       className="font-display text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.02em] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.55)]"
     >
       <span

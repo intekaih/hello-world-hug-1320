@@ -6,6 +6,7 @@ import { ExperienceCard } from "@/components/home/experience-card";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SectionHeader } from "./section-header";
 import { hashId, type RelatedItem } from "./types";
+import { ease } from "@/lib/design";
 
 /**
  * RelatedMovieRail — cinematic horizontal rail using ExperienceCard.
@@ -77,7 +78,7 @@ export function RelatedMovieRail({
                 show: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+                  transition: { duration: 0.55, ease: ease.outSoft },
                 },
               }}
               className="flex"

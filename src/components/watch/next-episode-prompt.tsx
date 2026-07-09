@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { ChevronRight, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ease } from "@/lib/design";
 
 /**
  * NextEpisodePrompt
@@ -47,8 +48,8 @@ export function NextEpisodePrompt({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-auto absolute bottom-24 right-4 z-30 w-[min(320px,86vw)] overflow-hidden rounded-2xl border border-white/12 bg-black/70 p-4 backdrop-blur-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.9)] sm:bottom-28 sm:right-6"
+          transition={{ duration: 0.3, ease: ease.out }}
+          className="glass-strong pointer-events-auto absolute bottom-24 right-4 z-30 w-[min(320px,86vw)] overflow-hidden rounded-2xl p-4 shadow-[var(--shadow-elevated)] sm:bottom-28 sm:right-6"
         >
           <div
             aria-hidden

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import type { ContinueWatchingItem } from "@/lib/home-queries";
 import { ProgressRing, AnimatedPercent } from "./progress-ring";
 import { RemainingTimeLabel } from "./remaining-time-label";
+import { ease } from "@/lib/design";
 
 /* -------------------------------------------------------------------------- */
 /*  helpers                                                                    */
@@ -181,7 +182,7 @@ export function ResumeExperienceCard({
                     filter: hover ? "brightness(1.08) saturate(1.08)" : "brightness(0.85) saturate(0.95)",
                   }
             }
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: ease.outSoft }}
           />
 
           {/* Bottom scrim */}
@@ -238,7 +239,7 @@ export function ResumeExperienceCard({
                   ? undefined
                   : { y: hover ? 0 : 8, opacity: hover ? 1 : 0.9 }
               }
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: ease.outSoft }}
               className={cn("space-y-2", featured ? "max-w-[62%]" : "max-w-[70%]")}
             >
               <h3
@@ -273,7 +274,7 @@ export function ResumeExperienceCard({
                         height: hover ? "auto" : 0,
                       }
                 }
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.35, ease: ease.outSoft }}
                 className="overflow-hidden text-[13px] italic text-white/85"
               >
                 {isNearlyDone && isSeries
@@ -290,7 +291,7 @@ export function ResumeExperienceCard({
                 initial={{ width: 0 }}
                 animate={{ width: `${pct}%` }}
                 transition={
-                  reduce ? { duration: 0 } : { duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }
+                  reduce ? { duration: 0 } : { duration: 1.1, ease: ease.outSoft, delay: 0.1 }
                 }
                 className="h-full rounded-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_10px_var(--color-primary)]"
               />

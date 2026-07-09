@@ -4,6 +4,7 @@ import { useRef } from "react";
 
 import { useTranslation } from "@/hooks/useTranslation";
 import { SectionHeader } from "./section-header";
+import { ease } from "@/lib/design";
 
 /**
  * CastCarousel — premium horizontal snap rail with avatar fallback,
@@ -72,7 +73,7 @@ function CastCard({ name, index }: { name: string; index: number }) {
       transition={{
         duration: 0.55,
         delay: Math.min(index * 0.04, 0.35),
-        ease: [0.16, 1, 0.3, 1],
+        ease: ease.outSoft,
       }}
       className="shrink-0 snap-start"
     >

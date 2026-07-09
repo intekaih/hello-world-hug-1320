@@ -25,6 +25,7 @@ import {
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 /**
  * ExperienceCard — the "Movie Experience Card" replacing the flat poster.
@@ -73,7 +74,7 @@ const SIZES = {
   lg: "w-[190px] sm:w-[220px] lg:w-[240px]",
 } as const;
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+const EASE = ease.outSoft;
 
 export function ExperienceCard({
   movie,
