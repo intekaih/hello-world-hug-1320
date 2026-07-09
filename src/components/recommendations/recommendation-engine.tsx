@@ -37,6 +37,8 @@ async function j<T>(url: string): Promise<T> {
  */
 export function RecommendationEngine() {
   const { t } = useTranslation();
+  const { suppressed } = useSuppressedRecs();
+
 
   const pool = useQuery({
     queryKey: ["rec", "pool"],
