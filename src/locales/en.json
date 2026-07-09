@@ -381,6 +381,19 @@
       "phim-le": "Movies",
       "hoat-hinh": "Anime",
       "tv-shows": "TV Shows"
+    },
+    "continueWatching": "Continue watching",
+    "noResultsWithQuery": "No results for \"{{q}}\"",
+    "why": "why: {{reason}}",
+    "suggest": {
+      "searchFor": "Search"
+    },
+    "recovery": {
+      "hint": "No dead-end — try a different vibe:",
+      "action": "Action",
+      "lateNight": "Late night",
+      "under2h": "Under 2h",
+      "topRated": "Top 2024"
     }
   },
   "home": {

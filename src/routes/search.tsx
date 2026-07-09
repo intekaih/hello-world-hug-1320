@@ -165,9 +165,9 @@ function SearchExperiencePage() {
       : null,
   );
 
-  // Debounce → 300ms
+  // Debounce → 120ms (targets <150ms perceived latency)
   useEffect(() => {
-    const timer = setTimeout(() => setDebounced(input), 300);
+    const timer = setTimeout(() => setDebounced(input), 120);
     return () => clearTimeout(timer);
   }, [input]);
 
@@ -337,8 +337,8 @@ function CinematicSearchHero({
   const [activeIdx, setActiveIdx] = useState(-1);
   const listboxId = useId();
 
-  const showSuggestions =
-    focused && debounced.trim().length > 0 && suggestions.length > 0;
+  // Open panel the moment there's a query — skeleton fills the <150ms gap.
+  const showSuggestions = focused && debounced.trim().length > 0;
 
   useEffect(() => setActiveIdx(-1), [debounced]);
 
@@ -467,6 +467,8 @@ function CinematicSearchHero({
             activeIdx={activeIdx}
             onSelect={(item) => submit(item.title)}
             setActiveIdx={setActiveIdx}
+            loading={loadingSuggestions}
+            onSubmitRaw={() => submit(debounced)}
           />
         </div>
 
@@ -512,6 +514,7 @@ function FloatingParticles({ active }: { active: boolean }) {
 
 function SearchSuggestionPanel({
   visible, listboxId, suggestions, debounced, activeIdx, onSelect, setActiveIdx,
+  loading, onSubmitRaw,
 }: {
   visible: boolean;
   listboxId: string;
@@ -520,8 +523,12 @@ function SearchSuggestionPanel({
   activeIdx: number;
   onSelect: (item: SuggestItem) => void;
   setActiveIdx: (i: number) => void;
+  loading: boolean;
+  onSubmitRaw: () => void;
 }) {
   const { t } = useTranslation();
+  const showSkeleton = loading && suggestions.length === 0;
+  const showEmpty = !loading && suggestions.length === 0;
   return (
     <AnimatePresence>
       {visible && (
@@ -529,53 +536,82 @@ function SearchSuggestionPanel({
           initial={{ opacity: 0, y: -6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.98 }}
-          transition={{ duration: 0.18, ease: ease.outSoft }}
+          transition={{ duration: 0.14, ease: ease.outSoft }}
           className="glass-strong absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-white/5 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             {t("search.suggestions")}
           </div>
-          <ul
-            id={listboxId}
-            role="listbox"
-            className="max-h-[60vh] overflow-y-auto py-1"
-          >
-            {suggestions.map((item, i) => (
-              <li
-                key={item.id}
-                id={`${listboxId}-opt-${i}`}
-                role="option"
-                aria-selected={i === activeIdx}
-              >
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onMouseEnter={() => setActiveIdx(i)}
-                  onClick={() => onSelect(item)}
-                  className={cn(
-                    "flex w-full items-center gap-3 px-3 py-2.5 text-left transition",
-                    i === activeIdx ? "bg-primary/15" : "hover:bg-white/5",
-                  )}
-                >
-                  <img
-                    src={thumbSrc(item.poster_url, { w: 200 })}
-                    alt=""
-                    className="h-14 w-10 flex-shrink-0 rounded-md object-cover"
-                    loading="lazy"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[15px] font-medium text-foreground">
-                      <HighlightedText text={item.title} query={debounced} />
-                    </div>
-                    <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                      {item.type} · {item.year}
-                    </div>
+
+          {showSkeleton ? (
+            <ul className="py-1" aria-busy="true">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <li key={i} className="flex items-center gap-3 px-3 py-2.5">
+                  <div className="h-14 w-10 flex-shrink-0 animate-pulse rounded-md bg-white/8" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 w-3/5 animate-pulse rounded bg-white/8" />
+                    <div className="h-2.5 w-1/4 animate-pulse rounded bg-white/6" />
                   </div>
-                  <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                </button>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          ) : showEmpty ? (
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={onSubmitRaw}
+              className="flex w-full items-center gap-3 px-4 py-4 text-left transition hover:bg-primary/10"
+            >
+              <SearchIcon className="h-4 w-4 text-primary/70" />
+              <div className="min-w-0 flex-1 text-sm text-foreground">
+                {t("search.suggest.searchFor")}{" "}
+                <span className="font-semibold text-primary">"{debounced}"</span>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+          ) : (
+            <ul
+              id={listboxId}
+              role="listbox"
+              className="max-h-[60vh] overflow-y-auto py-1"
+            >
+              {suggestions.map((item, i) => (
+                <li
+                  key={item.id}
+                  id={`${listboxId}-opt-${i}`}
+                  role="option"
+                  aria-selected={i === activeIdx}
+                >
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseEnter={() => setActiveIdx(i)}
+                    onClick={() => onSelect(item)}
+                    className={cn(
+                      "flex w-full items-center gap-3 px-3 py-2.5 text-left transition",
+                      i === activeIdx ? "bg-primary/15" : "hover:bg-white/5",
+                    )}
+                  >
+                    <img
+                      src={thumbSrc(item.poster_url, { w: 200 })}
+                      alt=""
+                      className="h-14 w-10 flex-shrink-0 rounded-md object-cover"
+                      loading="lazy"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[15px] font-medium text-foreground">
+                        <HighlightedText text={item.title} query={debounced} />
+                      </div>
+                      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                        {item.type} · {item.year}
+                      </div>
+                    </div>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
@@ -611,8 +647,47 @@ function DiscoveryPortal({
   setFilter: (patch: Partial<SearchParams>) => void;
 }) {
   const { t } = useTranslation();
+  const continueQuery = useQuery({
+    queryKey: ["search-continue-watching"],
+    queryFn: async ({ signal }) => {
+      const res = await fetch("/api/history", { signal });
+      if (!res.ok) return { items: [] as { slug: string; title?: string; episode?: string }[] };
+      return (await res.json()) as {
+        items: { slug: string; title?: string; episode?: string }[];
+      };
+    },
+    staleTime: 60_000,
+  });
+  const continueItems = (continueQuery.data?.items ?? []).slice(0, 6);
   return (
+
     <div className="space-y-12 pt-2">
+      {continueItems.length > 0 && (
+        <DiscoverySection
+          eyebrow={<TrendingUp className="h-3.5 w-3.5" />}
+          title={t("search.continueWatching")}
+        >
+          <ChipRow>
+            {continueItems.map((c) => {
+              const label =
+                c.title ??
+                c.slug.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+              return (
+                <PortalChip key={c.slug} onClick={() => onPick(label)} accent>
+                  {label}
+                  {c.episode ? (
+                    <span className="ml-1 font-mono text-[10px] text-white/60">
+                      ·EP{c.episode}
+                    </span>
+                  ) : null}
+                </PortalChip>
+              );
+            })}
+          </ChipRow>
+        </DiscoverySection>
+      )}
+
+
       {recent.length > 0 && (
         <DiscoverySection
           eyebrow={<Clock className="h-3.5 w-3.5" />}
@@ -868,9 +943,9 @@ function ResultsSection({
       {isLoading ? (
         <ResultsSkeleton />
       ) : items.length === 0 ? (
-        <SearchEmptyState />
+        <SearchEmptyState q={q} setFilter={setFilter} />
       ) : (
-        <SearchResultsGrid items={items} />
+        <SearchResultsGrid items={items} categoryFilter={search.category} />
       )}
 
       <div className="flex justify-center pt-4">
@@ -1041,55 +1116,121 @@ function FilterChip({
   );
 }
 
-function SearchResultsGrid({ items }: { items: ResultItem[] }) {
+function SearchResultsGrid({
+  items,
+  categoryFilter,
+}: {
+  items: ResultItem[];
+  categoryFilter: string;
+}) {
+  const { t } = useTranslation();
+  const typeLabelKey = (type: string) =>
+    type === "phim-bo"
+      ? "search.typeLabels.phim-bo"
+      : type === "phim-le"
+        ? "search.typeLabels.phim-le"
+        : type === "hoat-hinh"
+          ? "search.typeLabels.hoat-hinh"
+          : "";
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4 xl:grid-cols-5">
-      {items.map((item, i) => (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.45,
-            delay: Math.min(i * 0.03, 0.5),
-            ease: ease.outSoft,
-          }}
-        >
-          <ExperienceCard
-            movie={{
-              id: item.id,
-              slug: item.slug,
-              title: item.title,
-              poster_url: item.poster_url,
-              year: item.year,
-              rating: item.rating,
+      {items.map((item, i) => {
+        const whyGenre = categoryFilter
+          ? item.category.find((c) => slugify(c) === categoryFilter)
+          : undefined;
+        const typeKey = typeLabelKey(item.type);
+        return (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              delay: Math.min(i * 0.03, 0.5),
+              ease: ease.outSoft,
             }}
-            meta={{ year: item.year, genres: item.category }}
-            size="md"
-            className="w-full"
-          />
-        </motion.div>
-      ))}
+            className="space-y-2"
+          >
+            <ExperienceCard
+              movie={{
+                id: item.id,
+                slug: item.slug,
+                title: item.title,
+                poster_url: item.poster_url,
+                year: item.year,
+                rating: item.rating,
+              }}
+              meta={{ year: item.year, genres: item.category }}
+              size="md"
+              className="w-full"
+            />
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 px-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span>{item.year}</span>
+              <span aria-hidden>·</span>
+              <span className="text-gold">★ {item.rating.toFixed(1)}</span>
+              {typeKey && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span>{t(typeKey)}</span>
+                </>
+              )}
+              {whyGenre && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] normal-case tracking-normal text-primary">
+                    {t("search.why", { reason: whyGenre })}
+                  </span>
+                </>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
 
-function SearchEmptyState() {
+function SearchEmptyState({
+  q,
+  setFilter,
+}: {
+  q: string;
+  setFilter: (patch: Partial<SearchParams>) => void;
+}) {
   const { t } = useTranslation();
+  const recoveries: { label: string; patch: Partial<SearchParams> }[] = [
+    { label: t("search.recovery.action"), patch: { q: "", category: slugify("Hành động") } },
+    { label: t("search.recovery.lateNight"), patch: { q: "", category: slugify("Kinh dị") } },
+    { label: t("search.recovery.under2h"), patch: { q: "", type: "phim-le" } },
+    { label: t("search.recovery.topRated"), patch: { q: "", year: "2024" } },
+  ];
   return (
-    <div className="flex flex-col items-center gap-3 py-24 text-center">
+    <div className="flex flex-col items-center gap-3 py-16 text-center">
       <div className="glass grid h-16 w-16 place-items-center rounded-2xl">
         <SearchIcon className="h-8 w-8 text-muted-foreground" />
       </div>
       <p className="font-display text-lg font-semibold text-foreground">
-        {t("search.noResults")}
+        {q
+          ? t("search.noResultsWithQuery", { q })
+          : t("search.noResults")}
       </p>
       <p className="max-w-sm text-sm text-muted-foreground">
-        {t("search.noResultsHint")}
+        {t("search.recovery.hint")}
       </p>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {recoveries.map((r) => (
+          <button
+            key={r.label}
+            onClick={() => setFilter(r.patch)}
+            className="rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/70 hover:bg-primary/20"
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
       <Link
         to="/kham-pha"
-        className="mt-3 rounded-full border border-primary/40 bg-primary/10 px-6 py-2 text-sm font-medium text-foreground transition hover:border-primary/70 hover:bg-primary/20"
+        className="mt-2 text-xs text-muted-foreground underline-offset-4 transition hover:text-primary hover:underline"
       >
         {t("continueWatching.empty.cta")}
       </Link>
