@@ -23,6 +23,8 @@ import { LuckyRow } from "@/components/home/lucky-row";
 import { MysteryScene } from "@/components/home/mystery-scene";
 import { SceneAtmosphere } from "@/components/home/scene-atmosphere";
 import { SceneSection } from "@/components/home/scene-section";
+import { WelcomeBackHost } from "@/components/home/welcome-back-host";
+
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
 import { getDaypart, readHourOverride, rerankForLateNight } from "@/lib/daypart";
