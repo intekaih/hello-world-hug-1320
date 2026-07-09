@@ -15,7 +15,7 @@ import { ease } from "@/lib/design";
 function ContinueWatchingEmpty() {
   const { t } = useTranslation();
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[oklch(0.18_0.05_270)] via-[oklch(0.13_0.04_280)] to-[oklch(0.10_0.03_290)] px-8 py-14 text-center sm:px-14 sm:py-20">
+    <div className="scene-y relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[oklch(0.18_0.05_270)] via-[oklch(0.13_0.04_280)] to-[oklch(0.10_0.03_290)] px-8 text-center sm:px-14">
       <span
         aria-hidden
         className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[520px] -translate-x-1/2 rounded-full bg-primary/30 blur-3xl"
