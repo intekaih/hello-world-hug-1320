@@ -24,7 +24,8 @@ export const Route = createFileRoute("/api/watchlist/toggle")({
             movie_name: body.movie_name,
             movie_origin_name: body.movie_origin_name,
             movie_thumb: body.movie_thumb,
-            createdAt: Date.now(),
+            runtime: typeof body.runtime === "number" ? body.runtime : undefined,
+            createdAt: typeof body.createdAt === "number" ? body.createdAt : Date.now(),
           });
           return Response.json({ ok: true, saved: true });
         } catch {

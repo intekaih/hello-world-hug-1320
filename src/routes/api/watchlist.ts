@@ -6,6 +6,7 @@ export type WatchlistItem = {
   movie_origin_name?: string;
   movie_thumb: string;
   note?: string;
+  runtime?: number; // minutes — used for total-hours estimate
   createdAt: number;
 };
 
@@ -25,11 +26,16 @@ function seedIfEmpty() {
       movie_origin_name: "House of the Dragon",
       movie_thumb: IMG("/z2yahl2uefxDCl0nogcRBstwruJ.jpg"),
       note: "Xem sau khi hết Shogun",
+      runtime: 60,
       createdAt: Date.now() - 100000 },
     { movie_slug: "3-body-problem", movie_name: "3 Body Problem", movie_origin_name: "3 Body Problem",
-      movie_thumb: IMG("/yzD9Kf4vjSy5cJefz25f7Y4B9tt.jpg"), createdAt: Date.now() - 200000 },
+      movie_thumb: IMG("/yzD9Kf4vjSy5cJefz25f7Y4B9tt.jpg"),
+      runtime: 55,
+      createdAt: Date.now() - 200000 },
     { movie_slug: "wednesday", movie_name: "Wednesday", movie_origin_name: "Wednesday",
-      movie_thumb: IMG("/9PFonBhy4cQy7Jz20NpMygczOkv.jpg"), createdAt: Date.now() - 300000 },
+      movie_thumb: IMG("/9PFonBhy4cQy7Jz20NpMygczOkv.jpg"),
+      runtime: 45,
+      createdAt: Date.now() - 300000 },
   ];
   for (const s of seed) store.set(s.movie_slug, s);
 }
