@@ -75,9 +75,11 @@ export function RecommendationEngine() {
       })),
       favorites: (favorites.data?.items ?? []).map((f) => ({ slug: f.movie_slug, createdAt: f.createdAt })),
       watchlist: (watchlist.data?.items ?? []).map((w) => ({ slug: w.movie_slug, createdAt: w.createdAt })),
+      suppressed,
     };
     return buildRecommendations(input);
-  }, [pool.data, history.data, favorites.data, watchlist.data]);
+  }, [pool.data, history.data, favorites.data, watchlist.data, suppressed]);
+
 
   if (!surfaces) {
     return (
