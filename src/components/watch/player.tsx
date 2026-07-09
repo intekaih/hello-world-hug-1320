@@ -75,6 +75,7 @@ type Props = {
   cinemaMode?: boolean;
   onToggleCinemaMode?: () => void;
   onServerChange?: (id: string) => void;
+  serverId?: string;
 };
 
 /* -------------------------------------------------------------------------- */
