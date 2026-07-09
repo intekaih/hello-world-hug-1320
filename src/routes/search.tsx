@@ -417,7 +417,7 @@ function CinematicSearchHero({
                 : "0 10px 30px -20px oklch(0 0 0 / 0.6), 0 0 0 1px oklch(1 0 0 / 0.08)",
             }}
             transition={{ duration: 0.35, ease: ease.outSoft }}
-            className="relative overflow-hidden rounded-full bg-black/40 backdrop-blur-xl"
+            className="glass relative overflow-hidden rounded-full"
           >
             <SearchIcon
               className={cn(
@@ -530,7 +530,7 @@ function SearchSuggestionPanel({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.98 }}
           transition={{ duration: 0.18, ease: ease.outSoft }}
-          className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl border border-white/10 bg-black/80 shadow-2xl backdrop-blur-2xl"
+          className="glass-strong absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-white/5 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             {t("search.suggestions")}
@@ -663,7 +663,7 @@ function DiscoveryPortal({
             <button
               key={m.key}
               onClick={() => setFilter({ q: "", category: slugify(m.query) })}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-4 text-left backdrop-blur transition hover:-translate-y-0.5 hover:border-white/25"
+              className="glass group relative overflow-hidden rounded-2xl p-4 text-left transition hover:-translate-y-0.5 hover:border-white/25"
             >
               <div
                 aria-hidden
