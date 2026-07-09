@@ -92,6 +92,8 @@ export function EditorialScene({ movies }: { movies: MovieCard[] }) {
                 <img
                   src={thumbSrc(m.poster_url, { w: 240 })}
                   alt=""
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
