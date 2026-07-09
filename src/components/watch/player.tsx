@@ -292,7 +292,14 @@ export function PlayerContainer({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const onPlay = () => setPlaying(true);
+    let firstPlayFired = false;
+    const onPlay = () => {
+      setPlaying(true);
+      if (!firstPlayFired) {
+        firstPlayFired = true;
+        track("play_start", { slug, source: "player" });
+      }
+    };
     const onPause = () => setPlaying(false);
     const onTime = () => {
       setCurrentTime(video.currentTime);
