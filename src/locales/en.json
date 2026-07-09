@@ -412,6 +412,7 @@
     "episodeLabel": "EP {{ep}}",
     "progress": "{{n}}% watched",
     "groups": {
+      "unfinished": "Unfinished",
       "today": "Today",
       "yesterday": "Yesterday",
       "thisWeek": "This week",
