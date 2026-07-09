@@ -23,6 +23,8 @@ import { LuckyRow } from "@/components/home/lucky-row";
 import { MysteryScene } from "@/components/home/mystery-scene";
 import { SceneAtmosphere } from "@/components/home/scene-atmosphere";
 import { SceneSection } from "@/components/home/scene-section";
+import { WelcomeBackHost } from "@/components/home/welcome-back-host";
+
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
 import { getDaypart, readHourOverride, rerankForLateNight } from "@/lib/daypart";
@@ -101,6 +103,18 @@ function Home() {
 
       <div className="relative z-10">
         <Stagger>
+
+        {/* Welcome-back banner: 1×/session after a 48h lapse; dismiss = 7d */}
+        <StaggerItem>
+          <WelcomeBackHost
+            resume={data.continueWatching.find(
+              (c) => c.progress > 0.05 && c.progress < 0.95,
+            )}
+            newThisWeek={data.newMovies}
+          />
+        </StaggerItem>
+
+
 
         {/* SCENE 01 — Opening — cold cinematic blue */}
         <StaggerItem>
