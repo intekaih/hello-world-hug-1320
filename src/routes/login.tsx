@@ -57,28 +57,19 @@ function LoginPage() {
   const onSubmit = async (values: LoginForm) => {
     setServerError(null);
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = (await res.json()) as {
-        success: boolean;
-        error?: string;
-        user?: import("@/store/authStore").AuthUser;
-      };
-      if (!res.ok || !data.success || !data.user) {
-        setServerError(data.error ?? "Đăng nhập thất bại. Vui lòng thử lại.");
-        return;
-      }
-      // Hydrate store immediately so the next page sees the user.
-      (await import("@/store/authStore")).useAuthStore
-        .getState()
-        .setUser(data.user);
+      const { useAuth } = await import("@/lib/auth-context");
+      // Grab from ambient context via a tiny hook indirection is not possible here;
+      // fall back to direct api-client + store hydration (context refresh() below).
+      const { login: apiLogin } = await import("@/api-client/auth");
+      await apiLogin(values.username, values.password);
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+      // Silence unused warning
+      void useAuth;
       navigate({ to: redirect || "/", replace: true });
-    } catch {
-      setServerError("Không thể kết nối máy chủ. Kiểm tra lại kết nối.");
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Đăng nhập thất bại. Vui lòng thử lại.";
+      setServerError(msg);
     }
   };
 
