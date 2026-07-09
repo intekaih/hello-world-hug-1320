@@ -651,7 +651,7 @@ function DiscoveryPortal({
     queryKey: ["search-continue-watching"],
     queryFn: async ({ signal }) => {
       const res = await fetch("/api/history", { signal });
-      if (!res.ok) return { items: [] as { slug: string; title?: string }[] };
+      if (!res.ok) return { items: [] as { slug: string; title?: string; episode?: string }[] };
       return (await res.json()) as {
         items: { slug: string; title?: string; episode?: string }[];
       };
