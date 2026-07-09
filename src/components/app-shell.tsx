@@ -384,7 +384,7 @@ export function AppShell() {
   // Immersive routes (video watch, etc.) render without sidebar/header/tabbar.
   if (pathname.startsWith("/xem/")) {
     return (
-      <div className="min-h-screen bg-black text-foreground">
+      <div className="min-h-dvh bg-black text-foreground">
         <Outlet />
       </div>
     );
