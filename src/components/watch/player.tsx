@@ -31,6 +31,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useShareMovie } from "@/lib/share/use-share-movie";
+import { getSharedPlayerTime, setSharedPlayerTime } from "@/lib/share/player-time-ref";
 import { PlayerLoadingState } from "./player-loading-state";
 import {
   PlayerErrorState,
@@ -266,7 +267,10 @@ export function PlayerContainer({
     if (!video) return;
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
-    const onTime = () => setCurrentTime(video.currentTime);
+    const onTime = () => {
+      setCurrentTime(video.currentTime);
+      setSharedPlayerTime(video.currentTime);
+    };
     const onProgress = () => {
       if (video.buffered.length) {
         setBuffered(video.buffered.end(video.buffered.length - 1));
@@ -1149,9 +1153,10 @@ export function WatchActions({
         typeof window !== "undefined"
           ? `${window.location.origin}${window.location.pathname}`
           : undefined,
-      timestampSeconds: getCurrentTime?.() ?? 0,
+      timestampSeconds: getCurrentTime?.() ?? getSharedPlayerTime(),
     });
   };
+
 
 
   const Btn = ({
