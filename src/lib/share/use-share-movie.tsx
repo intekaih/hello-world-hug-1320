@@ -63,6 +63,44 @@ export function ShareProvider({ children }: { children: ReactNode }) {
     [t],
   );
 
+  /**
+   * Post-share micro-reward — celebratory toast with an optional
+   * "add to watchlist" action. Never spams, never contact-book invites.
+   */
+  const notifyShared = useCallback(
+    (p: SharePayload, channel: string) => {
+      const canAdd = Boolean(p.slug);
+      toast.success(t("share.toast.sharedTitle"), {
+        description: t("share.toast.sharedDescription", { channel }),
+        icon: <Sparkles className="h-4 w-4 text-primary" />,
+        duration: canAdd ? 5000 : 2600,
+        action: canAdd
+          ? {
+              label: t("share.toast.addWatchlist"),
+              onClick: async () => {
+                try {
+                  const res = await fetch("/api/watchlist/toggle", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({
+                      movie_slug: p.slug,
+                      movie_name: p.title,
+                      movie_thumb: p.posterUrl,
+                    }),
+                  });
+                  if (res.ok) toast.success(t("share.toast.addedWatchlist"));
+                } catch {
+                  /* fail silently — never fake success */
+                }
+              },
+            }
+          : undefined,
+      });
+    },
+    [t],
+  );
+
   return (
     <ShareContext.Provider value={{ open, isNativeAvailable }}>
       {children}
@@ -71,10 +109,12 @@ export function ShareProvider({ children }: { children: ReactNode }) {
         open={isOpen}
         onOpenChange={setIsOpen}
         onCopied={notifyCopied}
+        onShared={notifyShared}
       />
     </ShareContext.Provider>
   );
 }
+
 
 export function useShareMovie() {
   const ctx = useContext(ShareContext);
