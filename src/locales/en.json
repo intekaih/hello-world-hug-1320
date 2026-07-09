@@ -442,5 +442,69 @@
       "description": "New episodes and personalized picks will appear here.",
       "cta": "Discover movies"
     }
+  },
+  "recommendations": {
+    "pageEyebrow": "Personal signals",
+    "pageTitle": "Made for the way you watch",
+    "pageSubtitle": "A quiet layer that learns from what you resume, save, and love — and surfaces what fits tonight.",
+    "tonight": {
+      "eyebrow": "Tonight's pick",
+      "subtitle": "A single confident recommendation based on your recent mood.",
+      "cta": "Watch tonight"
+    },
+    "because": {
+      "eyebrow": "Because you watched",
+      "title": "Because you watched \"{{title}}\"",
+      "subtitle": "Same tone, adjacent worlds — hand-picked from your recent journey.",
+      "seedLabel": "You watched"
+    },
+    "continueMood": {
+      "eyebrow": "Continue the mood",
+      "title": "Keep the feeling going",
+      "subtitle": "Stories that carry the same emotional temperature as your recent picks."
+    },
+    "similarWorlds": {
+      "eyebrow": "Similar worlds",
+      "title": "Familiar universes to step into",
+      "subtitle": "New titles that share the shape of what you've been watching."
+    },
+    "hiddenGems": {
+      "eyebrow": "Hidden gems for you",
+      "title": "Quietly brilliant, made to be found",
+      "subtitle": "Highly rated titles just outside your usual orbit."
+    },
+    "rewatch": {
+      "eyebrow": "Quick rewatch",
+      "title": "One you loved, ready when you are",
+      "subtitle": "A comfort revisit — no commitment, all warmth."
+    },
+    "newEpisodes": {
+      "eyebrow": "New episodes you may like",
+      "title": "Fresh episodes worth your night",
+      "subtitle": "Series in your taste with something new to press play on."
+    },
+    "fromWatchlist": {
+      "eyebrow": "From your watchlist",
+      "title": "You saved these for a reason",
+      "subtitle": "A gentle nudge from the queue you built for yourself."
+    },
+    "reason": {
+      "sameGenre": "Same genre",
+      "sameCountry": "Same country",
+      "similarMood": "Similar mood",
+      "highlyRated": "Highly rated",
+      "newEpisode": "New episode",
+      "fromWatchlist": "From your watchlist",
+      "resume": "Continue where you left off",
+      "rewatch": "You loved this",
+      "unexplored": "Something new",
+      "trending": "Trending"
+    },
+    "reasonWithValue": {
+      "sameGenre": "Same as {{value}}",
+      "sameCountry": "From {{value}}",
+      "similarMood": "Feels like {{value}}"
+    }
   }
 }
+

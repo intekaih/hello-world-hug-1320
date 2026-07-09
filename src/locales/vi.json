@@ -442,5 +442,69 @@
       "description": "Tập mới và gợi ý dành riêng cho bạn sẽ xuất hiện tại đây.",
       "cta": "Khám phá phim"
     }
+  },
+  "recommendations": {
+    "pageEyebrow": "Tín hiệu cá nhân",
+    "pageTitle": "Được tạo theo cách bạn xem phim",
+    "pageSubtitle": "Một lớp gợi ý âm thầm học từ những gì bạn xem tiếp, lưu và yêu thích — rồi gợi ý điều hợp nhất cho tối nay.",
+    "tonight": {
+      "eyebrow": "Gợi ý tối nay",
+      "subtitle": "Một gợi ý duy nhất, dựa trên tâm trạng gần đây của bạn.",
+      "cta": "Xem tối nay"
+    },
+    "because": {
+      "eyebrow": "Vì bạn đã xem",
+      "title": "Vì bạn đã xem \"{{title}}\"",
+      "subtitle": "Cùng tông, cùng thế giới — chọn lọc từ hành trình gần đây của bạn.",
+      "seedLabel": "Bạn đã xem"
+    },
+    "continueMood": {
+      "eyebrow": "Tiếp nối bầu không khí",
+      "title": "Giữ cảm xúc ấy tiếp tục",
+      "subtitle": "Những phim mang cùng nhiệt độ cảm xúc với lựa chọn gần đây của bạn."
+    },
+    "similarWorlds": {
+      "eyebrow": "Thế giới tương tự",
+      "title": "Bước vào những vũ trụ quen thuộc",
+      "subtitle": "Những tựa mới cùng hình hài với những gì bạn đang xem."
+    },
+    "hiddenGems": {
+      "eyebrow": "Viên ngọc ẩn dành cho bạn",
+      "title": "Lặng lẽ xuất sắc, đợi được tìm thấy",
+      "subtitle": "Những tựa phim đánh giá cao, chỉ hơi ngoài quỹ đạo quen thuộc của bạn."
+    },
+    "rewatch": {
+      "eyebrow": "Xem lại nhanh",
+      "title": "Một bộ bạn từng yêu, luôn sẵn đó",
+      "subtitle": "Một lần trở lại thoải mái — không cam kết, chỉ ấm áp."
+    },
+    "newEpisodes": {
+      "eyebrow": "Tập mới có thể bạn thích",
+      "title": "Tập mới xứng đáng với một buổi tối",
+      "subtitle": "Những series hợp gu bạn, vừa có tập mới để bấm play."
+    },
+    "fromWatchlist": {
+      "eyebrow": "Từ danh sách xem sau",
+      "title": "Bạn đã lưu chúng vì một lý do",
+      "subtitle": "Một lời nhắc nhẹ nhàng từ hàng chờ bạn đã tự dựng."
+    },
+    "reason": {
+      "sameGenre": "Cùng thể loại",
+      "sameCountry": "Cùng quốc gia",
+      "similarMood": "Cùng bầu không khí",
+      "highlyRated": "Đánh giá cao",
+      "newEpisode": "Có tập mới",
+      "fromWatchlist": "Từ danh sách của bạn",
+      "resume": "Xem tiếp",
+      "rewatch": "Bạn từng yêu thích",
+      "unexplored": "Điều mới mẻ",
+      "trending": "Đang thịnh hành"
+    },
+    "reasonWithValue": {
+      "sameGenre": "Cùng {{value}}",
+      "sameCountry": "Từ {{value}}",
+      "similarMood": "Hợp với {{value}}"
+    }
   }
 }
+
