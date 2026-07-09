@@ -16,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import {
+  memo,
   useCallback,
   useEffect,
   useRef,
