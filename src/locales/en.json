@@ -542,8 +542,25 @@
       "title": "All quiet",
       "description": "New episodes and personalized picks will appear here.",
       "cta": "Discover movies"
+    },
+    "prefs": {
+      "title": "Notification preferences",
+      "subtitle": "Choose what you want to receive. Stored on this device.",
+      "new_episode": {
+        "title": "New episodes",
+        "desc": "Only for titles in your watchlist or history."
+      },
+      "recommendation": {
+        "title": "Recommendations",
+        "desc": "Periodic picks based on your taste. Off by default."
+      },
+      "system": {
+        "title": "System",
+        "desc": "Account updates and important messages."
+      }
     }
   },
+
   "taste": {
     "eyebrow": "Light personalization",
     "title": "Tell movieCC what you love",
