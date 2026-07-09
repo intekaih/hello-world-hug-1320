@@ -339,6 +339,32 @@
   }
 }
 
+/* Horizontal rail — prevents wheel/touch scroll from hijacking page scroll,
+ * enables smooth momentum, and marks the container as an isolated paint area
+ * so hover effects on cards don't repaint the neighbours. Apply to every
+ * horizontal card rail. */
+@utility rail-scroll {
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  contain: paint;
+}
+
+/* Mobile / low-end: soften expensive backdrop-filter which is a known
+ * source of scroll jank on iOS Safari and Android Chrome. */
+@media (hover: none) and (pointer: coarse) {
+  .glass { backdrop-filter: blur(12px) saturate(130%); }
+  .glass-strong { backdrop-filter: blur(18px) saturate(140%); }
+}
+
+/* Utility to opt decorative offscreen layers out of paint cost. */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
 /* Safe-area utilities for mobile notches / home indicators */
 @utility pt-safe-top {
   padding-top: env(safe-area-inset-top);
