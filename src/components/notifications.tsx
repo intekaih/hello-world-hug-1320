@@ -361,17 +361,27 @@ export function NotificationBell() {
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="truncate text-sm font-medium text-foreground">
-                          {n.movie_name}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <PlayCircle className="h-3 w-3 text-accent" />
-                          <span className="truncate">{n.message}</span>
-                        </div>
-                        <div className="mt-0.5 text-[10px] text-muted-foreground">
-                          {formatRelative(n.createdAt)}
-                        </div>
+                        {(() => {
+                          const c = formatNotificationCopy(n);
+                          return (
+                            <>
+                              <div className="truncate text-sm font-medium text-foreground">
+                                {c.headline}
+                              </div>
+                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <PlayCircle className="h-3 w-3 text-accent" />
+                                <span className="truncate">{c.meta}</span>
+                              </div>
+                            </>
+                          );
+                        })()}
+                        {n.type === "new_episode" && !n.read && (
+                          <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                            Xem ngay →
+                          </div>
+                        )}
                       </div>
+
                     </Link>
                   </li>
                 ))
