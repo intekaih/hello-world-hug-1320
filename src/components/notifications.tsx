@@ -324,10 +324,20 @@ export function NotificationRow({
       layout
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`glass flex items-start gap-4 rounded-2xl border p-3 transition ${
-        n.read ? "border-white/5" : "border-primary/30 bg-primary/5"
+      exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.18 } }}
+      transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative flex items-start gap-4 overflow-hidden rounded-2xl border p-3 transition-all duration-300 ${
+        n.read
+          ? "glass border-foreground/5"
+          : "glass-strong border-primary/40 shadow-lg shadow-primary/15 ring-1 ring-primary/25"
       }`}
     >
+      {!n.read && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-primary via-accent to-primary/40"
+        />
+      )}
       <Link
         to={n.episode ? "/xem/$slug/tap-{$episode}" : "/phim/$slug"}
         params={
@@ -339,30 +349,39 @@ export function NotificationRow({
         onClick={() => {
           if (!n.read) onMarkRead();
         }}
-        className="group flex flex-1 items-start gap-4"
+        className="group flex flex-1 items-start gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
       >
         <div className="relative flex-shrink-0">
           <img
-            src={thumbSrc(n.movie_thumb,{w:200})}
+            src={thumbSrc(n.movie_thumb, { w: 200 })}
             alt=""
-            className="h-24 w-16 rounded-lg bg-foreground/10 object-cover shadow-md sm:h-28 sm:w-20"
+            className="h-24 w-16 rounded-lg bg-foreground/10 object-cover shadow-md transition-transform duration-300 group-hover:scale-[1.03] sm:h-28 sm:w-20"
             loading="lazy"
-            onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg"; }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/placeholder.jpg";
+            }}
           />
           {!n.read && (
-            <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-primary ring-2 ring-bg" />
+            <motion.span
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)] ring-2 ring-background"
+            />
           )}
         </div>
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex flex-wrap items-center gap-2">
             {n.episode && (
-              <span className="rounded-md bg-accent/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent">
-                Tập mới
+              <span className="rounded-md bg-accent/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-accent">
+                Tập {n.episode}
               </span>
             )}
-            <span className="text-xs text-muted-foreground">{formatRelative(n.createdAt)}</span>
+            <span className="text-[11px] tabular-nums text-muted-foreground">
+              {formatRelative(n.createdAt)}
+            </span>
           </div>
-          <div className="font-medium text-foreground group-hover:text-primary">
+          <div className="font-display font-semibold text-foreground transition-colors group-hover:text-primary">
             {n.movie_name}
           </div>
           <p className="mt-0.5 text-sm text-muted-foreground">{n.message}</p>
@@ -371,11 +390,13 @@ export function NotificationRow({
       {!n.read && (
         <button
           onClick={onMarkRead}
-          className="flex flex-shrink-0 items-center gap-1 rounded-full border border-foreground/10 px-3 py-1.5 text-xs text-foreground/70 transition hover:border-primary/50 hover:text-foreground"
+          aria-label="Đánh dấu đã đọc"
+          className="flex min-h-11 flex-shrink-0 items-center gap-1 rounded-full border border-foreground/10 bg-surface-elevated/60 px-3 text-xs text-foreground/80 transition hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
         >
           <Check className="h-3.5 w-3.5" /> Đã đọc
         </button>
       )}
     </motion.div>
   );
+
 }
