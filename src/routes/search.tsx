@@ -1116,35 +1116,76 @@ function FilterChip({
   );
 }
 
-function SearchResultsGrid({ items }: { items: ResultItem[] }) {
+function SearchResultsGrid({
+  items,
+  categoryFilter,
+}: {
+  items: ResultItem[];
+  categoryFilter: string;
+}) {
+  const { t } = useTranslation();
+  const typeLabelKey = (type: string) =>
+    type === "phim-bo"
+      ? "search.typeLabels.phim-bo"
+      : type === "phim-le"
+        ? "search.typeLabels.phim-le"
+        : type === "hoat-hinh"
+          ? "search.typeLabels.hoat-hinh"
+          : "";
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4 xl:grid-cols-5">
-      {items.map((item, i) => (
-        <motion.div
-          key={item.id}
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.45,
-            delay: Math.min(i * 0.03, 0.5),
-            ease: ease.outSoft,
-          }}
-        >
-          <ExperienceCard
-            movie={{
-              id: item.id,
-              slug: item.slug,
-              title: item.title,
-              poster_url: item.poster_url,
-              year: item.year,
-              rating: item.rating,
+      {items.map((item, i) => {
+        const whyGenre = categoryFilter
+          ? item.category.find((c) => slugify(c) === categoryFilter)
+          : undefined;
+        const typeKey = typeLabelKey(item.type);
+        return (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              delay: Math.min(i * 0.03, 0.5),
+              ease: ease.outSoft,
             }}
-            meta={{ year: item.year, genres: item.category }}
-            size="md"
-            className="w-full"
-          />
-        </motion.div>
-      ))}
+            className="space-y-2"
+          >
+            <ExperienceCard
+              movie={{
+                id: item.id,
+                slug: item.slug,
+                title: item.title,
+                poster_url: item.poster_url,
+                year: item.year,
+                rating: item.rating,
+              }}
+              meta={{ year: item.year, genres: item.category }}
+              size="md"
+              className="w-full"
+            />
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 px-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span>{item.year}</span>
+              <span aria-hidden>·</span>
+              <span className="text-gold">★ {item.rating.toFixed(1)}</span>
+              {typeKey && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span>{t(typeKey)}</span>
+                </>
+              )}
+              {whyGenre && (
+                <>
+                  <span aria-hidden>·</span>
+                  <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] normal-case tracking-normal text-primary">
+                    {t("search.why", { reason: whyGenre })}
+                  </span>
+                </>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
