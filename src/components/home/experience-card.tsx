@@ -86,7 +86,7 @@ const SIZES = {
 
 const EASE = ease.outSoft;
 
-export function ExperienceCard({
+function ExperienceCardImpl({
   movie,
   trailerUrl,
   progress,
