@@ -1,9 +1,10 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Sparkles } from "lucide-react";
 
 import { useTranslation } from "@/hooks/useTranslation";
 import { ShareSheet } from "@/components/share/share-sheet";
+
 
 /**
  * Share payload — every surface that offers "share" passes one of these.
