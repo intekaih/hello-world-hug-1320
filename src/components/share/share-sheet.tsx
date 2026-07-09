@@ -346,3 +346,83 @@ function CopyBtn({
     </motion.button>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  ShareCardPreview                                                          */
+/*  Cinematic dopamine artefact — poster + tagline + QR. Fully in-DOM so      */
+/*  screen readers see it and the user can screenshot without extra tooling.  */
+/* -------------------------------------------------------------------------- */
+
+function ShareCardPreview({
+  title,
+  posterUrl,
+  url,
+  tagline,
+  brand,
+  qrHint,
+}: {
+  title: string;
+  posterUrl?: string;
+  url: string;
+  tagline: string;
+  brand: string;
+  qrHint: string;
+}) {
+  return (
+    <div
+      role="figure"
+      aria-label={`${tagline} — ${title}`}
+      className="mt-4 overflow-hidden rounded-2xl border border-glass-border bg-gradient-to-br from-primary/15 via-transparent to-primary/5 p-3 shadow-inner"
+    >
+      <div className="flex items-stretch gap-3">
+        {/* Poster */}
+        <div className="relative h-[112px] w-[76px] shrink-0 overflow-hidden rounded-xl bg-foreground/10 ring-1 ring-white/10">
+          {posterUrl ? (
+            <img
+              src={thumbSrc(posterUrl, { w: 240 })}
+              alt=""
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="grid h-full w-full place-items-center text-[10px] text-foreground-muted">
+              {brand}
+            </div>
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        </div>
+
+        {/* Copy + QR */}
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/90">
+              {tagline}
+            </p>
+            <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-foreground">
+              {title}
+            </p>
+            <p className="mt-2 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground-muted">
+              {brand}
+            </p>
+          </div>
+
+          <div className="flex shrink-0 flex-col items-center gap-1">
+            <div className="rounded-lg bg-white p-1.5 ring-1 ring-black/10">
+              <QRCodeSVG
+                value={url}
+                size={72}
+                level="M"
+                marginSize={0}
+                aria-label={qrHint}
+              />
+            </div>
+            <span className="max-w-[76px] text-center text-[9px] leading-tight text-foreground-muted">
+              {qrHint}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
