@@ -14,6 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ExperienceCard } from "@/components/home/experience-card";
+import { HeroTrailer } from "@/components/home/hero-trailer";
 import type {
   ContinueWatchingItem,
   HeroMovie,
