@@ -392,7 +392,7 @@ export function AppShell() {
 
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {/* Desktop + tablet sidebar (>=768px), collapsible */}
       <aside
         className={cn(
