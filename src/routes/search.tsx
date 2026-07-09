@@ -945,7 +945,7 @@ function ResultsSection({
       ) : items.length === 0 ? (
         <SearchEmptyState q={q} setFilter={setFilter} />
       ) : (
-        <SearchResultsGrid items={items} />
+        <SearchResultsGrid items={items} categoryFilter={search.category} />
       )}
 
       <div className="flex justify-center pt-4">
