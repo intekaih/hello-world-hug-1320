@@ -1,7 +1,11 @@
 import { QueryCache, QueryClient, MutationCache } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { initTracking } from "@/lib/track";
 import { routeTree } from "./routeTree.gen";
+
+// Install `window.__mcTrack` no-op sink + start 5-min session heartbeat.
+initTracking();
 
 /**
  * Extract a stable HTTP status if the error carries one, so we can suppress
