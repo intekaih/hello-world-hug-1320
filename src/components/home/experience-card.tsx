@@ -325,7 +325,7 @@ export function ExperienceCard({
             aria-hidden
             className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
             style={{
-              animation: "light-sweep 1200ms cubic-bezier(0.16, 1, 0.3, 1) 180ms both",
+              animation: "light-sweep 1200ms var(--ease-out-soft) 180ms both",
             }}
           />
         )}

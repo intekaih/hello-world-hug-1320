@@ -100,7 +100,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             className="absolute inset-0 will-change-transform"
             style={{
               transform: `translate3d(${mouse.x * -18}px, ${mouse.y * -12}px, 0)`,
-              transition: "transform 600ms cubic-bezier(0.16, 1, 0.3, 1)",
+              transition: "transform 600ms var(--ease-out-soft)",
             }}
           >
             <img
@@ -137,7 +137,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           className="max-w-2xl space-y-5"
           style={{
             transform: `translate3d(${mouse.x * 8}px, ${mouse.y * 5}px, 0)`,
-            transition: "transform 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "transform 800ms var(--ease-out-soft)",
           }}
         >
           {/* Genre eyebrow */}
@@ -432,7 +432,7 @@ function MoviePoster({ movie }: { movie: MovieCard }) {
       style={{ ["--rx" as string]: "0deg", ["--ry" as string]: "0deg" }}
     >
       <div
-        className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:shadow-[0_30px_80px_-20px_oklch(0.65_0.22_15/0.5)]"
+        className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)] transition-[transform,box-shadow] duration-500 ease-[var(--ease-out-soft)] will-change-transform group-hover:shadow-[0_30px_80px_-20px_oklch(0.65_0.22_15/0.5)]"
         style={{
           transform:
             "rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0)",

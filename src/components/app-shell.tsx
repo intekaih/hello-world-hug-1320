@@ -384,7 +384,7 @@ export function AppShell() {
   // Immersive routes (video watch, etc.) render without sidebar/header/tabbar.
   if (pathname.startsWith("/xem/")) {
     return (
-      <div className="min-h-screen bg-black text-foreground">
+      <div className="min-h-dvh bg-black text-foreground">
         <Outlet />
       </div>
     );
@@ -392,7 +392,7 @@ export function AppShell() {
 
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {/* Desktop + tablet sidebar (>=768px), collapsible */}
       <aside
         className={cn(
@@ -409,7 +409,7 @@ export function AppShell() {
       {/* Main column */}
       <div
         className={cn(
-          "flex min-h-screen flex-col transition-[padding] duration-300",
+          "flex min-h-dvh flex-col transition-[padding] duration-300",
           sidebarCollapsed ? "md:pl-[76px]" : "md:pl-[260px]",
         )}
       >
