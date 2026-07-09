@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { thumbSrc } from "@/utils/thumbSrc";
 import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
-import type { ContinueWatchingItem } from "@/lib/home-queries";
+import { type ContinueWatchingItem, hasVisibleProgress, isNearComplete } from "@/lib/home-queries";
 import { ProgressRing, AnimatedPercent } from "./progress-ring";
 import { RemainingTimeLabel } from "./remaining-time-label";
 import { ease } from "@/lib/design";
@@ -129,12 +129,15 @@ export function ResumeExperienceCard({
   const reduce = useReducedMotion();
   const [hover, setHover] = useState(false);
 
-  const { clean, episode } = parseTitle(item.title);
+  const parsed = parseTitle(item.title);
+  const clean = parsed.clean;
+  const episode = item.episodeLabel ?? parsed.episode;
   const remainingMin = parseRemainingMinutes(item.remaining);
   const resumeAt = computeResumeTime(item.progress, remainingMin);
   const pct = Math.round(item.progress * 100);
   const isSeries = !!episode;
-  const isNearlyDone = item.progress > 0.85;
+  const showProgress = hasVisibleProgress(item.progress);
+  const isNearlyDone = isNearComplete(item.progress);
 
   const width = featured
     ? "w-[86vw] max-w-[720px]"
