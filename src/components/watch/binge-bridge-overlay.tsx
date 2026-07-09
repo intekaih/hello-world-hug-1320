@@ -33,6 +33,33 @@ type WatchResp = { items: { movie_slug: string; createdAt: number }[] };
 
 const DEFAULT_COUNTDOWN = 15;
 
+function reasonChip(kind: RecMovie["reason"], value?: string): string {
+  switch (kind) {
+    case "sameGenre":
+      return value ? `Cùng ${value}` : "Cùng thể loại";
+    case "sameCountry":
+      return value ? `Từ ${value}` : "Cùng xuất xứ";
+    case "similarMood":
+      return "Cùng tông";
+    case "highlyRated":
+      return "Điểm cao";
+    case "newEpisode":
+      return "Tập mới";
+    case "fromWatchlist":
+      return "Trong watchlist";
+    case "resume":
+      return "Xem tiếp";
+    case "rewatch":
+      return "Xem lại";
+    case "unexplored":
+      return "Bạn chưa xem";
+    case "trending":
+      return "Đang hot";
+    default:
+      return "Gợi ý cho bạn";
+  }
+}
+
 async function j<T>(url: string): Promise<T> {
   const res = await fetch(url, { credentials: "include" });
   if (!res.ok) throw new Error(url);
@@ -319,6 +346,9 @@ export function BingeBridgeOverlay({
                           </div>
                           <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/60">
                             {p.year} · ★ {p.rating.toFixed(1)}
+                          </div>
+                          <div className="mt-1.5 inline-flex max-w-full items-center rounded-full border border-primary/30 bg-primary/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-primary/95">
+                            <span className="truncate">{reasonChip(p.reason, p.reasonValue)}</span>
                           </div>
                         </div>
                       </div>
