@@ -618,8 +618,13 @@
       "sameGenre": "Same as {{value}}",
       "sameCountry": "From {{value}}",
       "similarMood": "Feels like {{value}}"
+    },
+    "notInterested": {
+      "aria": "Not interested in \"{{title}}\"",
+      "tooltip": "Not interested — hide for 14 days"
     }
   },
+
   "share": {
     "sheet": {
       "eyebrow": "Share this moment"
