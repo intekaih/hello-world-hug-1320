@@ -1048,6 +1048,7 @@ export function PlayerContainer({
         onTooltipSeen={markBingeTooltipSeen}
         onOpenSettings={() => setSettingsSheetOpen(true)}
         onCancel={() => {
+          track("auto_next_cancel", { slug, episode: epNum });
           autoAdvanceStreakRef.current = 0;
           setNextPromptOpen(false);
         }}
@@ -1057,6 +1058,7 @@ export function PlayerContainer({
           onChangeEpisode(epNum + 1);
         }}
         onAutoAdvance={() => {
+          track("auto_next_fire", { slug, next: epNum + 1 });
           autoAdvanceStreakRef.current += 1;
           setNextPromptOpen(false);
           onChangeEpisode(epNum + 1);
