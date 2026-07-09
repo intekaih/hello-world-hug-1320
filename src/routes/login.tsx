@@ -45,6 +45,7 @@ function LoginPage() {
   const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const { login } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -58,14 +59,8 @@ function LoginPage() {
   const onSubmit = async (values: LoginForm) => {
     setServerError(null);
     try {
-      const { useAuth } = await import("@/lib/auth-context");
-      // Grab from ambient context via a tiny hook indirection is not possible here;
-      // fall back to direct api-client + store hydration (context refresh() below).
-      const { login: apiLogin } = await import("@/api-client/auth");
-      await apiLogin(values.username, values.password);
+      await login(values.username, values.password);
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
-      // Silence unused warning
-      void useAuth;
       navigate({ to: redirect || "/", replace: true });
     } catch (err) {
       const msg =
