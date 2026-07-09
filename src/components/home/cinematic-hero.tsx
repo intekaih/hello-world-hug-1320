@@ -159,7 +159,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
   return (
     <section
       ref={sectionRef}
-      className="relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-background sm:-mx-6 lg:-mx-8 lg:rounded-[32px]"
+      className="relative -mx-4 -mt-4 h-[92vh] min-h-[640px] overflow-hidden bg-background sm:-mx-6 lg:-mx-8 lg:rounded-[32px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={handleLeave}
       onMouseMove={handleMouseMove}
