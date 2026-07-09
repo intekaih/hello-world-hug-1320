@@ -1087,6 +1087,14 @@ export function PlayerContainer({
         open={shortcutsOpen}
         onClose={() => setShortcutsOpen(false)}
       />
+
+      <WellnessBreakSheet
+        open={wellnessOpen}
+        onClose={() => {
+          dismissWellnessToday();
+          setWellnessOpen(false);
+        }}
+      />
     </div>
   );
 }
