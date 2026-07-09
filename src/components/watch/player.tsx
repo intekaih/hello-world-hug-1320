@@ -46,7 +46,8 @@ import {
   useSeasonProgress,
 } from "@/hooks/useSeasonProgress";
 import { isAutoplayActive, usePlayerStore } from "@/store/playerStore";
-import { playTick } from "@/lib/ui-sound";
+import { useUIStore } from "@/store/uiStore";
+import { playTick, playWhoosh } from "@/lib/ui-sound";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
