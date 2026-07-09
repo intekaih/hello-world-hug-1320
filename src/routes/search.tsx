@@ -433,7 +433,7 @@ function CinematicSearchHero({
               onBlur={() => setTimeout(() => setFocused(false), 150)}
               onKeyDown={onKeyDown}
               placeholder={t("search.placeholder")}
-              className="h-14 w-full bg-transparent pl-14 pr-14 text-base text-white placeholder:text-white/40 outline-none md:h-16 md:pl-16 md:pr-16 md:text-lg"
+              className="h-14 w-full bg-transparent pl-14 pr-14 text-base text-white placeholder:text-white/60 outline-none md:h-16 md:pl-16 md:pr-16 md:text-lg"
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}

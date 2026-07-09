@@ -74,7 +74,7 @@ function ActorSearchPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="VD: Timothée Chalamet, Zendaya..."
-            className="h-14 w-full rounded-full border border-white/10 bg-black/40 pl-12 pr-32 text-base text-white placeholder:text-white/40 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
+            className="h-14 w-full rounded-full border border-white/10 bg-black/40 pl-12 pr-32 text-base text-white placeholder:text-white/60 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
           />
           <button
             type="submit"

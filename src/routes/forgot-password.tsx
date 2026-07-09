@@ -156,7 +156,7 @@ function ForgotPasswordPage() {
                       autoComplete="username"
                       placeholder="you@example.com"
                       disabled={isSubmitting}
-                      className="h-12 w-full rounded-xl border border-white/10 bg-black/40 pl-10 pr-3 text-white placeholder:text-white/30 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
+                      className="h-12 w-full rounded-xl border border-white/10 bg-black/40 pl-10 pr-3 text-white placeholder:text-white/60 outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/30 disabled:opacity-60"
                       aria-invalid={!!errors.identifier}
                     />
                   </div>
