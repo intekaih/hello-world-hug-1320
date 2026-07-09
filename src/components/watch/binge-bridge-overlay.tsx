@@ -33,6 +33,33 @@ type WatchResp = { items: { movie_slug: string; createdAt: number }[] };
 
 const DEFAULT_COUNTDOWN = 15;
 
+function reasonChip(kind: RecMovie["reason"], value?: string): string {
+  switch (kind) {
+    case "sameGenre":
+      return value ? `Cùng ${value}` : "Cùng thể loại";
+    case "sameCountry":
+      return value ? `Từ ${value}` : "Cùng xuất xứ";
+    case "similarMood":
+      return "Cùng tông";
+    case "highlyRated":
+      return "Điểm cao";
+    case "newEpisode":
+      return "Tập mới";
+    case "fromWatchlist":
+      return "Trong watchlist";
+    case "resume":
+      return "Xem tiếp";
+    case "rewatch":
+      return "Xem lại";
+    case "unexplored":
+      return "Bạn chưa xem";
+    case "trending":
+      return "Đang hot";
+    default:
+      return "Gợi ý cho bạn";
+  }
+}
+
 async function j<T>(url: string): Promise<T> {
   const res = await fetch(url, { credentials: "include" });
   if (!res.ok) throw new Error(url);
