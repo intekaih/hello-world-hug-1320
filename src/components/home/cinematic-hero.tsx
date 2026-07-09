@@ -75,18 +75,33 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
   const contentY = useTransform(smoothY, (v) => v * 6);
 
   const movie = movies[index];
+
+  // Skip trailer autoplay on coarse-pointer (mobile) or Save-Data.
+  // Big win: kills ~5-20MB/slide of unused bandwidth + a background video
+  // decode loop that stalls scrolling on low-end devices.
+  const allowTrailer = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const coarse = window.matchMedia?.("(pointer: coarse)").matches;
+    const conn = (navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (conn?.saveData) return false;
+    if (conn?.effectiveType && /^(slow-)?2g$/.test(conn.effectiveType)) return false;
+    return !coarse;
+  }, []);
+
   // Prefer explicit trailer map (backward-compat); fall back to normalized
   // movie.trailer_url. Only direct video URLs autoplay; YouTube/Vimeo/none
   // gracefully fall back to the animated backdrop + optional external btn.
   const trailerSource = movie ? normalizeTrailerSource(movie) : { kind: "none" as const };
   const explicitTrailer = movie ? trailers?.[movie.id] : undefined;
-  const trailerSrc =
-    explicitTrailer ??
-    (trailerSource.kind === "direct" ? trailerSource.src : undefined);
+  const trailerSrc = allowTrailer
+    ? (explicitTrailer ??
+       (trailerSource.kind === "direct" ? trailerSource.src : undefined))
+    : undefined;
   const externalTrailer =
     trailerSource.kind === "youtube" || trailerSource.kind === "vimeo"
       ? trailerSource.external
       : undefined;
+
 
   // Auto-advance slides
   useEffect(() => {
@@ -137,10 +152,15 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
     setPaused(false);
   }, [mx, my]);
 
-  // Deterministic particles per slide
+  // Deterministic particles per slide. Cut count on coarse pointer — 22
+  // continuously-animated spans are a measurable scroll-jank source on
+  // low-end mobile GPUs.
   const particles = useMemo(() => {
     const seed = movie?.id ?? 1;
-    return Array.from({ length: 22 }, (_, i) => {
+    const isCoarse = typeof window !== "undefined"
+      && window.matchMedia?.("(pointer: coarse)").matches;
+    const count = isCoarse ? 8 : 22;
+    return Array.from({ length: count }, (_, i) => {
       const r = pseudo(seed * 97 + i * 13);
       return {
         left: r() * 100,
@@ -153,6 +173,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
       };
     });
   }, [movie?.id]);
+
 
   if (!movie) return null;
 
