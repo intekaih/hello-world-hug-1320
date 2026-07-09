@@ -289,7 +289,7 @@ export function CategoryChips() {
             onClick={() => setActive(c)}
             className={cn(
               "relative shrink-0 rounded-full px-4 py-1.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-colors",
-              isActive ? "text-primary-foreground" : "text-foreground/90 hover:text-foreground",
+              isActive ? "text-white" : "text-white/70 hover:text-white",
             )}
           >
             {isActive && (
