@@ -165,9 +165,9 @@ function SearchExperiencePage() {
       : null,
   );
 
-  // Debounce → 300ms
+  // Debounce → 120ms (targets <150ms perceived latency)
   useEffect(() => {
-    const timer = setTimeout(() => setDebounced(input), 300);
+    const timer = setTimeout(() => setDebounced(input), 120);
     return () => clearTimeout(timer);
   }, [input]);
 
