@@ -23,6 +23,8 @@ import {
   type Movie,
   type RelatedItem,
 } from "@/components/movie-detail";
+import { InvitedBanner } from "@/components/movie-detail/invited-banner";
+
 
 
 // Related rail lives below the fold — code-split it.
