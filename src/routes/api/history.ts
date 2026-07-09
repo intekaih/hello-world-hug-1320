@@ -64,6 +64,15 @@ export const Route = createFileRoute("/api/history")({
       GET: async ({ request }) => {
         if (!requireAuth(request)) return Response.json({ items: [] });
         seedIfEmpty();
+        const url = new URL(request.url);
+        const slugFilter = url.searchParams.get("slug");
+        if (slugFilter) {
+          // Return all episodes for a single slug (season progress)
+          const items = Array.from(store.values())
+            .filter((e) => e.slug === slugFilter)
+            .sort((a, b) => Number(a.episode) - Number(b.episode));
+          return Response.json({ items });
+        }
         // Keep only most recent episode per slug
         const latestBySlug = new Map<string, HistoryEntry>();
         for (const entry of store.values()) {
