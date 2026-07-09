@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { History as HistoryIcon, Trash2, Play, X } from "lucide-react";
 import { motion } from "motion/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { ClearHistoryDialog } from "@/components/history/clear-history-dialog";
 
 import {
   EmptyState,
@@ -98,6 +99,7 @@ function HistoryPage() {
   });
 
   const items = query.data?.items ?? [];
+  const [clearOpen, setClearOpen] = useState(false);
 
   const unfinished = useMemo(() => {
     return items
@@ -138,9 +140,7 @@ function HistoryPage() {
         actions={
           items.length > 0 && (
             <button
-              onClick={() => {
-                if (confirm(t("history.confirmClear"))) clearAll.mutate();
-              }}
+              onClick={() => setClearOpen(true)}
               className="flex min-h-11 items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 text-sm text-foreground/80 transition hover:border-destructive/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
             >
               <Trash2 className="h-4 w-4" /> {t("history.clearAll")}
