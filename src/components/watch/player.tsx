@@ -30,6 +30,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useShareMovie } from "@/lib/share/use-share-movie";
 import { PlayerLoadingState } from "./player-loading-state";
 import {
   PlayerErrorState,
