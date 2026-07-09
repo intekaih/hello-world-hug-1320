@@ -259,13 +259,21 @@ export function ResumeExperienceCard({
               </h3>
 
               <div className="flex flex-wrap items-center gap-2">
-                <RemainingTimeLabel label={item.remaining} />
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">
-                  <AnimatedPercent value={item.progress} />
-                  <span className="ml-1 text-white/45">
-                    {t("continueWatching.percentWatched", { n: pct }).replace(/^\d+%\s*/, "")}
+                {isNearlyDone && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-primary-foreground shadow-[0_0_18px_-4px_var(--color-primary)]">
+                    <Sparkles className="h-3 w-3" aria-hidden />
+                    {t("continueWatching.nearlyDone")}
                   </span>
-                </span>
+                )}
+                <RemainingTimeLabel label={item.remaining} />
+                {showProgress && (
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">
+                    <AnimatedPercent value={item.progress} />
+                    <span className="ml-1 text-white/45">
+                      {t("continueWatching.percentWatched", { n: pct }).replace(/^\d+%\s*/, "")}
+                    </span>
+                  </span>
+                )}
               </div>
 
 
@@ -300,19 +308,36 @@ export function ResumeExperienceCard({
                 transition={
                   reduce ? { duration: 0 } : { duration: 1.1, ease: ease.outSoft, delay: 0.1 }
                 }
-                className="h-full rounded-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_10px_var(--color-primary)]"
-              />
-            </div>
+            {/* Thin timeline progress bar — only when actually in progress */}
+            {showProgress && (
+              <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/10">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${pct}%` }}
+                  transition={
+                    reduce ? { duration: 0 } : { duration: 1.1, ease: ease.outSoft, delay: 0.1 }
+                  }
+                  className="h-full rounded-full bg-gradient-to-r from-primary via-accent to-primary shadow-[0_0_10px_var(--color-primary)]"
+                />
+              </div>
+            )}
 
-            {/* Resume-from label */}
+            {/* Resume-from label + CTA */}
             <div className="mt-2 flex items-center justify-between">
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
                 {t("continueWatching.resumeFrom", { time: resumeAt })}
               </span>
-              {featured && (
-                <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+              {(featured || isNearlyDone) && (
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em]",
+                    isNearlyDone ? "text-primary" : "text-primary/80",
+                  )}
+                >
                   <Sparkles className="h-3 w-3" aria-hidden />
-                  {t("continueWatching.resume")}
+                  {isNearlyDone
+                    ? t("continueWatching.finishIt")
+                    : t("continueWatching.resume")}
                 </span>
               )}
             </div>
