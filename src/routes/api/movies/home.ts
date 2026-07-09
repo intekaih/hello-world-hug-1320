@@ -23,6 +23,7 @@ const heroMovies = [
     runtime: "2h 46m",
     rating: "PG-13",
     genres: ["Sci-Fi", "Adventure"],
+    trailer_url: "https://www.youtube.com/watch?v=Way9Dexny3w",
   },
   {
     id: 2,
@@ -35,6 +36,7 @@ const heroMovies = [
     runtime: "3h 0m",
     rating: "R",
     genres: ["Drama", "History"],
+    trailer_url: "https://www.youtube.com/watch?v=uYPbbksJxIg",
   },
   {
     id: 3,
@@ -47,6 +49,7 @@ const heroMovies = [
     runtime: "2h 56m",
     rating: "PG-13",
     genres: ["Crime", "Mystery"],
+    trailer_url: "https://www.youtube.com/watch?v=mqqft2x_Aa4",
   },
   {
     id: 4,
@@ -59,6 +62,7 @@ const heroMovies = [
     runtime: "2h 49m",
     rating: "PG-13",
     genres: ["Sci-Fi", "Drama"],
+    trailer_url: "https://www.youtube.com/watch?v=zSWdZVtXT7E",
   },
   {
     id: 5,
@@ -71,6 +75,7 @@ const heroMovies = [
     runtime: "2h 19m",
     rating: "R",
     genres: ["Action", "Adventure"],
+    trailer_url: "https://www.youtube.com/watch?v=wxN1T1uxQ2g",
   },
 ].map((m) => ({ ...m, slug: slugify(m.title) }));
 
