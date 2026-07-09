@@ -39,9 +39,9 @@ const card = (i: number, title: string, tag = "mccp", kind: "series" | "single" 
   };
 };
 
-const seed = (prefix: string, count: number) =>
+const seed = (prefix: string, count: number, kind: "series" | "single" | "anime" = "single") =>
   Array.from({ length: count }, (_, i) =>
-    card(i, `${prefix} ${i + 1}`, prefix.toLowerCase().replace(/\s/g, "")),
+    card(i, `${prefix} ${i + 1}`, prefix.toLowerCase().replace(/\s/g, ""), kind),
   );
 
 export const MOCK_HOME_DATA: HomeData = {
@@ -50,9 +50,9 @@ export const MOCK_HOME_DATA: HomeData = {
     hero(2, "Bí Mật Kinh Đô", "Một điệp viên trẻ lần theo dấu vết cuối cùng của cha."),
     hero(3, "Đêm Không Ngủ", "Thành phố về đêm — nơi mọi bí mật đều có giá."),
   ],
-  top10Movies: seed("Top", 10),
-  hotSeriesMovies: seed("Bộ", 12),
-  newMovies: seed("Mới", 12),
-  animeMovies: seed("Anime", 12),
+  top10Movies: seed("Top", 10, "single"),
+  hotSeriesMovies: seed("Bộ", 12, "series"),
+  newMovies: seed("Mới", 12, "single"),
+  animeMovies: seed("Anime", 12, "anime"),
   continueWatching: [],
 };
