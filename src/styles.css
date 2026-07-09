@@ -112,7 +112,8 @@
   --secondary-foreground: oklch(0.18 0.02 280);
 
   --muted: oklch(0.93 0.008 280);
-  --muted-foreground: oklch(0.18 0.02 280 / 0.65);
+  /* Bumped 0.65 → 0.72 to clear WCAG AA on warm off-white background */
+  --muted-foreground: oklch(0.18 0.02 280 / 0.72);
 
   --accent: oklch(0.78 0.16 70);
   --accent-foreground: oklch(0.18 0.02 280);
@@ -160,7 +161,8 @@
   --secondary: oklch(0.2 0.02 280);
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.2 0.02 280);
-  --muted-foreground: oklch(1 0 0 / 0.5);
+  /* Bumped 0.5 → 0.62 for WCAG AA on dark surfaces (was borderline) */
+  --muted-foreground: oklch(1 0 0 / 0.62);
   --accent: oklch(0.78 0.16 70);
   --accent-foreground: oklch(0.09 0.02 280);
   --gold: oklch(0.78 0.16 70);
@@ -335,6 +337,32 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Horizontal rail — prevents wheel/touch scroll from hijacking page scroll,
+ * enables smooth momentum, and marks the container as an isolated paint area
+ * so hover effects on cards don't repaint the neighbours. Apply to every
+ * horizontal card rail. */
+@utility rail-scroll {
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  contain: paint;
+}
+
+/* Mobile / low-end: soften expensive backdrop-filter which is a known
+ * source of scroll jank on iOS Safari and Android Chrome. */
+@media (hover: none) and (pointer: coarse) {
+  .glass { backdrop-filter: blur(12px) saturate(130%); }
+  .glass-strong { backdrop-filter: blur(18px) saturate(140%); }
+}
+
+/* Utility to opt decorative offscreen layers out of paint cost. */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
 }
 
 /* Safe-area utilities for mobile notches / home indicators */

@@ -63,7 +63,7 @@ export function MovieFactRail({ movie }: { movie: Movie }) {
           hidden: {},
           show: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
         }}
-        className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto rail-scroll px-4 pb-2 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {facts.map((f) => (
           <motion.li

@@ -50,7 +50,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (paused || movies.length <= 1) return;
@@ -61,14 +61,22 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
     return () => window.clearInterval(id);
   }, [paused, movies.length, index]);
 
+  // Write parallax offset via ref — avoids re-rendering the whole hero on
+  // every mousemove.
   const handleMouseMove = (e: React.MouseEvent) => {
     const el = sectionRef.current;
-    if (!el) return;
+    const p = parallaxRef.current;
+    if (!el || !p) return;
+    if (typeof window !== "undefined" &&
+        !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const rect = el.getBoundingClientRect();
-    setMouse({
-      x: (e.clientX - rect.left) / rect.width - 0.5,
-      y: (e.clientY - rect.top) / rect.height - 0.5,
-    });
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    p.style.transform = `translate3d(${x * -18}px, ${y * -12}px, 0)`;
+  };
+  const clearParallax = () => {
+    const p = parallaxRef.current;
+    if (p) p.style.transform = "translate3d(0,0,0)";
   };
 
   const movie = movies[index];
@@ -81,7 +89,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
         setPaused(false);
-        setMouse({ x: 0, y: 0 });
+        clearParallax();
       }}
       onMouseMove={handleMouseMove}
       aria-roledescription="carousel"
@@ -97,11 +105,9 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           className="absolute inset-0"
         >
           <div
+            ref={parallaxRef}
             className="absolute inset-0 will-change-transform"
-            style={{
-              transform: `translate3d(${mouse.x * -18}px, ${mouse.y * -12}px, 0)`,
-              transition: "transform 600ms var(--ease-out-soft)",
-            }}
+            style={{ transition: "transform 600ms var(--ease-out-soft)" }}
           >
             <img
               src={thumbSrc(movie.backdrop_url, { w: 1920 })}
@@ -135,10 +141,6 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
           }}
           className="max-w-2xl space-y-5"
-          style={{
-            transform: `translate3d(${mouse.x * 8}px, ${mouse.y * 5}px, 0)`,
-            transition: "transform 800ms var(--ease-out-soft)",
-          }}
         >
           {/* Genre eyebrow */}
           <motion.div
@@ -283,7 +285,7 @@ const CATEGORIES = [
 export function CategoryChips() {
   const [active, setActive] = useState("All");
   return (
-    <div className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto rail-scroll px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       {CATEGORIES.map((c) => {
         const isActive = c === active;
         return (
@@ -390,7 +392,7 @@ export function MovieRow({
       )}
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-4 overflow-x-auto rail-scroll px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {movies.map((m) => (
           <ExperienceCard key={m.id} movie={m} />
@@ -527,7 +529,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
       />
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 py-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-6 overflow-x-auto rail-scroll px-4 py-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
       >
         {movies.slice(0, 10).map((m, i) => (
           <ExperienceCard
@@ -574,7 +576,7 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
       />
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto rail-scroll px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {items.map((m) => (
           <Link

@@ -104,7 +104,7 @@ export function ContinueWatchingImmersive({
             hidden: {},
             show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
           }}
-          className="scrollbar-none -mx-4 flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto px-4 py-6 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+          className="scrollbar-none -mx-4 flex snap-x snap-proximity items-stretch gap-5 overflow-x-auto rail-scroll px-4 py-6 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
         >
           <motion.div
             variants={{

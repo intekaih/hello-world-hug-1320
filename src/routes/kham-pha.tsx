@@ -101,7 +101,7 @@ function Rail({
           )}
         </div>
       </div>
-      <div className="scrollbar-thin flex gap-3 overflow-x-auto pb-3 md:gap-4">
+      <div className="scrollbar-thin flex gap-3 overflow-x-auto rail-scroll pb-3 md:gap-4">
         {items.map((m, i) => (
           <PosterCard key={`${m.id}-${m.slug}`} movie={m} index={i} />
         ))}

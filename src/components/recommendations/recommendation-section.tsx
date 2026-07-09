@@ -40,7 +40,7 @@ export function RecommendationSection({
       subtitle={subtitle}
       entrance={entrance}
     >
-      <div className="scrollbar-thin -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 md:mx-0 md:px-0 md:gap-4">
+      <div className="scrollbar-thin -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto rail-scroll px-4 pb-3 md:mx-0 md:px-0 md:gap-4">
         {items.map((m, i) => (
           <RecCard key={`${m.id}-${m.slug}`} movie={m} index={i} />
         ))}

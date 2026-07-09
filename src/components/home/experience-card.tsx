@@ -181,6 +181,9 @@ export function ExperienceCard({
   const handleMove = useCallback(
     (e: MouseEvent<HTMLAnchorElement>) => {
       if (reduce) return;
+      // 3D tilt only makes sense on precise pointers. Bail early on touch.
+      if (typeof window !== "undefined" &&
+          !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
       const el = rootRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
