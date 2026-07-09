@@ -4,9 +4,11 @@ import { useMemo } from "react";
 import { buildRecommendations, type RecInputs } from "@/lib/recommendations/engine";
 import type { BrowseMovie } from "@/routes/api/browse";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useSuppressedRecs } from "@/hooks/useSuppressedRecs";
 import { RecommendationSection } from "./recommendation-section";
 import { TonightPick } from "./tonight-pick";
 import { MoodMatchRail } from "./mood-match-rail";
+
 
 type PoolResp = { items: BrowseMovie[] };
 type HistoryResp = {
