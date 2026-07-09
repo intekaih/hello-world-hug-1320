@@ -7,11 +7,14 @@ import { useEffect, useState } from "react";
  * Uses window online/offline events; no polling.
  */
 export function OfflineBanner() {
-  const [online, setOnline] = useState(
-    typeof navigator === "undefined" ? true : navigator.onLine,
-  );
+  // Always start "online" so SSR and first client render match.
+  // The real navigator.onLine is picked up in the effect below.
+  const [online, setOnline] = useState(true);
 
   useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      setOnline(navigator.onLine);
+    }
     const on = () => setOnline(true);
     const off = () => setOnline(false);
     window.addEventListener("online", on);
