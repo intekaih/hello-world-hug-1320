@@ -40,7 +40,7 @@ import {
 } from "./player-error-state";
 import { ShortcutOverlay } from "./shortcut-overlay";
 import { NextEpisodePrompt } from "./next-episode-prompt";
-import { SeasonCompleteOverlay } from "./season-complete-overlay";
+import { BingeBridgeOverlay } from "./binge-bridge-overlay";
 import {
   markEpisodeWatchedLocal,
   useSeasonProgress,
