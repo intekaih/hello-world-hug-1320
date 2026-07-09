@@ -7,12 +7,14 @@ import {
   useMarkRead,
   useNotifications,
 } from "@/components/notifications";
+import { NotificationPreferences } from "@/components/notification-preferences";
 import {
   EmptyState,
   PageHeader,
   RequireAuth,
 } from "@/components/user-lists/shared";
 import { useTranslation } from "@/hooks/useTranslation";
+
 
 export const Route = createFileRoute("/notifications")({
   head: () => ({
