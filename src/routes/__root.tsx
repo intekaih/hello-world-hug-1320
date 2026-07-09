@@ -153,7 +153,9 @@ function RootComponent() {
       <I18nProvider>
         <OfflineBanner />
         <AuthInitializer>
-          <AppShell />
+          <ShareProvider>
+            <AppShell />
+          </ShareProvider>
           <Toaster />
         </AuthInitializer>
       </I18nProvider>
