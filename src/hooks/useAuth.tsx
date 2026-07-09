@@ -72,7 +72,7 @@ export function AuthInitializer({ children }: { children: ReactNode }) {
 
   if (isAuthenticating) {
     return (
-      <div className="grid min-h-screen place-items-center bg-background text-white">
+      <div className="grid min-h-dvh place-items-center bg-background text-white">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="text-sm text-white/60">Đang khôi phục phiên đăng nhập…</p>
