@@ -693,6 +693,33 @@ export function PlayerContainer({
                 </p>
               </div>
               <div className="ml-auto flex items-center gap-2">
+                {totalEpisodes > 1 && (
+                  <div
+                    className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur-md sm:inline-flex"
+                    aria-label={
+                      seasonProgress.isNearComplete
+                        ? t("player.season.chipDone", {
+                            watched: seasonProgress.watched,
+                            total: seasonProgress.total,
+                          })
+                        : t("player.season.chip", {
+                            watched: seasonProgress.watched,
+                            total: seasonProgress.total,
+                            hours: seasonProgress.hoursLeft,
+                          })
+                    }
+                  >
+                    <span className="text-white">
+                      {seasonProgress.watched}/{seasonProgress.total}
+                    </span>
+                    <span className="text-white/40">·</span>
+                    <span className="text-white/70">
+                      {seasonProgress.isNearComplete
+                        ? "✓"
+                        : `~${seasonProgress.hoursLeft}h`}
+                    </span>
+                  </div>
+                )}
                 <ServerSelector
                   servers={servers}
                   value={serverId}
