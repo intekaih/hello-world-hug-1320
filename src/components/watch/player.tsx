@@ -45,6 +45,7 @@ import {
   markEpisodeWatchedLocal,
   useSeasonProgress,
 } from "@/hooks/useSeasonProgress";
+import { isAutoplayActive, usePlayerStore } from "@/store/playerStore";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
