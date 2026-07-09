@@ -425,6 +425,7 @@ export function ExperienceCard({
           src={thumbSrc(movie.poster_url, { w: 500 })}
           alt={movie.title}
           loading="lazy"
+          decoding="async"
           animate={{ scale: hovered ? 1.06 : 1 }}
           transition={{ duration: 0.9, ease: EASE }}
           className="h-full w-full object-cover"
