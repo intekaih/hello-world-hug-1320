@@ -243,6 +243,56 @@
   }
 }
 
+/* ============================================================
+ * PHASE Ω — Invisible Polish
+ * Consistent scrollbars, selection, numeric alignment,
+ * tap highlight, image rendering, and micro-defaults.
+ * ============================================================ */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-feature-settings: "ss01", "cv11", "kern";
+    text-size-adjust: 100%;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+    color: var(--foreground);
+  }
+  /* Numeric tabular alignment for meta / counters / times */
+  time, [data-numeric], .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  /* Consistent, subtle scrollbar across the app (dark canvas) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 20%, transparent) transparent;
+  }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--foreground) 18%, transparent);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--foreground) 32%, transparent);
+    background-clip: content-box;
+  }
+  /* Image decoding hint — smoother poster grids */
+  img { image-rendering: auto; }
+  /* Prevent iOS Safari input zoom on small viewports only */
+  @media (hover: none) and (pointer: coarse) {
+    input, select, textarea { font-size: max(16px, 1em); }
+  }
+
+}
+
+
 /* Glassmorphism — theme-aware */
 @utility glass {
   background: color-mix(in oklab, var(--surface-elevated) 55%, transparent);
