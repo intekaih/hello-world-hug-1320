@@ -351,6 +351,10 @@ export function ExperienceCard({
       onMouseEnter={enter}
       onMouseLeave={leave}
       onMouseMove={handleMove}
+      onFocus={() => {
+        setStage((s) => Math.max(s, 4));
+        prefetchDetail();
+      }}
       onClick={handleClick}
       onPointerDown={handlePointerDown}
       onPointerUp={cancelLongPress}
