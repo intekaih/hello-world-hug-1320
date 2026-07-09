@@ -53,7 +53,10 @@ export type RecInputs = {
   history: HistorySignal[];
   favorites: LibrarySignal[];
   watchlist: LibrarySignal[];
+  /** Slugs the user hit "Not interested" on — hidden across every surface. */
+  suppressed?: Set<string>;
 };
+
 
 export type RecSurfaces = {
   hasSignals: boolean;
