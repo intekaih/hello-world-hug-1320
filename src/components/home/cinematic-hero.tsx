@@ -109,6 +109,13 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
     setVideoReady(false);
   }, [movie?.id]);
 
+  const resumeValid =
+    !!resume && resume.progress > 0.05 && resume.progress < 0.95 && !!resume.slug;
+
+  useEffect(() => {
+    if (resumeValid && resume) track("hero_resume_shown", { slug: resume.slug });
+  }, [resumeValid, resume?.slug]);
+
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
       if (reduce) return;
@@ -283,9 +290,15 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             className="flex items-center gap-3"
           >
             <span className="h-px w-10 bg-primary" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-foreground/70">
-              Feature Presentation · Ep 01
-            </span>
+            {resumeValid && resume ? (
+              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary">
+                Tiếp tục · Còn {resume.remaining}
+              </span>
+            ) : (
+              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-foreground/70">
+                Feature Presentation · Ep 01
+              </span>
+            )}
           </motion.div>
 
           <motion.div
@@ -331,20 +344,51 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
               params={{ slug: movie.slug, episode: "1" }}
               className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full"
-              />
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -inset-1 rounded-full bg-primary/40 opacity-0 blur-xl transition-opacity duration-500 group-hover/cta:opacity-100"
-              />
-              <Play className="h-4 w-4 fill-current" />
-              <span>Xem ngay</span>
-            </Link>
+            {resumeValid && resume ? (
+              resume.episode ? (
+                <Link
+                  to="/xem/$slug/tap-{$episode}"
+                  params={{ slug: resume.slug, episode: resume.episode }}
+                  onClick={() => track("hero_resume_clicked", { slug: resume.slug })}
+                  className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full" />
+                  <RotateCcw className="h-4 w-4" />
+                  <span>Xem tiếp</span>
+                </Link>
+              ) : (
+                <Link
+                  to="/phim/$slug"
+                  params={{ slug: resume.slug }}
+                  onClick={() => track("hero_resume_clicked", { slug: resume.slug })}
+                  className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full" />
+                  <RotateCcw className="h-4 w-4" />
+                  <span>Xem tiếp</span>
+                </Link>
+              )
+            ) : (
+              <Link
+                to="/xem/$slug/tap-{$episode}"
+                params={{ slug: movie.slug, episode: "1" }}
+                className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-1 rounded-full bg-primary/40 opacity-0 blur-xl transition-opacity duration-500 group-hover/cta:opacity-100"
+                />
+                <Play className="h-4 w-4 fill-current" />
+                <span>Xem ngay</span>
+              </Link>
+            )}
             <Link
               to="/phim/$slug"
-              params={{ slug: movie.slug }}
+              params={{ slug: resumeValid && resume ? resume.slug : movie.slug }}
               className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/10"
             >
               <Info className="h-4 w-4" /> Chi tiết
