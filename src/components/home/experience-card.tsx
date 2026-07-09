@@ -150,18 +150,34 @@ export function ExperienceCard({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (!inView || !hovered) {
+    if (!inView || (!hovered && !previewArmed) || videoError) {
       v.pause();
     } else if (videoReady) {
       void v.play().catch(() => {});
     }
-  }, [inView, hovered, videoReady]);
+  }, [inView, hovered, previewArmed, videoReady, videoError]);
 
   // ── Hover-stage orchestration ───────────────────────────────────────
   const clearStageTimers = useCallback(() => {
     stageTimers.current.forEach((id) => window.clearTimeout(id));
     stageTimers.current = [];
   }, []);
+
+  /** Actually load the trailer — gated behind hover-intent (200ms). */
+  const mountTrailer = useCallback(() => {
+    if (!trailerUrl) return;
+    setVideoError(false);
+    setVideoMounted(true);
+    // Claim the global slot so other cards stop their videos.
+    previewSlotId.current = claimPreviewSlot(() => {
+      // Another card took over — collapse this preview.
+      const v = videoRef.current;
+      if (v) v.pause();
+      setVideoMounted(false);
+      setVideoReady(false);
+      setPreviewArmed(false);
+    });
+  }, [trailerUrl]);
 
   const enter = useCallback(() => {
     if (reduce) {
@@ -173,29 +189,43 @@ export function ExperienceCard({
     clearStageTimers();
     stageTimers.current.push(window.setTimeout(() => setStage(1), 0));
     stageTimers.current.push(window.setTimeout(() => setStage(2), 120));
+    // Hover-intent gate: only fetch/mount the trailer after HOVER_INTENT_MS.
+    // Fast scroll-throughs never trigger a network request.
     stageTimers.current.push(
       window.setTimeout(() => {
         setStage(3);
-        if (trailerUrl) setVideoMounted(true);
-      }, 300),
+        mountTrailer();
+      }, HOVER_INTENT_MS),
     );
     stageTimers.current.push(window.setTimeout(() => setStage(4), 600));
-  }, [clearStageTimers, reduce, trailerUrl]);
+  }, [clearStageTimers, reduce, mountTrailer]);
 
   const leave = useCallback(() => {
     clearStageTimers();
     setHovered(false);
     setStage(0);
     setVideoReady(false);
+    setPreviewArmed(false);
     rotX.set(0);
     rotY.set(0);
+    if (previewSlotId.current) {
+      releasePreviewSlot(previewSlotId.current);
+      previewSlotId.current = null;
+    }
     // Leave the video mounted for a moment to reuse on quick re-hover.
     stageTimers.current.push(
       window.setTimeout(() => setVideoMounted(false), 800),
     );
   }, [clearStageTimers, rotX, rotY]);
 
-  useEffect(() => () => clearStageTimers(), [clearStageTimers]);
+  useEffect(
+    () => () => {
+      clearStageTimers();
+      if (previewSlotId.current) releasePreviewSlot(previewSlotId.current);
+    },
+    [clearStageTimers],
+  );
+
 
   // ── Mouse tracking → tilt + reflection ──────────────────────────────
   const handleMove = useCallback(
