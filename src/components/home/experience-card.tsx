@@ -262,6 +262,55 @@ export function ExperienceCard({
   const stage3 = stage >= 3;
   const stage4 = stage >= 4;
 
+  // ── Coarse-pointer gesture: first tap = preview, second tap = navigate.
+  // Long-press (500ms) also triggers preview without navigation. Precise
+  // pointers keep the classic hover behaviour and never enter this branch.
+  const longPressTimer = useRef<number | null>(null);
+  const handleClick = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      if (!isCoarsePointer.current) return; // fine pointer → normal nav
+      if (!trailerUrl) return; // no preview available → let it navigate
+      if (previewArmed) {
+        // Second tap: release slot then navigate.
+        if (previewSlotId.current) {
+          releasePreviewSlot(previewSlotId.current);
+          previewSlotId.current = null;
+        }
+        setPreviewArmed(false);
+        return; // navigation proceeds
+      }
+      // First tap: swallow navigation, arm preview.
+      e.preventDefault();
+      setPreviewArmed(true);
+      setStage(3);
+      mountTrailer();
+    },
+    [mountTrailer, previewArmed, trailerUrl],
+  );
+
+  const handlePointerDown = useCallback(
+    (e: ReactPointerEvent<HTMLAnchorElement>) => {
+      if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+      if (!trailerUrl) return;
+      if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = window.setTimeout(() => {
+        setPreviewArmed(true);
+        setStage(3);
+        mountTrailer();
+      }, 500);
+    },
+    [mountTrailer, trailerUrl],
+  );
+
+  const cancelLongPress = useCallback(() => {
+    if (longPressTimer.current) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+
+
   return (
     <Link
       ref={rootRef}
