@@ -277,6 +277,7 @@ function WatchPage() {
             cinemaMode={cinemaMode}
             onToggleCinemaMode={toggleCinema}
             onServerChange={setActiveServerId}
+            serverId={activeServerId || undefined}
           />
         </div>
         {/* Mobile server chip bar — one-tap switching without opening settings */}
