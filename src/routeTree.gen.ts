@@ -44,6 +44,7 @@ import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.t
 import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
 import { Route as ApiNotificationsUnreadCountRouteImport } from './routes/api/notifications.unread-count'
 import { Route as ApiNotificationsMarkReadRouteImport } from './routes/api/notifications.mark-read'
+import { Route as ApiMoviesPoolRouteImport } from './routes/api/movies/pool'
 import { Route as ApiMoviesHomeRouteImport } from './routes/api/movies/home'
 import { Route as ApiMoviesSlugRouteImport } from './routes/api/movies.$slug'
 import { Route as ApiFavoritesToggleRouteImport } from './routes/api/favorites.toggle'
@@ -235,6 +236,11 @@ const ApiNotificationsMarkReadRoute =
     path: '/mark-read',
     getParentRoute: () => ApiNotificationsRoute,
   } as any)
+const ApiMoviesPoolRoute = ApiMoviesPoolRouteImport.update({
+  id: '/api/movies/pool',
+  path: '/api/movies/pool',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiMoviesHomeRoute = ApiMoviesHomeRouteImport.update({
   id: '/api/movies/home',
   path: '/api/movies/home',
@@ -337,6 +343,7 @@ export interface FileRoutesByFullPath {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/movies/pool': typeof ApiMoviesPoolRoute
   '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
   '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/movies/pool': typeof ApiMoviesPoolRoute
   '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
   '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
@@ -436,6 +444,7 @@ export interface FileRoutesById {
   '/api/favorites/toggle': typeof ApiFavoritesToggleRoute
   '/api/movies/$slug': typeof ApiMoviesSlugRouteWithChildren
   '/api/movies/home': typeof ApiMoviesHomeRoute
+  '/api/movies/pool': typeof ApiMoviesPoolRoute
   '/api/notifications/mark-read': typeof ApiNotificationsMarkReadRoute
   '/api/notifications/unread-count': typeof ApiNotificationsUnreadCountRoute
   '/api/watchlist/note': typeof ApiWatchlistNoteRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/movies/pool'
     | '/api/notifications/mark-read'
     | '/api/notifications/unread-count'
     | '/api/watchlist/note'
@@ -536,6 +546,7 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/movies/pool'
     | '/api/notifications/mark-read'
     | '/api/notifications/unread-count'
     | '/api/watchlist/note'
@@ -585,6 +596,7 @@ export interface FileRouteTypes {
     | '/api/favorites/toggle'
     | '/api/movies/$slug'
     | '/api/movies/home'
+    | '/api/movies/pool'
     | '/api/notifications/mark-read'
     | '/api/notifications/unread-count'
     | '/api/watchlist/note'
@@ -634,6 +646,7 @@ export interface RootRouteChildren {
   ApiAuthRegisterRoute: typeof ApiAuthRegisterRoute
   ApiMoviesSlugRoute: typeof ApiMoviesSlugRouteWithChildren
   ApiMoviesHomeRoute: typeof ApiMoviesHomeRoute
+  ApiMoviesPoolRoute: typeof ApiMoviesPoolRoute
   XemSlugTapChar123episodeChar125Route: typeof XemSlugTapChar123episodeChar125Route
 }
 
@@ -884,6 +897,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiNotificationsMarkReadRouteImport
       parentRoute: typeof ApiNotificationsRoute
     }
+    '/api/movies/pool': {
+      id: '/api/movies/pool'
+      path: '/api/movies/pool'
+      fullPath: '/api/movies/pool'
+      preLoaderRoute: typeof ApiMoviesPoolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/movies/home': {
       id: '/api/movies/home'
       path: '/api/movies/home'
@@ -1076,6 +1096,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthRegisterRoute: ApiAuthRegisterRoute,
   ApiMoviesSlugRoute: ApiMoviesSlugRouteWithChildren,
   ApiMoviesHomeRoute: ApiMoviesHomeRoute,
+  ApiMoviesPoolRoute: ApiMoviesPoolRoute,
   XemSlugTapChar123episodeChar125Route: XemSlugTapChar123episodeChar125Route,
 }
 export const routeTree = rootRouteImport
