@@ -23,6 +23,8 @@ import {
   type Movie,
   type RelatedItem,
 } from "@/components/movie-detail";
+import { InvitedBanner } from "@/components/movie-detail/invited-banner";
+
 
 
 // Related rail lives below the fold — code-split it.
@@ -134,7 +136,10 @@ function MovieDetailPage() {
 
   return (
     <div className="space-y-16 pb-24">
+      <InvitedBanner title={movie.title} />
       <MovieDetailHero movie={movie} />
+
+
 
       <div id="detail-body" className="space-y-16">
         <StoryBlock movie={movie} />

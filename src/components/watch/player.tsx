@@ -1442,14 +1442,12 @@ export function WatchActions({
   const share = () => {
     openShare({
       title: title ?? slug,
+      slug,
       posterUrl,
-      url:
-        typeof window !== "undefined"
-          ? `${window.location.origin}${window.location.pathname}`
-          : undefined,
       timestampSeconds: getCurrentTime?.() ?? getSharedPlayerTime(),
     });
   };
+
 
 
 

@@ -58,16 +58,14 @@ export function useShare(movie: Movie) {
   const share = () => {
     open({
       title: movie.title,
+      slug: movie.slug,
       posterUrl: movie.poster_url,
       description: movie.overview_vi ?? movie.overview,
-      url:
-        typeof window !== "undefined"
-          ? `${window.location.origin}/phim/${movie.slug}`
-          : `/phim/${movie.slug}`,
     });
   };
   return { copied: false, share };
 }
+
 
 
 /* -------------------------------------------------------------------------- */
