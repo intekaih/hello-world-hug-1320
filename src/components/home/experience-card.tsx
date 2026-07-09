@@ -397,9 +397,12 @@ export function ExperienceCard({
           style={{ willChange: "transform" }}
         />
 
-        {/* Trailer video (Stage 3+) */}
+        {/* Trailer video — mounted only after 200ms hover-intent, and stopped
+            if another card claims the global preview slot. Poster stays
+            underneath: on error we simply skip the crossfade so the user
+            keeps seeing poster + rating (no broken frame). */}
         <AnimatePresence>
-          {videoMounted && trailerUrl && (
+          {videoMounted && trailerUrl && !videoError && (
             <motion.video
               key="trailer"
               ref={videoRef}
@@ -411,12 +414,18 @@ export function ExperienceCard({
               initial={{ opacity: 0 }}
               animate={{ opacity: videoReady && stage3 ? 1 : 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
+              transition={{ duration: 0.2, ease: EASE }}
               onCanPlay={() => setVideoReady(true)}
+              onError={() => {
+                setVideoError(true);
+                setVideoReady(false);
+                setVideoMounted(false);
+              }}
               className="absolute inset-0 h-full w-full object-cover"
             />
           )}
         </AnimatePresence>
+
 
         {/* Reflection sheen — follows cursor */}
         <motion.div
