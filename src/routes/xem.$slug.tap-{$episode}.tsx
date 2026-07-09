@@ -276,8 +276,33 @@ function WatchPage() {
             onChangeEpisode={goToEpisode}
             cinemaMode={cinemaMode}
             onToggleCinemaMode={toggleCinema}
+            onServerChange={setActiveServerId}
           />
         </div>
+        {/* Mobile server chip bar — one-tap switching without opening settings */}
+        {!cinemaMode && servers.length > 1 && (
+          <div className="mt-3 flex gap-2 overflow-x-auto rail-scroll px-1 sm:hidden" role="tablist" aria-label="Nguồn phát">
+            {servers.map((s) => {
+              const active = (activeServerId || servers[0]?.id) === s.id;
+              return (
+                <button
+                  key={s.id}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setActiveServerId(s.id)}
+                  className={cn(
+                    "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition",
+                    active
+                      ? "border-primary/60 bg-primary/20 text-white"
+                      : "border-white/15 bg-white/5 text-white/70 hover:text-white",
+                  )}
+                >
+                  {s.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </motion.div>
 
       {/* Floating cinema exit — visible only in cinema mode */}
