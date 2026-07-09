@@ -288,6 +288,18 @@
       "subtitle": "Pick your next journey",
       "back": "Back to details",
       "browse": "Browse more"
+    },
+    "bridge": {
+      "eyebrow": "Because you watched",
+      "afterTitle": "{{title}}",
+      "subtitle": "Three picks tuned to your taste",
+      "trailerIn": "Trailer starts in {{s}}s",
+      "trailerPlaying": "Trailer playing · muted",
+      "playNow": "Watch now",
+      "addWatchlist": "Add to watchlist",
+      "added": "Saved to watchlist",
+      "notInterested": "Not interested",
+      "close": "Close"
     }
   },
   "search": {
