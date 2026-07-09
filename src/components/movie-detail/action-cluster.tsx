@@ -44,6 +44,10 @@ export function useBookmarkState(movie: Movie) {
     setWl(next);
     persist(`wl:${movie.slug}`, next);
     // Best-effort server sync so the /watchlist page reflects the change.
+    const runtimeMin = (() => {
+      const m = /(\d+)/.exec(movie.duration ?? "");
+      return m ? Number.parseInt(m[1], 10) : undefined;
+    })();
     try {
       if (next) {
         void fetch("/api/watchlist/toggle", {
@@ -54,7 +58,7 @@ export function useBookmarkState(movie: Movie) {
             movie_name: movie.title,
             movie_origin_name: movie.original_title,
             movie_thumb: movie.poster_url ?? "",
-            runtime: movie.runtime,
+            runtime: runtimeMin,
           }),
         });
       } else {
