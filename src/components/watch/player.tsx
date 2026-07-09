@@ -417,6 +417,36 @@ export function PlayerContainer({
     if (remaining > 40 && nextPromptOpen) setNextPromptOpen(false);
   }, [currentTime, duration, episode, totalEpisodes, nextPromptOpen]);
 
+  /* -------------------------- Ethical auto-next --------------------------- */
+  const autoNext = usePlayerStore((s) => s.autoNext);
+  const pauseAutoplayUntil = usePlayerStore((s) => s.pauseAutoplayUntil);
+  const firstBingeTooltipSeen = usePlayerStore((s) => s.firstBingeTooltipSeen);
+  const markBingeTooltipSeen = usePlayerStore((s) => s.markBingeTooltipSeen);
+  const pauseAutoplayTonight = usePlayerStore((s) => s.pauseAutoplayTonight);
+  const resumeAutoplay = usePlayerStore((s) => s.resumeAutoplay);
+  const effectiveAutoNext = isAutoplayActive({ autoNext, pauseAutoplayUntil });
+
+  // Auto-clear an expired "pause tonight" so future prompts behave normally.
+  useEffect(() => {
+    if (pauseAutoplayUntil && Date.now() >= pauseAutoplayUntil) {
+      resumeAutoplay();
+    }
+  }, [pauseAutoplayUntil, resumeAutoplay]);
+
+  // Session-only counter (never persisted) of consecutive auto-advances.
+  const autoAdvanceStreakRef = useRef(0);
+  const [softAskArmed, setSoftAskArmed] = useState(false);
+  useEffect(() => {
+    // When a new prompt opens, decide whether to escalate to a soft-ask.
+    if (nextPromptOpen && effectiveAutoNext && autoAdvanceStreakRef.current >= 3) {
+      setSoftAskArmed(true);
+    }
+    if (!nextPromptOpen) setSoftAskArmed(false);
+  }, [nextPromptOpen, effectiveAutoNext]);
+
+  const [settingsSheetOpen, setSettingsSheetOpen] = useState(false);
+
+
   /* -------------------------- Season progress ----------------------------- */
   const seasonProgress = useSeasonProgress(slug, totalEpisodes, 45);
   const [completeDismissed, setCompleteDismissed] = useState(false);
