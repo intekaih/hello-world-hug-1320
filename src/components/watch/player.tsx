@@ -412,6 +412,38 @@ export function PlayerContainer({
     if (remaining > 40 && nextPromptOpen) setNextPromptOpen(false);
   }, [currentTime, duration, episode, totalEpisodes, nextPromptOpen]);
 
+  /* -------------------------- Season progress ----------------------------- */
+  const seasonProgress = useSeasonProgress(slug, totalEpisodes, 45);
+  const [completeDismissed, setCompleteDismissed] = useState(false);
+  const [completeOpen, setCompleteOpen] = useState(false);
+  useEffect(() => {
+    setCompleteDismissed(false);
+    setCompleteOpen(false);
+  }, [slug, episode]);
+
+  const isLastEp = Number(episode) >= totalEpisodes && totalEpisodes > 0;
+  useEffect(() => {
+    if (!duration || completeDismissed) return;
+    const remaining = duration - currentTime;
+    if (isLastEp && remaining > 0 && remaining <= 20) {
+      setCompleteOpen(true);
+    }
+  }, [currentTime, duration, isLastEp, completeDismissed]);
+
+  // Persist watched marker locally at ≥92% so season chip updates without auth.
+  const markedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!duration) return;
+    const ratio = currentTime / duration;
+    const key = `${slug}::${episode}`;
+    if (ratio >= 0.92 && markedRef.current !== key) {
+      markedRef.current = key;
+      const n = Number(episode);
+      if (Number.isFinite(n)) markEpisodeWatchedLocal(slug, n);
+    }
+  }, [currentTime, duration, slug, episode]);
+
+
 
 
   /* ---------------------------- Fullscreen -------------------------------- */
