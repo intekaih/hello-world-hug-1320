@@ -143,12 +143,13 @@ export function ShareSheet({ payload, open, onOpenChange, onCopied, onShared }: 
         // Deep link failed — copy link as consolation.
         void doCopy(url, "messenger");
       }
-      toast.success(t("share.toast.opened", { channel: c.label }), { duration: 1800 });
+      onShared?.(payload, c.label);
     } catch {
       void doCopy(url, c.key);
     }
     onOpenChange(false);
   };
+
 
   if (!payload) return null;
 
