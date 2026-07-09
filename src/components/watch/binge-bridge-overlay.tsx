@@ -320,6 +320,9 @@ export function BingeBridgeOverlay({
                           <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/60">
                             {p.year} · ★ {p.rating.toFixed(1)}
                           </div>
+                          <div className="mt-1.5 inline-flex max-w-full items-center rounded-full border border-primary/30 bg-primary/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-primary/95">
+                            <span className="truncate">{reasonChip(p.reason, p.reasonValue)}</span>
+                          </div>
                         </div>
                       </div>
                     </Link>
