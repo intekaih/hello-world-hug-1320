@@ -573,6 +573,13 @@ export function PlayerContainer({
           e.preventDefault();
           setShortcutsOpen((v) => !v);
           break;
+        case "s":
+        case "S":
+          if (skipTarget) {
+            e.preventDefault();
+            performSkip();
+          }
+          break;
         case "Escape":
           setShortcutsOpen(false);
           setEpisodePanelOpen(false);
@@ -583,7 +590,8 @@ export function PlayerContainer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [togglePlay, seekBy, toggleFullscreen, showControls, onToggleCinemaMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [togglePlay, seekBy, toggleFullscreen, showControls, onToggleCinemaMode, skipTarget]);
 
   const epNum = Number(episode);
   const canPrev = epNum > 1;
