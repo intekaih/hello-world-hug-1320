@@ -83,7 +83,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       aria-label={movie.title}
-      className="dark relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-black text-white sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
+      className="relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-background sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
       style={{ ["--px" as string]: "0px", ["--py" as string]: "0px" }}
     >
       {/* Backdrop — Ken Burns + parallax */}
