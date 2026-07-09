@@ -188,6 +188,23 @@ function Home() {
           </SceneSection>
         </StaggerItem>
 
+        {/* SCENE 06.5 — Controlled surprise · seeded editorial lottery */}
+        <StaggerItem>
+          <SceneSection
+            mood="gold"
+            entrance="focus"
+          >
+            <LuckyRow
+              pool={[
+                ...data.top10Movies,
+                ...data.hotSeriesMovies,
+                ...data.newMovies,
+                ...data.animeMovies,
+              ]}
+            />
+          </SceneSection>
+        </StaggerItem>
+
         {/* SCENE 07 — Cinematic Collection — cyan, focus entrance, GenreCosmos */}
         <StaggerItem>
           <SceneSection
