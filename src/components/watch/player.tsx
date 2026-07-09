@@ -355,6 +355,8 @@ export function PlayerContainer({
       const video = videoRef.current;
       if (!video || video.paused) return;
       saveProgress();
+      const { shouldPrompt } = noteWatching(5);
+      if (shouldPrompt) setWellnessOpen(true);
     }, 5000);
     return () => window.clearInterval(id);
   }, [saveProgress]);
