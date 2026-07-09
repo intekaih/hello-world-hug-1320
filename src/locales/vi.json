@@ -544,7 +544,41 @@
       "cta": "Khám phá phim"
     }
   },
+  "taste": {
+    "eyebrow": "Cá nhân hoá nhẹ nhàng",
+    "title": "Nói cho movieCC biết bạn thích gì",
+    "subtitle": "Chọn vài thứ bạn yêu — chúng tôi dùng để gợi ý phim hợp gu hơn. Bỏ qua cũng được, sửa sau lúc nào cũng được.",
+    "editableLater": "Sửa lại bất kỳ lúc nào trong Hồ sơ.",
+    "genres": {
+      "label": "Thể loại yêu thích",
+      "count": "{{current}}/{{max}} đã chọn"
+    },
+    "country": {
+      "label": "Xuất xứ ưa thích"
+    },
+    "mood": {
+      "label": "Tối nay bạn muốn cảm thấy…",
+      "options": {
+        "relax": { "title": "Thư giãn", "desc": "Nhẹ nhàng, ấm áp, dễ xem." },
+        "tense": { "title": "Căng thẳng", "desc": "Hồi hộp, kịch tính, nín thở." },
+        "moving": { "title": "Xúc động", "desc": "Chậm rãi, sâu lắng, chạm cảm xúc." }
+      }
+    },
+    "actions": {
+      "skip": "Bỏ qua",
+      "save": "Lưu và bắt đầu"
+    },
+    "profile": {
+      "title": "Sở thích của bạn",
+      "subtitle": "Dùng cho gợi ý phim. Chỉ lưu trên thiết bị này (đồng bộ tài khoản là tuỳ chọn).",
+      "empty": "Chưa có sở thích nào. Chọn vài thứ để gợi ý chính xác hơn.",
+      "setup": "Thiết lập",
+      "edit": "Chỉnh sửa",
+      "none": "Chưa chọn"
+    }
+  },
   "recommendations": {
+
     "pageEyebrow": "Tín hiệu cá nhân",
     "pageTitle": "Được tạo theo cách bạn xem phim",
     "pageSubtitle": "Một lớp gợi ý âm thầm học từ những gì bạn xem tiếp, lưu và yêu thích — rồi gợi ý điều hợp nhất cho tối nay.",

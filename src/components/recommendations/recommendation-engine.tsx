@@ -5,9 +5,11 @@ import { buildRecommendations, type RecInputs } from "@/lib/recommendations/engi
 import type { BrowseMovie } from "@/routes/api/browse";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSuppressedRecs } from "@/hooks/useSuppressedRecs";
+import { useTasteStore } from "@/store/tasteStore";
 import { RecommendationSection } from "./recommendation-section";
 import { TonightPick } from "./tonight-pick";
 import { MoodMatchRail } from "./mood-match-rail";
+
 
 
 type PoolResp = { items: BrowseMovie[] };
@@ -38,6 +40,11 @@ async function j<T>(url: string): Promise<T> {
 export function RecommendationEngine() {
   const { t } = useTranslation();
   const { suppressed } = useSuppressedRecs();
+  const tasteGenres = useTasteStore((s) => s.genres);
+  const tasteCountry = useTasteStore((s) => s.country);
+  const tasteMood = useTasteStore((s) => s.mood);
+
+
 
 
   const pool = useQuery({
@@ -76,9 +83,11 @@ export function RecommendationEngine() {
       favorites: (favorites.data?.items ?? []).map((f) => ({ slug: f.movie_slug, createdAt: f.createdAt })),
       watchlist: (watchlist.data?.items ?? []).map((w) => ({ slug: w.movie_slug, createdAt: w.createdAt })),
       suppressed,
+      taste: { genres: tasteGenres, country: tasteCountry, mood: tasteMood },
     };
     return buildRecommendations(input);
-  }, [pool.data, history.data, favorites.data, watchlist.data, suppressed]);
+  }, [pool.data, history.data, favorites.data, watchlist.data, suppressed, tasteGenres, tasteCountry, tasteMood]);
+
 
 
   if (!surfaces) {

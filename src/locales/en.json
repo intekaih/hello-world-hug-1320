@@ -544,7 +544,41 @@
       "cta": "Discover movies"
     }
   },
+  "taste": {
+    "eyebrow": "Light personalization",
+    "title": "Tell movieCC what you love",
+    "subtitle": "Pick a few things you enjoy — we'll tune recommendations to fit. Skip anytime, edit later.",
+    "editableLater": "You can change this anytime in Profile.",
+    "genres": {
+      "label": "Favorite genres",
+      "count": "{{current}}/{{max}} selected"
+    },
+    "country": {
+      "label": "Preferred country"
+    },
+    "mood": {
+      "label": "Tonight you want to feel…",
+      "options": {
+        "relax": { "title": "Relaxed", "desc": "Light, warm, easy to watch." },
+        "tense": { "title": "On edge", "desc": "Tense, dramatic, breath-holding." },
+        "moving": { "title": "Moved", "desc": "Slow, deep, emotionally resonant." }
+      }
+    },
+    "actions": {
+      "skip": "Skip",
+      "save": "Save & start"
+    },
+    "profile": {
+      "title": "Your taste",
+      "subtitle": "Used to personalize recommendations. Stored on this device (account sync optional).",
+      "empty": "No taste picks yet. Choose a few for sharper picks.",
+      "setup": "Set up",
+      "edit": "Edit",
+      "none": "Not set"
+    }
+  },
   "recommendations": {
+
     "pageEyebrow": "Personal signals",
     "pageTitle": "Made for the way you watch",
     "pageSubtitle": "A quiet layer that learns from what you resume, save, and love — and surfaces what fits tonight.",

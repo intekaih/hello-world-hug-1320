@@ -48,6 +48,13 @@ export type HistorySignal = {
 };
 export type LibrarySignal = { slug: string; createdAt: number };
 
+export type TasteMood = "relax" | "tense" | "moving";
+export type TasteProfile = {
+  genres: string[];       // exact category strings from the pool
+  country: string | null; // exact country string from the pool
+  mood: TasteMood | null;
+};
+
 export type RecInputs = {
   pool: BrowseMovie[];
   history: HistorySignal[];
@@ -55,7 +62,10 @@ export type RecInputs = {
   watchlist: LibrarySignal[];
   /** Slugs the user hit "Not interested" on — hidden across every surface. */
   suppressed?: Set<string>;
+  /** Onboarding-lite preferences; feeds weights even with zero watch signal. */
+  taste?: TasteProfile;
 };
+
 
 
 export type RecSurfaces = {
@@ -97,6 +107,33 @@ function buildWeights(seeds: BrowseMovie[]) {
   return { genre, country, type };
 }
 
+/** Editorial mood → genre bias, kept aligned with tasteStore.MOOD_GENRES. */
+const MOOD_GENRE_BIAS: Record<TasteMood, string[]> = {
+  relax: ["Hài", "Tình cảm", "Hoạt hình"],
+  tense: ["Hành động", "Kinh dị", "Tội phạm", "Bí ẩn"],
+  moving: ["Chính kịch", "Lịch sử", "Tình cảm"],
+};
+
+/** Fold onboarding taste into an existing weight map (in place). */
+function applyTasteWeights(
+  weights: ReturnType<typeof buildWeights>,
+  taste: TasteProfile | undefined,
+) {
+  if (!taste) return;
+  // Explicit picks weigh as if the user had watched ~3 movies of that genre.
+  for (const g of taste.genres) {
+    weights.genre.set(g, (weights.genre.get(g) ?? 0) + 3);
+  }
+  if (taste.country) {
+    weights.country.set(taste.country, (weights.country.get(taste.country) ?? 0) + 3);
+  }
+  if (taste.mood) {
+    for (const g of MOOD_GENRE_BIAS[taste.mood]) {
+      weights.genre.set(g, (weights.genre.get(g) ?? 0) + 1);
+    }
+  }
+}
+
 function scoreAgainstWeights(
   m: BrowseMovie,
   w: ReturnType<typeof buildWeights>,
@@ -108,6 +145,7 @@ function scoreAgainstWeights(
   s += m.rating * 0.15;
   return s;
 }
+
 
 function topReason(m: BrowseMovie, w: ReturnType<typeof buildWeights>): {
   reason: ReasonKind;
@@ -124,8 +162,12 @@ function topReason(m: BrowseMovie, w: ReturnType<typeof buildWeights>): {
 // ── main ──────────────────────────────────────────────────────────────
 
 export function buildRecommendations(input: RecInputs): RecSurfaces {
-  const { pool: rawPool, history, favorites, watchlist, suppressed } = input;
+  const { pool: rawPool, history, favorites, watchlist, suppressed, taste } = input;
   const suppress = suppressed ?? new Set<string>();
+  const hasTaste = Boolean(
+    taste && (taste.genres.length > 0 || taste.country || taste.mood),
+  );
+
   // Suppression is global: a hidden slug can't appear on any surface, including
   // Tonight and "Because you watched…" seeds — otherwise the "Not interested"
   // signal feels ignored on the next render.
@@ -146,10 +188,11 @@ export function buildRecommendations(input: RecInputs): RecSurfaces {
     ...history.map((h) => h.slug),
     ...favorites.map((f) => f.slug),
   ]);
-  const hasSignals =
+  const hasWatchSignals =
     historySeeds.length + favSeeds.length + watchSeeds.length > 0;
+  const hasSignals = hasWatchSignals || hasTaste;
 
-  // ── Fallback: no signals → cold-start uses ONLY trending / highlyRated ─
+  // ── Fallback: no signals at all → cold-start uses ONLY trending / highlyRated ─
   if (!hasSignals) {
 
     const trending = pool
@@ -174,6 +217,7 @@ export function buildRecommendations(input: RecInputs): RecSurfaces {
     };
   }
 
+
   // Recency-weighted seed set (history counts more when recent, favorites always count 2).
   const now = Date.now();
   const decay = (t: number) => Math.exp(-(now - t) / (1000 * 60 * 60 * 24 * 14));
@@ -188,6 +232,8 @@ export function buildRecommendations(input: RecInputs): RecSurfaces {
     weightedSeeds.push(m, m);
   }
   const weights = buildWeights(weightedSeeds);
+  applyTasteWeights(weights, taste);
+
 
   // ── Because You Watched — top-recent history seed ───────────────────
   const seedForBecause = historySeeds[0] ?? favSeeds[0];
