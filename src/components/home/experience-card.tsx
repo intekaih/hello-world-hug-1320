@@ -20,6 +20,7 @@ import {
   useRef,
   useState,
   type MouseEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
@@ -27,6 +28,11 @@ import { type MovieCard, hasVisibleProgress, isNearComplete } from "@/lib/home-q
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
 import { useTranslation } from "@/hooks/useTranslation";
+import { claimPreviewSlot, releasePreviewSlot } from "@/lib/media/preview-slot";
+
+/** Hover-intent delay before we consider it a real preview intent. */
+const HOVER_INTENT_MS = 200;
+
 
 /**
  * ExperienceCard — the "Movie Experience Card" replacing the flat poster.
@@ -100,7 +106,20 @@ export function ExperienceCard({
   // Trailer mount + ready state (Stage 3 fade-in).
   const [videoMounted, setVideoMounted] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const [inView, setInView] = useState(true);
+
+  // Coarse-pointer tap-preview state: first tap arms the preview, second
+  // tap navigates. `previewArmed` is true while we are showing the
+  // preview overlay from a tap gesture (not a hover).
+  const [previewArmed, setPreviewArmed] = useState(false);
+  const previewSlotId = useRef<symbol | null>(null);
+  const isCoarsePointer = useRef(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    isCoarsePointer.current = window.matchMedia("(pointer: coarse)").matches;
+  }, []);
+
 
   // Mouse-tracked 3D tilt.
   const mx = useMotionValue(0.5);
@@ -131,18 +150,34 @@ export function ExperienceCard({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (!inView || !hovered) {
+    if (!inView || (!hovered && !previewArmed) || videoError) {
       v.pause();
     } else if (videoReady) {
       void v.play().catch(() => {});
     }
-  }, [inView, hovered, videoReady]);
+  }, [inView, hovered, previewArmed, videoReady, videoError]);
 
   // ── Hover-stage orchestration ───────────────────────────────────────
   const clearStageTimers = useCallback(() => {
     stageTimers.current.forEach((id) => window.clearTimeout(id));
     stageTimers.current = [];
   }, []);
+
+  /** Actually load the trailer — gated behind hover-intent (200ms). */
+  const mountTrailer = useCallback(() => {
+    if (!trailerUrl) return;
+    setVideoError(false);
+    setVideoMounted(true);
+    // Claim the global slot so other cards stop their videos.
+    previewSlotId.current = claimPreviewSlot(() => {
+      // Another card took over — collapse this preview.
+      const v = videoRef.current;
+      if (v) v.pause();
+      setVideoMounted(false);
+      setVideoReady(false);
+      setPreviewArmed(false);
+    });
+  }, [trailerUrl]);
 
   const enter = useCallback(() => {
     if (reduce) {
@@ -154,29 +189,43 @@ export function ExperienceCard({
     clearStageTimers();
     stageTimers.current.push(window.setTimeout(() => setStage(1), 0));
     stageTimers.current.push(window.setTimeout(() => setStage(2), 120));
+    // Hover-intent gate: only fetch/mount the trailer after HOVER_INTENT_MS.
+    // Fast scroll-throughs never trigger a network request.
     stageTimers.current.push(
       window.setTimeout(() => {
         setStage(3);
-        if (trailerUrl) setVideoMounted(true);
-      }, 300),
+        mountTrailer();
+      }, HOVER_INTENT_MS),
     );
     stageTimers.current.push(window.setTimeout(() => setStage(4), 600));
-  }, [clearStageTimers, reduce, trailerUrl]);
+  }, [clearStageTimers, reduce, mountTrailer]);
 
   const leave = useCallback(() => {
     clearStageTimers();
     setHovered(false);
     setStage(0);
     setVideoReady(false);
+    setPreviewArmed(false);
     rotX.set(0);
     rotY.set(0);
+    if (previewSlotId.current) {
+      releasePreviewSlot(previewSlotId.current);
+      previewSlotId.current = null;
+    }
     // Leave the video mounted for a moment to reuse on quick re-hover.
     stageTimers.current.push(
       window.setTimeout(() => setVideoMounted(false), 800),
     );
   }, [clearStageTimers, rotX, rotY]);
 
-  useEffect(() => () => clearStageTimers(), [clearStageTimers]);
+  useEffect(
+    () => () => {
+      clearStageTimers();
+      if (previewSlotId.current) releasePreviewSlot(previewSlotId.current);
+    },
+    [clearStageTimers],
+  );
+
 
   // ── Mouse tracking → tilt + reflection ──────────────────────────────
   const handleMove = useCallback(
@@ -213,6 +262,55 @@ export function ExperienceCard({
   const stage3 = stage >= 3;
   const stage4 = stage >= 4;
 
+  // ── Coarse-pointer gesture: first tap = preview, second tap = navigate.
+  // Long-press (500ms) also triggers preview without navigation. Precise
+  // pointers keep the classic hover behaviour and never enter this branch.
+  const longPressTimer = useRef<number | null>(null);
+  const handleClick = useCallback(
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      if (!isCoarsePointer.current) return; // fine pointer → normal nav
+      if (!trailerUrl) return; // no preview available → let it navigate
+      if (previewArmed) {
+        // Second tap: release slot then navigate.
+        if (previewSlotId.current) {
+          releasePreviewSlot(previewSlotId.current);
+          previewSlotId.current = null;
+        }
+        setPreviewArmed(false);
+        return; // navigation proceeds
+      }
+      // First tap: swallow navigation, arm preview.
+      e.preventDefault();
+      setPreviewArmed(true);
+      setStage(3);
+      mountTrailer();
+    },
+    [mountTrailer, previewArmed, trailerUrl],
+  );
+
+  const handlePointerDown = useCallback(
+    (e: ReactPointerEvent<HTMLAnchorElement>) => {
+      if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+      if (!trailerUrl) return;
+      if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = window.setTimeout(() => {
+        setPreviewArmed(true);
+        setStage(3);
+        mountTrailer();
+      }, 500);
+    },
+    [mountTrailer, trailerUrl],
+  );
+
+  const cancelLongPress = useCallback(() => {
+    if (longPressTimer.current) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+
+
   return (
     <Link
       ref={rootRef}
@@ -225,6 +323,10 @@ export function ExperienceCard({
       onMouseEnter={enter}
       onMouseLeave={leave}
       onMouseMove={handleMove}
+      onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      onPointerUp={cancelLongPress}
+      onPointerCancel={cancelLongPress}
       className={cn(
         "group/card relative shrink-0 snap-start",
         SIZES[size],
@@ -295,9 +397,12 @@ export function ExperienceCard({
           style={{ willChange: "transform" }}
         />
 
-        {/* Trailer video (Stage 3+) */}
+        {/* Trailer video — mounted only after 200ms hover-intent, and stopped
+            if another card claims the global preview slot. Poster stays
+            underneath: on error we simply skip the crossfade so the user
+            keeps seeing poster + rating (no broken frame). */}
         <AnimatePresence>
-          {videoMounted && trailerUrl && (
+          {videoMounted && trailerUrl && !videoError && (
             <motion.video
               key="trailer"
               ref={videoRef}
@@ -309,12 +414,18 @@ export function ExperienceCard({
               initial={{ opacity: 0 }}
               animate={{ opacity: videoReady && stage3 ? 1 : 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
+              transition={{ duration: 0.2, ease: EASE }}
               onCanPlay={() => setVideoReady(true)}
+              onError={() => {
+                setVideoError(true);
+                setVideoReady(false);
+                setVideoMounted(false);
+              }}
               className="absolute inset-0 h-full w-full object-cover"
             />
           )}
         </AnimatePresence>
+
 
         {/* Reflection sheen — follows cursor */}
         <motion.div
