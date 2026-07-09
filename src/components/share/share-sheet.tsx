@@ -12,11 +12,13 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { QRCodeSVG } from "qrcode.react";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
+import { thumbSrc } from "@/utils/thumbSrc";
 import { buildShareUrl, type SharePayload } from "@/lib/share/use-share-movie";
 
 type Props = {
@@ -24,6 +26,8 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCopied: (title: string) => void;
+  /** Fired when the user completes a share via a channel (window opened). */
+  onShared?: (payload: SharePayload, channel: string) => void;
 };
 
 type Channel = {
@@ -34,6 +38,7 @@ type Channel = {
   /** small tint for the icon halo */
   tint: string;
 };
+
 
 /** Deterministic message picker so the same movie surfaces the same line. */
 function hash(s: string) {
