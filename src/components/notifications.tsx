@@ -476,8 +476,18 @@ export function NotificationRow({
           <div className="font-display font-semibold text-foreground transition-colors group-hover:text-primary">
             {n.movie_name}
           </div>
-          <p className="mt-0.5 text-sm text-muted-foreground">{n.message}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {n.type === "new_episode" && n.episode
+              ? `Tập ${n.episode} đã lên`
+              : n.message}
+          </p>
+          {n.type === "new_episode" && (
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-[11px] font-semibold text-primary ring-1 ring-primary/25">
+              <PlayCircle className="h-3 w-3" /> Xem ngay
+            </span>
+          )}
         </div>
+
       </Link>
       {!n.read && (
         <button
