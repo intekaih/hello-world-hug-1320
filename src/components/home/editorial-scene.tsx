@@ -39,6 +39,8 @@ export function EditorialScene({ movies }: { movies: MovieCard[] }) {
             <img
               src={thumbSrc(feature.poster_url, { w: 1200 })}
               alt={feature.title}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.05]"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
@@ -90,6 +92,8 @@ export function EditorialScene({ movies }: { movies: MovieCard[] }) {
                 <img
                   src={thumbSrc(m.poster_url, { w: 240 })}
                   alt=""
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
