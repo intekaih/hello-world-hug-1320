@@ -314,7 +314,13 @@ function WatchPage() {
 
             <div className="mt-8 grid gap-6 pb-24 lg:grid-cols-[1fr_320px]">
               <div className="space-y-6">
-                <WatchActions slug={slug} />
+                <WatchActions
+                  slug={slug}
+                  title={title}
+                  episode={episode}
+                  posterUrl={posterUrl}
+                />
+
                 {overview && (
                   <section className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 backdrop-blur-xl">
                     <div

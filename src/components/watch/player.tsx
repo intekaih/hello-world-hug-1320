@@ -30,6 +30,8 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useShareMovie } from "@/lib/share/use-share-movie";
+import { getSharedPlayerTime, setSharedPlayerTime } from "@/lib/share/player-time-ref";
 import { PlayerLoadingState } from "./player-loading-state";
 import {
   PlayerErrorState,
@@ -121,7 +123,16 @@ export function PlayerContainer({
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
   const [seekFeedback, setSeekFeedback] = useState<null | "back" | "fwd">(null);
 
-  const initialTimeRef = useRef(initialTime);
+  // Honour ?t=<seconds> deep-links (from shared timestamped URLs).
+  const initialTimeRef = useRef(
+    (() => {
+      if (initialTime > 0) return initialTime;
+      if (typeof window === "undefined") return 0;
+      const t = new URLSearchParams(window.location.search).get("t");
+      const n = t ? Number(t) : 0;
+      return Number.isFinite(n) && n > 0 ? n : 0;
+    })(),
+  );
   const reloadTokenRef = useRef(0);
   const [reloadToken, setReloadToken] = useState(0);
   const retryPlayback = useCallback(() => {
@@ -256,7 +267,10 @@ export function PlayerContainer({
     if (!video) return;
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
-    const onTime = () => setCurrentTime(video.currentTime);
+    const onTime = () => {
+      setCurrentTime(video.currentTime);
+      setSharedPlayerTime(video.currentTime);
+    };
     const onProgress = () => {
       if (video.buffered.length) {
         setBuffered(video.buffered.end(video.buffered.length - 1));
@@ -1097,11 +1111,24 @@ export function EpisodePanel({
 /*  WatchActions                                                              */
 /* -------------------------------------------------------------------------- */
 
-export function WatchActions({ slug }: { slug: string }) {
+export function WatchActions({
+  slug,
+  title,
+  episode,
+  posterUrl,
+  getCurrentTime,
+}: {
+  slug: string;
+  title?: string;
+  episode?: string;
+  posterUrl?: string;
+  getCurrentTime?: () => number;
+}) {
+  const { t } = useTranslation();
+  const { open: openShare } = useShareMovie();
   const [fav, setFav] = useState(false);
   const [watchlist, setWatchlist] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     try {
@@ -1118,15 +1145,19 @@ export function WatchActions({ slug }: { slug: string }) {
     } catch {}
   };
 
-  const share = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    try {
-      if (navigator.share) await navigator.share({ url });
-      else await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {}
+  const share = () => {
+    openShare({
+      title: title ?? slug,
+      posterUrl,
+      url:
+        typeof window !== "undefined"
+          ? `${window.location.origin}${window.location.pathname}`
+          : undefined,
+      timestampSeconds: getCurrentTime?.() ?? getSharedPlayerTime(),
+    });
   };
+
+
 
   const Btn = ({
     active,
@@ -1194,7 +1225,7 @@ export function WatchActions({ slug }: { slug: string }) {
         className="flex flex-col items-center gap-1 rounded-xl px-4 py-2.5 text-xs font-medium text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
       >
         <Share2 className="h-5 w-5" />
-        <span>{copied ? "Đã copy" : "Chia sẻ"}</span>
+        <span>{t("share.actions.share")}</span>
       </button>
     </div>
   );

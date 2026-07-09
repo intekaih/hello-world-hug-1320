@@ -13,6 +13,7 @@ import { AuthInitializer } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { OfflineBanner } from "@/components/offline-banner";
 import { I18nProvider } from "@/i18n";
+import { ShareProvider } from "@/lib/share/use-share-movie";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -153,7 +154,9 @@ function RootComponent() {
       <I18nProvider>
         <OfflineBanner />
         <AuthInitializer>
-          <AppShell />
+          <ShareProvider>
+            <AppShell />
+          </ShareProvider>
           <Toaster />
         </AuthInitializer>
       </I18nProvider>

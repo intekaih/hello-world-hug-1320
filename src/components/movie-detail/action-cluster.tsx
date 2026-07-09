@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Movie } from "./types";
+import { useShareMovie } from "@/lib/share/use-share-movie";
 
 /* -------------------------------------------------------------------------- */
 /*  Persisted client-side bookmark state — matches the previous behaviour     */
@@ -53,21 +54,21 @@ export function useBookmarkState(movie: Movie) {
 }
 
 export function useShare(movie: Movie) {
-  const [copied, setCopied] = useState(false);
-  const share = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    try {
-      if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ url, title: movie.title });
-      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(url);
-      }
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
-    } catch {}
+  const { open } = useShareMovie();
+  const share = () => {
+    open({
+      title: movie.title,
+      posterUrl: movie.poster_url,
+      description: movie.overview_vi ?? movie.overview,
+      url:
+        typeof window !== "undefined"
+          ? `${window.location.origin}/phim/${movie.slug}`
+          : `/phim/${movie.slug}`,
+    });
   };
-  return { copied, share };
+  return { copied: false, share };
 }
+
 
 /* -------------------------------------------------------------------------- */
 /*  Magnetic primary button — Play "Watch Now"                                */

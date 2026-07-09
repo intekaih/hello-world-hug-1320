@@ -505,6 +505,30 @@
       "sameCountry": "Từ {{value}}",
       "similarMood": "Hợp với {{value}}"
     }
+  },
+  "share": {
+    "sheet": {
+      "eyebrow": "Chia sẻ khoảnh khắc này"
+    },
+    "actions": {
+      "share": "Chia sẻ",
+      "copyLink": "Copy link",
+      "copyTitleLink": "Copy tên + link",
+      "copied": "Đã copy"
+    },
+    "toast": {
+      "copiedTitle": "Đã copy link",
+      "copiedDescription": "\"{{title}}\" đã sẵn sàng để chia sẻ.",
+      "opened": "Đang mở {{channel}}…",
+      "copyFailed": "Không copy được — thử lại nhé."
+    },
+    "messages": {
+      "one": "Mình nghĩ bạn sẽ thích phim này.",
+      "two": "Tối nay xem phim này không?",
+      "three": "Bộ này đáng xem đấy.",
+      "four": "Xem cái này rồi lại nghĩ đến bạn."
+    }
   }
 }
+
 
