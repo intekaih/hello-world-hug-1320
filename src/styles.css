@@ -455,7 +455,7 @@
 }
 
 @utility title-reveal {
-  animation: title-reveal 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: title-reveal 900ms var(--ease-out-soft) both;
 }
 
 /* Ambient pulsing glow for CTA / logo */
