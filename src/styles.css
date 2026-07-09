@@ -145,6 +145,17 @@
   --sidebar-accent-foreground: oklch(0.18 0.02 280);
   --sidebar-border: oklch(0.18 0.02 280 / 0.08);
   --sidebar-ring: oklch(0.65 0.22 15);
+
+  /* Theme System 2.0 — light */
+  --surface-glass: oklch(1 0 0 / 0.72);
+  --glass-border: oklch(0.18 0.02 280 / 0.10);
+  --overlay: oklch(0.18 0.02 280 / 0.55);
+  --scrim: oklch(0.10 0.02 280 / 0.70);
+  --hero-overlay-bottom: linear-gradient(180deg, transparent 0%, oklch(1 0 0 / 0.35) 55%, var(--background) 100%);
+  --hero-overlay-left: linear-gradient(90deg, oklch(1 0 0 / 0.55), transparent 55%);
+  --card-overlay: linear-gradient(180deg, transparent 55%, oklch(0.10 0.02 280 / 0.75) 100%);
+  --shadow-soft: 0 8px 24px -12px oklch(0.18 0.02 280 / 0.20);
+  --shadow-media: 0 24px 48px -16px oklch(0.18 0.02 280 / 0.25);
 }
 
 .dark {
