@@ -514,11 +514,18 @@ export function MovieRowSkeleton() {
 
 export function Top10Section({ movies }: { movies: MovieCard[] }) {
   const { ref, scrollBy } = useScroller();
+  // Honest framing: this ranking is derived from our own catalog scoring
+  // (rating × recency inside the movieCC pool), never a global chart.
+  const updatedLabel = new Date().toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
   return (
     <div className="space-y-3">
       <SectionHeader
-        title="Top 10 hôm nay"
-        subtitle="Được xem nhiều nhất trong 24h qua"
+        title="Đang hot trên movieCC"
+        subtitle={`Xếp theo điểm trong catalog movieCC · cập nhật ${updatedLabel}`}
         onScrollLeft={() => scrollBy(-1)}
         onScrollRight={() => scrollBy(1)}
       />
@@ -526,6 +533,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
         ref={ref}
         className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-6 overflow-x-auto rail-scroll px-4 py-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
       >
+
         {movies.slice(0, 10).map((m, i) => (
           <ExperienceCard
             key={m.id}
