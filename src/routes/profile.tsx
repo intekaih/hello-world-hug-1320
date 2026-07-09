@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { RequireAuth, PageHeader } from "@/components/user-lists/shared";
 import { LibrarySummary } from "@/components/library-summary";
 import { TastePreferencesCard } from "@/components/onboarding/taste-preferences-card";
+import { TasteBadge } from "@/components/profile/taste-badge";
 import { useAuthStore } from "@/store/authStore";
 import { apiPost } from "@/api-client";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -96,7 +97,10 @@ function ProfilePage() {
       {/* keep t reference in case future strings adopt i18n */}
       <span className="sr-only">{t("library.summary.title")}</span>
 
+      <TasteBadge />
+
       <TastePreferencesCard />
+
 
 
 
