@@ -72,17 +72,19 @@ function MovieDetailPage() {
   const { t } = useTranslation();
 
   const movieQ = useQuery({
-    queryKey: ["movie", slug],
+    queryKey: ["movie-detail", slug],
     queryFn: async () => {
-      const res = await fetch(`/api/movies/${slug}`);
-      if (!res.ok) {
+      const { fetchMovieDetail } = await import("@/api-client/movie-detail");
+      try {
+        return await fetchMovieDetail(slug);
+      } catch (e) {
+        const status = (e as { status?: number }).status;
         const err = new Error(
-          res.status === 404 ? t("detail.notFound.title") : `Error ${res.status}`,
+          status === 404 ? t("detail.notFound.title") : `Error ${status ?? ""}`,
         ) as Error & { status: number };
-        err.status = res.status;
+        err.status = status ?? 500;
         throw err;
       }
-      return res.json() as Promise<Movie>;
     },
     retry: (failureCount, error) => {
       const status = (error as { status?: number })?.status;
@@ -92,16 +94,16 @@ function MovieDetailPage() {
   });
 
   const relatedQ = useQuery({
-    queryKey: ["movie", slug, "related"],
+    queryKey: ["movie-detail", slug, "related"],
     queryFn: async () => {
-      const res = await fetch(`/api/movies/${slug}/related`);
-      if (!res.ok) return [] as RelatedItem[];
-      return res.json() as Promise<RelatedItem[]>;
+      const { fetchRelatedMovies } = await import("@/api-client/movie-detail");
+      return fetchRelatedMovies(slug, 12);
     },
     enabled: movieQ.isSuccess,
   });
 
-  const movieData = movieQ.data;
+
+  const movieData = movieQ.data?.movie;
   usePageMeta(
     movieData
       ? {
@@ -133,6 +135,7 @@ function MovieDetailPage() {
   }
 
   const movie = movieData;
+
 
   return (
     <div className="space-y-16 pb-24">
