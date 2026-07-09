@@ -335,6 +335,30 @@
       "tv-shows": "TV Shows"
     }
   },
+  "home": {
+    "daypart": {
+      "morning": {
+        "eyebrow": "◐ Sáng nay của bạn",
+        "title": "Nhẹ nhàng khởi động ngày",
+        "subtitle": "Chọn một câu chuyện vừa vặn cho tách cà phê đầu tiên."
+      },
+      "afternoon": {
+        "eyebrow": "◑ Chiều nay của bạn",
+        "title": "Giải lao giữa ngày",
+        "subtitle": "Một khoảng nghỉ ngắn giữa lịch trình."
+      },
+      "evening": {
+        "eyebrow": "◕ Buổi tối của bạn",
+        "title": "Đêm chiếu tại rạp nhà",
+        "subtitle": "Chậm lại, tắt đèn, và bước vào một thế giới khác."
+      },
+      "late_night": {
+        "eyebrow": "☾ Đêm khuya · chọn phim ngắn hơn?",
+        "title": "Gọn nhẹ và sắc nét cho giờ này",
+        "subtitle": "Những lựa chọn đánh giá cao, đủ để kết thúc trước khi bạn ngủ quên."
+      }
+    }
+  },
   "browse": {
     "titleSuffix": "MovieCC",
     "description": "Duyệt kho phim đầy đủ, lọc theo thể loại, quốc gia, năm.",
