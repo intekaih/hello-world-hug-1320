@@ -14,6 +14,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LichChieuRouteImport } from './routes/lich-chieu'
 import { Route as KhamPhaRouteImport } from './routes/kham-pha'
@@ -39,6 +40,8 @@ import { Route as ApiHistoryRouteImport } from './routes/api/history'
 import { Route as ApiFavoritesRouteImport } from './routes/api/favorites'
 import { Route as ApiDiscoverRouteImport } from './routes/api/discover'
 import { Route as ApiBrowseRouteImport } from './routes/api/browse'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as XemSlugTapChar123episodeChar125RouteImport } from './routes/xem.$slug.tap-{$episode}'
 import { Route as ApiWatchlistToggleRouteImport } from './routes/api/watchlist.toggle'
 import { Route as ApiWatchlistNoteRouteImport } from './routes/api/watchlist.note'
@@ -54,6 +57,7 @@ import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
 import { Route as ApiAuthForgotPasswordRouteImport } from './routes/api/auth/forgot-password'
 import { Route as ApiActorsSearchRouteImport } from './routes/api/actors.search'
 import { Route as ApiActorsNameRouteImport } from './routes/api/actors.$name'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApiMoviesSlugRelatedRouteImport } from './routes/api/movies.$slug.related'
 import { Route as ApiHistorySlugEpRouteImport } from './routes/api/history.$slug.$ep'
 import { Route as ApiMoviesSlugEpisodeTapChar123epChar125RouteImport } from './routes/api/movies.$slug.episode.tap-{$ep}'
@@ -81,6 +85,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -208,6 +217,18 @@ const ApiBrowseRoute = ApiBrowseRouteImport.update({
   path: '/api/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const XemSlugTapChar123episodeChar125Route =
   XemSlugTapChar123episodeChar125RouteImport.update({
     id: '/xem/$slug/tap-{$episode}',
@@ -286,6 +307,12 @@ const ApiActorsNameRoute = ApiActorsNameRouteImport.update({
   path: '/api/actors/$name',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiMoviesSlugRelatedRoute = ApiMoviesSlugRelatedRouteImport.update({
   id: '/related',
   path: '/related',
@@ -314,11 +341,14 @@ export interface FileRoutesByFullPath {
   '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/browse': typeof ApiBrowseRoute
   '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
@@ -334,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/phim/$slug': typeof PhimSlugRoute
   '/browse/': typeof BrowseIndexRoute
   '/dien-vien/': typeof DienVienIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -364,11 +395,14 @@ export interface FileRoutesByTo {
   '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/browse': typeof ApiBrowseRoute
   '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
@@ -384,6 +418,7 @@ export interface FileRoutesByTo {
   '/phim/$slug': typeof PhimSlugRoute
   '/browse': typeof BrowseIndexRoute
   '/dien-vien': typeof DienVienIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -415,11 +450,14 @@ export interface FileRoutesById {
   '/kham-pha': typeof KhamPhaRoute
   '/lich-chieu': typeof LichChieuRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/search': typeof SearchRoute
   '/watchlist': typeof WatchlistRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/browse': typeof ApiBrowseRoute
   '/api/discover': typeof ApiDiscoverRoute
   '/api/favorites': typeof ApiFavoritesRouteWithChildren
@@ -435,6 +473,7 @@ export interface FileRoutesById {
   '/phim/$slug': typeof PhimSlugRoute
   '/browse/': typeof BrowseIndexRoute
   '/dien-vien/': typeof DienVienIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/actors/$name': typeof ApiActorsNameRoute
   '/api/actors/search': typeof ApiActorsSearchRoute
   '/api/auth/forgot-password': typeof ApiAuthForgotPasswordRoute
@@ -467,11 +506,14 @@ export interface FileRouteTypes {
     | '/kham-pha'
     | '/lich-chieu'
     | '/login'
+    | '/mcp'
     | '/notifications'
     | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/browse'
     | '/api/discover'
     | '/api/favorites'
@@ -487,6 +529,7 @@ export interface FileRouteTypes {
     | '/phim/$slug'
     | '/browse/'
     | '/dien-vien/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -517,11 +560,14 @@ export interface FileRouteTypes {
     | '/kham-pha'
     | '/lich-chieu'
     | '/login'
+    | '/mcp'
     | '/notifications'
     | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/browse'
     | '/api/discover'
     | '/api/favorites'
@@ -537,6 +583,7 @@ export interface FileRouteTypes {
     | '/phim/$slug'
     | '/browse'
     | '/dien-vien'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -567,11 +614,14 @@ export interface FileRouteTypes {
     | '/kham-pha'
     | '/lich-chieu'
     | '/login'
+    | '/mcp'
     | '/notifications'
     | '/privacy'
     | '/profile'
     | '/search'
     | '/watchlist'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/api/browse'
     | '/api/discover'
     | '/api/favorites'
@@ -587,6 +637,7 @@ export interface FileRouteTypes {
     | '/phim/$slug'
     | '/browse/'
     | '/dien-vien/'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/actors/$name'
     | '/api/actors/search'
     | '/api/auth/forgot-password'
@@ -618,11 +669,14 @@ export interface RootRouteChildren {
   KhamPhaRoute: typeof KhamPhaRoute
   LichChieuRoute: typeof LichChieuRoute
   LoginRoute: typeof LoginRoute
+  McpRoute: typeof McpRoute
   NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   SearchRoute: typeof SearchRoute
   WatchlistRoute: typeof WatchlistRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiBrowseRoute: typeof ApiBrowseRoute
   ApiDiscoverRoute: typeof ApiDiscoverRoute
   ApiFavoritesRoute: typeof ApiFavoritesRouteWithChildren
@@ -638,6 +692,7 @@ export interface RootRouteChildren {
   PhimSlugRoute: typeof PhimSlugRoute
   BrowseIndexRoute: typeof BrowseIndexRoute
   DienVienIndexRoute: typeof DienVienIndexRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiActorsNameRoute: typeof ApiActorsNameRoute
   ApiActorsSearchRoute: typeof ApiActorsSearchRoute
   ApiAuthForgotPasswordRoute: typeof ApiAuthForgotPasswordRoute
@@ -685,6 +740,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -862,6 +924,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/xem/$slug/tap-{$episode}': {
       id: '/xem/$slug/tap-{$episode}'
       path: '/xem/$slug/tap-{$episode}'
@@ -967,6 +1043,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiActorsNameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/movies/$slug/related': {
       id: '/api/movies/$slug/related'
       path: '/related'
@@ -1068,11 +1151,15 @@ const rootRouteChildren: RootRouteChildren = {
   KhamPhaRoute: KhamPhaRoute,
   LichChieuRoute: LichChieuRoute,
   LoginRoute: LoginRoute,
+  McpRoute: McpRoute,
   NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   SearchRoute: SearchRoute,
   WatchlistRoute: WatchlistRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiBrowseRoute: ApiBrowseRoute,
   ApiDiscoverRoute: ApiDiscoverRoute,
   ApiFavoritesRoute: ApiFavoritesRouteWithChildren,
@@ -1088,6 +1175,7 @@ const rootRouteChildren: RootRouteChildren = {
   PhimSlugRoute: PhimSlugRoute,
   BrowseIndexRoute: BrowseIndexRoute,
   DienVienIndexRoute: DienVienIndexRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiActorsNameRoute: ApiActorsNameRoute,
   ApiActorsSearchRoute: ApiActorsSearchRoute,
   ApiAuthForgotPasswordRoute: ApiAuthForgotPasswordRoute,
