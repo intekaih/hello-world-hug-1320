@@ -125,8 +125,8 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Content */}
-      <div className="absolute inset-0 flex items-end p-5 sm:p-10 lg:p-14">
+      {/* Content — always dark scope so text stays legible over the movie image */}
+      <div className="dark absolute inset-0 flex items-end p-5 text-white sm:p-10 lg:p-14">
         <motion.div
           key={`content-${movie.id}`}
           initial="hidden"
