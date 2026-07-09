@@ -60,7 +60,7 @@ const FALLBACK_SERVERS: ServerSource[] = [
   { id: "backup", name: "Dự phòng", src: FALLBACK_STREAM },
 ];
 
-const TOTAL_EPISODES = 48;
+const FALLBACK_totalEpisodes = 1;
 
 function WatchPage() {
   const { slug, episode } = Route.useParams();
@@ -106,7 +106,8 @@ function WatchPage() {
     queryFn: async () => {
       try {
         const { fetchMovieDetail } = await import("@/api-client/movie-detail");
-        const { movie: m } = await fetchMovieDetail(slug);
+        const { movie: m, episodes: eps } = await fetchMovieDetail(slug);
+        const epCount = eps?.[0]?.items?.length ?? m.total_episodes ?? 0;
         return {
           title: m.title,
           poster_url: m.poster_url,
@@ -114,6 +115,7 @@ function WatchPage() {
           year: m.year,
           overview: m.overview,
           overview_vi: m.overview_vi,
+          total_episodes: epCount || FALLBACK_totalEpisodes,
         };
       } catch {
         return null;
@@ -176,8 +178,9 @@ function WatchPage() {
   }, [movie, title, episode, slug, posterUrl]);
 
   const epNum = Number(episode) || 1;
+  const totalEpisodes = movie?.total_episodes ?? FALLBACK_totalEpisodes;
   const canPrev = epNum > 1;
-  const canNext = epNum < TOTAL_EPISODES;
+  const canNext = epNum < totalEpisodes;
   const overview = movie?.overview_vi || movie?.overview;
 
   const toggleCinema = () => setCinemaMode((v) => !v);
@@ -227,7 +230,7 @@ function WatchPage() {
           <div className="hidden shrink-0 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/60 sm:flex">
             <span className="text-white">EP {String(epNum).padStart(2, "0")}</span>
             <span className="text-white/40">/</span>
-            <span>{String(TOTAL_EPISODES).padStart(2, "0")}</span>
+            <span>{String(totalEpisodes).padStart(2, "0")}</span>
           </div>
         </div>
       </motion.div>
@@ -269,7 +272,7 @@ function WatchPage() {
           <PlayerContainer
             slug={slug}
             episode={episode}
-            totalEpisodes={TOTAL_EPISODES}
+            totalEpisodes={totalEpisodes}
             title={title}
             poster={backdropUrl}
             servers={servers}
@@ -370,7 +373,7 @@ function WatchPage() {
               </button>
               <div className="flex items-center gap-2.5 rounded-full border border-white/12 bg-white/5 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 backdrop-blur-md">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_10px_oklch(0.68_0.24_25)]" />
-                {t("player.episodeShort", { n: String(epNum).padStart(2, "0") })} · {String(TOTAL_EPISODES).padStart(2, "0")}
+                {t("player.episodeShort", { n: String(epNum).padStart(2, "0") })} · {String(totalEpisodes).padStart(2, "0")}
               </div>
               <button
                 onClick={() => canNext && goToEpisode(epNum + 1)}
