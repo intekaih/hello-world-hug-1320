@@ -514,6 +514,7 @@ function FloatingParticles({ active }: { active: boolean }) {
 
 function SearchSuggestionPanel({
   visible, listboxId, suggestions, debounced, activeIdx, onSelect, setActiveIdx,
+  loading, onSubmitRaw,
 }: {
   visible: boolean;
   listboxId: string;
@@ -522,8 +523,12 @@ function SearchSuggestionPanel({
   activeIdx: number;
   onSelect: (item: SuggestItem) => void;
   setActiveIdx: (i: number) => void;
+  loading: boolean;
+  onSubmitRaw: () => void;
 }) {
   const { t } = useTranslation();
+  const showSkeleton = loading && suggestions.length === 0;
+  const showEmpty = !loading && suggestions.length === 0;
   return (
     <AnimatePresence>
       {visible && (
@@ -531,53 +536,82 @@ function SearchSuggestionPanel({
           initial={{ opacity: 0, y: -6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -4, scale: 0.98 }}
-          transition={{ duration: 0.18, ease: ease.outSoft }}
+          transition={{ duration: 0.14, ease: ease.outSoft }}
           className="glass-strong absolute left-0 right-0 top-[calc(100%+10px)] z-40 overflow-hidden rounded-3xl shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-white/5 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
             {t("search.suggestions")}
           </div>
-          <ul
-            id={listboxId}
-            role="listbox"
-            className="max-h-[60vh] overflow-y-auto py-1"
-          >
-            {suggestions.map((item, i) => (
-              <li
-                key={item.id}
-                id={`${listboxId}-opt-${i}`}
-                role="option"
-                aria-selected={i === activeIdx}
-              >
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onMouseEnter={() => setActiveIdx(i)}
-                  onClick={() => onSelect(item)}
-                  className={cn(
-                    "flex w-full items-center gap-3 px-3 py-2.5 text-left transition",
-                    i === activeIdx ? "bg-primary/15" : "hover:bg-white/5",
-                  )}
-                >
-                  <img
-                    src={thumbSrc(item.poster_url, { w: 200 })}
-                    alt=""
-                    className="h-14 w-10 flex-shrink-0 rounded-md object-cover"
-                    loading="lazy"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[15px] font-medium text-foreground">
-                      <HighlightedText text={item.title} query={debounced} />
-                    </div>
-                    <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                      {item.type} · {item.year}
-                    </div>
+
+          {showSkeleton ? (
+            <ul className="py-1" aria-busy="true">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <li key={i} className="flex items-center gap-3 px-3 py-2.5">
+                  <div className="h-14 w-10 flex-shrink-0 animate-pulse rounded-md bg-white/8" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-3 w-3/5 animate-pulse rounded bg-white/8" />
+                    <div className="h-2.5 w-1/4 animate-pulse rounded bg-white/6" />
                   </div>
-                  <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                </button>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          ) : showEmpty ? (
+            <button
+              type="button"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={onSubmitRaw}
+              className="flex w-full items-center gap-3 px-4 py-4 text-left transition hover:bg-primary/10"
+            >
+              <SearchIcon className="h-4 w-4 text-primary/70" />
+              <div className="min-w-0 flex-1 text-sm text-foreground">
+                {t("search.suggest.searchFor")}{" "}
+                <span className="font-semibold text-primary">"{debounced}"</span>
+              </div>
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+          ) : (
+            <ul
+              id={listboxId}
+              role="listbox"
+              className="max-h-[60vh] overflow-y-auto py-1"
+            >
+              {suggestions.map((item, i) => (
+                <li
+                  key={item.id}
+                  id={`${listboxId}-opt-${i}`}
+                  role="option"
+                  aria-selected={i === activeIdx}
+                >
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseEnter={() => setActiveIdx(i)}
+                    onClick={() => onSelect(item)}
+                    className={cn(
+                      "flex w-full items-center gap-3 px-3 py-2.5 text-left transition",
+                      i === activeIdx ? "bg-primary/15" : "hover:bg-white/5",
+                    )}
+                  >
+                    <img
+                      src={thumbSrc(item.poster_url, { w: 200 })}
+                      alt=""
+                      className="h-14 w-10 flex-shrink-0 rounded-md object-cover"
+                      loading="lazy"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[15px] font-medium text-foreground">
+                        <HighlightedText text={item.title} query={debounced} />
+                      </div>
+                      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                        {item.type} · {item.year}
+                      </div>
+                    </div>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
