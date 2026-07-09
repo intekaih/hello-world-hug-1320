@@ -53,8 +53,11 @@ export const Route = createFileRoute("/xem/$slug/tap-{$episode}")({
   },
 });
 
+const FALLBACK_STREAM = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 const FALLBACK_SERVERS: ServerSource[] = [
-  { id: "vip1", name: "VIP #1", src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+  { id: "vip1", name: "VIP #1", src: FALLBACK_STREAM },
+  { id: "vip2", name: "VIP #2", src: FALLBACK_STREAM },
+  { id: "backup", name: "Dự phòng", src: FALLBACK_STREAM },
 ];
 
 const TOTAL_EPISODES = 48;
