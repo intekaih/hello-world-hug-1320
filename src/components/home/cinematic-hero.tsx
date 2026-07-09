@@ -252,7 +252,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
       </AnimatePresence>
 
       {/* CONTENT LAYER */}
-      <div className="absolute inset-0 flex items-end p-5 pb-14 sm:p-10 sm:pb-20 lg:p-16 lg:pb-24">
+      <div className="dark absolute inset-0 flex items-end p-5 pb-14 text-white sm:p-10 sm:pb-20 lg:p-16 lg:pb-24">
         <motion.div
           key={`content-${movie.id}`}
           style={{ x: contentX, y: contentY }}
