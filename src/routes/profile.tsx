@@ -5,8 +5,10 @@ import { KeyRound, LogOut, Save, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { RequireAuth, PageHeader } from "@/components/user-lists/shared";
+import { LibrarySummary } from "@/components/library-summary";
 import { useAuthStore } from "@/store/authStore";
 import { apiPost } from "@/api-client";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
