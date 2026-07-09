@@ -103,7 +103,7 @@ function MovieDetailPage() {
   });
 
 
-  const movieData = movieQ.data;
+  const movieData = movieQ.data?.movie;
   usePageMeta(
     movieData
       ? {
@@ -135,6 +135,7 @@ function MovieDetailPage() {
   }
 
   const movie = movieData;
+
 
   return (
     <div className="space-y-16 pb-24">
