@@ -342,8 +342,8 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
         </motion.div>
       </div>
 
-      {/* Trailer mute toggle */}
-      {trailerSrc && (
+      {/* Trailer mute toggle (direct video) or external trailer link */}
+      {trailerSrc ? (
         <button
           onClick={() => setMuted((m) => !m)}
           aria-label={muted ? "Bật tiếng trailer" : "Tắt tiếng trailer"}
@@ -351,7 +351,18 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
         >
           {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
         </button>
-      )}
+      ) : externalTrailer ? (
+        <a
+          href={externalTrailer}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Xem trailer"
+          className="glass absolute right-5 top-5 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/10 sm:right-10 sm:top-10"
+        >
+          <Play className="h-3.5 w-3.5 fill-current" />
+          Trailer
+        </a>
+      ) : null}
 
       {/* Progress rail */}
       <div className="absolute bottom-5 right-5 z-10 flex items-center gap-4 sm:bottom-10 sm:right-10">
