@@ -151,8 +151,9 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    // Ensure a CSRF token cookie exists before any mutation fires.
-    import("@/hooks/useCsrfToken").then((m) => m.ensureCsrfToken());
+    // Prime the BE-issued CSRF cookie (double-submit) before any mutation.
+    // Falls back silently in dev if BE isn't up yet.
+    import("@/api-client/csrf").then((m) => m.ensureBeCsrfToken().catch(() => {}));
   }, []);
 
   return (
