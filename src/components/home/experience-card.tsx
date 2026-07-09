@@ -730,3 +730,6 @@ function ProgressBadge({
     </div>
   );
 }
+
+export const ExperienceCard = memo(ExperienceCardImpl);
+
