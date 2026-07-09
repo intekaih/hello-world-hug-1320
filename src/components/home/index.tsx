@@ -137,7 +137,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           className="max-w-2xl space-y-5"
           style={{
             transform: `translate3d(${mouse.x * 8}px, ${mouse.y * 5}px, 0)`,
-            transition: "transform 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "transform 800ms var(--ease-out-soft)",
           }}
         >
           {/* Genre eyebrow */}
