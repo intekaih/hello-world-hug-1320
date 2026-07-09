@@ -339,9 +339,12 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
       )}
       aria-hidden={!open}
     >
-      <div
+      <button
+        type="button"
+        aria-label="Đóng menu"
+        tabIndex={open ? 0 : -1}
         className={cn(
-          "absolute inset-0 bg-background/70 backdrop-blur-sm transition-opacity",
+          "absolute inset-0 bg-background/70 backdrop-blur-sm transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
           open ? "opacity-100" : "opacity-0",
         )}
         onClick={onClose}
