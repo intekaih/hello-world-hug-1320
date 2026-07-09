@@ -1517,3 +1517,104 @@ export function WatchActions({
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  PlayerSettingsSheet — auto-next toggle + explanation                      */
+/* -------------------------------------------------------------------------- */
+
+function PlayerSettingsSheet({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const autoNext = usePlayerStore((s) => s.autoNext);
+  const setAutoNext = usePlayerStore((s) => s.setAutoNext);
+  const pauseUntil = usePlayerStore((s) => s.pauseAutoplayUntil);
+  const resumeAutoplay = usePlayerStore((s) => s.resumeAutoplay);
+  const paused = !!pauseUntil && Date.now() < pauseUntil;
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 z-40 bg-black/60"
+          />
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="absolute inset-x-0 bottom-0 z-50 rounded-t-3xl border-t border-white/10 bg-black/90 p-5 backdrop-blur-2xl"
+          >
+            <div className="mx-auto mb-4 h-1 w-12 rounded-full bg-white/25" />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.26em] text-primary/90">
+                  {t("player.settings.eyebrow")}
+                </div>
+                <h3 className="mt-1 font-display text-xl font-semibold text-white">
+                  {t("player.settings.title")}
+                </h3>
+              </div>
+              <button
+                onClick={onClose}
+                aria-label={t("common.close")}
+                className="rounded-full border border-white/10 p-2 text-white/70 transition hover:border-white/30 hover:bg-white/10 hover:text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-white">
+                    {t("player.settings.autoNextLabel")}
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-white/65">
+                    {t("player.settings.autoNextExplain")}
+                  </p>
+                  {paused && (
+                    <button
+                      onClick={resumeAutoplay}
+                      className="mt-2 text-[11px] font-semibold text-primary hover:underline"
+                    >
+                      {t("player.settings.resumeNow")}
+                    </button>
+                  )}
+                </div>
+                <button
+                  role="switch"
+                  aria-checked={autoNext}
+                  onClick={() => setAutoNext(!autoNext)}
+                  className={cn(
+                    "relative h-6 w-11 shrink-0 rounded-full border transition",
+                    autoNext
+                      ? "border-primary/40 bg-primary/70"
+                      : "border-white/15 bg-white/10",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow transition-all",
+                      autoNext ? "left-[22px]" : "left-[2px]",
+                    )}
+                  />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
