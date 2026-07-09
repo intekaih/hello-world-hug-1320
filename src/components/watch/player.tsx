@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useShareMovie } from "@/lib/share/use-share-movie";
 import { getSharedPlayerTime, setSharedPlayerTime } from "@/lib/share/player-time-ref";
+import { track } from "@/lib/track";
 import { PlayerLoadingState } from "./player-loading-state";
 import {
   PlayerErrorState,
@@ -66,6 +67,16 @@ type Props = {
 /* -------------------------------------------------------------------------- */
 /*  Utils                                                                     */
 /* -------------------------------------------------------------------------- */
+
+/** Ngắn, vi-friendly: "45s", "4 phút", "1h 02m" */
+const formatRemainingVi = (s: number) => {
+  if (!Number.isFinite(s) || s <= 0) return "0s";
+  if (s < 60) return `${Math.ceil(s)}s`;
+  if (s < 3600) return `${Math.ceil(s / 60)} phút`;
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return `${h}h ${String(m).padStart(2, "0")}m`;
+};
 
 const formatTime = (s: number) => {
   if (!Number.isFinite(s) || s < 0) s = 0;
@@ -349,16 +360,41 @@ export function PlayerContainer({
     };
   }, [saveProgress]);
 
-  // pause video when tab hidden
+  // pause video when tab hidden + Zeigarnik title bridge
   useEffect(() => {
+    const prevTitle = document.title;
+    let bridged = false;
+    const restore = () => {
+      if (bridged) {
+        document.title = prevTitle;
+        bridged = false;
+      }
+    };
     const onVis = () => {
       const video = videoRef.current;
       if (!video) return;
-      if (document.hidden && !video.paused) video.pause();
+      if (document.hidden) {
+        if (!video.paused) video.pause();
+        const dur = video.duration || 0;
+        const cur = video.currentTime || 0;
+        const remaining = dur - cur;
+        if (dur > 0 && cur > 0 && remaining > 0) {
+          document.title = `▶ ${formatRemainingVi(remaining)} — ${title}`;
+          bridged = true;
+          track("player_tab_blurred", { slug, remainingSec: Math.round(remaining) });
+        }
+      } else {
+        const remaining = (video.duration || 0) - (video.currentTime || 0);
+        restore();
+        track("player_tab_returned", { slug, remainingSec: Math.round(remaining) });
+      }
     };
     document.addEventListener("visibilitychange", onVis);
-    return () => document.removeEventListener("visibilitychange", onVis);
-  }, []);
+    return () => {
+      document.removeEventListener("visibilitychange", onVis);
+      restore();
+    };
+  }, [slug, title]);
 
   /* -------------------------- Next episode prompt ------------------------- */
   useEffect(() => {
