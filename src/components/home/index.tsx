@@ -89,7 +89,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
         setPaused(false);
-        setMouse({ x: 0, y: 0 });
+        clearParallax();
       }}
       onMouseMove={handleMouseMove}
       aria-roledescription="carousel"
@@ -105,11 +105,9 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           className="absolute inset-0"
         >
           <div
+            ref={parallaxRef}
             className="absolute inset-0 will-change-transform"
-            style={{
-              transform: `translate3d(${mouse.x * -18}px, ${mouse.y * -12}px, 0)`,
-              transition: "transform 600ms var(--ease-out-soft)",
-            }}
+            style={{ transition: "transform 600ms var(--ease-out-soft)" }}
           >
             <img
               src={thumbSrc(movie.backdrop_url, { w: 1920 })}
@@ -143,10 +141,6 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
           }}
           className="max-w-2xl space-y-5"
-          style={{
-            transform: `translate3d(${mouse.x * 8}px, ${mouse.y * 5}px, 0)`,
-            transition: "transform 800ms var(--ease-out-soft)",
-          }}
         >
           {/* Genre eyebrow */}
           <motion.div
