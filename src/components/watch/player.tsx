@@ -122,7 +122,16 @@ export function PlayerContainer({
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
   const [seekFeedback, setSeekFeedback] = useState<null | "back" | "fwd">(null);
 
-  const initialTimeRef = useRef(initialTime);
+  // Honour ?t=<seconds> deep-links (from shared timestamped URLs).
+  const initialTimeRef = useRef(
+    (() => {
+      if (initialTime > 0) return initialTime;
+      if (typeof window === "undefined") return 0;
+      const t = new URLSearchParams(window.location.search).get("t");
+      const n = t ? Number(t) : 0;
+      return Number.isFinite(n) && n > 0 ? n : 0;
+    })(),
+  );
   const reloadTokenRef = useRef(0);
   const [reloadToken, setReloadToken] = useState(0);
   const retryPlayback = useCallback(() => {
