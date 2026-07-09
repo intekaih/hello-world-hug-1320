@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
+import { X } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { RecMovie } from "@/lib/recommendations/engine";
@@ -7,7 +8,10 @@ import type { SceneMood } from "@/components/home/scene-section";
 import { SceneSection } from "@/components/home/scene-section";
 import { ease } from "@/lib/design";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
+import { suppressSlug } from "@/lib/recommendations/suppress";
 import { RecommendationReasonChip } from "./reason-chip";
+
 
 /**
  * RecommendationSection — cinematic wrapper around a taste-scored rail.
