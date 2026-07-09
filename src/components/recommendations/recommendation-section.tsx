@@ -20,7 +20,6 @@ export function RecommendationSection({
   title,
   subtitle,
   items,
-  icon,
   entrance = "drift",
 }: {
   mood: SceneMood;
@@ -36,16 +35,7 @@ export function RecommendationSection({
   return (
     <SceneSection
       mood={mood}
-      eyebrow={
-        icon ? (
-          <span className="inline-flex items-center gap-1.5">
-            {icon}
-            {eyebrow}
-          </span>
-        ) : (
-          eyebrow
-        )
-      }
+      eyebrow={eyebrow}
       title={title}
       subtitle={subtitle}
       entrance={entrance}
