@@ -1111,6 +1111,7 @@ export function WatchActions({
   posterUrl?: string;
   getCurrentTime?: () => number;
 }) {
+  const { t } = useTranslation();
   const { open: openShare } = useShareMovie();
   const [fav, setFav] = useState(false);
   const [watchlist, setWatchlist] = useState(false);
