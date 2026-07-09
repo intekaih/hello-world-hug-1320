@@ -4,6 +4,7 @@ import { useRef } from "react";
 
 import { useTranslation } from "@/hooks/useTranslation";
 import { SectionHeader } from "./section-header";
+import { ease } from "@/lib/design";
 
 /**
  * CastCarousel — premium horizontal snap rail with avatar fallback,

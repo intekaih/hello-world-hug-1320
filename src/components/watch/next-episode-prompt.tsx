@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { ChevronRight, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ease } from "@/lib/design";
 
 /**
  * NextEpisodePrompt

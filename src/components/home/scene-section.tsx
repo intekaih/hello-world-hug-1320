@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import { useRef, type ReactNode, type CSSProperties } from "react";
 
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 /**
  * SceneSection — wraps a homepage row in a scroll-linked cinematic scene.

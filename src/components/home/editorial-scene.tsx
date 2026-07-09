@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
+import { ease } from "@/lib/design";
 
 /**
  * EditorialScene — magazine-inspired layout: one dominant feature poster on

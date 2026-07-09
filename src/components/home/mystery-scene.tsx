@@ -4,6 +4,7 @@ import { Eye, Star } from "lucide-react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
+import { ease } from "@/lib/design";
 
 /**
  * MysteryScene — Hidden Gems. Each card is veiled in darkness until

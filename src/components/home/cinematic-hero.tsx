@@ -20,6 +20,7 @@ import {
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { HeroMovie } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 /**
  * CinematicHero — the emotional opening scene of MovieCC.

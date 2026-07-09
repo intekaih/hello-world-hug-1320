@@ -4,6 +4,7 @@ import { Calendar, ChevronRight } from "lucide-react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
+import { ease } from "@/lib/design";
 
 /**
  * ComingSoonScene — vertical release timeline. Each row is a wide banner:

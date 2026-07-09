@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
+import { ease } from "@/lib/design";
 
 /**
  * CinemaModeLayout

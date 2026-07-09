@@ -25,6 +25,7 @@ import {
 import { thumbSrc } from "@/utils/thumbSrc";
 import type { MovieCard } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 /**
  * ExperienceCard — the "Movie Experience Card" replacing the flat poster.

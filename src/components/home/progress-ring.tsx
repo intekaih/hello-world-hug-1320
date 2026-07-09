@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { ease } from "@/lib/design";
 
 type Props = {
   progress: number; // 0..1

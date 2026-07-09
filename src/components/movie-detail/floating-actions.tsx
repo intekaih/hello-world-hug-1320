@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useBookmarkState, useShare } from "./action-cluster";
 import type { Movie } from "./types";
+import { ease } from "@/lib/design";
 
 /**
  * FloatingMovieActions — sticky glass dock: play, favorite, watchlist,

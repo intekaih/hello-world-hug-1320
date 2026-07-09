@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SectionHeader } from "./section-header";
 import type { Movie } from "./types";
+import { ease } from "@/lib/design";
 
 /**
  * StoryBlock — immersive synopsis with cinematic typography, gradient mask

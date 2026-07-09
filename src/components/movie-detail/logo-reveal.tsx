@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
+import { ease } from "@/lib/design";
 
 /**
  * Cinematic title reveal — vertical rise + blur clear.

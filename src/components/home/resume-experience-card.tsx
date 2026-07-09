@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import type { ContinueWatchingItem } from "@/lib/home-queries";
 import { ProgressRing, AnimatedPercent } from "./progress-ring";
 import { RemainingTimeLabel } from "./remaining-time-label";
+import { ease } from "@/lib/design";
 
 /* -------------------------------------------------------------------------- */
 /*  helpers                                                                    */

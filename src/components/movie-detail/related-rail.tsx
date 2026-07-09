@@ -6,6 +6,7 @@ import { ExperienceCard } from "@/components/home/experience-card";
 import { useTranslation } from "@/hooks/useTranslation";
 import { SectionHeader } from "./section-header";
 import { hashId, type RelatedItem } from "./types";
+import { ease } from "@/lib/design";
 
 /**
  * RelatedMovieRail — cinematic horizontal rail using ExperienceCard.

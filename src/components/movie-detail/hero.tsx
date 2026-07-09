@@ -8,6 +8,7 @@ import { MovieActionCluster } from "./action-cluster";
 import { MovieLogoReveal } from "./logo-reveal";
 import { MovieMetaBadges } from "./meta-badges";
 import { youTubeEmbed, type Movie } from "./types";
+import { ease } from "@/lib/design";
 
 /**
  * MovieDetailHero — near-fullscreen cinematic chamber.

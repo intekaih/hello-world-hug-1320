@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { ContinueWatchingItem } from "@/lib/home-queries";
 import { ResumeExperienceCard } from "./resume-experience-card";
+import { ease } from "@/lib/design";
 
 /* -------------------------------------------------------------------------- */
 /*  Empty state                                                                */

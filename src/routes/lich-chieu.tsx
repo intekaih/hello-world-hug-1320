@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
+import { ease } from "@/lib/design";
   CalendarClock,
   Clock3,
   Flame,

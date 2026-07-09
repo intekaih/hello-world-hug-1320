@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ExperienceCard } from "@/components/home/experience-card";
 import type {
+import { ease } from "@/lib/design";
   ContinueWatchingItem,
   HeroMovie,
   MovieCard,
