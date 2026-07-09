@@ -30,12 +30,18 @@ export const Route = createFileRoute("/api/movies/$slug/episode/tap-{$ep}")({
         if (!Number.isFinite(ep) || ep < 1) {
           return Response.json({ error: "Invalid episode" }, { status: 400 });
         }
+        // Demo intro/recap markers for the first two episodes so QA can
+        // exercise the "Skip intro / recap" affordance without real data.
+        const introEndSec = ep <= 2 ? 42 : undefined;
+        const recapEndSec = ep === 2 ? 78 : undefined;
         return Response.json({
           slug: params.slug,
           episode: params.ep,
           episode_number: ep,
           title: `Tập ${ep}`,
           duration: 2640,
+          introEndSec,
+          recapEndSec,
           servers: DEFAULT_SERVERS,
           subtitles: [
             { lang: "vi", label: "Tiếng Việt", src: "" },

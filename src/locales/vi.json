@@ -227,6 +227,12 @@
       "exitCinema": "Thoát chế độ rạp",
       "shortcuts": "Phím tắt"
     },
+    "skip": {
+      "intro": "Bỏ qua intro",
+      "recap": "Bỏ qua tóm tắt",
+      "introAria": "Bỏ qua intro (phím S)",
+      "recapAria": "Bỏ qua tóm tắt (phím S)"
+    },
     "loading": {
       "eyebrow": "Đang tải",
       "title": "Đang chuẩn bị rạp phim của bạn…",
