@@ -1,12 +1,7 @@
 import { useEffect, type ReactNode } from "react";
-import { Loader2 } from "lucide-react";
 
 import { apiGet, ApiError } from "@/api-client";
-import {
-  useAuthStore,
-  selectIsAuthenticating,
-  type AuthUser,
-} from "@/store/authStore";
+import { useAuthStore, type AuthUser } from "@/store/authStore";
 
 type MeResponse = {
   user: AuthUser | null;
@@ -62,23 +57,12 @@ export function useAuthBootstrap() {
 }
 
 /**
- * Root-level gate: runs the bootstrap and shows a splash while the initial
- * /me check is in flight. Public and protected pages both mount only after
- * the check completes, so `useAuthStore` is authoritative from first render.
+ * Root-level bootstrap: fires the /me check on mount and always renders
+ * children. Public pages must remain reachable during the initial probe;
+ * protected surfaces gate on the auth store independently. Rendering the
+ * same tree on server and client avoids hydration mismatches.
  */
 export function AuthInitializer({ children }: { children: ReactNode }) {
   useAuthBootstrap();
-  const isAuthenticating = useAuthStore(selectIsAuthenticating);
-
-  if (isAuthenticating) {
-    return (
-      <div className="grid min-h-dvh place-items-center bg-background text-white">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-white/60">Đang khôi phục phiên đăng nhập…</p>
-        </div>
-      </div>
-    );
-  }
   return <>{children}</>;
 }
