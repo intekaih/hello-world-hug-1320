@@ -288,6 +288,18 @@
       "subtitle": "Chọn một hành trình tiếp theo",
       "back": "Về trang phim",
       "browse": "Khám phá thêm"
+    },
+    "bridge": {
+      "eyebrow": "Vì bạn vừa xem",
+      "afterTitle": "{{title}}",
+      "subtitle": "Ba lựa chọn được chọn theo gu của bạn",
+      "trailerIn": "Trailer bắt đầu sau {{s}}s",
+      "trailerPlaying": "Trailer đang phát · muted",
+      "playNow": "Xem ngay",
+      "addWatchlist": "Thêm watchlist",
+      "added": "Đã lưu vào watchlist",
+      "notInterested": "Không quan tâm",
+      "close": "Đóng"
     }
   },
   "search": {
