@@ -159,7 +159,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
       )}
 
       {/* Content — bottom aligned */}
-      <div className="absolute inset-0 flex items-end">
+      <div className="dark absolute inset-0 flex items-end text-white">
         <div className="w-full p-6 sm:p-10 lg:p-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="max-w-2xl space-y-5">
