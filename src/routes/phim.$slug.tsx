@@ -323,7 +323,7 @@ function SeriesPartsNav({
 function DetailSkeleton() {
   return (
     <div className="space-y-10">
-      <Skeleton className="-mx-4 h-[92vh] min-h-[640px] rounded-none sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]" />
+      <Skeleton className="-mx-4 h-[70dvh] min-h-[520px] rounded-none sm:-mx-6 sm:h-[86dvh] sm:min-h-[640px] lg:-mx-8 lg:h-[92dvh] lg:rounded-[2rem]" />
       <Skeleton className="h-24 w-full max-w-4xl" />
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-12">
         {Array.from({ length: 12 }).map((_, i) => (
