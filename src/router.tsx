@@ -72,6 +72,8 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
+    // Prefetch route code + loader data on link hover/focus (~50-200ms head start).
+    defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
   });
 
