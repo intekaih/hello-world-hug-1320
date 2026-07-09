@@ -77,16 +77,17 @@ export function TasteBadge() {
   const onShare = async () => {
     const text = `${headline} — gu xem của tôi trên movieCC`;
     try {
-      if (typeof navigator !== "undefined" && "share" in navigator) {
-        await (navigator as Navigator & { share: (d: ShareData) => Promise<void> }).share({
+      const nav = typeof navigator !== "undefined" ? (navigator as Navigator) : null;
+      if (nav && typeof nav.share === "function") {
+        await nav.share({
           title: "Gu xem của tôi trên movieCC",
           text,
           url: typeof window !== "undefined" ? window.location.origin : undefined,
         });
         return;
       }
-      if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(text);
+      if (nav?.clipboard) {
+        await nav.clipboard.writeText(text);
         toast.success("Đã sao chép thẻ gu xem");
       }
     } catch {
