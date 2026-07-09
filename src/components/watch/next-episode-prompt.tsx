@@ -16,11 +16,15 @@ export function NextEpisodePrompt({
   seconds,
   onCancel,
   onPlayNow,
+  nextEpisodeNumber,
+  posterUrl,
 }: {
   visible: boolean;
   seconds: number;
   onCancel: () => void;
   onPlayNow: () => void;
+  nextEpisodeNumber?: number;
+  posterUrl?: string;
 }) {
   const { t } = useTranslation();
   const [count, setCount] = useState(seconds);
