@@ -48,6 +48,8 @@ import {
 import { isAutoplayActive, usePlayerStore } from "@/store/playerStore";
 import { useUIStore } from "@/store/uiStore";
 import { playTick, playWhoosh } from "@/lib/ui-sound";
+import { noteWatching, dismissWellnessToday } from "@/lib/wellness";
+import { WellnessBreakSheet } from "@/components/wellness/wellness-break-sheet";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -145,6 +147,8 @@ export function PlayerContainer({
   >([]);
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
   const [seekFeedback, setSeekFeedback] = useState<null | "back" | "fwd">(null);
+
+  const [wellnessOpen, setWellnessOpen] = useState(false);
 
   // Honour ?t=<seconds> deep-links (from shared timestamped URLs).
   const initialTimeRef = useRef(
