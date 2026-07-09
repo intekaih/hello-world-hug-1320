@@ -20,10 +20,6 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
 
   const items = movies.slice(0, 6);
 
-  // Fake future dates that feel like "next 6 weeks".
-  const now = new Date();
-  const fmtMonth = new Intl.DateTimeFormat("en", { month: "short" });
-
   return (
     <div className="relative">
       {/* Timeline rail */}
@@ -42,11 +38,7 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
         }}
         className="space-y-4"
       >
-        {items.map((m, i) => {
-          const d = new Date(now.getTime() + (i + 1) * 7 * 24 * 60 * 60 * 1000);
-          const day = String(d.getDate()).padStart(2, "0");
-          const mon = fmtMonth.format(d).toUpperCase();
-
+        {items.map((m) => {
           return (
             <motion.li
               key={m.id}
