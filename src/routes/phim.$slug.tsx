@@ -136,7 +136,10 @@ function MovieDetailPage() {
 
   return (
     <div className="space-y-16 pb-24">
+      <InvitedBanner title={movie.title} />
       <MovieDetailHero movie={movie} />
+
+
 
       <div id="detail-body" className="space-y-16">
         <StoryBlock movie={movie} />
