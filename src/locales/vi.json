@@ -412,6 +412,7 @@
     "episodeLabel": "Tập {{ep}}",
     "progress": "Đã xem {{n}}%",
     "groups": {
+      "unfinished": "Dở dang",
       "today": "Hôm nay",
       "yesterday": "Hôm qua",
       "thisWeek": "Tuần này",
