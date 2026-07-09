@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "moviecc-mcp",
+      "version": "0.1.0",
+      "title": "MovieCC Catalog"
+    },
+    "tools": [
+      {
+        "name": "search_movies",
+        "title": "Search movies",
+        "description": "Full-text search across the MovieCC public catalog. Filter by type, category, country, year, quality, or language. Returns paginated cards.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "q": {
+              "description": "Free-text title query. Case-insensitive.",
+              "type": "string"
+            },
+            "type": {
+              "description": "Catalog type: series, movie, animation, or TV show.",
+              "type": "string",
+              "enum": [
+                "phim-bo",
+                "phim-le",
+                "hoat-hinh",
+                "tv-shows"
+              ]
+            },
+            "category": {
+              "description": "Category slug (e.g. 'hanh-dong').",
+              "type": "string"
+            },
+            "country": {
+              "description": "Country slug (e.g. 'my', 'nhat-ban').",
+              "type": "string"
+            },
+            "year": {
+              "description": "Release year.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "quality": {
+              "type": "string",
+              "enum": [
+                "4K",
+                "FHD",
+                "HD"
+              ]
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "Vietsub",
+                "Lồng tiếng",
+                "Thuyết minh"
+              ]
+            },
+            "page": {
+              "description": "1-based page number. Default 1.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "browse_catalog",
+        "title": "Browse catalog",
+        "description": "List the base MovieCC public catalog without a query. Useful for exploring what's available. Returns up to `limit` cards.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max number of results. Default 50, max 200.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "offset": {
+              "description": "How many items to skip. Default 0.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_movie",
+        "title": "Get movie details",
+        "description": "Fetch full details for one movie or series by its slug: overview, cast, director, categories, poster, backdrop, trailer, and episode count.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Movie slug, e.g. 'dune-part-two' or 'shogun'."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "trending",
+        "title": "Trending movies",
+        "description": "Top-rated titles from the MovieCC catalog, sorted by rating then year. Unique by slug.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max results. Default 18, max 50.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "new_releases",
+        "title": "New releases",
+        "description": "Most recent titles in the catalog by release year (ties broken by rating).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max results. Default 20, max 50.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "type": {
+              "description": "Optional catalog type filter.",
+              "type": "string",
+              "enum": [
+                "phim-bo",
+                "phim-le",
+                "hoat-hinh",
+                "tv-shows"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
