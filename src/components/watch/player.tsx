@@ -879,7 +879,7 @@ export function PlayerContainer({
         }}
       />
 
-      <SeasonCompleteOverlay
+      <BingeBridgeOverlay
         visible={completeOpen && isLastEp}
         slug={slug}
         title={title}
@@ -888,6 +888,7 @@ export function PlayerContainer({
           setCompleteDismissed(true);
         }}
       />
+
 
       <ShortcutOverlay
         open={shortcutsOpen}
