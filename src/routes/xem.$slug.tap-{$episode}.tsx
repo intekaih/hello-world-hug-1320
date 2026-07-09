@@ -71,11 +71,17 @@ function WatchPage() {
     queryFn: async () => {
       const res = await fetch(`/api/movies/${slug}/episode/tap-${episode}`);
       if (!res.ok) return null;
-      return res.json() as Promise<{ servers: ServerSource[] }>;
+      return res.json() as Promise<{
+        servers: ServerSource[];
+        introEndSec?: number;
+        recapEndSec?: number;
+      }>;
     },
     staleTime: 5 * 60 * 1000,
   });
   const servers = epData?.servers?.length ? epData.servers : FALLBACK_SERVERS;
+  const introEndSec = epData?.introEndSec;
+  const recapEndSec = epData?.recapEndSec;
 
   const { data: history } = useQuery({
     queryKey: ["history", slug, episode],
