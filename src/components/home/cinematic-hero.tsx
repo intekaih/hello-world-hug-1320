@@ -7,7 +7,7 @@ import {
   useTransform,
   useReducedMotion,
 } from "motion/react";
-import { Play, Info, Volume2, VolumeX, ArrowDown } from "lucide-react";
+import { Play, Info, Volume2, VolumeX, ArrowDown, RotateCcw } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -22,6 +22,7 @@ import type { HeroMovie } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
 import { normalizeTrailerSource } from "@/lib/media/trailer";
+import { track } from "@/lib/track";
 
 /**
  * CinematicHero — the emotional opening scene of MovieCC.
@@ -32,15 +33,23 @@ import { normalizeTrailerSource } from "@/lib/media/trailer";
  * in under two seconds.
  */
 
+export type HeroResume = {
+  slug: string;
+  title?: string;
+  progress: number;
+  remaining: string;
+  episode?: string;
+};
+
 type CinematicHeroProps = {
   movies: HeroMovie[];
   /** Optional trailer sources per hero movie id. */
   trailers?: Record<number, string | undefined>;
+  /** Optional Zeigarnik resume — replaces primary CTA when valid. */
+  resume?: HeroResume;
 };
 
-const SLIDE_MS = 8500;
-
-export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
+export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(true);
