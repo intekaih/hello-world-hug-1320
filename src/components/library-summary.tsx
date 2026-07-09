@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import { Bell, Bookmark, Heart, History as HistoryIcon } from "lucide-react";
