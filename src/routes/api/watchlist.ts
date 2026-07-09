@@ -6,6 +6,7 @@ export type WatchlistItem = {
   movie_origin_name?: string;
   movie_thumb: string;
   note?: string;
+  runtime?: number; // minutes — used for total-hours estimate
   createdAt: number;
 };
 
