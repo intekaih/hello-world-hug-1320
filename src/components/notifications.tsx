@@ -146,10 +146,12 @@ function useNotificationAlerts(count: number, items: Notification[]) {
     if (count > prev) {
       setBump((b) => b + 1);
       const latest = items.find((n) => !n.read);
-      const title = latest ? `${latest.movie_name}` : "Bạn có thông báo mới";
-      const description = latest?.message ?? `${count} thông báo chưa đọc`;
+      const copy = latest ? formatNotificationCopy(latest) : null;
+      const title = copy?.headline ?? "Bạn có thông báo mới";
+      const description = copy?.meta ?? `${count} thông báo chưa đọc`;
       toast(title, {
         description,
+
         action: latest
           ? {
               label: "Xem",
