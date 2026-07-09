@@ -33,6 +33,9 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 export const Route = createFileRoute("/")({
   component: Home,
+  // Kick off home fetch in parallel with route resolution so the cache is
+  // warm by the time the component mounts (saves ~1 render tick + waterfall).
+  loader: ({ context }) => context.queryClient.ensureQueryData(homeQueryOptions),
   head: () => ({
     meta: buildPageMeta({
       title: "movieCC - Xem phim HD miễn phí",
