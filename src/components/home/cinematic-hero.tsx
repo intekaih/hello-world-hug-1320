@@ -261,9 +261,9 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             className="pointer-events-none absolute inset-x-0 bottom-0 bg-black"
           />
 
-          {/* Scrims for text legibility */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/90 via-background/25 to-transparent" />
+          {/* Scrims for text legibility — always dark so white content stays readable in both themes */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/55 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/85 via-black/35 to-transparent" />
           <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_40%,oklch(0_0_0/0.6)_100%)]" />
           <div className="grain" />
         </motion.div>
