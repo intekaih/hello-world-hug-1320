@@ -1097,11 +1097,23 @@ export function EpisodePanel({
 /*  WatchActions                                                              */
 /* -------------------------------------------------------------------------- */
 
-export function WatchActions({ slug }: { slug: string }) {
+export function WatchActions({
+  slug,
+  title,
+  episode,
+  posterUrl,
+  getCurrentTime,
+}: {
+  slug: string;
+  title?: string;
+  episode?: string;
+  posterUrl?: string;
+  getCurrentTime?: () => number;
+}) {
+  const { open: openShare } = useShareMovie();
   const [fav, setFav] = useState(false);
   const [watchlist, setWatchlist] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     try {
@@ -1118,15 +1130,18 @@ export function WatchActions({ slug }: { slug: string }) {
     } catch {}
   };
 
-  const share = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    try {
-      if (navigator.share) await navigator.share({ url });
-      else await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {}
+  const share = () => {
+    openShare({
+      title: title ?? slug,
+      posterUrl,
+      url:
+        typeof window !== "undefined"
+          ? `${window.location.origin}${window.location.pathname}`
+          : undefined,
+      timestampSeconds: getCurrentTime?.() ?? 0,
+    });
   };
+
 
   const Btn = ({
     active,
