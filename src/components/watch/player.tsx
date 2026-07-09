@@ -475,7 +475,11 @@ export function PlayerContainer({
     if (ratio >= 0.92 && markedRef.current !== key) {
       markedRef.current = key;
       const n = Number(episode);
-      if (Number.isFinite(n)) markEpisodeWatchedLocal(slug, n);
+      if (Number.isFinite(n)) {
+        markEpisodeWatchedLocal(slug, n);
+        // Discrete confirmation tick — no-op unless user opted in.
+        playTick();
+      }
     }
   }, [currentTime, duration, slug, episode]);
 
