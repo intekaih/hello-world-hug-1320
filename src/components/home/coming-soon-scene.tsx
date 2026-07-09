@@ -8,7 +8,7 @@ import { ease } from "@/lib/design";
 
 /**
  * ComingSoonScene — vertical release timeline. Each row is a wide banner:
- *  · left column: bold mono date badge (fake countdown feeling)
+ *  · left column: honest "SOON" badge + real year (no fabricated dates)
  *  · right column: masked backdrop with a light-sweep on hover
  * A subtle vertical rail (the "future line") threads all entries together.
  *
