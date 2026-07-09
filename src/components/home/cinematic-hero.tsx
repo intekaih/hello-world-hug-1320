@@ -339,11 +339,6 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             transition={{ duration: 0.7 }}
             className="flex flex-wrap items-center gap-3 pt-2"
           >
-            <Link
-              to="/xem/$slug/tap-{$episode}"
-              params={{ slug: movie.slug, episode: "1" }}
-              className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
-            >
             {resumeValid && resume ? (
               resume.episode ? (
                 <Link
