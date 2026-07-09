@@ -19,6 +19,7 @@ import {
 import { useEffect, useRef, useState, type ComponentType } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { NotificationBell } from "@/components/notifications";
 import { LanguageSwitcher } from "@/components/language-switcher";
