@@ -274,7 +274,20 @@
       "short": "Tập tiếp",
       "startsIn": "Tập tiếp bắt đầu sau {{seconds}}s",
       "playNow": "Xem ngay",
-      "cancel": "Ở lại"
+      "cancel": "Ở lại",
+      "upNextLabel": "Tập {{n}}"
+    },
+    "season": {
+      "chip": "Đã xem {{watched}}/{{total}} tập · ~{{hours}}h",
+      "chipDone": "Đã xem {{watched}}/{{total}} tập · hoàn thành",
+      "halfway": "Bạn đang ở nửa sau — đà này rất tốt"
+    },
+    "complete": {
+      "eyebrow": "Kết thúc mùa",
+      "title": "Bạn đã xong {{title}}",
+      "subtitle": "Chọn một hành trình tiếp theo",
+      "back": "Về trang phim",
+      "browse": "Khám phá thêm"
     }
   },
   "search": {

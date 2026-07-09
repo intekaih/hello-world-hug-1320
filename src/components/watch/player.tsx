@@ -40,6 +40,11 @@ import {
 } from "./player-error-state";
 import { ShortcutOverlay } from "./shortcut-overlay";
 import { NextEpisodePrompt } from "./next-episode-prompt";
+import { SeasonCompleteOverlay } from "./season-complete-overlay";
+import {
+  markEpisodeWatchedLocal,
+  useSeasonProgress,
+} from "@/hooks/useSeasonProgress";
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -407,6 +412,38 @@ export function PlayerContainer({
     if (remaining > 40 && nextPromptOpen) setNextPromptOpen(false);
   }, [currentTime, duration, episode, totalEpisodes, nextPromptOpen]);
 
+  /* -------------------------- Season progress ----------------------------- */
+  const seasonProgress = useSeasonProgress(slug, totalEpisodes, 45);
+  const [completeDismissed, setCompleteDismissed] = useState(false);
+  const [completeOpen, setCompleteOpen] = useState(false);
+  useEffect(() => {
+    setCompleteDismissed(false);
+    setCompleteOpen(false);
+  }, [slug, episode]);
+
+  const isLastEp = Number(episode) >= totalEpisodes && totalEpisodes > 0;
+  useEffect(() => {
+    if (!duration || completeDismissed) return;
+    const remaining = duration - currentTime;
+    if (isLastEp && remaining > 0 && remaining <= 20) {
+      setCompleteOpen(true);
+    }
+  }, [currentTime, duration, isLastEp, completeDismissed]);
+
+  // Persist watched marker locally at ≥92% so season chip updates without auth.
+  const markedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!duration) return;
+    const ratio = currentTime / duration;
+    const key = `${slug}::${episode}`;
+    if (ratio >= 0.92 && markedRef.current !== key) {
+      markedRef.current = key;
+      const n = Number(episode);
+      if (Number.isFinite(n)) markEpisodeWatchedLocal(slug, n);
+    }
+  }, [currentTime, duration, slug, episode]);
+
+
 
 
   /* ---------------------------- Fullscreen -------------------------------- */
@@ -656,6 +693,33 @@ export function PlayerContainer({
                 </p>
               </div>
               <div className="ml-auto flex items-center gap-2">
+                {totalEpisodes > 1 && (
+                  <div
+                    className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur-md sm:inline-flex"
+                    aria-label={
+                      seasonProgress.isNearComplete
+                        ? t("player.season.chipDone", {
+                            watched: seasonProgress.watched,
+                            total: seasonProgress.total,
+                          })
+                        : t("player.season.chip", {
+                            watched: seasonProgress.watched,
+                            total: seasonProgress.total,
+                            hours: seasonProgress.hoursLeft,
+                          })
+                    }
+                  >
+                    <span className="text-white">
+                      {seasonProgress.watched}/{seasonProgress.total}
+                    </span>
+                    <span className="text-white/40">·</span>
+                    <span className="text-white/70">
+                      {seasonProgress.isNearComplete
+                        ? "✓"
+                        : `~${seasonProgress.hoursLeft}h`}
+                    </span>
+                  </div>
+                )}
                 <ServerSelector
                   servers={servers}
                   value={serverId}
@@ -806,10 +870,22 @@ export function PlayerContainer({
       <NextEpisodePrompt
         visible={nextPromptOpen && canNext}
         seconds={Math.max(1, Math.round(duration - currentTime))}
+        nextEpisodeNumber={epNum + 1}
+        posterUrl={poster}
         onCancel={() => setNextPromptOpen(false)}
         onPlayNow={() => {
           setNextPromptOpen(false);
           onChangeEpisode(epNum + 1);
+        }}
+      />
+
+      <SeasonCompleteOverlay
+        visible={completeOpen && isLastEp}
+        slug={slug}
+        title={title}
+        onDismiss={() => {
+          setCompleteOpen(false);
+          setCompleteDismissed(true);
         }}
       />
 

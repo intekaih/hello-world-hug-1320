@@ -17,6 +17,7 @@ import {
   FloatingMovieActions,
   MovieDetailHero,
   MovieFactRail,
+  SeasonProgressBlock,
   SectionHeader,
   StoryBlock,
   type Movie,
@@ -145,7 +146,10 @@ function MovieDetailPage() {
         <CategoryChips categories={movie.categories} />
 
         {movie.total_episodes > 1 && (
-          <EpisodeSelector slug={movie.slug} total={movie.total_episodes} />
+          <>
+            <SeasonProgressBlock movie={movie} />
+            <EpisodeSelector slug={movie.slug} total={movie.total_episodes} />
+          </>
         )}
 
         {movie.parts.length > 1 && (

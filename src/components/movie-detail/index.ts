@@ -6,6 +6,7 @@ export { StoryBlock } from "./story-block";
 export { MovieFactRail } from "./fact-rail";
 export { CastCarousel } from "./cast-carousel";
 export { EpisodeSelector } from "./episode-selector";
+export { SeasonProgressBlock } from "./season-progress-block";
 export { RelatedMovieRail } from "./related-rail";
 export { FloatingMovieActions } from "./floating-actions";
 export { SectionHeader } from "./section-header";
