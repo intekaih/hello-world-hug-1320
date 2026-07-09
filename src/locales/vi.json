@@ -306,6 +306,21 @@
       "added": "Đã lưu vào watchlist",
       "notInterested": "Không quan tâm",
       "close": "Đóng"
+    },
+    "autoNext": {
+      "tooltip": "Tự phát tập sau đang BẬT.",
+      "openSettings": "Tắt trong Cài đặt",
+      "manualHint": "Tự phát đang tắt — chọn để xem tập tiếp.",
+      "softAsk": "Bạn đã xem 3 tập liên tiếp — tiếp tục tự phát?",
+      "continueYes": "Tiếp tục",
+      "pauseTonight": "Nghỉ đến sáng"
+    },
+    "settings": {
+      "eyebrow": "Trình phát",
+      "title": "Cài đặt player",
+      "autoNextLabel": "Tự phát tập sau",
+      "autoNextExplain": "Tự động chuyển sang tập kế tiếp sau đoạn credits. Có thể tắt bất cứ lúc nào.",
+      "resumeNow": "Bật lại ngay"
     }
   },
   "search": {
@@ -588,5 +603,3 @@
     }
   }
 }
-
-
