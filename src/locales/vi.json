@@ -618,8 +618,13 @@
       "sameGenre": "Cùng {{value}}",
       "sameCountry": "Từ {{value}}",
       "similarMood": "Hợp với {{value}}"
+    },
+    "notInterested": {
+      "aria": "Không quan tâm tới \"{{title}}\"",
+      "tooltip": "Không quan tâm — ẩn 14 ngày"
     }
   },
+
   "share": {
     "sheet": {
       "eyebrow": "Chia sẻ khoảnh khắc này"
