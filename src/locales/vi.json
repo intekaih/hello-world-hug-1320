@@ -105,6 +105,8 @@
     "nextEpisodeWaiting": "Tập tiếp theo đang chờ",
     "pickUpWhereLeft": "Tiếp tục từ nơi bạn dừng lại",
     "episode": "Tập {{n}}",
+    "nearlyDone": "Sắp xong",
+    "finishIt": "Xem nốt",
     "lastWatched": {
       "justNow": "Vừa xem",
       "minutesAgo": "{{n}} phút trước",
