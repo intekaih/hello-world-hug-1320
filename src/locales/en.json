@@ -274,7 +274,20 @@
       "short": "Next",
       "startsIn": "Next episode starts in {{seconds}}s",
       "playNow": "Play now",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "upNextLabel": "Episode {{n}}"
+    },
+    "season": {
+      "chip": "{{watched}}/{{total}} watched · ~{{hours}}h left",
+      "chipDone": "{{watched}}/{{total}} watched · complete",
+      "halfway": "You're past the midpoint — nice pace"
+    },
+    "complete": {
+      "eyebrow": "Season complete",
+      "title": "You finished {{title}}",
+      "subtitle": "Pick your next journey",
+      "back": "Back to details",
+      "browse": "Browse more"
     }
   },
   "search": {
