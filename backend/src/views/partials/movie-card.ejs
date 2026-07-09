@@ -1,0 +1,74 @@
+<div class="movie-card animate-in"
+    data-hover-slug="<%= movie.slug %>"
+    data-hover-name="<%= movie.name %>"
+    data-hover-thumb="<%= movie.thumb_url %>"
+    data-hover-year="<%= movie.year %>"
+    data-hover-ep="<%= movie.episode_current %>"
+    data-hover-quality="<%= movie.quality %>"
+    data-hover-rating="<%= (movie.rating && movie.rating > 0) ? movie.rating.toFixed(1) : '' %>"
+    data-hover-cats="<%= (movie.category && movie.category.length > 0) ? movie.category.slice(0, 3).map(c => c.name).join('|') : '' %>"
+    data-hover-origin="<%= movie.origin_name || '' %>">
+    <% var _cardHref='/phim/' + movie.slug; %>
+        <!-- Main Card Link -->
+        <a href="<%= _cardHref %>" class="movie-card-link">
+            <div class="movie-card-img skeleton">
+                <img src="<%= typeof thumbSrc !== 'undefined' ? thumbSrc(movie.thumb_url, 300) : movie.thumb_url %>"
+                    alt="<%= movie.name %>" width="300" height="450"
+                    sizes="(max-width: 360px) 105px, (max-width: 480px) 120px, (max-width: 768px) 140px, 180px"
+                    data-fallback="/images/no-poster.svg">
+
+                <!-- Quick Play Overlay -->
+                <div class="movie-card-play-overlay">
+                    <div class="movie-card-play-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="movie-card-badges">
+                    <% if (movie.quality) { %>
+                    <span class="badge-quality">
+                        <%= movie.quality %>
+                    </span>
+                    <% } %>
+                    <% if (movie.lang) { %>
+                    <span class="badge-lang">
+                        <%= movie.lang.replace(/Thuyết Minh/gi, 'TM') %>
+                    </span>
+                    <% } %>
+                </div>
+                <% if (movie.rating && movie.rating> 0) { %>
+                    <div
+                        class="movie-card-rating <%= movie.rating >= 7 ? 'rating-high' : movie.rating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <%= movie.rating.toFixed(1) %>
+                    </div>
+                    <% } %>
+                        <% if (typeof movie.watchProgress !=='undefined' && movie.watchProgress> 0) { %>
+                            <div class="movie-card-progress">
+                                <div class="movie-card-progress-bar"
+                                    style="width:<%= Math.min(movie.watchProgress, 100) %>%"></div>
+                            </div>
+                            <% } %>
+            </div>
+            <div class="movie-card-info">
+                <h3 class="movie-card-title">
+                    <%= movie.name %>
+                </h3>
+                <div class="movie-card-meta">
+                    <% if (movie.year && movie.year > 0) { %>
+                    <span class="movie-card-year">
+                        <%= movie.year %>
+                    </span>
+                    <% } %>
+                    <span>
+                        <%= movie.episode_current %>
+                    </span>
+                </div>
+            </div>
+        </a>
+</div>

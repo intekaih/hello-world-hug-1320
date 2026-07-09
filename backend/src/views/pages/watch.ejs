@@ -1,0 +1,522 @@
+<% /* Tìm tập trước/sau */ const currentIdx=episodes.findIndex(ep=> ep.slug === currentEpisode || (ep.slug && ep.slug.toLowerCase() === currentEpisode));
+    const nextEp = currentIdx >= 0 && currentIdx < episodes.length - 1 ? episodes[currentIdx + 1] : null; 
+    const prevEp=currentIdx> 0 ? episodes[currentIdx - 1] : null;
+    const currentEpObj = currentIdx >= 0 ? episodes[currentIdx] : null;
+    const currentEpName = currentEpObj && currentEpObj.name ? currentEpObj.name : currentEpisode;
+%>
+<%# GEO: VideoObject Structured Data cho AI discovery %>
+<% if (typeof watchJsonLd !== 'undefined' && watchJsonLd) { %>
+<script type="application/ld+json" nonce="<%= nonce %>"><%- watchJsonLd %></script>
+<% } %>
+        <div class="player-container" id="playerContainer">
+            <!-- Cinema Mode Overlay -->
+            <div class="cinema-overlay" id="cinemaOverlay" data-action="toggleCinemaMode"></div>
+
+            <div class="player-wrapper" id="playerWrapper">
+                <% if (streamHash) { %>
+                    <!-- Custom HLS Player -->
+                    <div class="custom-player" id="customPlayer">
+                        <video id="hlsVideo" playsinline></video>
+
+                        <!-- Title overlay: Tên phim - Tập -->
+                        <div class="cp-title-overlay" id="cpTitleOverlay">
+                            <div class="cp-title-overlay-left">
+                                <span class="cp-title-overlay-text">
+                                    <%= movie.name %>
+                                </span>
+                                <span class="cp-title-overlay-ep">
+                                    <% if (String(currentEpName).toLowerCase() === 'full') { %>Full<% } else { %>
+                                            <%= String(currentEpName).match(/t[ậa]p/i) ? currentEpName : 'Tập ' + currentEpName %>
+                                                <% } %>
+                                </span>
+                            </div>
+                            <span class="cp-title-overlay-brand">movieCC</span>
+                        </div>
+
+                        <!-- Loading spinner -->
+                        <div class="cp-loading" id="cpLoading">
+                            <div class="cp-spinner"></div>
+                        </div>
+
+                        <!-- Big play button -->
+                        <div class="cp-big-play" id="cpBigPlay">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5,3 19,12 5,21" />
+                            </svg>
+                        </div>
+
+                        <!-- Controls overlay -->
+                        <div class="cp-controls" id="cpControls">
+                            <!-- Progress bar -->
+                            <div class="cp-progress-wrap" id="cpProgressWrap">
+                                <div class="cp-progress-bar">
+                                    <div class="cp-progress-buffered" id="cpBuffered"></div>
+                                    <div class="cp-progress-played" id="cpPlayed">
+                                        <div class="cp-progress-thumb"></div>
+                                    </div>
+                                </div>
+                                <div class="cp-progress-tooltip" id="cpTooltip">00:00</div>
+                            </div>
+
+                            <div class="cp-controls-row">
+                                <!-- Left controls -->
+                                <div class="cp-left">
+                                    <button class="cp-btn" id="cpPlayBtn" title="Phát / Tạm dừng (Space)">
+                                        <svg class="cp-icon-play" viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,3 19,12 5,21" />
+                                        </svg>
+                                        <svg class="cp-icon-pause" viewBox="0 0 24 24" fill="currentColor"
+                                            style="display:none">
+                                            <rect x="6" y="4" width="4" height="16" />
+                                            <rect x="14" y="4" width="4" height="16" />
+                                        </svg>
+                                    </button>
+                                    <button class="cp-btn" id="cpRewBtn" title="Tua lại 10s">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 4v6h6" />
+                                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" /><text x="12" y="16"
+                                                fill="currentColor" stroke="none" font-size="8" text-anchor="middle"
+                                                font-weight="bold">10</text>
+                                        </svg>
+                                    </button>
+                                    <button class="cp-btn" id="cpFwdBtn" title="Tua tới 10s">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M23 4v6h-6" />
+                                            <path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10" /><text x="12" y="16"
+                                                fill="currentColor" stroke="none" font-size="8" text-anchor="middle"
+                                                font-weight="bold">10</text>
+                                        </svg>
+                                    </button>
+                                    <button class="cp-btn cp-skip-btn" id="cpSkipIntroBtn" title="Tua tới (I)">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="5,4 15,12 5,20" />
+                                            <polygon points="13,4 23,12 13,20" />
+                                        </svg>
+                                    </button>
+                                    <div class="cp-volume-wrap">
+                                        <button class="cp-btn" id="cpMuteBtn" title="Tắt/Bật tiếng (M)">
+                                            <svg class="cp-icon-vol" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="currentColor" />
+                                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                                            </svg>
+                                            <svg class="cp-icon-mute" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2" style="display:none">
+                                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19" fill="currentColor" />
+                                                <line x1="23" y1="9" x2="17" y2="15" />
+                                                <line x1="17" y1="9" x2="23" y2="15" />
+                                            </svg>
+                                        </button>
+                                        <div class="cp-vol-slider-wrap">
+                                            <input type="range" class="cp-vol-slider" id="cpVolSlider" min="0" max="1"
+                                                step="0.01" value="1">
+                                        </div>
+                                    </div>
+                                    <span class="cp-time" id="cpTime">00:00 / 00:00</span>
+                                </div>
+
+                                <!-- Right controls -->
+                                <div class="cp-right">
+                                    <% if (nextEp) { %>
+                                        <a href="/xem/<%= movie.slug %>/<%= nextEp.slug %>" class="cp-btn"
+                                            id="cpNextBtn" title="Tập tiếp theo (N)">
+                                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5,4 15,12 5,20" />
+                                                <rect x="17" y="4" width="3" height="16" />
+                                            </svg>
+                                        </a>
+                                        <% } %>
+                                            <button class="cp-btn" id="cpSubBtn" title="Phụ đề (Nếu có)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2">
+                                                    <rect x="1" y="4" width="22" height="16" rx="2" />
+                                                    <line x1="1" y1="10" x2="23" y2="10" />
+                                                </svg>
+                                            </button>
+                                            <button class="cp-btn" id="cpPipBtn" title="Picture-in-Picture (P)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2">
+                                                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                                                    <rect x="12" y="9" width="8" height="6" rx="1" fill="currentColor"
+                                                        opacity="0.3" />
+                                                </svg>
+                                            </button>
+                                            <button class="cp-btn" id="cpAspectBtn" title="Tỉ lệ khung hình (R)">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                                                    <rect x="6" y="7" width="12" height="10" rx="1" opacity="0.3" />
+                                                </svg>
+                                            </button>
+                                            <button class="cp-btn" id="cpSettingsBtn" title="Cài đặt">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2">
+                                                    <circle cx="12" cy="12" r="3" />
+                                                    <path
+                                                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                                </svg>
+                                            </button>
+                                            <button class="cp-btn" id="cpFullBtn" title="Toàn màn hình (F)">
+                                                <svg class="cp-icon-expand" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <polyline points="15 3 21 3 21 9" />
+                                                    <polyline points="9 21 3 21 3 15" />
+                                                    <line x1="21" y1="3" x2="14" y2="10" />
+                                                    <line x1="3" y1="21" x2="10" y2="14" />
+                                                </svg>
+                                                <svg class="cp-icon-compress" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" style="display:none">
+                                                    <polyline points="4 14 10 14 10 20" />
+                                                    <polyline points="20 10 14 10 14 4" />
+                                                    <line x1="14" y1="10" x2="21" y2="3" />
+                                                    <line x1="3" y1="21" x2="10" y2="14" />
+                                                </svg>
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settings panel -->
+                        <div class="cp-settings-panel" id="cpSettingsPanel">
+                            <div class="cp-settings-title">Tốc độ phát</div>
+                            <div class="cp-speed-options" id="cpSpeedOptions">
+                                <button data-speed="0.5">0.5x</button>
+                                <button data-speed="0.75">0.75x</button>
+                                <button data-speed="1" class="active">1x</button>
+                                <button data-speed="1.25">1.25x</button>
+                                <button data-speed="1.5">1.5x</button>
+                                <button data-speed="2">2x</button>
+                            </div>
+                            <div class="cp-settings-divider"></div>
+                            <div class="cp-settings-title">Thời gian tua (giây)</div>
+                            <div class="cp-seek-options" id="cpSeekOptions">
+                                <button data-seek="5">5s</button>
+                                <button data-seek="10" class="active">10s</button>
+                                <button data-seek="15">15s</button>
+                                <button data-seek="30">30s</button>
+                                <button data-seek="60">60s</button>
+                            </div>
+                            <div class="cp-settings-divider"></div>
+                            <div class="cp-settings-title">Nút tua tới (>>)</div>
+                            <div class="cp-skip-section">
+                                <div class="cp-skip-presets" id="cpSkipFwdPresets">
+                                    <button data-skip="30">30s</button>
+                                    <button data-skip="60">60s</button>
+                                    <button data-skip="90" class="active">90s</button>
+                                    <button data-skip="120">120s</button>
+                                    <button data-skip="150">150s</button>
+                                </div>
+                                <div class="cp-skip-custom">
+                                    <input type="number" id="cpSkipFwdCustom" class="cp-skip-input" min="1" max="600"
+                                        placeholder="Nhập số giây...">
+                                    <button id="cpSkipFwdCustomBtn" class="cp-skip-apply">OK</button>
+                                </div>
+                            </div>
+                            <div class="cp-skip-hint">Phím tắt: I = tua tới, ? = phím tắt</div>
+                            <div class="cp-settings-divider"></div>
+                            <div class="cp-settings-title">Hình ảnh</div>
+                            <div class="cp-filter-group">
+                                <div class="cp-filter-row">
+                                    <span class="cp-filter-label">Độ sáng</span>
+                                    <input type="range" class="cp-filter-slider" id="cpBrightness" min="50" max="150"
+                                        value="100">
+                                    <span class="cp-filter-value" id="cpBrightnessVal">100%</span>
+                                </div>
+                                <div class="cp-filter-row">
+                                    <span class="cp-filter-label">Tương phản</span>
+                                    <input type="range" class="cp-filter-slider" id="cpContrast" min="50" max="150"
+                                        value="100">
+                                    <span class="cp-filter-value" id="cpContrastVal">100%</span>
+                                </div>
+                                <button class="cp-filter-reset" id="cpFilterReset">Đặt lại</button>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else if (embedUrl) { %>
+                        <iframe id="embedPlayer" src="<%= embedUrl %>" allowfullscreen
+                            style="width:100%;height:100%;border:none;background:#000"></iframe>
+                        <% } else { %>
+                            <div class="cp-no-video">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#e74c3c"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="15" y1="9" x2="9" y2="15" />
+                                    <line x1="9" y1="9" x2="15" y2="15" />
+                                </svg>
+                                <p>Tập phim chưa có sẵn.</p>
+                            </div>
+                            <% } %>
+            </div>
+
+            <!-- Player Info Bar (enhanced) -->
+            <div class="player-info">
+                <div class="player-info-left">
+                    <h1 class="player-title">
+                        <%= movie.name %>
+                    </h1>
+                    <span class="player-ep">
+                        <% if (String(currentEpName).toLowerCase() === 'full') { %>Full<% } else { %><%= String(currentEpName).match(/t[ậa]p/i) ? currentEpName : 'Tập ' + currentEpName %>
+                                    <% } %> / <%= movie.episode_total %>
+                    </span>
+                </div>
+                <div class="player-info-right">
+                    <!-- Cinema Mode Toggle -->
+                    <button class="player-mode-btn" id="cinemaModeBtn" data-action="toggleCinemaMode"
+                        title="Chế độ rạp phim (C)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="M2 8h20M2 16h20M8 4v16M16 4v16" />
+                        </svg>
+                    </button>
+                    <!-- Lights Toggle -->
+                    <button class="player-mode-btn" id="lightsBtn" data-action="toggleLights" title="Tắt đèn (L)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 18h6M10 22h4" />
+                            <path
+                                d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+                        </svg>
+                    </button>
+                    <% if (prevEp) { %>
+                        <a href="/xem/<%= movie.slug %>/<%= prevEp.slug %>" class="player-nav-btn"
+                            title="Tập trước (B)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                            Trước
+                        </a>
+                        <% } %>
+                            <% if (nextEp) { %>
+                                <a href="/xem/<%= movie.slug %>/<%= nextEp.slug %>"
+                                    class="player-nav-btn player-nav-next" title="Tập tiếp theo (N)">
+                                    Tiếp
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                </a>
+                                <% } %>
+                </div>
+            </div>
+
+            <!-- Movie Detail Strip -->
+            <div class="player-detail-strip">
+                <div class="player-detail-left">
+                    <div class="player-detail-badges">
+                        <span class="badge-quality">
+                            <%= movie.quality %>
+                        </span>
+                        <span class="badge-lang">
+                            <%= movie.lang %>
+                        </span>
+                        <% if (movie.year) { %>
+                            <span class="badge-ep">
+                                <%= movie.year %>
+                            </span>
+                            <% } %>
+                    </div>
+                    <% if (movie.category && movie.category.length> 0) { %>
+                        <div class="player-detail-cats">
+                            <% movie.category.slice(0, 4).forEach((cat, i)=> { %>
+                                <% if (i> 0) { %><span style="color:var(--text-muted)">•</span>
+                                    <% } %>
+                                        <a href="/the-loai/<%= cat.slug %>"
+                                            style="color:var(--text-secondary);font-size:0.85rem">
+                                            <%= cat.name %>
+                                        </a>
+                                        <% }); %>
+                        </div>
+                        <% } %>
+                </div>
+                <div class="player-detail-right">
+                    <a href="/phim/<%= movie.slug %>" class="player-detail-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="16" x2="12" y2="12" />
+                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                        </svg>
+                        Chi tiết phim
+                    </a>
+                </div>
+            </div>
+
+            <% if (servers && servers.length> 0) { %>
+                <div class="server-section">
+                    <h4>Server</h4>
+                    <div class="server-btns" id="serverBtns">
+                        <% for (var i=0; i < servers.length; i++) { %>
+                            <button
+                                class="server-btn<% if (i === (typeof activeServerIdx !== 'undefined' ? activeServerIdx : 0)) { %> active<% } %>"
+                                data-idx="<%= i %>" data-action="switchServer" data-is-nguonc="<%= servers[i].isNguonc ? 'true' : 'false' %>">
+                                <%= servers[i].name %>
+                            </button>
+                            <% } %>
+                    </div>
+
+                </div>
+                <% } %>
+
+                    <div class="episode-section" id="episodeSection">
+                        <h3 id="episodeCount">Chọn tập (<%= servers[activeServerIdx] ?
+                                servers[activeServerIdx].episodes.length : episodes.length %> tập)</h3>
+                        <div class="episode-grid" id="episodeGrid">
+                            <% var _activeEps=servers[activeServerIdx] ? servers[activeServerIdx].episodes : episodes;
+                                %>
+                                <% for (var j=0; j < _activeEps.length; j++) { %>
+                                    <a href="/xem/<%= movie.slug %>/<%= _activeEps[j].slug %>"
+                                        class="episode-btn<% if (_activeEps[j].slug === currentEpisode || _activeEps[j].slug.toLowerCase() === currentEpisode) { %> active<% } %>">
+                                        <% if (_activeEps[j].name && _activeEps[j].name.toLowerCase()==='full' ) { %>
+                                            Full<% } else { %><%= String(_activeEps[j].name).replace(/t[ậa]p\s*/i, '').trim() || _activeEps[j].name %><% } %>
+                                    </a>
+                                    <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Gợi ý phim (lazy-loaded via API) -->
+                    <div class="watch-related" id="watchRelatedSection">
+                        <h3 class="watch-related-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            </svg>
+                            Có thể bạn muốn xem
+                        </h3>
+                        <div class="movie-grid watch-related-grid" id="watchRelatedGrid">
+                            <% if (typeof relatedMovies !== 'undefined' && relatedMovies.length > 0) { %>
+                                <% relatedMovies.forEach(movie=> { %>
+                                    <%- include('../partials/movie-card', { movie }) %>
+                                <% }); %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <script nonce="<%= nonce %>">
+                        (function () {
+                            var grid = document.getElementById('watchRelatedGrid');
+                            var section = document.getElementById('watchRelatedSection');
+                            if (!grid || !section) return;
+                            if (grid.querySelector('.movie-card')) return;
+                            fetch('/api/movies/<%= movie.slug %>/related')
+                                .then(function (r) { return r.json(); })
+                                .then(function (data) {
+                                    if (data.relatedMovies && data.relatedMovies.length > 0) {
+                                        data.relatedMovies.forEach(function (movie) {
+                                            var card = document.createElement('div');
+                                            card.className = 'movie-card';
+                                            var thumb = movie.poster_url || movie.thumb_url || '/images/no-poster.svg';
+                                            // Build DOM safely — no innerHTML to prevent XSS
+                                            var link = document.createElement('a');
+                                            link.href = '/phim/' + encodeURIComponent(movie.slug);
+                                            link.className = 'movie-card-link';
+                                            var imgWrap = document.createElement('div');
+                                            imgWrap.className = 'movie-card-img';
+                                            var img = document.createElement('img');
+                                            img.src = thumb;
+                                            img.alt = movie.name || '';
+                                            img.width = 300; img.height = 450;
+                                            img.loading = 'lazy';
+                                            img.onerror = function () { this.onerror = null; this.src = '/images/no-poster.svg'; };
+                                            var badges = document.createElement('div');
+                                            badges.className = 'movie-card-badges';
+                                            var bq = document.createElement('span');
+                                            bq.className = 'badge-quality';
+                                            bq.textContent = movie.quality || '';
+                                            var bl = document.createElement('span');
+                                            bl.className = 'badge-lang';
+                                            bl.textContent = (movie.lang || '').replace(/Thuyết Minh/gi, 'TM');
+                                            badges.appendChild(bq); badges.appendChild(bl);
+                                            imgWrap.appendChild(img); imgWrap.appendChild(badges);
+                                            var info = document.createElement('div');
+                                            info.className = 'movie-card-info';
+                                            var h3 = document.createElement('h3');
+                                            h3.className = 'movie-card-title';
+                                            h3.textContent = movie.name || '';
+                                            var meta = document.createElement('div');
+                                            meta.className = 'movie-card-meta';
+                                            var yr = document.createElement('span');
+                                            yr.className = 'movie-card-year';
+                                            yr.textContent = (movie.year && movie.year > 0) ? String(movie.year) : '';
+                                            var ep = document.createElement('span');
+                                            ep.textContent = movie.episode_current || '';
+                                            meta.appendChild(yr); meta.appendChild(ep);
+                                            info.appendChild(h3); info.appendChild(meta);
+                                            link.appendChild(imgWrap); link.appendChild(info);
+                                            card.appendChild(link);
+                                            grid.appendChild(card);
+                                        });
+                                    } else {
+                                        section.style.display = 'none';
+                                    }
+                                })
+                                .catch(function () { section.style.display = 'none'; });
+                        })();
+                    </script>
+        </div>
+
+        <div id="serverData" style="display:none" data-embeds="<%= serverEmbeds %>"
+            data-streams="<%= typeof serverStreams !== 'undefined' ? serverStreams : '{}' %>"
+            data-embed-fallbacks="<%= typeof serverEmbedFallbacks !== 'undefined' ? serverEmbedFallbacks : '{}' %>"
+            data-server-episodes="<%= JSON.stringify(servers.map(function(s){ return s.episodes.map(function(e){ return { slug: e.slug, name: e.name }; }); })) %>"
+            data-movie-slug="<%= movie.slug %>">
+        </div>
+
+        <script nonce="<%= nonce %>">
+            (function () {
+                var sd = document.getElementById('serverData');
+                if (!sd) return;
+                var serverEpsAll = JSON.parse(sd.getAttribute('data-server-episodes') || '[]');
+                var movieSlug = sd.getAttribute('data-movie-slug') || '';
+                var currentEp = '<%= currentEpisode %>';
+
+                function renderEpisodeGrid(idx) {
+                    var grid = document.getElementById('episodeGrid');
+                    var countEl = document.getElementById('episodeCount');
+                    if (!grid) return;
+                    var eps = serverEpsAll[idx] || [];
+                    countEl && (countEl.textContent = 'Chọn tập (' + eps.length + ' tập)');
+                    // Build DOM safely — no innerHTML to prevent XSS
+                    while (grid.firstChild) grid.removeChild(grid.firstChild);
+                    eps.forEach(function (ep) {
+                        var isActive = ep.slug === currentEp || ep.slug.toLowerCase() === currentEp;
+                        var label = ep.name && ep.name.toLowerCase() === 'full' ? 'Full' : (String(ep.name).replace(/t[ậa]p\s*/i, '').trim() || ep.name);
+                        var a = document.createElement('a');
+                        a.href = '/xem/' + encodeURIComponent(movieSlug) + '/' + encodeURIComponent(ep.slug);
+                        a.className = 'episode-btn' + (isActive ? ' active' : '');
+                        a.textContent = label;
+                        grid.appendChild(a);
+                    });
+                }
+
+                // Hook into server button clicks
+                var serverBtns = document.getElementById('serverBtns');
+                if (serverBtns) {
+                    serverBtns.addEventListener('click', function (e) {
+                        var btn = e.target.closest('[data-idx]');
+                        if (!btn) return;
+                        var idx = parseInt(btn.getAttribute('data-idx'));
+                        if (!isNaN(idx)) renderEpisodeGrid(idx);
+                        
+
+                    });
+                }
+            })();
+        </script>
+
+
+        <div id="watchData" style="display:none" data-slug="<%= movie.slug %>" data-episode="<%= currentEpisode %>"
+            data-name="<%= movie.name %>" data-thumb="<%= movie.poster_url || movie.thumb_url || '' %>"
+            data-origin="<%= movie.origin_name || '' %>"
+            data-stream-hash="<%= typeof streamHash !== 'undefined' ? streamHash : '' %>"
+            data-embed-url="<%= typeof embedUrl !== 'undefined' ? embedUrl : '' %>"
+            data-embed-fallback="<%= typeof embedFallbackUrl !== 'undefined' ? embedFallbackUrl : '' %>"
+            data-prev="<%= prevEp ? '/xem/' + movie.slug + '/' + prevEp.slug : '' %>"
+            data-next="<%= nextEp ? '/xem/' + movie.slug + '/' + nextEp.slug : '' %>"></div>
+
+        <% /* Luôn load hls.js để switchServer() có thể chuyển sang server m3u8 */ %>
+            <script nonce="<%= nonce %>" src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
+            <script nonce="<%= nonce %>" src="/js/player.min.js?v=<%= v %>"></script>
+            <script nonce="<%= nonce %>"
+                src="/js/<%= typeof isProduction !== 'undefined' && isProduction ? 'custom-player.min.js' : 'custom-player.js' %>?v=<%= v %>"></script>

@@ -1,0 +1,303 @@
+<div class="admin-layout">
+    <%- include('../partials/admin-sidebar') %>
+        <div class="admin-main">
+            <div class="admin-header">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <h1>Hộp thư Góp ý</h1>
+                    <% if (typeof unreadCount !=='undefined' && unreadCount> 0) { %>
+                        <span
+                            style="background:var(--danger,#e74c3c);color:#fff;font-size:0.8rem;font-weight:700;padding:2px 8px;border-radius:12px">
+                            <%= unreadCount %> mới
+                        </span>
+                        <% } %>
+                </div>
+                <div style="color:var(--text-muted);font-size:0.9rem">
+                    Tổng cộng: <%= typeof totalCount !=='undefined' ? totalCount : feedbacks.length %> tin
+                </div>
+            </div>
+
+            <style nonce="<%= nonce %>">
+                .fb-row.unread {
+                    background: rgba(255, 255, 255, 0.03);
+                    border-left: 3px solid var(--primary);
+                }
+
+                .fb-message {
+                    max-width: 300px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-size: 0.9rem;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                }
+
+                .fb-message:hover {
+                    color: var(--text-primary);
+                    text-decoration: underline;
+                }
+
+                .cat-badge {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-size: 0.75rem;
+                    font-weight: 500;
+                    font-family: monospace;
+                    text-transform: uppercase;
+                }
+
+                /* Modal style */
+                .fb-modal-body {
+                    line-height: 1.6;
+                    font-size: 0.95rem;
+                    color: var(--text-primary);
+                    white-space: pre-wrap;
+                    padding: 12px 16px;
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    max-height: 60vh;
+                    overflow-y: auto;
+                }
+
+                .fb-modal-meta {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                    font-size: 0.85rem;
+                    color: var(--text-muted);
+                }
+
+                .fb-modal-meta span strong {
+                    color: var(--text-primary);
+                }
+            </style>
+
+            <div class="table-container" style="margin-top:20px">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Người gửi</th>
+                            <th>Phân loại</th>
+                            <th>Nội dung (Nhấp để đọc)</th>
+                            <th>Phim liên quan</th>
+                            <th>Ngày gửi</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (feedbacks.length===0) { %>
+                            <tr>
+                                <td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted)">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5" style="margin-bottom:12px;opacity:0.5">
+                                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                                        <polyline points="3 7 12 13 21 7" />
+                                    </svg>
+                                    <div>Chưa có góp ý nào</div>
+                                </td>
+                            </tr>
+                            <% } %>
+
+                                <% feedbacks.forEach(fb=> { %>
+                                    <tr class="fb-row <%= !fb.is_read ? 'unread' : '' %>" data-id="<%= fb.id %>"
+                                        data-read="<%= fb.is_read %>">
+                                        <td>
+                                            <div style="font-weight:600">
+                                                <%= fb.name %>
+                                            </div>
+                                            <% if (fb.email) { %>
+                                                <div style="font-size:0.8rem;color:var(--text-muted)">
+                                                    <%= fb.email %>
+                                                </div>
+                                                <% } %>
+                                                    <% if (fb.ip) { %>
+                                                        <div style="font-size:0.75rem;opacity:0.5" title="IP Address">
+                                                            <%= fb.ip %>
+                                                        </div>
+                                                        <% } %>
+                                        </td>
+                                        <td>
+                                            <% let cColor='#888' , cBg='rgba(255,255,255,0.1)' , cName='Khác' ; if
+                                                (fb.category==='bug' ) { cColor='#e74c3c' ; cBg='rgba(231,76,60,0.15)' ;
+                                                cName='Lỗi' ; } if (fb.category==='feature' ) { cColor='#3498db' ;
+                                                cBg='rgba(52,152,219,0.15)' ; cName='Đề xuất' ; } if
+                                                (fb.category==='content' ) { cColor='#2ecc71' ;
+                                                cBg='rgba(46,204,113,0.15)' ; cName='Nội dung' ; } %>
+                                                <span class="cat-badge"
+                                                    style="color:<%= cColor %>;background:<%= cBg %>">
+                                                    <%= cName %>
+                                                </span>
+                                        </td>
+                                        <td>
+                                            <div class="fb-message" data-action="readFeedback" data-id="<%= fb.id %>"
+                                                data-name="<%= fb.name %>" data-email="<%= fb.email || 'Không có' %>"
+                                                data-movie="<%= fb.movie_slug || 'Không xác định' %>"
+                                                data-date="<%= new Date(fb.created_at).toLocaleString('vi-VN') %>"
+                                                data-message="<%= fb.message %>" data-read="<%= fb.is_read %>">
+                                                <%= fb.message %>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <% if (fb.movie_slug) { %>
+                                                <a href="/phim/<%= fb.movie_slug %>" target="_blank"
+                                                    style="color:var(--primary);text-decoration:none;font-size:0.85rem">
+                                                    <%= fb.movie_slug %>
+                                                </a>
+                                                <% } else { %>
+                                                    <span style="color:var(--text-muted);font-size:0.85rem">-</span>
+                                                    <% } %>
+                                        </td>
+                                        <td style="color:var(--text-muted);font-size:0.85rem">
+                                            <%= fb.created_at ? new Date(fb.created_at).toLocaleDateString('vi-VN')
+                                                : 'N/A' %>
+                                        </td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="table-action-btn" title="Chưa đọc"
+                                                    data-action="toggleRead" data-id="<%= fb.id %>"
+                                                    data-read="<%= fb.is_read %>">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                        stroke="<%= fb.is_read ? 'currentColor' : 'var(--primary)' %>"
+                                                        stroke-width="2">
+                                                        <polyline points="20 6 9 17 4 12" />
+                                                    </svg>
+                                                </button>
+                                                <button class="table-action-btn delete" title="Xóa" data-action="delete"
+                                                    data-id="<%= fb.id %>">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <polyline points="3 6 5 6 21 6" />
+                                                        <path
+                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (typeof totalPages !=='undefined' && totalPages> 1) { %>
+                <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px">
+                    <% if (currentPage> 1) { %>
+                        <a href="/admin/feedbacks?page=<%= currentPage - 1 %>" class="btn btn-ghost btn-sm">← Trước</a>
+                        <% } %>
+                            <span style="color:var(--text-muted);font-size:0.85rem">
+                                Trang <%= currentPage %> / <%= totalPages %>
+                            </span>
+                            <% if (currentPage < totalPages) { %>
+                                <a href="/admin/feedbacks?page=<%= currentPage + 1 %>" class="btn btn-ghost btn-sm">Sau
+                                    →</a>
+                                <% } %>
+                </div>
+                <% } %>
+        </div>
+</div>
+
+<!-- Modal đọc Feedback -->
+<div class="modal-overlay" id="fbModal">
+    <div class="modal" style="max-width:600px">
+        <div class="modal-header">
+            <h3>Nội dung Góp ý</h3>
+            <button class="modal-close" onclick="closeFbModal()">&times;</button>
+        </div>
+        <div class="fb-modal-meta">
+            <span><strong>Người gửi:</strong> <span id="mdName"></span></span>
+            <span><strong>Email:</strong> <span id="mdEmail"></span></span>
+            <span><strong>Phim liên quan:</strong> <span id="mdMovie"></span></span>
+            <span><strong>Thời gian:</strong> <span id="mdDate"></span></span>
+        </div>
+        <div class="fb-modal-body" id="mdMessage"></div>
+        <div class="modal-footer" style="margin-top:20px">
+            <button class="btn btn-primary btn-sm" onclick="closeFbModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<script nonce="<%= nonce %>">
+    (function () {
+        const csrfToken = '<%= csrfToken %>';
+        const fbModal = document.getElementById('fbModal');
+
+        document.addEventListener('click', function (e) {
+            // Read feedback
+            const readBtn = e.target.closest('[data-action="readFeedback"]');
+            if (readBtn) {
+                const id = readBtn.dataset.id;
+                document.getElementById('mdName').textContent = readBtn.dataset.name;
+                document.getElementById('mdEmail').textContent = readBtn.dataset.email;
+                document.getElementById('mdMovie').textContent = readBtn.dataset.movie;
+                document.getElementById('mdDate').textContent = readBtn.dataset.date;
+                document.getElementById('mdMessage').textContent = readBtn.dataset.message;
+                fbModal.classList.add('show');
+
+                if (readBtn.dataset.read === 'false') {
+                    fetch('/admin/api/feedback/' + id + '/read', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken }
+                    }).then(() => {
+                        readBtn.dataset.read = 'true';
+                        const row = document.querySelector(`.fb-row[data-id="${id}"]`);
+                        if (row) {
+                            row.classList.remove('unread');
+                            row.dataset.read = 'true';
+                            const btnSvg = row.querySelector('.table-action-btn[data-action="toggleRead"] svg');
+                            if (btnSvg) btnSvg.setAttribute('stroke', 'currentColor');
+
+                            // Decrement badge count
+                            const headerBadge = document.querySelector('.admin-header span');
+                            if (headerBadge) {
+                                let count = parseInt(headerBadge.textContent);
+                                if (!isNaN(count)) {
+                                    count--;
+                                    if (count <= 0) headerBadge.remove();
+                                    else headerBadge.textContent = count + ' mới';
+                                }
+                            }
+                        }
+                    });
+                }
+                return;
+            }
+
+            // Toggle Read manually
+            const toggleBtn = e.target.closest('[data-action="toggleRead"]');
+            if (toggleBtn) {
+                const id = toggleBtn.dataset.id;
+                const isRead = toggleBtn.dataset.read === 'true';
+                if (isRead) return;
+                fetch('/admin/api/feedback/' + id + '/read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken }
+                }).then(() => window.location.reload());
+                return;
+            }
+
+            // Delete Feedback
+            const delBtn = e.target.closest('[data-action="delete"]');
+            if (delBtn) {
+                const id = delBtn.dataset.id;
+                if (!confirm('Bạn có chắc muốn xóa góp ý này?')) return;
+                fetch('/admin/api/feedback/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken }
+                }).then(r => r.json()).then(data => {
+                    if (data.success) window.location.reload();
+                    else alert('Lỗi xóa góp ý');
+                });
+                return;
+            }
+
+            // Close modal
+            if (e.target.closest('.modal-close') || e.target.matches('.modal-overlay') || e.target.closest('.modal-footer .btn')) {
+                fbModal.classList.remove('show');
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <% if (typeof noIndex !== 'undefined' && noIndex) { %><meta name="robots" content="noindex, follow"><% } %>
+  <meta name="description"
+    content="<%= typeof metaDesc !== 'undefined' && metaDesc ? metaDesc : 'movieCC - Xem phim trực tuyến chất lượng cao, phụ đề tiếng Việt, cập nhật nhanh nhất' %>">
+  <!-- Open Graph -->
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'movieCC' %>">
+  <meta property="og:description"
+    content="<%= typeof metaDesc !== 'undefined' && metaDesc ? metaDesc : 'Xem phim trực tuyến chất lượng cao, phụ đề tiếng Việt' %>">
+  <meta property="og:type" content="<%= typeof ogType !== 'undefined' && ogType ? ogType : 'website' %>">
+  <% const _ogUrl=(typeof ogUrl !=='undefined' && ogUrl) ? ogUrl : ((typeof siteUrl !=='undefined' ? siteUrl : '' ) +
+    (typeof currentPath !=='undefined' ? currentPath : '/' )); %>
+    <meta property="og:url" content="<%= _ogUrl %>">
+    <% if (typeof ogImage !=='undefined' && ogImage) { %>
+      <meta property="og:image" content="<%= ogImage %>">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+      <% } %>
+        <meta property="og:site_name" content="movieCC">
+        <meta property="og:locale" content="vi_VN">
+        <!-- Twitter Card -->
+        <meta name="twitter:card"
+          content="<%= (typeof ogImage !== 'undefined' && ogImage) ? 'summary_large_image' : 'summary' %>">
+        <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'movieCC' %>">
+        <meta name="twitter:description"
+          content="<%= typeof metaDesc !== 'undefined' && metaDesc ? metaDesc : 'Xem phim trực tuyến chất lượng cao' %>">
+        <% if (typeof ogImage !=='undefined' && ogImage) { %>
+          <meta name="twitter:image" content="<%= ogImage %>">
+          <% } %>
+            <title>
+              <%= typeof title !=='undefined' ? title : 'movieCC' %>
+            </title>
+            <meta name="theme-color" content="#0a0a0a">
+            <% if (typeof canonicalUrl !== 'undefined' && canonicalUrl) { %>
+              <link rel="canonical" href="<%= canonicalUrl %>">
+            <% } else if (typeof currentPath !=='undefined' && currentPath) { %>
+              <link rel="canonical" href="<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') + currentPath %>">
+            <% } %>
+                <link rel="alternate" hreflang="vi" href="<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
+                <link rel="alternate" hreflang="x-default" href="<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') + (typeof currentPath !== 'undefined' ? currentPath : '/') %>">
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <%# DNS prefetch for external image CDNs %>
+                <link rel="dns-prefetch" href="https://img.ophim.live">
+                <link rel="dns-prefetch" href="https://phimimg.com">
+                <link rel="dns-prefetch" href="https://img.phimapi.com">
+                <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" id="gfonts">
+                <script nonce="<%= nonce %>">document.getElementById('gfonts').media='all';</script>
+                <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"></noscript>
+                <link rel="preload" href="/css/bundle.min.css?v=<%= v %>" as="style" fetchpriority="high">
+                <link rel="stylesheet" href="/css/bundle.min.css?v=<%= v %>" fetchpriority="high">
+                <% if (typeof isWatchPage !== 'undefined' && isWatchPage) { %>
+                <link rel="stylesheet" href="/css/player.min.css?v=<%= v %>">
+                <% } %>
+                <% if (typeof isAdminPage !== 'undefined' && isAdminPage) { %>
+                <link rel="stylesheet" href="/css/admin.min.css?v=<%= v %>">
+                <% } %>
+        <!-- Favicon / Branding -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/icon-512.png">
+                <link rel="manifest" href="/manifest.json">
+                <% if (!(typeof ogImage !== 'undefined' && ogImage)) { %>
+                <meta property="og:image" content="<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') %>/images/default-og.jpg">
+                <meta property="og:image:width" content="1200">
+                <meta property="og:image:height" content="630">
+                <% } %>
+                <meta name="csrf-token" content="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+
+                <%# ═══ GEO: Organization + WebSite + SearchAction Schema (all pages) ═══ %>
+                <% var _su = typeof siteUrl !== 'undefined' ? siteUrl : ''; %>
+                <script type="application/ld+json" nonce="<%= nonce %>">
+                {
+                  "@context": "https://schema.org",
+                  "@graph": [
+                    {
+                      "@type": "Organization",
+                      "@id": "<%= _su %>/#organization",
+                      "name": "movieCC",
+                      "url": "<%= _su %>",
+                      "description": "movieCC là nền tảng xem phim trực tuyến chất lượng cao hàng đầu Việt Nam. Cung cấp phim bộ, phim lẻ, anime với phụ đề tiếng Việt, chất lượng 4K, cập nhật nhanh nhất. Liên hệ: Telegram https://t.me/ShopCC_app",
+                      "foundingDate": "2025",
+                      "sameAs": ["https://t.me/ShopCC_app"],
+                      "contactPoint": {
+                        "@type": "ContactPoint",
+                        "contactType": "customer support",
+                        "url": "https://t.me/ShopCC_app",
+                        "availableLanguage": ["vi", "en"]
+                      },
+                      "logo": {
+                        "@type": "ImageObject",
+                        "url": "<%= _su %>/images/logo.png"
+                      }
+                    },
+                    {
+                      "@type": "WebSite",
+                      "@id": "<%= _su %>/#website",
+                      "url": "<%= _su %>",
+                      "name": "movieCC",
+                      "description": "Xem phim trực tuyến chất lượng cao, phụ đề tiếng Việt, cập nhật nhanh nhất. Phim bộ, phim lẻ, anime, phim chiếu rạp.",
+                      "publisher": { "@id": "<%= _su %>/#organization" },
+                      "inLanguage": "vi",
+                      "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": {
+                          "@type": "EntryPoint",
+                          "urlTemplate": "<%= _su %>/tim-kiem?q={search_term_string}"
+                        },
+                        "query-input": "required name=search_term_string"
+                      }
+                    }
+                  ]
+                }
+                </script>
+
+                <%# ═══ GEO: ItemList Schema for home page sections ═══ %>
+                <% if (typeof isHome !== 'undefined' && isHome && typeof topMovies !== 'undefined' && topMovies && topMovies.length > 0) { %>
+                <script type="application/ld+json" nonce="<%= nonce %>">
+                {
+                  "@context": "https://schema.org",
+                  "@type": "ItemList",
+                  "name": "Phim Thịnh Hành trên movieCC",
+                  "description": "Top phim được xem nhiều nhất trên movieCC - Nền tảng xem phim trực tuyến chất lượng cao",
+                  "numberOfItems": <%= topMovies.length %>,
+                  "itemListElement": [
+                    <% topMovies.slice(0, 10).forEach(function(m, idx) { %>
+                    {
+                      "@type": "ListItem",
+                      "position": <%= idx + 1 %>,
+                      "url": "<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') %>/phim/<%= m.slug %>",
+                      "name": "<%= (m.name || '').replace(/"/g, '\\"') %>"
+                    }<% if (idx < Math.min(topMovies.length, 10) - 1) { %>,<% } %>
+                    <% }); %>
+                  ]
+                }
+                </script>
+                <% } %>
+
+                <%# ═══ GEO: BreadcrumbList Schema (dynamic per page) ═══ %>
+                <% if (typeof breadcrumbs !== 'undefined' && breadcrumbs && breadcrumbs.length > 0) { %>
+                <script type="application/ld+json" nonce="<%= nonce %>">
+                {
+                  "@context": "https://schema.org",
+                  "@type": "BreadcrumbList",
+                  "itemListElement": [
+                    <% breadcrumbs.forEach(function(bc, idx) { %>
+                    {
+                      "@type": "ListItem",
+                      "position": <%= idx + 1 %>,
+                      "name": "<%= bc.name.replace(/"/g, '\\"') %>"
+                      <% if (bc.url) { %>,"item": "<%= (typeof siteUrl !== 'undefined' ? siteUrl : '') + bc.url %>"<% } %>
+                    }<% if (idx < breadcrumbs.length - 1) { %>,<% } %>
+                    <% }); %>
+                  ]
+                }
+                </script>
+                <% } %>
+                <script nonce="<%= nonce %>">
+                  (function () {
+                    var t = localStorage.getItem('moviecc-theme');
+                    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+                  })();
+                </script>
+                <%# Speculation Rules API: prerender/prefetch để tăng tốc điều hướng trang %>
+                <% if (typeof isSpeculationEnabled === 'undefined' || isSpeculationEnabled !== false) { %>
+                <script type="speculationrules" nonce="<%= nonce %>">
+                {
+                  "prerender": [
+                    {
+                      "eagerness": "moderate",
+                      "where": {
+                        "and": [
+                          { "href_matches": ["/*"] },
+                          { "not": { "href_matches": [
+                            "/xem/*/*",
+                            "/api/*",
+                            "/admin/*",
+                            "/dang-xuat",
+                            "/dang-nhap",
+                            "/dang-ky",
+                            "/ho-so",
+                            "/lich-su",
+                            "/yeu-thich",
+                            "/quen-mat-khau",
+                            "/gop-y"
+                          ]}},
+                          { "not": { "selector_matches": "[data-no-prerender]" }}
+                        ]
+                      }
+                    }
+                  ],
+                  "prefetch": [
+                    {
+                      "eagerness": "conservative",
+                      "where": {
+                        "and": [
+                          { "href_matches": [
+                            "/phim/*",
+                            "/danh-sach/*",
+                            "/the-loai/*",
+                            "/quoc-gia/*",
+                            "/tim-kiem*",
+                            "/",
+                            "/xem/*/*"
+                          ]},
+                          { "not": { "selector_matches": "[data-no-prefetch]" }}
+                        ]
+                      }
+                    }
+                  ]
+                }
+                </script>
+                <% } %>
+</head>
+
+<body class="<%= typeof isHome !== 'undefined' && isHome ? 'page-home' : '' %><%= typeof isDetailPage !== 'undefined' && isDetailPage ? ' page-detail' : '' %>">
+  <!-- Navigation Progress Bar -->
+  <div id="page-loader" class="nav-progress-bar"></div>
+  <%- include('../partials/header') %>
+    <main class="main-content">
+      <canvas id="starlightBg"></canvas>
+      <%- body %>
+    </main>
+    <%- include('../partials/footer') %>
+
+        <!-- Floating Feedback Button -->
+        <% if (typeof feedbackEnabled !=='undefined' && feedbackEnabled) { %>
+          <a href="/gop-y" class="floating-feedback-btn" title="Góp ý & Phản hồi" aria-label="Góp ý cho chúng tôi">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </a>
+          <% } %>
+
+            <!-- Scroll to Top -->
+            <button class="scroll-top" id="scrollTopBtn" data-action="scrollTop" title="Lên đầu trang"
+              aria-label="Cuộn lên đầu trang">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+            </button>
+
+            <!-- Download App Modal -->
+            <div class="app-modal-overlay" id="appModalOverlay">
+              <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="appModalTitle">
+                <div class="app-modal-header">
+                  <h3 id="appModalTitle" class="app-modal-title">Tải ứng dụng movieCC</h3>
+                  <button class="app-modal-close" id="appModalClose" aria-label="Đóng">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="app-modal-body">
+                  <div class="app-modal-desc">Chọn nền tảng bạn đang sử dụng</div>
+                  <div class="app-modal-cards">
+                    <a href="/download/MovieCC.apk" class="app-modal-card" id="btnDownloadApk" download>
+                      <div class="app-card-icon app-card-icon-android">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M17.523 15.342a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-9.046 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM2.89 8.762C2.077 8.762 1.5 9.34 1.5 10.15v5.05c0 .81.577 1.388 1.39 1.388.812 0 1.39-.577 1.39-1.388V10.15c0-.81-.578-1.388-1.39-1.388zm18.22 0c-.813 0-1.39.577-1.39 1.388v5.05c0 .81.577 1.388 1.39 1.388.812 0 1.39-.577 1.39-1.388V10.15c0-.81-.578-1.388-1.39-1.388zM15.78 2.31l1.009-1.848a.2.2 0 0 0-.075-.271.2.2 0 0 0-.272.076l-1.023 1.874A6.5 6.5 0 0 0 12 1.5c-.89 0-1.73.178-2.499.491L8.478.267A.2.2 0 0 0 8.206.19a.2.2 0 0 0-.075.27l1.009 1.85A6.476 6.476 0 0 0 5.5 8h13a6.476 6.476 0 0 0-2.72-5.69zM5.5 9.5v8.25A2.25 2.25 0 0 0 7.75 20h.75v2.61c0 .77.566 1.39 1.39 1.39.824 0 1.39-.62 1.39-1.39V20h1.44v2.61c0 .77.566 1.39 1.39 1.39.824 0 1.39-.62 1.39-1.39V20h.75a2.25 2.25 0 0 0 2.25-2.25V9.5H5.5z"/>
+                        </svg>
+                      </div>
+                      <div class="app-card-info">
+                        <div class="app-card-name">Android (APK)</div>
+                        <div class="app-card-meta">Cài đặt trực tiếp</div>
+                      </div>
+                      <div class="app-card-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </div>
+                    </a>
+                    <div class="app-modal-card app-modal-card-soon" id="btnDownloadIpa">
+                      <div class="app-card-icon app-card-icon-apple">
+                        <svg width="36" height="36" viewBox="0 0 814 1000" fill="currentColor">
+                          <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-43.5-150.3-109.2C172.1 725.5 116 605.4 116 492.7c0-182.4 119.4-279 236.9-279 61.6 0 112.9 40.5 150.9 40.5 36.5 0 94.1-43 163.8-43 26.3 0 108.2 2.6 168.3 80.3zm-119.1-234.9c-29 34.9-76.8 61.6-122.8 61.6-5.2 0-10.4-.6-15.6-1.9-1.3-5.8-1.9-11.7-1.9-18.1 0-34.2 18.2-71.3 45.5-94.8 29-25.8 75.6-44.1 116.7-45.4 1.3 6.5 1.9 12.9 1.9 19.4 0 35.5-13 73.9-23.8 79.2z"/>
+                        </svg>
+                      </div>
+                      <div class="app-card-info">
+                        <div class="app-card-name">iOS (IPA)</div>
+                        <div class="app-card-meta app-card-soon-tag">Sắp ra mắt</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script nonce="<%= nonce %>">
+            (function() {
+              var btn = document.getElementById('appDownloadBtn');
+              var mobileBtn = document.getElementById('mobileDownloadBtn');
+              var overlay = document.getElementById('appModalOverlay');
+              var closeBtn = document.getElementById('appModalClose');
+              if (!overlay) return;
+
+              function openModal() {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                closeBtn && closeBtn.focus();
+                // Đóng smart banner khi mở modal
+                var banner = document.getElementById('installBanner');
+                if (banner) banner.classList.remove('show');
+              }
+              function closeModal() {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+              }
+
+              btn && btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openModal();
+              });
+              mobileBtn && mobileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openModal();
+              });
+              closeBtn && closeBtn.addEventListener('click', closeModal);
+              overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) closeModal();
+              });
+              document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+              });
+
+              // --- Smart Install Banner ---
+              var banner = document.getElementById('installBanner');
+              var bannerClose = document.getElementById('installBannerClose');
+              var bannerBtn = document.getElementById('installBannerBtn');
+              if (!banner) return;
+
+              // Phát hiện mobile
+              var isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                             || window.innerWidth <= 768;
+              // Đã dismiss chưa (session)
+              var dismissed = sessionStorage.getItem('__mcc_banner_dismissed__') === '1';
+
+              if (isMobile && !dismissed) {
+                // Hiện sau 3 giây
+                setTimeout(function() {
+                  banner.classList.add('show');
+                }, 3000);
+              }
+
+              function dismissBanner() {
+                banner.classList.remove('show');
+                sessionStorage.setItem('__mcc_banner_dismissed__', '1');
+              }
+
+              bannerClose && bannerClose.addEventListener('click', dismissBanner);
+              bannerBtn && bannerBtn.addEventListener('click', function() {
+                dismissBanner();
+                openModal();
+              });
+            })();
+            </script>
+
+            <!-- Smart Install Banner (mobile bottom bar) -->
+            <div class="install-banner" id="installBanner">
+                <div class="install-banner-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </div>
+                <div class="install-banner-info">
+                    <p class="install-banner-title">Tải app movieCC</p>
+                    <p class="install-banner-desc">Xem phim mượt hơn, miễn phí!</p>
+                </div>
+                <button class="install-banner-btn" id="installBannerBtn">Cài đặt</button>
+                <button class="install-banner-close" id="installBannerClose" aria-label="Đóng">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <script defer nonce="<%= nonce %>"
+              src="/js/<%= typeof isProduction !== 'undefined' && isProduction ? 'app.min.js' : 'app.js' %>?v=<%= v %>"></script>
+            <script defer nonce="<%= nonce %>"
+              src="/js/<%= typeof isProduction !== 'undefined' && isProduction ? 'starlight.min.js' : 'starlight.js' %>?v=<%= v %>"></script>
+            <%# Service Worker registration %>
+            <script nonce="<%= nonce %>">
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function() {});
+                });
+              }
+            </script>
+</body>
+
+</html>

@@ -1,0 +1,434 @@
+/* ---- Hero Slider ---- */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 560px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    z-index: 1;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    /* Center top cho ảnh ngang (TMDB backdrop) + ảnh dọc (poster) đều hiển thị tốt */
+    background-position: center top;
+    /* Scale nhẹ để tránh viền trắng do rounding */
+    transform: scale(1.02);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+    /* Giữ độ nét cho ảnh HD */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.hero-logo {
+    display: block;
+    max-width: 340px;
+    max-height: 130px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: left center;
+    margin-bottom: 14px;
+}
+
+.hero-title-hidden {
+    display: none;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to right, var(--bg-dark) 0%, rgba(10, 10, 18, 0.85) 30%, rgba(10, 10, 18, 0.4) 60%, rgba(10, 10, 18, 0.1) 100%),
+        linear-gradient(to top, var(--bg-dark) 0%, transparent 30%),
+        linear-gradient(to bottom, rgba(10, 10, 18, 0.3) 0%, transparent 15%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px;
+    max-width: 650px;
+}
+
+.hero-slide .hero-content>* {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.hero-slide.active .hero-content>* {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-slide.active .hero-content>*:nth-child(1) {
+    transition-delay: 0.15s;
+}
+
+.hero-slide.active .hero-content>*:nth-child(2) {
+    transition-delay: 0.25s;
+}
+
+.hero-slide.active .hero-content>*:nth-child(3) {
+    transition-delay: 0.35s;
+}
+
+.hero-slide.active .hero-content>*:nth-child(4) {
+    transition-delay: 0.45s;
+}
+
+.hero-slide.active .hero-content>*:nth-child(5) {
+    transition-delay: 0.55s;
+}
+
+.hero-slide.active .hero-content>*:nth-child(6) {
+    transition-delay: 0.65s;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.hero-badge span {
+    padding: 5px 14px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-quality {
+    background: var(--primary);
+    color: var(--bg-dark);
+}
+
+.badge-lang {
+    background: rgba(244, 171, 180, 0.2);
+    color: var(--primary);
+    border: 1px solid rgba(244, 171, 180, 0.3);
+}
+
+.badge-ep {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+.hero-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    opacity: 0.85;
+}
+
+.hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.hero-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.hero-meta-item svg {
+    width: 15px;
+    height: 15px;
+    color: var(--primary);
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Play button (bottom-left) */
+.hero-play-btn {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    z-index: 10;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-play-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg-dark);
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(244, 171, 180, 0.4);
+}
+
+.hero-play-btn svg {
+    margin-left: 3px;
+}
+
+/* Thumbnail navigation (bottom-right) */
+.hero-thumbs {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    z-index: 20;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.hero-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.hero-thumb.active {
+    border-color: var(--primary);
+    opacity: 1;
+    transform: scale(1.15);
+    box-shadow: 0 4px 15px rgba(244, 171, 180, 0.3);
+}
+
+.hero-thumb:hover {
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+.hero-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-thumb-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--primary);
+    transition: none;
+}
+
+.hero-thumb.active .hero-thumb-progress {
+    animation: thumbProgress 7s linear forwards;
+}
+
+@keyframes thumbProgress {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* Mobile Dot Indicators */
+.hero-dots {
+    display: none;
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    gap: 8px;
+    align-items: center;
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.hero-dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--primary);
+    box-shadow: 0 0 10px rgba(244, 171, 180, 0.5);
+}
+
+
+/* Progress bar (bottom) */
+.hero-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+.hero-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    transition: none;
+    animation: heroProgress 7s linear forwards;
+}
+
+@keyframes heroProgress {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* Hero Trailer Preview */
+.hero-trailer-container {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    background: #000;
+}
+
+.hero-trailer-container.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hero-trailer-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.hero-trailer-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 60px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-trailer-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--bg-dark);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(244, 171, 180, 0.4);
+}
+
+.hero-trailer-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 6;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.hero-trailer-close:hover {
+    background: rgba(231, 76, 60, 0.8);
+    transform: scale(1.1);
+}

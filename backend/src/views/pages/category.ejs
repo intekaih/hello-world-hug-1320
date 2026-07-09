@@ -1,0 +1,151 @@
+<% if (typeof collectionJsonLd !== 'undefined' && collectionJsonLd) { %>
+<script type="application/ld+json" nonce="<%= nonce %>"><%- collectionJsonLd %></script>
+<% } %>
+<% if (typeof paginationPrev !== 'undefined' && paginationPrev) { %><link rel="prev" href="<%= paginationPrev %>"><% } %>
+<% if (typeof paginationNext !== 'undefined' && paginationNext) { %><link rel="next" href="<%= paginationNext %>"><% } %>
+<div class="container">
+    <!-- Header + Filter (1 row) -->
+    <div class="cat-toolbar">
+        <div class="cat-toolbar-left">
+            <div class="breadcrumb">
+                <a href="/" class="breadcrumb-link">Trang chủ</a>
+                <span class="breadcrumb-sep">›</span>
+                <span class="breadcrumb-current">
+                    <%= categoryName %>
+                </span>
+            </div>
+            <h1 class="cat-toolbar-title">
+                <%= categoryName %>
+            </h1>
+        </div>
+        <div class="cat-toolbar-filters">
+            <select class="cat-filter-select" data-filter="applyCategory" id="filterCategory">
+                <option value="">Thể loại</option>
+                <% const afObj=typeof activeFilters !=='undefined' ? activeFilters : {}; %>
+                    <% categories.forEach(cat=> { %>
+                        <option value="<%= cat.slug %>" <%=(filterType==='category' && categorySlug===cat.slug) ||
+                            afObj.category===cat.slug ? 'selected' : '' %>><%= cat.name %>
+                        </option>
+                        <% }); %>
+            </select>
+            <select class="cat-filter-select" data-filter="applyCountry" id="filterCountry">
+                <option value="">Quốc gia</option>
+                <% countries.forEach(c=> { %>
+                    <option value="<%= c.slug %>" <%=(filterType==='country' && categorySlug===c.slug) ||
+                        afObj.country===c.slug ? 'selected' : '' %>><%= c.name %>
+                    </option>
+                    <% }); %>
+            </select>
+            <select class="cat-filter-select" data-filter="applyType">
+                <option value="">Loại phim</option>
+                <option value="/danh-sach/phim-bo" <%=categorySlug==='phim-bo' ? 'selected' : '' %>>Phim Bộ</option>
+                <option value="/danh-sach/phim-le" <%=categorySlug==='phim-le' ? 'selected' : '' %>>Phim Lẻ</option>
+                <option value="/danh-sach/hoat-hinh" <%=categorySlug==='hoat-hinh' ? 'selected' : '' %>>Anime</option>
+            </select>
+            <% const af=typeof activeFilters !=='undefined' ? activeFilters : {}; %>
+                <select class="cat-filter-select" data-filter="applyYear">
+                    <option value="">Năm</option>
+                    <% for (let y=new Date().getFullYear() + 1; y>= 2000; y--) { %>
+                        <option value="<%= y %>" <%=af.year==y ? 'selected' : '' %>><%= y %>
+                        </option>
+                        <% } %>
+                </select>
+                <select class="cat-filter-select" data-filter="applySort">
+                    <option value="">Sắp xếp</option>
+                    <option value="newest" <%=af.sort==='newest' ? 'selected' : '' %>>Mới nhất</option>
+                    <option value="oldest" <%=af.sort==='oldest' ? 'selected' : '' %>>Cũ nhất</option>
+                    <option value="name-az" <%=af.sort==='name-az' ? 'selected' : '' %>>Tên A-Z</option>
+                    <option value="name-za" <%=af.sort==='name-za' ? 'selected' : '' %>>Tên Z-A</option>
+                </select>
+        </div>
+    </div>
+
+    <!-- Movie Grid -->
+    <% if (movies.length> 0) { %>
+        <div class="movie-grid movie-grid-large">
+            <% movies.forEach(movie=> { %>
+                <%- include('../partials/movie-card', { movie }) %>
+                    <% }); %>
+        </div>
+        <% } else { %>
+            <div class="cat-empty">
+                <div class="cat-empty-icon">
+                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <rect x="2" y="2" width="20" height="20" rx="2" />
+                        <line x1="9" y1="2" x2="9" y2="22" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                    </svg>
+                </div>
+                <h3>Chưa có phim nào</h3>
+                <p>Hãy thử chọn bộ lọc khác hoặc quay lại sau</p>
+                <a href="/" class="btn btn-outline" style="margin-top:16px">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </svg>
+                    Về trang chủ
+                </a>
+            </div>
+            <% } %>
+
+                <!-- Pagination -->
+                <% if (totalPages> 1) { %>
+                    <% const af=typeof activeFilters !=='undefined' ? activeFilters : {}; const qp=new
+                        URLSearchParams(); if (af.year) qp.set('year', af.year); if (af.sort) qp.set('sort', af.sort);
+                        if (af.country) qp.set('country', af.country); if (af.category) qp.set('category', af.category);
+                        function pageUrl(p) { qp.set('page', p); return '?' + qp.toString(); } %>
+                        <div class="pagination">
+                            <% if (currentPage> 1) { %>
+                                <a href="<%= pageUrl(currentPage - 1) %>" class="pagination-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6" />
+                                    </svg>
+                                </a>
+                                <% } %>
+                                    <% let startPage=Math.max(1, currentPage - 2); let endPage=Math.min(totalPages,
+                                        currentPage + 2); %>
+                                        <% if (startPage> 1) { %>
+                                            <a href="<%= pageUrl(1) %>">1</a>
+                                            <% if (startPage> 2) { %><span class="pagination-dots">…</span>
+                                                <% } %>
+                                                    <% } %>
+                                                        <% for (let i=startPage; i <=endPage; i++) { %>
+                                                            <% if (i===currentPage) { %>
+                                                                <span class="active">
+                                                                    <%= i %>
+                                                                </span>
+                                                                <% } else { %>
+                                                                    <a href="<%= pageUrl(i) %>">
+                                                                        <%= i %>
+                                                                    </a>
+                                                                    <% } %>
+                                                                        <% } %>
+                                                                            <% if (endPage < totalPages) { %>
+                                                                                <% if (endPage < totalPages - 1) { %>
+                                                                                    <span
+                                                                                        class="pagination-dots">…</span>
+                                                                                    <% } %>
+                                                                                        <a
+                                                                                            href="<%= pageUrl(totalPages) %>">
+                                                                                            <%= totalPages %>
+                                                                                        </a>
+                                                                                        <% } %>
+                                                                                            <% if (currentPage <
+                                                                                                totalPages) { %>
+                                                                                                <a href="<%= pageUrl(currentPage + 1) %>"
+                                                                                                    class="pagination-arrow">
+                                                                                                    <svg width="16"
+                                                                                                        height="16"
+                                                                                                        viewBox="0 0 24 24"
+                                                                                                        fill="none"
+                                                                                                        stroke="currentColor"
+                                                                                                        stroke-width="2">
+                                                                                                        <polyline
+                                                                                                            points="9 18 15 12 9 6" />
+                                                                                                    </svg>
+                                                                                                </a>
+                                                                                                <% } %>
+                        </div>
+                        <% } %>
+</div>

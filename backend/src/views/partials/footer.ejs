@@ -1,0 +1,87 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="/" class="footer-brand-logo" aria-label="movieCC - Trang chủ">
+                    <%- include('logo-svg') %>
+                </a>
+                <p class="footer-desc">Nền tảng xem phim trực tuyến chất lượng cao hàng đầu Việt Nam. Cập nhật nhanh nhất phim bộ, phim lẻ, anime với phụ đề tiếng Việt.</p>
+            </div>
+
+            <div class="footer-svg-showcase">
+                <div class="footer-svg-wrap">
+                    <div class="footer-svg-inner footer-svg-dark">
+                        <img src="/images/VNno1Dark.svg" alt="Hoàng Sa &amp; Trường Sa là của Việt Nam" width="200" height="200" loading="lazy">
+                    </div>
+                    <div class="footer-svg-inner footer-svg-light">
+                        <img src="/images/VNno1Light.svg" alt="Hoàng Sa &amp; Trường Sa là của Việt Nam" width="200" height="200" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; <%= new Date().getFullYear() %> movieCC. All rights reserved.</span>
+            <span class="footer-bottom-sep">|</span>
+            <a href="/gioi-thieu" class="footer-bottom-link">Giới thiệu</a>
+            <span class="footer-bottom-sep">|</span>
+            <a href="/chinh-sach-bao-mat" class="footer-bottom-link">Chính sách bảo mật</a>
+            <% if (typeof feedbackEnabled !=='undefined' && feedbackEnabled) { %>
+            <span class="footer-bottom-sep">|</span>
+            <a href="/gop-y" class="footer-bottom-link">Góp ý &amp; Phản hồi</a>
+            <% } %>
+        </div>
+    </div>
+
+    <%# GEO: FAQPage Schema — giúp AI trích dẫn khi người dùng hỏi về movieCC %>
+    <% if (typeof isHome !== 'undefined' && isHome) { %>
+    <script type="application/ld+json" nonce="<%= nonce %>">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "movieCC là gì?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "movieCC là nền tảng xem phim trực tuyến chất lượng cao hàng đầu Việt Nam. Cung cấp kho phim đa dạng gồm phim bộ, phim lẻ, anime, phim chiếu rạp với phụ đề tiếng Việt, chất lượng lên đến 4K, cập nhật nhanh nhất."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "movieCC có những loại phim nào?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "movieCC cung cấp đa dạng thể loại: Phim Bộ (Hàn Quốc, Trung Quốc, Âu Mỹ), Phim Lẻ, Anime/Hoạt hình, Phim Chiếu Rạp, TV Shows. Các thể loại phổ biến gồm Hành Động, Tình Cảm, Cổ Trang, Kinh Dị, Hài Hước, Tâm Lý, Viễn Tưởng và nhiều hơn nữa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "movieCC hỗ trợ xem trên thiết bị nào?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "movieCC hỗ trợ xem phim trên mọi thiết bị: điện thoại (Android, iOS), máy tính (Windows, Mac, Linux), tablet và Smart TV. Giao diện responsive tự động thích ứng với mọi kích thước màn hình."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Phim trên movieCC có phụ đề tiếng Việt không?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Có. Hầu hết phim trên movieCC đều có phụ đề tiếng Việt (Vietsub), thuyết minh hoặc lồng tiếng. Bạn có thể lọc phim theo ngôn ngữ: Vietsub, Thuyết Minh, Lồng Tiếng."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Làm sao tìm phim trên movieCC?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bạn có thể tìm phim trên movieCC bằng nhiều cách: sử dụng thanh tìm kiếm ở đầu trang, duyệt theo thể loại (Hành Động, Tình Cảm, Kinh Dị...), lọc theo quốc gia (Hàn Quốc, Trung Quốc, Âu Mỹ...), hoặc xem danh sách phim mới cập nhật và phim thịnh hành."
+          }
+        }
+      ]
+    }
+    </script>
+    <% } %>
+</footer>

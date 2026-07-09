@@ -1,0 +1,425 @@
+<div class="admin-layout">
+    <%- include('../partials/admin-sidebar') %>
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>Quản lý tài khoản</h1>
+                <button type="button" class="btn btn-primary btn-sm" id="btnCreateUser">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Tạo tài khoản
+                </button>
+            </div>
+
+            <!-- Search + stats -->
+            <div
+                style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+                <form action="/admin/users" method="GET" style="display:flex;gap:8px;flex:1;max-width:400px">
+                    <input type="text" class="form-input" name="q"
+                        placeholder="Tìm theo tên đăng nhập hoặc tên hiển thị..."
+                        value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+                        style="font-size:0.85rem;padding:8px 12px">
+                    <button type="submit" class="btn btn-primary btn-sm">Tìm</button>
+                    <% if (typeof searchQuery !=='undefined' && searchQuery) { %>
+                        <a href="/admin/users" class="btn btn-ghost btn-sm">Xóa lọc</a>
+                        <% } %>
+                </form>
+                <span style="color:var(--text-muted);font-size:0.85rem">
+                    Tổng: <%= typeof totalUsers !=='undefined' ? totalUsers : users.length %> tài khoản
+                </span>
+            </div>
+
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tài khoản</th>
+                            <th>Quyền</th>
+                            <th>Trạng thái</th>
+                            <th>Gói/Nguồn</th>
+                            <th>Thời hạn</th>
+                            <th>Online cuối</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(u=> { %>
+                            <tr>
+                                <td>
+                                    <span title="<%= u.id %>" style="font-size:0.8rem;color:var(--text-muted)"><%= String(u.id).slice(-6) %></span>
+                                </td>
+                                <td>
+                                    <div style="font-weight:500"><%= u.username %></div>
+                                    <div style="font-size:0.8rem;color:var(--text-muted)"><%= u.display_name %></div>
+                                </td>
+                                <td><span class="role-badge <%= u.role === 'admin' ? 'role-admin' : 'role-user' %>">
+                                        <%= u.role %>
+                                    </span></td>
+                                <td><span class="status-badge <%= u.is_active ? 'status-active' : 'status-inactive' %>">
+                                        <span style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>
+                                        <%= u.is_active ? 'Hoạt động' : 'Khóa' %>
+                                    </span></td>
+                                <td>
+                                    <% if (u.account_source === 'business_api') { %>
+                                        <span style="font-size:0.8rem;padding:2px 6px;border-radius:4px;background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)">API: <%= u.plan || 'N/A' %></span>
+                                    <% } else { %>
+                                        <span style="font-size:0.8rem;color:var(--text-muted)">Thủ công</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% 
+                                    if (u.expires_at) { 
+                                        const now = new Date();
+                                        const exp = new Date(u.expires_at);
+                                        const diffMs = exp - now;
+                                        if (diffMs <= 0) {
+                                            %><span style="color:#ef4444;font-size:0.85rem;font-weight:500">Đã hết hạn</span><%
+                                        } else {
+                                            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                                            const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                            const isExpiringSoon = diffDays < 3;
+                                            %>
+                                            <div style="font-size:0.85rem;<%= isExpiringSoon ? 'color:#f59e0b;font-weight:500' : 'color:var(--text-primary)' %>">
+                                                <%= diffDays > 0 ? `Còn ${diffDays} ngày ${diffHours} giờ` : `Còn ${diffHours} giờ` %>
+                                                <% if(isExpiringSoon) { %>
+                                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-bottom:2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                                <% } %>
+                                            </div>
+                                            <div style="font-size:0.75rem;color:var(--text-muted)"><%= exp.toLocaleDateString('vi-VN') %> <%= exp.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}) %></div>
+                                            <%
+                                        }
+                                    } else { 
+                                        %><span style="font-size:0.85rem;color:var(--text-muted)">Vĩnh viễn</span><% 
+                                    } 
+                                    %>
+                                </td>
+                                <td style="font-size:0.85rem">
+                                    <% if (u.last_active) { 
+                                        const lastActive = new Date(u.last_active);
+                                        const diffMs = new Date() - lastActive;
+                                        const diffMins = Math.floor(diffMs / 60000);
+                                        let activeText = '';
+                                        if (diffMins < 5) activeText = '<span style="color:#10b981">Vừa xong</span>';
+                                        else if (diffMins < 60) activeText = `${diffMins} phút trước`;
+                                        else if (diffMins < 1440) activeText = `${Math.floor(diffMins/60)} giờ trước`;
+                                        else activeText = lastActive.toLocaleDateString('vi-VN');
+                                    %>
+                                        <div><%- activeText %></div>
+                                    <% } else { %>
+                                        <span style="color:var(--text-muted)">Chưa từng</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button class="table-action-btn" title="Sửa"
+                                            data-action="editUser" data-id="<%= u.id %>"
+                                            data-username="<%= u.username %>"
+                                            data-display="<%= u.display_name %>"
+                                            data-role="<%= u.role %>"
+                                            data-plan="<%= u.plan || '' %>"
+                                            data-source="<%= u.account_source || 'manual' %>"
+                                            data-expires="<%= u.expires_at ? new Date(u.expires_at.getTime() - u.expires_at.getTimezoneOffset() * 60000).toISOString().slice(0,16) : '' %>">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
+                                        </button>
+                                        <% if (u.id !==user.id) { %>
+                                            <button class="table-action-btn"
+                                                title="<%= u.is_active ? 'Khóa' : 'Mở khóa' %>"
+                                                data-action="toggleUser" data-id="<%= u.id %>">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <%- u.is_active
+                                                        ? '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
+                                                        : '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>'
+                                                        %>
+                                                </svg>
+                                            </button>
+                                            <button class="table-action-btn" title="Reset mật khẩu"
+                                                data-action="resetPassword" data-id="<%= u.id %>" data-username="<%= u.username %>">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <circle cx="7" cy="17" r="4"/>
+                                                    <path d="M10.5 13.5L21 3"/>
+                                                    <path d="M18 6l2 2"/>
+                                                </svg>
+                                            </button>
+                                            <button class="table-action-btn delete" title="Xóa"
+                                                data-action="deleteUser" data-id="<%= u.id %>">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6" />
+                                                    <path
+                                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                </svg>
+                                            </button>
+                                            <% } %>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (typeof totalPages !=='undefined' && totalPages> 1) { %>
+                <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px">
+                    <% const qParam=(typeof searchQuery !=='undefined' && searchQuery) ? '&q=' +
+                        encodeURIComponent(searchQuery) : '' ; %>
+                        <% if (currentPage> 1) { %>
+                            <a href="/admin/users?page=<%= currentPage - 1 %><%= qParam %>"
+                                class="btn btn-ghost btn-sm">← Trước</a>
+                            <% } %>
+                                <span style="color:var(--text-muted);font-size:0.85rem">
+                                    Trang <%= currentPage %> / <%= totalPages %>
+                                </span>
+                                <% if (currentPage < totalPages) { %>
+                                    <a href="/admin/users?page=<%= currentPage + 1 %><%= qParam %>"
+                                        class="btn btn-ghost btn-sm">Sau →</a>
+                                    <% } %>
+                </div>
+                <% } %>
+        </div>
+</div>
+
+<!-- Modal tạo tài khoản -->
+<div class="modal-overlay" id="createUserModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Tạo tài khoản mới</h3>
+            <button class="modal-close" data-action="closeModal" data-modal="createUserModal">&times;</button>
+        </div>
+        <form id="createUserForm">
+            <div class="form-group">
+                <label class="form-label">Tài khoản</label>
+                <input type="text" class="form-input" name="username" placeholder="Nhập tài khoản" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tên hiển thị</label>
+                <input type="text" class="form-input" name="display_name" placeholder="Nhập tên hiển thị" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Quyền</label>
+                <select class="form-input" name="role">
+                    <option value="user">Người dùng</option>
+                    <option value="admin">Quản trị viên</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Gói (Plan)</label>
+                <input type="text" class="form-input" name="plan" placeholder="VD: 30d (Không bắt buộc)">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Thời hạn</label>
+                <select class="form-input" id="createDurationType" style="margin-bottom:8px">
+                    <option value="30">30 ngày</option>
+                    <option value="90">90 ngày</option>
+                    <option value="180">180 ngày</option>
+                    <option value="365">1 năm</option>
+                    <option value="forever">Vĩnh viễn</option>
+                    <option value="custom">Nhập số ngày...</option>
+                </select>
+                <input type="number" class="form-input" id="createCustomDays" style="display:none" placeholder="Nhập số ngày (VD: 15)" min="1">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost btn-sm" data-action="closeModal" data-modal="createUserModal">Hủy</button>
+                <button type="submit" class="btn btn-primary btn-sm">Tạo tài khoản</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal chỉnh sửa tài khoản -->
+<div class="modal-overlay" id="editUserModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Chỉnh sửa tài khoản</h3>
+            <button class="modal-close" data-action="closeModal" data-modal="editUserModal">&times;</button>
+        </div>
+        <form id="editUserForm">
+            <input type="hidden" name="userId" id="editUserId">
+            <div class="form-group">
+                <label class="form-label">Tài khoản</label>
+                <input type="text" class="form-input" id="editUsername" name="username" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Mật khẩu mới <span style="color:var(--text-muted);font-weight:normal">(để
+                        trống nếu không đổi)</span></label>
+                <input type="password" class="form-input" name="password" placeholder="Nhập mật khẩu mới">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tên hiển thị</label>
+                <input type="text" class="form-input" id="editDisplayName" name="display_name"
+                    placeholder="Nhập tên hiển thị" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Quyền</label>
+                <select class="form-input" id="editRole" name="role">
+                    <option value="user">Người dùng</option>
+                    <option value="admin">Quản trị viên</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nguồn tài khoản</label>
+                <select class="form-input" id="editSource" name="account_source">
+                    <option value="manual">Thủ công</option>
+                    <option value="business_api">API (Business)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Gói (Plan)</label>
+                <input type="text" class="form-input" id="editPlan" name="plan" placeholder="VD: 30d (Không bắt buộc)">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Thời hạn (Hết hạn lúc)</label>
+                <input type="datetime-local" class="form-input" id="editExpires" name="expires_at" placeholder="Để trống nếu vĩnh viễn">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ghost btn-sm" data-action="closeModal" data-modal="editUserModal">Hủy</button>
+                <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal hiển thị mật khẩu tạm sau khi reset -->
+<div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Mật khẩu tạm thời</h3>
+            <button class="modal-close" id="closeResetModal">&times;</button>
+        </div>
+        <div style="padding:4px 0 8px">
+            <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:16px">
+                Mật khẩu tạm cho tài khoản
+                <strong id="resetUsername" style="color:var(--text-primary)"></strong>
+                đã được đặt lại thành công. Hãy sao chép và gửi cho người dùng.
+            </p>
+
+            <div style="position:relative">
+                <input type="text" id="tempPasswordField" readonly
+                    style="width:100%;font-family:monospace;font-size:1.1rem;font-weight:700;letter-spacing:2px;padding:14px 48px 14px 16px;background:rgba(var(--primary-rgb,244,171,180),0.08);border:1px solid rgba(var(--primary-rgb,244,171,180),0.25);border-radius:10px;color:var(--primary,#F4ABB4);outline:none;cursor:text">
+                <button type="button" id="copyTempPw"
+                    style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center"
+                    title="Sao chép">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-top:14px;padding:10px 12px;background:rgba(255,200,50,0.07);border:1px solid rgba(255,200,50,0.2);border-radius:8px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffb400" stroke-width="2" style="flex-shrink:0;margin-top:1px">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span style="font-size:0.78rem;color:#ffb400;line-height:1.5">
+                    Mật khẩu này chỉ hiển thị <strong>một lần duy nhất</strong>. Sau khi đóng cửa sổ này, bạn sẽ không thể xem lại. Người dùng nên đổi mật khẩu ngay sau khi đăng nhập.
+                </span>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top:20px">
+            <button type="button" class="btn btn-primary btn-sm" id="closeResetModalBtn">Đã hiểu, đóng lại</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal tạo tài khoản thành công -->
+<div class="modal-overlay" id="accountCreatedModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Tạo tài khoản thành công</h3>
+            <button class="modal-close" onclick="location.reload()">&times;</button>
+        </div>
+        <div style="padding:4px 0 8px">
+            <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:16px">
+                Tài khoản <strong id="createdUsername" style="color:var(--text-primary)"></strong> đã được tạo. Hãy sao chép nội dung bên dưới gửi cho khách hàng.
+            </p>
+
+            <div style="position:relative">
+                <textarea id="createdCopyText" readonly rows="13"
+                    style="width:100%;font-size:0.9rem;padding:12px 48px 12px 12px;background:rgba(var(--primary-rgb,244,171,180),0.08);border:1px solid rgba(var(--primary-rgb,244,171,180),0.25);border-radius:10px;color:var(--text-primary);outline:none;cursor:text;resize:none;line-height:1.5;white-space:pre-wrap;"></textarea>
+                <button type="button" id="copyCreatedInfo"
+                    style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px;display:flex;align-items:center"
+                    title="Sao chép">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top:20px">
+            <button type="button" class="btn btn-primary btn-sm" onclick="location.reload()">Đóng và làm mới trang</button>
+        </div>
+    </div>
+</div>
+
+<script nonce="<%= nonce %>">
+(function () {
+    const csrfToken = '<%= csrfToken %>';
+
+    // Xử lý nút Reset mật khẩu
+    document.addEventListener('click', async function (e) {
+        const btn = e.target.closest('[data-action="resetPassword"]');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+        const username = btn.dataset.username;
+        if (!confirm('Bạn có chắc muốn đặt lại mật khẩu cho tài khoản "' + username + '"?\nMật khẩu mới sẽ được hiển thị một lần duy nhất.')) return;
+
+        btn.disabled = true;
+        try {
+            const resp = await fetch('/admin/api/users/' + id + '/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-csrf-token': csrfToken },
+                credentials: 'same-origin',
+            });
+            const data = await resp.json();
+            if (data.success) {
+                document.getElementById('resetUsername').textContent = data.username;
+                document.getElementById('tempPasswordField').value = data.tempPassword;
+                document.getElementById('resetPasswordModal').classList.add('show');
+            } else {
+                alert('Lỗi: ' + (data.message || 'Không thể reset mật khẩu'));
+            }
+        } catch (err) {
+            alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+        } finally {
+            btn.disabled = false;
+        }
+    });
+
+    // Copy mật khẩu tạm
+    document.getElementById('copyTempPw').addEventListener('click', function () {
+        const field = document.getElementById('tempPasswordField');
+        field.select();
+        navigator.clipboard.writeText(field.value).then(function () {
+            const btn = document.getElementById('copyTempPw');
+            btn.style.color = 'var(--primary,#F4ABB4)';
+            setTimeout(function () { btn.style.color = ''; }, 1500);
+        }).catch(function () {
+            document.execCommand('copy');
+        });
+    });
+
+    // Đóng modal
+    function closeResetModal() {
+        document.getElementById('resetPasswordModal').classList.remove('show');
+        document.getElementById('tempPasswordField').value = '';
+        document.getElementById('resetUsername').textContent = '';
+    }
+    document.getElementById('closeResetModal').addEventListener('click', closeResetModal);
+    document.getElementById('closeResetModalBtn').addEventListener('click', closeResetModal);
+    document.getElementById('resetPasswordModal').addEventListener('click', function (e) {
+        if (e.target === this) closeResetModal();
+    });
+})();
+</script>
+
+<script nonce="<%= nonce %>" src="/js/admin.js?v=<%= v %>"></script>

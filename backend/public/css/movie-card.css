@@ -1,0 +1,267 @@
+/* ---- Sections ---- */
+.section {
+    margin-bottom: 40px;
+    background-color: transparent;
+    /* Prevent white bg flash on Cốc Cốc */
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(244, 171, 180, 0.4);
+}
+
+.section-link {
+    font-size: 0.85rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+}
+
+.section-link:hover {
+    gap: 8px;
+}
+
+/* ---- Movie Grid ---- */
+/* Carousel-style grid (homepage sections) — fixed-width cards */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 14px;
+    overflow: visible;
+}
+
+/* Full-page list grid — auto-fill theo kích thước màn hình, lấp đầy hàng */
+.movie-grid-large {
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+}
+
+.movie-card {
+    position: relative;
+    z-index: 1;
+    transition: z-index 0s;
+}
+
+.movie-card:hover {
+    z-index: 100;
+}
+
+.movie-card-link {
+    display: block;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    background: var(--bg-card);
+    border: 1px solid transparent;
+    height: 100%;
+}
+
+.movie-card:hover .movie-card-link {
+    transform: translateY(-6px);
+    border-color: var(--border-hover);
+    box-shadow: 0 8px 30px rgba(244, 171, 180, 0.2), 0 0 0 1px rgba(244, 171, 180, 0.1);
+}
+
+.movie-card-img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    background: var(--bg-surface);
+}
+
+.movie-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-card:hover .movie-card-img img {
+    transform: scale(1.08);
+}
+
+/* Quick Play Overlay */
+.movie-card-play-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.movie-card:hover .movie-card-play-overlay {
+    opacity: 1;
+}
+
+.movie-card-play-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(244, 171, 180, 0.9);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0a12;
+    transform: scale(0.6);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+    box-shadow: 0 0 0 0 rgba(244, 171, 180, 0);
+}
+
+.movie-card-play-btn svg {
+    margin-left: 3px;
+}
+
+.movie-card:hover .movie-card-play-btn {
+    transform: scale(1);
+    box-shadow: 0 0 30px rgba(244, 171, 180, 0.4), 0 0 60px rgba(244, 171, 180, 0.15);
+}
+
+.movie-card-badges {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    display: flex;
+    gap: 4px;
+    z-index: 2;
+}
+
+.movie-card-badges span {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.movie-card-badges .badge-quality {
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card-badges .badge-lang {
+    background: rgba(0, 0, 0, 0.6);
+    color: #eee;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Badge khi phim có 2 nguồn (OPhim + KKPhim) */
+.movie-card-badges .badge-dual {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.25), rgba(255, 87, 34, 0.2));
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+}
+
+/* Rating badge on poster (top-right corner) */
+.movie-card-rating {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 7px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.movie-card-rating.rating-high {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.movie-card-rating.rating-mid {
+    background: rgba(241, 196, 15, 0.2);
+    color: #f1c40f;
+    border: 1px solid rgba(241, 196, 15, 0.4);
+}
+
+.movie-card-rating.rating-low {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.4);
+}
+
+.movie-card-info {
+    padding: 8px 10px;
+}
+
+.movie-card-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-card-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.movie-card-year {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* Watch Progress Bar */
+.movie-card-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    z-index: 3;
+}
+
+.movie-card-progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    border-radius: 0 2px 2px 0;
+    transition: width 0.3s ease;
+}

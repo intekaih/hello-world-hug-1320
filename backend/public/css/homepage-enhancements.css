@@ -1,0 +1,292 @@
+/* ===== Category Chips Filter Bar ===== */
+.category-chips-section {
+    padding: 20px 0 10px;
+    position: relative;
+}
+
+.category-chips-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px 0;
+    scroll-snap-type: x proximity;
+}
+
+.category-chips-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.category-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+.category-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 171, 180, 0.15);
+}
+
+.category-chip.active {
+    background: var(--primary);
+    color: var(--bg-dark);
+    border-color: var(--primary);
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(244, 171, 180, 0.3);
+}
+
+.category-chip.active svg {
+    stroke: var(--bg-dark);
+}
+
+/* ===== Netflix-style Horizontal Scroll Row ===== */
+.movie-row {
+    position: relative;
+    margin: 0 -16px;
+    padding: 0 16px;
+    background-color: transparent;
+    /* Prevent white bg flash on Cốc Cốc */
+}
+
+.movie-row-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 8px 0 16px;
+    scroll-snap-type: x proximity;
+    background-color: transparent;
+    /* Prevent white bg flash on Cốc Cốc */
+}
+
+.movie-row-track::-webkit-scrollbar {
+    display: none;
+}
+
+.movie-row-track .movie-card {
+    min-width: 180px;
+    max-width: 200px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
+/* Row Arrow Buttons */
+.row-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 15, 20, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Fallback cho Cốc Cốc và trình duyệt không hỗ trợ backdrop-filter */
+@supports not (backdrop-filter: blur(8px)) {
+    .row-arrow {
+        background: rgba(15, 15, 20, 0.95);
+    }
+}
+
+.movie-row:hover .row-arrow {
+    opacity: 1;
+}
+
+.row-arrow:hover,
+.row-arrow:focus-visible {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+    opacity: 1;
+    box-shadow: 0 4px 20px rgba(244, 171, 180, 0.4);
+}
+
+.row-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.row-arrow-left {
+    left: 8px;
+}
+
+.row-arrow-right {
+    right: 8px;
+}
+
+/* ===== Featured Banner ===== */
+.featured-banner {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    height: 260px;
+    margin: 10px 0 30px;
+    cursor: pointer;
+    border: 1px solid rgba(244, 171, 180, 0.1);
+}
+
+.featured-banner::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(244, 171, 180, 0.2), transparent 50%, rgba(254, 211, 221, 0.1));
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.featured-banner:hover::before {
+    opacity: 1;
+}
+
+.featured-banner-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.featured-banner:hover .featured-banner-bg {
+    transform: scale(1.05);
+}
+
+.featured-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.5) 50%,
+            rgba(0, 0, 0, 0.2) 100%);
+}
+
+.featured-banner-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    max-width: 550px;
+}
+
+.featured-banner-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.featured-banner-badges span {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+}
+
+.featured-banner-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    padding-top: 2px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.featured-banner-sub {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== Responsive for new components ===== */
+@media (max-width: 768px) {
+    .category-chip {
+        padding: 6px 14px;
+        font-size: 0.78rem;
+    }
+
+    .movie-row-track .movie-card {
+        min-width: 140px;
+        max-width: 160px;
+    }
+
+    .row-arrow {
+        display: none;
+    }
+
+    .featured-banner {
+        height: 260px;
+        margin-bottom: 24px;
+    }
+
+    .featured-banner-content {
+        padding: 20px;
+    }
+
+    .featured-banner-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-row-track .movie-card {
+        min-width: 120px;
+        max-width: 140px;
+    }
+
+    .featured-banner {
+        height: 220px;
+        border-radius: var(--radius);
+    }
+
+    .featured-banner-content {
+        padding: 16px;
+    }
+
+    .featured-banner-title {
+        font-size: 1rem;
+    }
+
+    .featured-banner-sub {
+        font-size: 0.75rem;
+    }
+}

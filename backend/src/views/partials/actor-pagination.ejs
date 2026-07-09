@@ -1,0 +1,53 @@
+<%
+  var base = '/dien-vien';
+  var qs = query ? '?q=' + encodeURIComponent(query) + '&page=' : '?page=';
+  var maxVisible = 5;
+  var half = Math.floor(maxVisible / 2);
+  var startP = Math.max(1, currentPage - half);
+  var endP = Math.min(totalPages, startP + maxVisible - 1);
+  if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+%>
+<div class="pagination" style="margin-top: 32px; margin-bottom: 16px">
+    <% if (currentPage > 1) { %>
+        <a href="<%= base + qs + (currentPage - 1) %>" class="pagination-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Trước
+        </a>
+    <% } else { %>
+        <span class="pagination-btn pagination-btn-disabled">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Trước
+        </span>
+    <% } %>
+
+    <% if (startP > 1) { %>
+        <a href="<%= base + qs + 1 %>" class="pagination-num">1</a>
+        <% if (startP > 2) { %><span class="pagination-ellipsis">…</span><% } %>
+    <% } %>
+
+    <% for (var p = startP; p <= endP; p++) { %>
+        <% if (p === currentPage) { %>
+            <span class="pagination-num pagination-num-active"><%= p %></span>
+        <% } else { %>
+            <a href="<%= base + qs + p %>" class="pagination-num"><%= p %></a>
+        <% } %>
+    <% } %>
+
+    <% if (endP < totalPages) { %>
+        <% if (endP < totalPages - 1) { %><span class="pagination-ellipsis">…</span><% } %>
+        <a href="<%= base + qs + totalPages %>" class="pagination-num"><%= totalPages %></a>
+    <% } %>
+
+    <% if (currentPage < totalPages) { %>
+        <a href="<%= base + qs + (currentPage + 1) %>" class="pagination-btn">
+            Sau
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+    <% } else { %>
+        <span class="pagination-btn pagination-btn-disabled">
+            Sau
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </span>
+    <% } %>
+</div>
+<p class="pagination-info" style="text-align:center;margin-bottom:32px">Trang <%= currentPage %> / <%= totalPages %></p>

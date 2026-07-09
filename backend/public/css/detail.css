@@ -1,0 +1,658 @@
+/* ============================================
+   Movie Detail Page — Premium Cinematic Design
+   ============================================ */
+
+/* ---- Cinematic Hero Backdrop ---- */
+.detail-hero {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    overflow: hidden;
+    margin-bottom: 0;
+    background: var(--bg-dark);
+}
+
+.detail-hero-bg {
+    position: absolute;
+    inset: -40px;
+    visibility: hidden;
+}
+
+.detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: none;
+    visibility: hidden;
+}
+
+/* ---- Detail Content Layout ---- */
+.detail-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 48px;
+    padding: 80px 0 40px;
+    align-items: stretch;
+    background: var(--bg-dark);
+}
+
+/* Override body background cho trang detail — tránh màu tối lộ ra ngoài detail-hero */
+body.page-detail {
+    background: var(--bg-dark);
+}
+
+/* ---- Floating Poster Card ---- */
+.detail-poster {
+    flex-shrink: 0;
+    width: 280px;
+    aspect-ratio: 2/3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(244, 171, 180, 0.15);
+    background: var(--bg-surface);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+    position: relative;
+}
+
+.detail-poster:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(244, 171, 180, 0.15),
+        0 0 0 1px rgba(244, 171, 180, 0.25);
+}
+
+.detail-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.detail-poster:hover img {
+    transform: scale(1.05);
+}
+
+/* ---- Info Panel ---- */
+.detail-info {
+    flex: 1;
+    padding-top: 10px;
+    min-width: 0;
+}
+
+.detail-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.detail-origin {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+/* ---- Season / Part Navigation ---- */
+.season-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.season-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(244, 171, 180, 0.2);
+    background: rgba(244, 171, 180, 0.06);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.season-btn:hover {
+    border-color: rgba(244, 171, 180, 0.45);
+    color: var(--primary);
+    background: rgba(244, 171, 180, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244, 171, 180, 0.12);
+}
+
+.season-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--bg-dark);
+    border-color: transparent;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(244, 171, 180, 0.25);
+    cursor: default;
+}
+
+.season-btn.active:hover {
+    transform: none;
+}
+
+/* ---- Badges Row ---- */
+.detail-badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.badge-quality {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--bg-dark);
+}
+
+.badge-lang {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: rgba(244, 171, 180, 0.12);
+    color: var(--primary);
+    border: 1px solid rgba(244, 171, 180, 0.25);
+}
+
+.badge-ep {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ---- Meta Info Grid ---- */
+.detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 28px;
+    margin-bottom: 24px;
+}
+
+.detail-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.detail-meta-item svg {
+    color: var(--primary);
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.detail-meta-item a {
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+}
+
+.detail-meta-item a:hover {
+    color: var(--primary);
+}
+
+/* ---- Cast & Director ---- */
+.detail-cast {
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.detail-cast-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.detail-cast-value {
+    color: var(--text-secondary);
+}
+
+/* ---- Synopsis / Content ---- */
+.detail-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 28px;
+    padding: 20px 24px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(244, 171, 180, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: relative;
+}
+
+.detail-desc h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-desc h2::before {
+    content: '';
+    width: 3px;
+    height: 16px;
+    background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    border-radius: 2px;
+}
+
+.detail-desc p {
+    margin: 0;
+}
+
+/* ── FAQ Section ──────────────────────────────────────────────────────────── */
+.detail-faq {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.detail-faq > h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-faq > h2::before {
+    content: '';
+    width: 3px;
+    height: 16px;
+    background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    border-radius: 2px;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.faq-q {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.faq-a {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---- Actions + Chips Group ---- */
+.detail-actions-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+/* ---- Action Buttons ---- */
+.detail-actions-group .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.detail-actions-group .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--bg-dark);
+    border: none;
+}
+
+.detail-actions-group .btn-primary svg {
+    width: 14px;
+    height: 14px;
+}
+
+.detail-actions-group .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244, 171, 180, 0.25);
+}
+
+.detail-actions-group .btn-primary.resume-cta {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    animation: resumeGlow 2s ease-in-out infinite;
+}
+
+@keyframes resumeGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(46, 204, 113, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4);
+    }
+}
+
+/* ---- Favorite Button (detail page) ---- */
+.detail-fav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.detail-fav-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(244, 171, 180, 0.08);
+}
+
+.detail-fav-btn.fav-active {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(244, 171, 180, 0.1);
+}
+
+.detail-fav-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.detail-fav-btn:hover svg {
+    transform: scale(1.15);
+}
+
+@keyframes fav-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.35);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fav-pulse svg {
+    animation: fav-pulse 0.5s ease;
+}
+
+/* Highlight animation khi chưa yêu thích — khuyến khích nhấn */
+.fav-highlight svg {
+    animation: fav-glow 2s ease-in-out infinite;
+    color: var(--primary);
+    stroke: var(--primary) !important;
+}
+
+.fav-highlight {
+    border-color: rgba(244, 171, 180, 0.35) !important;
+}
+
+@keyframes fav-glow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0px transparent);
+    }
+
+    50% {
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 8px rgba(244, 171, 180, 0.6));
+    }
+}
+
+.detail-notif-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.detail-notif-hint svg {
+    color: var(--primary);
+    opacity: 0.6;
+}
+
+/* ---- Single Movie Banner (phim lẻ) ---- */
+.single-movie-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(244, 171, 180, 0.12);
+    margin-bottom: 32px;
+}
+
+.single-movie-info {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.single-movie-play {
+    font-size: 0.9rem;
+    padding: 10px 24px;
+    border-radius: 24px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ---- Action Buttons (standalone section) ---- */
+.detail-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.detail-actions .btn-primary {
+    min-width: 160px;
+}
+
+.detail-actions .btn svg {
+    transition: transform 0.2s ease;
+}
+
+.detail-actions .btn-primary:hover svg {
+    transform: translateX(2px);
+}
+
+/* ---- Genre / Country Chips ---- */
+.detail-chips {
+    display: contents;
+}
+
+.detail-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: rgba(244, 171, 180, 0.08);
+    color: var(--text-secondary);
+    border: 1px solid rgba(244, 171, 180, 0.12);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.detail-chip:hover {
+    background: rgba(244, 171, 180, 0.18);
+    color: var(--primary);
+    border-color: rgba(244, 171, 180, 0.35);
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   Episodes Section
+   ============================================ */
+.episode-section {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.episode-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary), var(--primary-dark), transparent);
+    opacity: 0.6;
+}
+
+.episode-section h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+}
+
+.episode-section h2 svg {
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.episode-count {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 4px;
+}
+
+.episode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+}
+
+.episode-btn {
+    width: 100%;
+    min-width: 72px;
+    padding: 10px;
+    text-align: center;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.episode-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.episode-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 171, 180, 0.15);
+}
+
+.episode-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--bg-dark);
+    border-color: transparent;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(244, 171, 180, 0.3);
+}
+
+/* ============================================
+   Related Movies Section
+   ============================================ */
+.detail-related {
+    margin-top: 16px;
+    margin-bottom: 40px;
+}
+
+.detail-related .section-header {
+    margin-bottom: 20px;
+}

@@ -1,0 +1,1275 @@
+/* ============================================================
+   Responsive Design — movieCC
+   Breakpoints: 1024px → 768px → 480px → 360px
+   ============================================================ */
+
+/* ---- 1024px (Tablet Landscape) ---- */
+@media (max-width: 1024px) {
+    .hero-slider {
+        height: 450px;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-content {
+        padding: 0 30px;
+        max-width: 500px;
+    }
+
+    .hero-play-btn {
+        left: 30px;
+        bottom: 30px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .hero-thumbs {
+        right: 30px;
+        bottom: 24px;
+        gap: 8px;
+    }
+
+    .hero-thumb {
+        width: 32px;
+        height: 32px;
+    }
+
+    .detail-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        padding: 50px 0 30px;
+    }
+
+    .detail-poster {
+        width: 220px;
+    }
+
+    .detail-info {
+        text-align: center;
+    }
+
+    .detail-meta {
+        justify-content: center;
+    }
+
+    .detail-badges {
+        justify-content: center;
+    }
+
+    .detail-chips {
+        justify-content: center;
+    }
+
+    .detail-cast {
+        text-align: center;
+    }
+
+    .detail-actions {
+        justify-content: center;
+    }
+
+    .detail-hero {
+        min-height: 420px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-sidebar {
+        width: 220px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-table {
+        min-width: 600px;
+    }
+
+    .login-card {
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    /* --- Navbar Search --- */
+    .nav-search.active form {
+        max-width: 280px;
+    }
+
+    .nav-search.active input {
+        max-width: 220px;
+    }
+}
+
+/* ---- 1280px (Small Desktop) ---- */
+@media (max-width: 1280px) {
+    .nav-search.active form {
+        max-width: 300px;
+    }
+
+    .nav-search.active input {
+        max-width: 240px;
+    }
+}
+
+/* ---- 768px (Tablet Portrait / Large Phone) ---- */
+@media (max-width: 768px) {
+    :root {
+        --nav-height: 56px;
+    }
+
+    /* --- Navbar --- */
+    .nav-logo-custom {
+        height: 34px;
+    }
+
+    .nav-user-name {
+        display: none;
+    }
+
+    .nav-user {
+        padding: 6px;
+        border-radius: 50%;
+    }
+
+    .nav-right {
+        gap: 8px;
+    }
+
+    .nav-search.active input {
+        width: 130px;
+        font-size: 0.85rem;
+    }
+
+    .nav-search.active form {
+        width: auto;
+    }
+
+    /* --- Hero --- */
+    .hero-slider {
+        height: 360px;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
+    }
+
+    .hero-content {
+        padding: 0 16px;
+        padding-bottom: 20px;
+        justify-content: flex-end;
+    }
+
+    .hero-desc {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        font-size: 0.82rem;
+    }
+
+    .hero-play-btn {
+        left: 16px;
+        bottom: 16px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .hero-thumbs {
+        right: 16px;
+        bottom: 14px;
+        gap: 6px;
+    }
+
+    .hero-thumb {
+        width: 28px;
+        height: 28px;
+    }
+
+    .hero-badge span {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    .hero-actions .btn {
+        font-size: 0.85rem;
+        padding: 8px 18px;
+    }
+
+    /* --- Section Headers --- */
+    .section-title {
+        font-size: 1.05rem;
+    }
+
+    .section-header {
+        margin-bottom: 12px;
+    }
+
+    /* --- Movie Grid --- */
+    .movie-grid,
+    .movie-grid-large {
+        grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+        gap: 10px;
+    }
+
+    /* --- Movie Row (horizontal scroll) --- */
+    .row-arrow {
+        display: none !important;
+    }
+
+    .movie-row {
+        padding: 0;
+    }
+
+    .movie-row-track {
+        gap: 8px;
+        padding: 0 12px 4px;
+        padding-right: 16px;
+    }
+
+    .movie-row-card {
+        min-width: 120px;
+    }
+
+    /* --- Continue Watching --- */
+    .continue-watching-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+        overflow-x: visible;
+    }
+
+    .cw-card {
+        width: auto;
+    }
+
+    .cw-card-title {
+        font-size: 0.82rem;
+    }
+
+    .cw-card-sub {
+        font-size: 0.72rem;
+    }
+
+    /* --- Category Chips --- */
+    .category-chips-scroll {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 4px;
+    }
+
+    .category-chips-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 0.8rem;
+        padding: 6px 14px;
+    }
+
+    .category-chips-section {
+        position: relative;
+    }
+
+    .category-chips-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, var(--bg-card));
+        pointer-events: none;
+    }
+
+    /* --- Featured Banner --- */
+    .featured-banner {
+        min-height: auto;
+        padding: 0;
+    }
+
+    .featured-banner-inner {
+        flex-direction: column;
+        padding: 24px 16px;
+        gap: 16px;
+    }
+
+    .featured-banner-poster {
+        width: 120px;
+        margin: 0 auto;
+    }
+
+    .featured-banner-info {
+        text-align: center;
+    }
+
+    .featured-banner-title {
+        font-size: 1.2rem;
+    }
+
+    .featured-banner-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* --- Detail Page --- */
+    .detail-poster {
+        width: 160px;
+    }
+
+    .detail-title {
+        font-size: 1.5rem;
+    }
+
+    .detail-hero {
+        min-height: 340px;
+    }
+
+    .detail-desc {
+        font-size: 0.85rem;
+        padding: 14px 16px;
+        line-height: 1.65;
+    }
+
+    .detail-meta-item {
+        font-size: 0.82rem;
+    }
+
+    .detail-chip {
+        font-size: 0.78rem;
+        padding: 6px 12px;
+    }
+
+    /* --- Player --- */
+    .player-wrapper {
+        border-radius: var(--radius);
+        margin-bottom: 14px;
+    }
+
+    .player-title {
+        font-size: 1.05rem;
+    }
+
+    .player-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .server-section {
+        padding: 12px;
+    }
+
+    .server-btn {
+        padding: 10px 14px;
+        font-size: 0.82rem;
+        min-height: 42px;
+    }
+
+    /* Custom Player */
+    .cp-controls-row {
+        gap: 2px;
+    }
+
+    .cp-left, .cp-right {
+        gap: 1px;
+    }
+
+    .cp-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .cp-btn svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .cp-time {
+        font-size: 0.72rem;
+    }
+
+    .cp-big-play svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .cp-volume-wrap:hover .cp-vol-slider-wrap {
+        width: 60px;
+    }
+
+    .cp-right #cpPipBtn {
+        display: none;
+    }
+
+    /* --- Episodes --- */
+    .episode-section {
+        padding: 14px;
+    }
+
+    .episode-grid {
+        grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+    }
+
+    .episode-btn {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+        min-height: 40px;
+        min-width: 52px;
+    }
+
+    /* --- Pagination --- */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination a,
+    .pagination span {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.8rem;
+    }
+
+    /* --- Search --- */
+    .search-form {
+        flex-direction: column;
+        border-radius: var(--radius);
+    }
+
+    .search-form button {
+        border-radius: 0 0 var(--radius) var(--radius);
+        padding: 12px;
+    }
+
+    .search-hero h1 {
+        font-size: 1.4rem;
+    }
+
+    .search-filters {
+        gap: 8px;
+    }
+
+    .filter-select {
+        flex: 1;
+        min-width: 120px;
+        font-size: 0.82rem;
+        padding: 8px 12px;
+        padding-right: 30px;
+    }
+
+    .category-header h1 {
+        font-size: 1.4rem;
+    }
+
+
+
+    /* --- Footer --- */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .footer {
+        padding: 28px 0 16px;
+        margin-top: 30px;
+    }
+
+    /* --- Login --- */
+    .login-card {
+        padding: 32px 24px;
+    }
+
+    .login-logo {
+        font-size: 1.8rem;
+    }
+
+    /* --- Error Page --- */
+    .error-code .digit {
+        font-size: 5rem;
+    }
+
+    .error-code .zero svg {
+        width: 80px;
+        height: 80px;
+    }
+
+    .error-title {
+        font-size: 1.4rem;
+    }
+
+    .error-desc {
+        font-size: 0.9rem;
+    }
+
+    .error-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-back-home,
+    .btn-search-link {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 24px;
+    }
+
+    /* --- History --- */
+    .history-item {
+        flex-wrap: wrap;
+    }
+
+    .history-thumb {
+        width: 120px;
+        height: 68px;
+    }
+
+    .history-actions {
+        width: 100%;
+        justify-content: flex-end;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+    }
+
+    .history-title {
+        font-size: 0.95rem;
+    }
+
+    /* --- Resume Dialog --- */
+    .resume-dialog-box {
+        padding: 24px 20px;
+    }
+
+    .resume-dialog-actions {
+        flex-direction: column;
+    }
+
+    .resume-dialog-actions .btn {
+        width: 100%;
+    }
+
+    /* --- Modal --- */
+    .modal {
+        padding: 24px 20px;
+        max-width: 90%;
+    }
+
+    /* --- Scroll-to-top --- */
+    .scroll-top {
+        right: 14px;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ---- 480px (Mobile) ---- */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    /* --- Hero --- */
+    .hero-slider {
+        height: 280px;
+    }
+
+    .hero-title {
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+
+    .hero-desc {
+        display: none;
+    }
+
+    .hero-meta {
+        display: none;
+    }
+
+    .hero-actions {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .hero-actions .btn {
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 9px 12px;
+        min-height: 40px;
+        justify-content: center;
+    }
+
+    .hero-play-btn {
+        display: none;
+    }
+
+    .hero-thumbs {
+        display: none;
+    }
+
+    .hero-content {
+        padding: 0 14px;
+        padding-bottom: 16px;
+        justify-content: flex-end;
+    }
+
+    .hero-badge {
+        margin-bottom: 8px;
+    }
+
+    .hero-badge span {
+        font-size: 0.6rem;
+        padding: 3px 7px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+
+    /* --- Navbar --- */
+    .nav-logo-custom {
+        height: 28px; /* Flex size for mobile */
+    }
+
+    .nav-right .btn {
+        padding: 7px 12px;
+        font-size: 0.8rem;
+    }
+
+    /* --- Section Headers --- */
+    .section-title {
+        font-size: 0.95rem;
+    }
+
+    .section-title::before {
+        height: 16px;
+        width: 3px;
+    }
+
+    /* --- Movie Grid --- */
+    .movie-grid,
+    .movie-grid-large {
+        grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+        gap: 8px;
+    }
+
+    .movie-card-info {
+        padding: 8px;
+    }
+
+    .movie-card-title {
+        font-size: 0.78rem;
+    }
+
+    .movie-card-meta {
+        font-size: 0.68rem;
+        gap: 4px;
+    }
+
+    .movie-card-badges span {
+        font-size: 0.6rem;
+        padding: 2px 5px;
+    }
+
+    /* --- Continue Watching --- */
+    .continue-watching-strip {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+    }
+
+    /* --- Movie Row --- */
+    .movie-row-track {
+        gap: 6px;
+        padding: 0 10px 4px;
+        padding-right: 14px;
+    }
+
+    .movie-row-card {
+        min-width: 110px;
+    }
+
+    /* --- Detail Page --- */
+    .detail-poster {
+        width: 130px;
+    }
+
+    .detail-title {
+        font-size: 1.25rem;
+    }
+
+    .detail-origin {
+        font-size: 0.82rem;
+    }
+
+    .detail-hero {
+        min-height: auto;
+    }
+
+    .detail-content {
+        padding: 24px 0 16px;
+        gap: 14px;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .detail-actions .btn {
+        width: 100%;
+    }
+
+    .detail-desc {
+        font-size: 0.83rem;
+        padding: 12px 14px;
+        line-height: 1.6;
+    }
+
+    .detail-desc h3 {
+        font-size: 0.9rem;
+    }
+
+    .detail-badges span {
+        font-size: 0.65rem;
+    }
+
+    .detail-chip {
+        font-size: 0.72rem;
+        padding: 5px 10px;
+    }
+
+    .detail-cast {
+        font-size: 0.82rem;
+    }
+
+    .episode-section::before {
+        display: none;
+    }
+
+    /* --- Player --- */
+    .player-wrapper {
+        border-radius: var(--radius-sm);
+    }
+
+    .player-title {
+        font-size: 0.95rem;
+    }
+
+    .server-btn {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+        min-height: 40px;
+    }
+
+    /* Custom Player */
+    .cp-controls-row {
+        gap: 0;
+    }
+
+    .cp-left, .cp-right {
+        gap: 0;
+    }
+
+    .cp-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .cp-btn svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .cp-time {
+        font-size: 0.62rem;
+        white-space: nowrap;
+    }
+
+    .cp-controls {
+        padding: 24px 6px 4px;
+    }
+
+    .cp-big-play svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .cp-volume-wrap {
+        display: none;
+    }
+
+    .cp-settings-panel {
+        right: 6px;
+        bottom: 44px;
+        min-width: 180px;
+    }
+
+    .cp-right #cpSubBtn,
+    .cp-right #cpPipBtn {
+        display: none;
+    }
+
+    /* --- Episodes --- */
+    .episode-section {
+        padding: 12px;
+        border-radius: var(--radius);
+    }
+
+    .episode-section h3 {
+        font-size: 0.95rem;
+    }
+
+    .episode-grid {
+        grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+        gap: 5px;
+    }
+
+    .episode-btn {
+        padding: 6px 4px;
+        font-size: 0.75rem;
+        min-height: 36px;
+        min-width: 44px;
+    }
+
+    /* --- Search --- */
+    .search-hero {
+        padding: 20px 0 14px;
+    }
+
+    .search-hero h1 {
+        font-size: 1.15rem;
+    }
+
+    .filter-select {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .search-filters {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .category-header {
+        padding: 16px 0 12px;
+    }
+
+    .category-header h1 {
+        font-size: 1.15rem;
+        gap: 8px;
+    }
+
+    .category-header h1::before {
+        height: 22px;
+    }
+
+    /* --- Pagination --- */
+    .pagination a,
+    .pagination span {
+        min-width: 34px;
+        height: 34px;
+        padding: 0 8px;
+        font-size: 0.75rem;
+    }
+
+    /* --- History --- */
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .history-thumb-link {
+        width: 100%;
+    }
+
+    .history-thumb {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16/9;
+    }
+
+    .history-info {
+        width: 100%;
+    }
+
+    .history-title {
+        font-size: 0.9rem;
+        white-space: normal;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+
+    .history-actions {
+        width: 100%;
+        border-top: 1px solid var(--border);
+        padding-top: 8px;
+    }
+
+    /* --- Admin --- */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-value {
+        font-size: 1.3rem;
+    }
+
+    .stat-label {
+        font-size: 0.78rem;
+    }
+
+    .admin-main {
+        padding: 12px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.05rem;
+    }
+
+    /* --- Footer --- */
+    .footer {
+        padding: 24px 0 16px;
+        margin-top: 24px;
+    }
+
+    .footer-brand-name {
+        font-size: 1.1rem;
+    }
+
+    .footer-desc {
+        font-size: 0.8rem;
+    }
+
+    .footer-title {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+
+    .footer-links a {
+        font-size: 0.8rem;
+        padding: 3px 0;
+    }
+
+    /* --- Login --- */
+    .login-card {
+        padding: 28px 20px;
+        margin: 0 12px;
+    }
+
+    .login-logo {
+        font-size: 1.6rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.82rem;
+    }
+
+    .form-input {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+
+    .login-btn {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    /* --- Error Page --- */
+    .error-code .digit {
+        font-size: 4rem;
+    }
+
+    .error-code .zero svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    .error-title {
+        font-size: 1.2rem;
+    }
+
+    .error-desc {
+        font-size: 0.85rem;
+        margin-bottom: 24px;
+    }
+
+    .error-page {
+        padding: 24px 12px;
+    }
+
+    /* --- Buttons touch targets --- */
+    .btn {
+        min-height: 40px;
+    }
+
+    .btn-sm {
+        min-height: 36px;
+        padding: 8px 14px;
+    }
+
+    /* --- Scroll-to-top --- */
+    .scroll-top {
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        bottom: 72px;
+    }
+}
+
+/* ---- 360px (Small Mobile) ---- */
+@media (max-width: 360px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .hero-slider {
+        height: 260px;
+    }
+
+    .hero-content {
+        max-width: calc(100% - 28px);
+        padding: 0 14px;
+    }
+
+    .hero-badge {
+        margin-bottom: 8px;
+    }
+
+    .hero-badge span {
+        font-size: 0.55rem;
+    }
+
+    .hero-actions .btn {
+        font-size: 0.75rem;
+        padding: 8px 10px;
+    }
+
+    .movie-grid,
+    .movie-grid-large {
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 6px;
+    }
+
+    .movie-card-info {
+        padding: 5px;
+    }
+
+    .movie-card-title {
+        font-size: 0.7rem;
+    }
+
+    .nav-logo-custom {
+        height: 24px;
+    }
+
+    .nav-right {
+        gap: 4px;
+    }
+
+    .detail-poster {
+        width: 120px;
+    }
+
+    .detail-title {
+        font-size: 1.05rem;
+    }
+
+    .episode-grid {
+        grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .episode-btn {
+        font-size: 0.7rem;
+        padding: 5px 3px;
+        min-width: 38px;
+    }
+
+    .footer-bottom {
+        font-size: 0.72rem;
+    }
+
+    .pagination a,
+    .pagination span {
+        min-width: 28px;
+        height: 28px;
+    }
+
+    .section-title {
+        font-size: 0.88rem;
+    }
+
+    .cp-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .cp-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .cp-time {
+        font-size: 0.58rem;
+    }
+
+    .cp-controls {
+        padding: 20px 4px 3px;
+    }
+
+    /* Top 10 Strip */
+    .top10-card {
+        width: 120px;
+    }
+
+    .top10-poster {
+        width: 85px;
+    }
+
+    .top10-rank {
+        font-size: 2.5rem;
+        margin-right: -8px;
+    }
+
+    .top10-strip {
+        scroll-padding: 0 12px;
+    }
+
+    .continue-watching-strip {
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 6px;
+    }
+
+    .cw-card-title {
+        font-size: 0.72rem;
+    }
+
+    .login-card {
+        padding: 24px 16px;
+        margin: 0 8px;
+    }
+
+    .search-hero h1 {
+        font-size: 1rem;
+    }
+}
+
+/* ---- 320px (iPhone SE gen 1 / Extra Small) ---- */
+@media (max-width: 320px) {
+    .container {
+        padding: 0 8px;
+    }
+
+    .movie-grid,
+    .movie-grid-large {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+    }
+
+    .continue-watching-strip {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+    }
+}
+
+/* ============================================================
+   Performance: Disable backdrop-filter on mobile (GPU saver)
+   backdrop-filter: blur() forces per-frame compositing layer +
+   Gaussian blur recalculation → biggest FPS killer on mobile
+   ============================================================ */
+@media (max-width: 768px) {
+    .navbar,
+    .navbar.scrolled,
+    .page-home .navbar.scrolled {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(var(--bg-dark-rgb), 0.92);
+    }
+
+    .bottom-nav {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        /* Already has solid bg: rgba(var(--bg-dark-rgb), 0.85) */
+    }
+
+    .movie-card-badges span {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .movie-card-rating {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .movie-card-play-btn {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .scroll-top {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .toast-notification {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+}
+
+/* ============================================================
+   Performance: content-visibility for off-screen sections
+   Skips rendering for sections not yet in viewport → ~7x faster initial paint
+   ============================================================ */
+.section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
+}
+
+.featured-banner {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 300px;
+}
+
+/* ---- Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+    .hero-slider,
+    .movie-card,
+    .cw-card,
+    .cp-controls {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    * {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+}

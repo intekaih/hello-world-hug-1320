@@ -1,0 +1,59 @@
+# Backend Node.js dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Env files (chứa secrets)
+.env
+.env.local
+.env.production
+.env.development
+
+# Build outputs
+dist/
+build/
+coverage/
+*.log
+logs/
+*.log.*
+
+# Session/storage data
+data/
+sessions/
+*.json.bak
+*.db
+*.sqlite
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Test artifacts
+.nyc_output/
+junit.xml
+test-results/
+playwright-report/
+playwright/.cache/
+
+# PM2/Process manager
+.pm2/
+.pids/
+*.pid
+
+# Temp / Cache
+tmp/
+temp/
+.cache/
+.eslintcache
+.parcel-cache/

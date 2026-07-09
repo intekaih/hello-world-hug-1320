@@ -1,0 +1,238 @@
+<div class="container feedback-page">
+    <div class="breadcrumb" style="padding:0 0 16px;margin:0">
+        <a href="/" class="breadcrumb-link">Trang chủ</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Góp ý & Phản hồi</span>
+    </div>
+
+    <div class="feedback-wrapper">
+        <div class="feedback-header">
+            <div class="feedback-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+            </div>
+            <h1 class="feedback-title">Góp ý & Phản hồi</h1>
+            <p class="feedback-subtitle">Mọi ý kiến đóng góp của bạn đều giúp movieCC trở nên tốt hơn ❤️</p>
+        </div>
+
+        <% if (success) { %>
+            <div class="feedback-success" id="feedbackSuccess">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                <h2>Cảm ơn bạn! 🎉</h2>
+                <p>Góp ý của bạn đã được gửi thành công. Chúng tôi sẽ xem xét sớm nhất có thể.</p>
+                <a href="/" class="btn btn-primary" style="margin-top:16px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Về trang chủ
+                </a>
+            </div>
+            <% } else { %>
+
+                <form class="feedback-form" id="feedbackForm">
+                    <div class="feedback-grid">
+                        <div class="form-group">
+                            <label for="fbName" class="form-label">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                                Tên của bạn <span class="required">*</span>
+                            </label>
+                            <input type="text" id="fbName" name="name" class="form-input" placeholder="VD: Nguyễn Văn A"
+                                required maxlength="100" value="<%= user ? user.display_name : '' %>">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fbEmail" class="form-label">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
+                                Email (không bắt buộc)
+                            </label>
+                            <input type="email" id="fbEmail" name="email" class="form-input"
+                                placeholder="Để nhận phản hồi từ chúng tôi" maxlength="200">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            Loại góp ý
+                        </label>
+                        <div class="feedback-categories">
+                            <label class="fb-cat-option">
+                                <input type="radio" name="category" value="bug">
+                                <span class="fb-cat-chip">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="15" y1="9" x2="9" y2="15" />
+                                        <line x1="9" y1="9" x2="15" y2="15" />
+                                    </svg>
+                                    Lỗi / Bug
+                                </span>
+                            </label>
+                            <label class="fb-cat-option">
+                                <input type="radio" name="category" value="feature">
+                                <span class="fb-cat-chip">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polygon
+                                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                    </svg>
+                                    Đề xuất
+                                </span>
+                            </label>
+                            <label class="fb-cat-option">
+                                <input type="radio" name="category" value="content">
+                                <span class="fb-cat-chip">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" />
+                                        <polyline points="17 2 12 7 7 2" />
+                                    </svg>
+                                    Nội dung phim
+                                </span>
+                            </label>
+                            <label class="fb-cat-option">
+                                <input type="radio" name="category" value="other" checked>
+                                <span class="fb-cat-chip">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                                    </svg>
+                                    Khác
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fbMessage" class="form-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="17" y1="10" x2="3" y2="10" />
+                                <line x1="21" y1="6" x2="3" y2="6" />
+                                <line x1="21" y1="14" x2="3" y2="14" />
+                                <line x1="17" y1="18" x2="3" y2="18" />
+                            </svg>
+                            Nội dung góp ý <span class="required">*</span>
+                        </label>
+                        <textarea id="fbMessage" name="message" class="form-input form-textarea"
+                            placeholder="Hãy mô tả chi tiết ý kiến, lỗi gặp phải, hoặc đề xuất của bạn..." required
+                            minlength="10" maxlength="2000" rows="6"></textarea>
+                        <div class="form-hint">
+                            <span id="fbCharCount">0</span>/2000 ký tự
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fbMovieSlug" class="form-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                            </svg>
+                            Liên quan đến phim (không bắt buộc)
+                        </label>
+                        <input type="text" id="fbMovieSlug" name="movieSlug" class="form-input"
+                            placeholder="VD: lat-mat-7 hoặc tên phim">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary feedback-submit" id="fbSubmitBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                        <span id="fbSubmitLabel">Gửi góp ý</span>
+                    </button>
+                </form>
+                <% } %>
+    </div>
+</div>
+
+<% if (!success) { %>
+    <script nonce="<%= nonce %>">
+        (function () {
+            var form = document.getElementById('feedbackForm');
+            var msg = document.getElementById('fbMessage');
+            var count = document.getElementById('fbCharCount');
+            var btn = document.getElementById('fbSubmitBtn');
+            var label = document.getElementById('fbSubmitLabel');
+
+            msg.addEventListener('input', function () {
+                count.textContent = this.value.length;
+                if (this.value.length > 1800) {
+                    count.style.color = 'var(--danger, #e74c3c)';
+                } else {
+                    count.style.color = '';
+                }
+            });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (btn.disabled) return;
+
+                var name = document.getElementById('fbName').value.trim();
+                var message = msg.value.trim();
+                if (!name) return showToast('Vui lòng nhập tên', 'error');
+                if (message.length < 10) return showToast('Nội dung ít nhất 10 ký tự', 'error');
+
+                btn.disabled = true;
+                label.textContent = 'Đang gửi...';
+
+                var category = 'other';
+                var radios = form.querySelectorAll('input[name="category"]');
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) { category = radios[i].value; break; }
+                }
+
+                var token = (typeof getCsrfToken === 'function') ? getCsrfToken() : '';
+
+                fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-csrf-token': token },
+                    body: JSON.stringify({
+                        name: name,
+                        email: document.getElementById('fbEmail').value.trim(),
+                        category: category,
+                        message: message,
+                        movieSlug: document.getElementById('fbMovieSlug').value.trim()
+                    })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            window.location.href = '/gop-y?success=1';
+                        } else {
+                            showToast(data.error || 'Có lỗi xảy ra', 'error');
+                            btn.disabled = false;
+                            label.textContent = 'Gửi góp ý';
+                        }
+                    })
+                    .catch(function () {
+                        showToast('Lỗi kết nối, vui lòng thử lại', 'error');
+                        btn.disabled = false;
+                        label.textContent = 'Gửi góp ý';
+                    });
+            });
+        })();
+    </script>
+    <% } %>

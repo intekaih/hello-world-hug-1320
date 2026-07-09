@@ -1,0 +1,41 @@
+{
+  "name": "movieCC - Xem phim trực tuyến",
+  "short_name": "movieCC",
+  "description": "Xem phim trực tuyến chất lượng cao, phụ đề tiếng Việt, cập nhật nhanh nhất. Phim bộ, phim lẻ, anime, phim chiếu rạp.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "any",
+  "lang": "vi",
+  "categories": ["entertainment", "video"],
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Tìm kiếm phim",
+      "short_name": "Tìm kiếm",
+      "url": "/tim-kiem",
+      "icons": []
+    },
+    {
+      "name": "Phim mới cập nhật",
+      "short_name": "Phim mới",
+      "url": "/danh-sach/phim-moi-cap-nhat",
+      "icons": []
+    }
+  ]
+}

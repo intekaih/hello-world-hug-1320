@@ -1,0 +1,362 @@
+/* ---- Animations ---- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-6px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(6px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes floatParticle {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    25% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    75% {
+        transform: translate(15px, 15px) scale(1.05);
+    }
+}
+
+/* Scroll Reveal */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal-on-scroll.revealed,
+.reveal-on-scroll .revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Grid children reveal */
+.movie-grid.reveal-on-scroll>*,
+.top10-strip.reveal-on-scroll>* {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.movie-grid.reveal-on-scroll>*.revealed,
+.top10-strip.reveal-on-scroll>*.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .reveal-on-scroll,
+    .movie-grid.reveal-on-scroll>*,
+    .top10-strip.reveal-on-scroll>* {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* animate-in handled by JS IntersectionObserver now */
+
+/* ============================================
+   Scroll-Triggered PowerPoint-style Animations
+   Triggered by IntersectionObserver via JS
+   ============================================ */
+
+/* Fade Up */
+.sa-fade-up {
+    opacity: 0;
+    transform: translateY(48px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+/* Slide in from Left (element starts left, slides right) */
+.sa-fade-right {
+    opacity: 0;
+    transform: translateX(-52px);
+    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+/* Slide in from Right */
+.sa-fade-left {
+    opacity: 0;
+    transform: translateX(52px);
+    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+/* Zoom + rise */
+.sa-zoom-in {
+    opacity: 0;
+    transform: scale(0.88) translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+
+/* In-view final state — all resolve to visible/natural */
+.sa-fade-up.in-view,
+.sa-fade-right.in-view,
+.sa-fade-left.in-view,
+.sa-zoom-in.in-view {
+    opacity: 1;
+    transform: none;
+}
+
+/* Section-title accent bar grows when section-header slides in */
+.section-header.sa-fade-right .section-title::before {
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s;
+}
+.section-header.in-view .section-title::before {
+    transform: scaleY(1);
+}
+
+/* Respect prefers-reduced-motion for new system */
+@media (prefers-reduced-motion: reduce) {
+    .sa-fade-up,
+    .sa-fade-right,
+    .sa-fade-left,
+    .sa-zoom-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .section-header.sa-fade-right .section-title::before {
+        transform: scaleY(1);
+        transition: none;
+    }
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Slide from Right */
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Pulse Glow */
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(244, 171, 180, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(244, 171, 180, 0.4);
+    }
+}
+
+/* Utility Hover Animations */
+.hover-scale {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+    transform: scale(1.03);
+}
+
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Section Title Animation */
+.section-header {
+    animation: slideUp 0.5s ease-out both;
+}
+
+/* Page Transition Fade */
+.main-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ---- Toast Notification ---- */
+.toast-notification {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: var(--radius);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+.toast-show {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.toast-success .toast-icon {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+}
+
+.toast-success {
+    border-color: rgba(46, 204, 113, 0.3);
+}
+
+.toast-error .toast-icon {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+.toast-error {
+    border-color: rgba(231, 76, 60, 0.3);
+}
+
+.toast-info .toast-icon {
+    background: rgba(244, 171, 180, 0.2);
+    color: var(--primary);
+}
+
+.toast-info {
+    border-color: rgba(244, 171, 180, 0.3);
+}
+
+/* ---- Fav Heart Pulse ---- */
+@keyframes favPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fav-pulse {
+    animation: favPulse 0.6s ease;
+}
+
+@media (max-width: 480px) {
+    .toast-notification {
+        top: auto;
+        bottom: 20px;
+        right: 12px;
+        left: 12px;
+        max-width: none;
+    }
+}

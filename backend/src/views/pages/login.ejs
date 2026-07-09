@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Đăng nhập movieCC để trải nghiệm xem phim Server VIP siêu mượt, Full HD/4K đỉnh cao và 100% không quảng cáo. Đăng ký tài khoản ngay hôm nay!">
+    <meta name="keywords" content="đăng nhập moviecc, xem phim vip, phim không quảng cáo, phim full hd, moviecc">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title"
+        content="<%= typeof title !=='undefined' ? title : 'Đăng nhập movieCC - Trải nghiệm Xem Phim Đỉnh Cao' %>">
+    <meta property="og:description"
+        content="Đăng nhập movieCC để trải nghiệm xem phim Server VIP siêu mượt, Full HD/4K đỉnh cao và 100% không quảng cáo.">
+    <meta property="og:image" content="https://moviecc.app/images/default-og.jpg">
+    <meta property="og:site_name" content="movieCC">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Đăng nhập movieCC - Trải nghiệm Xem Phim Đỉnh Cao">
+    <meta name="twitter:description"
+        content="Khám phá ngay kho phim VIP tốc độ 10Gbps, không giật lag và hoàn toàn không quảng cáo.">
+
+    <!-- GEO Optimization: JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "movieCC",
+          "url": "https://moviecc.app",
+          "description": "movieCC là nền tảng xem phim trực tuyến chất lượng cao, cung cấp máy chủ VIP 10Gbps, độ phân giải 4K UHD, và trải nghiệm 100% không quảng cáo."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [{
+            "@type": "Question",
+            "name": "movieCC là gì?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "movieCC là một nền tảng xem phim trực tuyến cao cấp, sử dụng công nghệ hạ tầng máy chủ VIP 10Gbps giúp truyền phát mượt mà nội dung Full HD và 4K UHD. Đặc biệt, nền tảng hoàn toàn không chứa quảng cáo."
+            }
+          }]
+        }
+      ]
+    }
+    </script>
+
+    <title>
+        <%= typeof title !=='undefined' ? title : 'Đăng nhập - movieCC' %>
+    </title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="/css/bundle.min.css?v=<%= typeof v !== 'undefined' ? v : '' %>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <script nonce="<%= typeof nonce !== 'undefined' ? nonce : '' %>">
+        (function () {
+            var t = localStorage.getItem('moviecc-theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="login-bg"></div>
+        <div class="login-particles">
+            <div class="login-particle"></div>
+            <div class="login-particle"></div>
+            <div class="login-particle"></div>
+        </div>
+
+        <div class="login-card custom-split-card">
+            <div class="login-left">
+                <div class="login-header">
+                    <a href="/" class="login-logo-link">
+                        <div class="login-logo">movieCC</div>
+                    </a>
+                    <p class="login-subtitle">Đăng nhập để tiếp tục xem phim</p>
+                </div>
+
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="login-error"><%= error %></div>
+                <% } else if (typeof query !== 'undefined' && query && query.csrf_error) { %>
+                    <div class="login-error">Phiên bảo mật hết hạn. Vui lòng thử đăng nhập lại.</div>
+                <% } %>
+
+                        <form action="/dang-nhap" method="POST" id="loginForm">
+                            <input type="hidden" name="_csrf"
+                                value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+                            <input type="hidden" name="latitude" id="latitude">
+                            <input type="hidden" name="longitude" id="longitude">
+                            <div class="form-group">
+                                <label class="form-label" for="username">Tài khoản</label>
+                                <input type="text" class="form-input" id="username" name="username"
+                                    placeholder="Nhập tài khoản" required autocomplete="username">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="password">Mật khẩu</label>
+                                <div class="password-wrap">
+                                    <input type="password" class="form-input" id="password" name="password"
+                                        placeholder="Nhập mật khẩu" required autocomplete="current-password">
+                                    <button type="button" class="pw-toggle" tabindex="-1" aria-label="Ẩn/hiện mật khẩu">
+                                        <svg class="pw-icon-show" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                        <svg class="pw-icon-hide" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                            <line x1="1" y1="1" x2="23" y2="23" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="cf-turnstile" data-sitekey="0x4AAAAAAC8VVvOqij4yDqsg" style="margin-bottom: 20px;"></div>
+
+                            <button type="submit" class="login-btn" id="loginBtn">
+                                <span class="login-btn-text">Đăng nhập</span>
+                            </button>
+                        </form>
+
+                        <div style="text-align:center;margin-top:18px">
+                            <a href="/quen-mat-khau" class="login-forgot-link">
+                                Quên mật khẩu?
+                            </a>
+                        </div>
+
+                        <div style="text-align:center;margin-top:12px;font-size:0.8rem;color:var(--text-muted)">
+                            Tài khoản được cấp bởi quản trị viên
+                        </div>
+                        <a href="/" class="login-back-home">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 12H5" />
+                                <polyline points="12 19 5 12 12 5" />
+                            </svg>
+                            Về trang chủ
+                        </a>
+            </div>
+
+            <div class="login-right">
+                <div class="benefits-container">
+                    <h3 class="benefits-title">Trải nghiệm Xem Phim Đỉnh Cao cùng movieCC</h3>
+                    <p class="benefits-desc">
+                        <strong>movieCC</strong> là nền tảng xem phim trực tuyến cao cấp, sử dụng hạ tầng mạng <strong>VIP 10Gbps</strong> để truyền phát nội dung truyền hình và điện ảnh đa dạng. Chúng tôi cam kết mang đến trải nghiệm điện ảnh <strong>đích thực</strong> ngay tại nhà.
+                    </p>
+                    <ul class="benefits-list">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Tốc độ stream cực khủng với <strong>Server VIP 10Gbps</strong> - Không bao giờ lo giật
+                                lag dù mạng kém</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Chất lượng hình ảnh <strong>Full HD / 4K UHD</strong> siêu nét, âm thanh vòm sống
+                                động</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Kho phim cập nhật thần tốc, thuyết minh & vietsub đa dạng</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span>Trải nghiệm <strong>100% Sạch sẽ - Nói KHÔNG với mọi loại quảng cáo</strong></span>
+                        </li>
+                    </ul>
+
+                    <a href="https://t.me/moviecc_app" target="_blank" rel="noopener noreferrer" class="telegram-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="flex-shrink: 0;">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.84 1.18-5.18 3.44-.49.33-.93.5-1.33.49-.44-.01-1.28-.24-1.91-.45-.77-.25-1.38-.38-1.33-.8.02-.22.33-.45.92-.68 3.63-1.58 6.05-2.62 7.27-3.13 3.47-1.45 4.19-1.7 4.66-1.71.1 0 .34.02.48.13.12.09.16.22.18.33.02.13.02.26.02.31z" />
+                        </svg>
+                        Liên hệ để đăng ký ngay
+                    </a>
+                    <div style="text-align:center;margin-top:12px;font-size:0.8rem;color:var(--text-muted)">
+                        Hỗ trợ tạo mới & cấp lại tài khoản
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Custom Layout overrides */
+        .custom-split-card {
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            width: 850px !important;
+            max-width: 95vw !important;
+        }
+
+        .login-left {
+            width: 50%;
+            padding: 48px 40px;
+        }
+
+        .login-right {
+            width: 50%;
+            padding: 48px 40px;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.08) 0%, rgba(20, 20, 25, 0.4) 100%);
+            border-left: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+        }
+
+        .benefits-container {
+            width: 100%;
+        }
+
+        .benefits-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .benefits-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .benefits-list svg {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .telegram-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: rgba(42, 171, 238, 0.15);
+            color: #2aabee;
+            border: 1px solid rgba(42, 171, 238, 0.3);
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn:hover {
+            background: rgba(42, 171, 238, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .custom-split-card {
+                flex-direction: column;
+                width: 420px !important;
+            }
+
+            .login-left,
+            .login-right {
+                width: 100%;
+                padding: 36px 24px;
+            }
+
+            .login-right {
+                border-left: none;
+                border-top: 1px solid var(--glass-border);
+            }
+        }
+
+        .login-forgot-link {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .login-forgot-link:hover {
+            color: var(--primary);
+        }
+    </style>
+    <script nonce="<%= typeof nonce !== 'undefined' ? nonce : '' %>">
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+            btn.querySelector('.login-btn-text').textContent = 'Đang kiểm tra bảo mật...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        document.getElementById('latitude').value = pos.coords.latitude;
+                        document.getElementById('longitude').value = pos.coords.longitude;
+                        btn.querySelector('.login-btn-text').textContent = 'Đang xử lý...';
+                        loginForm.submit();
+                    },
+                    function(err) {
+                        // Bỏ qua nếu không cấp quyền
+                        btn.querySelector('.login-btn-text').textContent = 'Đang xử lý...';
+                        loginForm.submit();
+                    },
+                    { timeout: 4000, maximumAge: 0 }
+                );
+            } else {
+                btn.querySelector('.login-btn-text').textContent = 'Đang xử lý...';
+                loginForm.submit();
+            }
+        });
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.pw-toggle');
+            if (!btn) return;
+            var wrap = btn.closest('.password-wrap');
+            var input = wrap.querySelector('input');
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.classList.add('pw-visible');
+            } else {
+                input.type = 'password';
+                btn.classList.remove('pw-visible');
+            }
+        });
+    </script>
+</body>
+
+</html>

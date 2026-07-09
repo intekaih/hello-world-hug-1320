@@ -1,0 +1,182 @@
+<div class="container">
+    <div class="breadcrumb" style="margin: 20px 0 16px">
+        <a href="/" class="breadcrumb-link">Trang chủ</a>
+        <span class="breadcrumb-sep">›</span>
+        <a href="/dien-vien" class="breadcrumb-link">Diễn viên</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current"><%= actorDisplayName %></span>
+    </div>
+
+    <div class="actor-detail-layout">
+
+        <!-- ===== SIDEBAR TRÁI ===== -->
+        <aside class="actor-sidebar">
+            <div class="actor-sidebar-photo">
+                <% if (tmdbPerson && tmdbPerson.profileUrl) { %>
+                    <img src="<%= tmdbPerson.profileUrl.replace('/w300/', '/w500/') %>"
+                         alt="<%= actorDisplayName %>"
+                         onerror="this.onerror=null;this.parentElement.classList.add('actor-sidebar-no-img')">
+                <% } else { %>
+                    <div class="actor-sidebar-no-img-inner">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                <% } %>
+            </div>
+
+            <h1 class="actor-sidebar-name"><%= tmdbPerson ? tmdbPerson.name : actorDisplayName %></h1>
+
+            <div class="actor-sidebar-actions">
+                <button class="actor-action-btn" onclick="this.classList.toggle('fav-active')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    Yêu thích
+                </button>
+                <button class="actor-action-btn" onclick="if(navigator.share){navigator.share({title:document.title,url:location.href})}else{navigator.clipboard&&navigator.clipboard.writeText(location.href)}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    Chia sẻ
+                </button>
+            </div>
+
+            <div class="actor-sidebar-info">
+                <% if (tmdbPerson && tmdbPerson.alsoKnownAs && tmdbPerson.alsoKnownAs.length > 0) { %>
+                    <div class="actor-info-row">
+                        <span class="actor-info-label">Tên khác</span>
+                        <span class="actor-info-value"><%= tmdbPerson.alsoKnownAs.slice(0,2).join(' / ') %></span>
+                    </div>
+                <% } %>
+                <div class="actor-info-row">
+                    <span class="actor-info-label">Tiểu sử</span>
+                    <span class="actor-info-value">
+                        <% if (tmdbPerson && tmdbPerson.biography) { %>
+                            <%= tmdbPerson.biography.substring(0, 120) %><% if (tmdbPerson.biography.length > 120) { %>...<% } %>
+                        <% } else { %>
+                            Đang cập nhật
+                        <% } %>
+                    </span>
+                </div>
+                <div class="actor-info-row">
+                    <span class="actor-info-label">Giới tính</span>
+                    <span class="actor-info-value">
+                        <% if (tmdbPerson && tmdbPerson.gender === 1) { %>Nữ
+                        <% } else if (tmdbPerson && tmdbPerson.gender === 2) { %>Nam
+                        <% } else { %>Đang cập nhật<% } %>
+                    </span>
+                </div>
+                <div class="actor-info-row">
+                    <span class="actor-info-label">Ngày sinh</span>
+                    <span class="actor-info-value"><%= (tmdbPerson && tmdbPerson.birthday) ? tmdbPerson.birthday : 'Đang cập nhật' %></span>
+                </div>
+                <% if (tmdbPerson && tmdbPerson.placeOfBirth) { %>
+                    <div class="actor-info-row">
+                        <span class="actor-info-label">Nơi sinh</span>
+                        <span class="actor-info-value"><%= tmdbPerson.placeOfBirth %></span>
+                    </div>
+                <% } %>
+                <% if (tmdbPerson && tmdbPerson.knownFor && tmdbPerson.knownFor.length > 0) { %>
+                    <div class="actor-info-row">
+                        <span class="actor-info-label">Nổi tiếng</span>
+                        <span class="actor-info-value"><%= tmdbPerson.knownFor.slice(0,2).join(', ') %></span>
+                    </div>
+                <% } %>
+            </div>
+        </aside>
+
+        <!-- ===== NỘI DUNG PHẢI: PHIM ===== -->
+        <main class="actor-main">
+            <div class="actor-main-header">
+                <h2 class="actor-main-title">Các phim đã tham gia</h2>
+                <span class="actor-main-count"><%= totalMovies %> phim</span>
+            </div>
+
+            <% const hasProvider = providerMovies && providerMovies.length > 0; %>
+            <% const hasTmdb = tmdbMovies && tmdbMovies.length > 0; %>
+
+            <% if (!hasProvider && !hasTmdb) { %>
+                <div class="cat-empty">
+                    <div class="cat-empty-icon">
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="2" width="20" height="20" rx="2"/>
+                            <line x1="9" y1="2" x2="9" y2="22"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                        </svg>
+                    </div>
+                    <h3>Chưa tìm thấy phim</h3>
+                    <p>Thử <a href="/tim-kiem?q=<%= encodeURIComponent(actorDisplayName) %>" style="color:var(--primary)">tìm kiếm trực tiếp</a></p>
+                </div>
+            <% } %>
+
+            <% if (hasProvider) { %>
+                <% if (hasTmdb) { %>
+                    <p class="actor-section-label">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:var(--primary);flex-shrink:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Có trên movieCC (<%= providerMovies.length %>)
+                    </p>
+                <% } %>
+                <div class="movie-grid movie-grid-large" style="margin-bottom: 36px">
+                    <% providerMovies.forEach(movie => { %>
+                        <%- include('../partials/movie-card', { movie }) %>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <% if (hasTmdb) { %>
+                <% if (hasProvider) { %>
+                    <p class="actor-section-label">
+                        Filmography
+                        <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);margin-left:4px">nguồn TMDB</span>
+                    </p>
+                <% } %>
+                <div class="tmdb-movie-grid">
+                    <% tmdbMovies.forEach(m => { %>
+                        <a href="<%= m.searchUrl %>" class="tmdb-movie-card" title="<%= m.title %>">
+                            <div class="tmdb-movie-poster">
+                                <img src="<%= m.posterUrl %>" alt="<%= m.title %>" loading="lazy"
+                                    onerror="this.onerror=null;this.src='/images/no-poster.svg'">
+                                <% if (m.rating > 0) { %>
+                                    <div class="tmdb-movie-rating <%= m.rating >= 7 ? 'rating-high' : m.rating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                                        <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                        <%= m.rating.toFixed(1) %>
+                                    </div>
+                                <% } %>
+                                <div class="tmdb-movie-overlay">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"/>
+                                        <path d="m21 21-4.35-4.35"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="tmdb-movie-info">
+                                <p class="tmdb-movie-title"><%= m.title %></p>
+                                <p class="tmdb-movie-meta">
+                                    <%= m.year || '?' %>
+                                    <% if (m.character) { %><span class="tmdb-movie-char"> · <%= m.character.substring(0, 20) %></span><% } %>
+                                </p>
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
+
+                <% if (totalPages > 1) { %>
+                    <div class="pagination" style="margin-top:28px">
+                        <% if (currentPage > 1) { %>
+                            <a href="/dien-vien/<%= encodeURIComponent(actorDisplayName) %>?page=<%= currentPage - 1 %>" class="pagination-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                                Trang trước
+                            </a>
+                        <% } %>
+                        <span class="pagination-info">Trang <%= currentPage %> / <%= totalPages %></span>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/dien-vien/<%= encodeURIComponent(actorDisplayName) %>?page=<%= currentPage + 1 %>" class="pagination-btn">
+                                Trang sau
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                            </a>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } %>
+        </main>
+
+    </div>
+</div>

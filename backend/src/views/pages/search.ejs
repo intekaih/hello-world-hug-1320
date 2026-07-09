@@ -1,0 +1,207 @@
+<% if (typeof searchJsonLd !== 'undefined' && searchJsonLd) { %>
+<script type="application/ld+json" nonce="<%= nonce %>"><%- searchJsonLd %></script>
+<% } %>
+<% const filterQ = (filterCategory ? '&category=' + encodeURIComponent(filterCategory) : '') + (filterCountry ? '&country=' + encodeURIComponent(filterCountry) : ''); %>
+<!-- Search Toolbar (2 cột) -->
+<div class="search-toolbar">
+    <div class="container">
+        <form class="search-toolbar-row" action="/tim-kiem" method="GET" id="searchPageForm">
+
+            <!-- Cột trái: ô tìm kiếm -->
+            <div class="search-toolbar-input-wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    class="search-toolbar-icon">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input type="text" name="q" value="<%= keyword %>" placeholder="Tìm tên phim, diễn viên, đạo diễn..."
+                    autofocus>
+                <% if (keyword) { %>
+                    <button type="button" class="search-toolbar-clear"
+                        data-action="clearSearch"
+                        title="Xóa">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                    <% } %>
+                        <button type="submit" class="search-toolbar-submit">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.35-4.35" />
+                            </svg>
+                            Tìm kiếm
+                        </button>
+            </div>
+
+            <!-- Cột phải: bộ lọc -->
+            <div class="search-toolbar-filters">
+                <select class="search-toolbar-select" name="category" id="filterCategory" data-filter="applyFilters">
+                    <option value="">Thể loại</option>
+                    <% if (typeof categories !=='undefined' ) { %>
+                        <% categories.forEach(cat=> { %>
+                            <option value="<%= cat.slug %>" <%= (typeof filterCategory !== 'undefined' && filterCategory === cat.slug) ? 'selected' : '' %>>
+                                <%= cat.name %>
+                            </option>
+                            <% }); %>
+                                <% } %>
+                </select>
+                <select class="search-toolbar-select" name="country" id="filterCountry" data-filter="applyFilters">
+                    <option value="">Quốc gia</option>
+                    <% if (typeof countries !=='undefined' ) { %>
+                        <% countries.forEach(c=> { %>
+                            <option value="<%= c.slug %>" <%= (typeof filterCountry !== 'undefined' && filterCountry === c.slug) ? 'selected' : '' %>>
+                                <%= c.name %>
+                            </option>
+                            <% }); %>
+                                <% } %>
+                </select>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="container">
+
+    <% if (!keyword) { %>
+        <!-- Trending Tags -->
+        <div class="search-discover">
+            <div class="search-discover-section">
+                <h3 class="search-discover-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--primary)" stroke="none">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                    Tìm kiếm phổ biến
+                </h3>
+                <div class="trending-tags">
+                    <a href="/tim-kiem?q=avengers" class="trending-tag">Avengers</a>
+                    <a href="/tim-kiem?q=one+piece" class="trending-tag">One Piece</a>
+                    <a href="/tim-kiem?q=naruto" class="trending-tag">Naruto</a>
+                    <a href="/tim-kiem?q=spider+man" class="trending-tag">Spider Man</a>
+                    <a href="/tim-kiem?q=john+wick" class="trending-tag">John Wick</a>
+                    <a href="/tim-kiem?q=demon+slayer" class="trending-tag">Demon Slayer</a>
+                    <a href="/tim-kiem?q=fast+and+furious" class="trending-tag">Fast & Furious</a>
+                    <a href="/tim-kiem?q=squid+game" class="trending-tag">Squid Game</a>
+                    <a href="/tim-kiem?q=attack+on+titan" class="trending-tag">Attack on Titan</a>
+                    <a href="/tim-kiem?q=batman" class="trending-tag">Batman</a>
+                    <a href="/tim-kiem?q=dragon+ball" class="trending-tag">Dragon Ball</a>
+                    <a href="/tim-kiem?q=wednesday" class="trending-tag">Wednesday</a>
+                </div>
+            </div>
+
+            <div class="search-discover-section">
+                <h3 class="search-discover-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                        stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    Duyệt theo thể loại
+                </h3>
+                <div class="category-browse-grid">
+                    <% if (typeof categories !=='undefined' ) { %>
+                        <% categories.slice(0, 16).forEach(cat=> { %>
+                            <a href="/the-loai/<%= cat.slug %>" class="category-browse-card">
+                                <%= cat.name %>
+                            </a>
+                            <% }); %>
+                                <% } %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+
+            <% if (results.length> 0) { %>
+                <div class="movie-grid movie-grid-large">
+                    <% results.forEach(movie=> { %>
+                        <%- include('../partials/movie-card', { movie }) %>
+                            <% }); %>
+                </div>
+
+                <!-- Pagination -->
+                <% if (totalPages> 1) { %>
+                    <div class="pagination">
+                        <% if (currentPage> 1) { %>
+                            <a href="/tim-kiem?q=<%= encodeURIComponent(keyword) %>&page=<%= currentPage - 1 %><%= filterQ %>"
+                                class="pagination-arrow">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6" />
+                                </svg>
+                            </a>
+                            <% } %>
+                                <% let startPage=Math.max(1, currentPage - 2); let endPage=Math.min(totalPages,
+                                    currentPage + 2); %>
+                                    <% if (startPage> 1) { %>
+                                        <a href="/tim-kiem?q=<%= encodeURIComponent(keyword) %>&page=1<%= filterQ %>">1</a>
+                                        <% if (startPage> 2) { %><span class="pagination-dots">…</span>
+                                            <% } %>
+                                                <% } %>
+                                                    <% for (let p=startPage; p <=endPage; p++) { %>
+                                                        <% if (p===currentPage) { %>
+                                                            <span class="active">
+                                                                <%= p %>
+                                                            </span>
+                                                            <% } else { %>
+                                                                <a
+                                                                    href="/tim-kiem?q=<%= encodeURIComponent(keyword) %>&page=<%= p %><%= filterQ %>">
+                                                                    <%= p %>
+                                                                </a>
+                                                                <% } %>
+                                                                    <% } %>
+                                                                        <% if (endPage < totalPages) { %>
+                                                                            <% if (endPage < totalPages - 1) { %><span
+                                                                                    class="pagination-dots">…</span>
+                                                                                <% } %>
+                                                                                    <a
+                                                                                        href="/tim-kiem?q=<%= encodeURIComponent(keyword) %>&page=<%= totalPages %><%= filterQ %>">
+                                                                                        <%= totalPages %>
+                                                                                    </a>
+                                                                                    <% } %>
+                                                                                        <% if (currentPage < totalPages)
+                                                                                            { %>
+                                                                                            <a href="/tim-kiem?q=<%= encodeURIComponent(keyword) %>&page=<%= currentPage + 1 %><%= filterQ %>"
+                                                                                                class="pagination-arrow">
+                                                                                                <svg width="16"
+                                                                                                    height="16"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    fill="none"
+                                                                                                    stroke="currentColor"
+                                                                                                    stroke-width="2">
+                                                                                                    <polyline
+                                                                                                        points="9 18 15 12 9 6" />
+                                                                                                </svg>
+                                                                                            </a>
+                                                                                            <% } %>
+                    </div>
+                    <% } %>
+                        <% } else if (keyword) { %>
+                            <div class="cat-empty">
+                                <div class="cat-empty-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="m21 21-4.35-4.35" />
+                                        <line x1="8" y1="8" x2="14" y2="14" stroke-width="1.5" />
+                                    </svg>
+                                </div>
+                                <h3>Không tìm thấy kết quả</h3>
+                                <p>Hãy thử tìm kiếm với từ khóa khác hoặc kiểm tra chính tả</p>
+                                <a href="/tim-kiem" class="btn btn-outline" style="margin-top:16px">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="m21 21-4.35-4.35" />
+                                    </svg>
+                                    Tìm kiếm mới
+                                </a>
+                            </div>
+                            <% } %>
+</div>

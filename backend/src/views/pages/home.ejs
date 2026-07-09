@@ -1,0 +1,682 @@
+<% if (heroMovies && heroMovies.length> 0) { %>
+    <!-- Preload First Hero Image for LCP — ưu tiên backdrop_url (TMDB, ảnh ngang HD) -->
+    <% const firstHeroUrl = heroMovies[0].backdrop_url || heroMovies[0].poster_url || heroMovies[0].thumb_url || ''; %>
+    <link rel="preload" as="image" href="<%= firstHeroUrl %>" fetchpriority="high">
+    <!-- Hero Slider -->
+    <section class="hero-slider" id="heroSlider">
+        <% heroMovies.forEach((movie, index)=> {
+            // Ưu tiên: backdrop_url (TMDB, ảnh ngang HD) > poster_url > thumb_url
+            const heroImageUrl = movie.backdrop_url || movie.poster_url || movie.thumb_url || '';
+            // Serialize movie data cho JavaScript
+            const movieData = {
+                slug: movie.slug,
+                name: movie.name,
+                episode_current: movie.episode_current,
+                epSlug: movie.epSlug || null,
+                backdrop_url: movie.backdrop_url || null,
+                poster_url: movie.poster_url || null,
+                thumb_url: movie.thumb_url || null
+            };
+        %>
+            <div class="hero-slide <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>" data-movie="<%= JSON.stringify(movieData) %>">
+                <div class="hero-bg" data-bg="<%= heroImageUrl %>"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge-quality">
+                            <%= movie.quality %>
+                        </span>
+                        <span class="badge-lang">
+                            <%= movie.lang %>
+                        </span>
+                        <span class="badge-ep">
+                            <%= movie.episode_current %>
+                        </span>
+                        <% if (movie.rating && movie.rating> 0) { %>
+                            <span
+                                class="rating-badge <%= movie.rating >= 7 ? 'rating-high' : movie.rating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon
+                                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                </svg>
+                                <%= movie.rating.toFixed(1) %>
+                            </span>
+                            <% } %>
+                    </div>
+                    <% if (movie.logo_url) { %>
+                    <img
+                        class="hero-logo"
+                        src="<%= movie.logo_url %>"
+                        alt="<%= movie.name %>"
+                        crossorigin="anonymous"
+                        data-remove-bg="1"
+                    >
+                    <h2 class="hero-title hero-title-hidden"><%= movie.name %></h2>
+                    <% } else { %>
+                    <h2 class="hero-title"><%= movie.name %></h2>
+                    <% } %>
+                    <p class="hero-subtitle">
+                        <%= movie.origin_name %><% if (movie.year && movie.year > 0) { %> (<%= movie.year %>)<% } %>
+                    </p>
+                    <% if (movie.content) { %>
+                        <p class="hero-desc"><%- movie.content.replace(/<[^>]*>/g, '').substring(0, 180)
+                                %>...</p>
+                        <% } %>
+                            <div class="hero-meta">
+                                <% if (movie.time) { %>
+                                    <div class="hero-meta-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                        <span>
+                                            <%= movie.time %>
+                                        </span>
+                                    </div>
+                                    <% } %>
+                                        <% if (movie.category && movie.category.length> 0) { %>
+                                            <div class="hero-meta-item">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2">
+                                                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                                                </svg>
+                                                <span>
+                                                    <%= movie.category.map(c=> c.name).join(', ') %>
+                                                </span>
+                                            </div>
+                                            <% } %>
+                                                <% if (movie.country && movie.country.length> 0) { %>
+                                                    <div class="hero-meta-item">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                            <circle cx="12" cy="10" r="3" />
+                                                        </svg>
+                                                        <span>
+                                                            <%= movie.country.map(c=> c.name).join(', ')
+                                                                %>
+                                                        </span>
+                                                    </div>
+                                                    <% } %>
+                            </div>
+                            <div class="hero-actions">
+                                <a href="/xem/<%= movie.slug %>/<%= movie.epSlug || 'tap-1' %>" class="btn btn-primary">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="5 3 19 12 5 21 5 3" />
+                                    </svg>
+                                    Xem ngay
+                                </a>
+                                <a href="/phim/<%= movie.slug %>" class="btn btn-outline">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                                    </svg>
+                                    Chi tiết
+                                </a>
+                            </div>
+                </div>
+            </div>
+            <% }); %>
+
+                <!-- Thumbnail Navigation -->
+                <div class="hero-thumbs" id="heroThumbs">
+                    <% heroMovies.forEach((movie, index)=> {
+                        const thumbUrl = movie.thumb_url || movie.poster_url || '';
+                    %>
+                        <div class="hero-thumb <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
+                            <img src="<%= thumbUrl %>" alt="<%= movie.name %>" loading="<%= index < 3 ? 'eager' : 'lazy' %>"
+                                width="120" height="180" data-fallback="/images/no-poster.svg">
+                            <div class="hero-thumb-progress"></div>
+                        </div>
+                        <% }); %>
+                </div>
+
+                <!-- Mobile Dot Indicators -->
+                <div class="hero-dots" id="heroDots">
+                    <% heroMovies.forEach((movie, index)=> { %>
+                        <button class="hero-dot <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>"
+                            aria-label="Chuyển đến slide <%= index + 1 %>"></button>
+                        <% }); %>
+                </div>
+
+                <!-- Slide Progress Bar -->
+                <div class="hero-progress">
+                    <div class="hero-progress-bar" id="heroProgressBar"></div>
+                </div>
+    </section>
+
+    <!-- Preload Hero Images Script — chạy sau khi load trang để tránh block spinner -->
+    <script nonce="<%= nonce %>">
+    window.addEventListener('load', function() {
+        var heroSlider = document.getElementById('heroSlider');
+        if (!heroSlider) return;
+        var slides = heroSlider.querySelectorAll('.hero-slide');
+        var totalSlides = slides.length;
+        if (totalSlides === 0) return;
+
+        // Load ảnh cho các slides (từ slide 1)
+        slides.forEach(function(slide, index) {
+            if (index === 0) return; // Slide đầu đã được preload bằng <link rel="preload">
+            var movieData = slide.dataset.movie ? JSON.parse(slide.dataset.movie) : null;
+            if (!movieData) return;
+            
+            var imgUrl = movieData.backdrop_url || movieData.poster_url || movieData.thumb_url;
+            if (!imgUrl) return;
+
+            // Slide tiếp: lazy load sau khi trang đã load xong
+            setTimeout(function() {
+                var img = new Image();
+                img.src = imgUrl;
+            }, index * 300);
+        });
+
+        // Preload thumbnail images (2-3 thumbnail đầu)
+        var thumbs = heroSlider.querySelectorAll('.hero-thumb img');
+        thumbs.forEach(function(img, index) {
+            if (index < 3 && img.src && !img.complete) {
+                var preloadImg = new Image();
+                preloadImg.src = img.src;
+            }
+        });
+    });
+    </script>
+    <% } %>
+
+        <div class="container">
+
+
+                    <!-- ===== Tiếp tục xem ===== -->
+                    <% if (typeof continueWatching !=='undefined' && continueWatching.length> 0) { %>
+                        <section class="section">
+                            <div class="section-header">
+                                <h2 class="section-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)"
+                                        stroke-width="2" style="margin-right:2px;">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    Tiếp tục xem
+                                </h2>
+                                <a href="/lich-su" class="section-link">
+                                    Xem tất cả
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="continue-watching-strip">
+                                <% continueWatching.forEach(item => {
+                                    const pct = item.duration > 0 ? Math.min(Math.round((item.current_time / item.duration) * 100), 100) : 0;
+                                    let epLabel = item.episode_slug;
+                                    if (epLabel) {
+                                        const s = epLabel.toLowerCase();
+                                        if (s === "full" || s === "hoan-tat" || s === "hoantat") epLabel = "Bản Full";
+                                        else if (s.startsWith("tap-")) epLabel = "Tập " + s.replace("tap-", "");
+                                        else if (!isNaN(Number(s))) epLabel = "Tập " + s;
+                                        else epLabel = epLabel.replace(/-(\d+)/g, ' $1').replace(/^tap/i, 'Tập').trim();
+                                    }
+                                %>
+                                    <a href="/xem/<%= item.movie_slug %>/<%= item.episode_slug %>" class="cw-card">
+                                        <div class="cw-thumb skeleton">
+                                            <img src="<%= item.movie_thumb || '/images/no-poster.svg' %>"
+                                                alt="<%= item.movie_name %>" loading="lazy"
+                                                data-skeleton-parent
+                                                data-fallback="/images/no-poster.svg" data-fallback-class="skeleton">
+
+                                            <span class="cw-ep-badge"><%= epLabel %></span>
+
+                                            <div class="cw-play">
+                                                <div class="cw-play-circle">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                                        <polygon points="5 3 19 12 5 21 5 3"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+
+                                            <% if (item.duration > 0) { %>
+                                                <div class="cw-progress">
+                                                    <div class="cw-progress-bar" style="width:<%= pct %>%"></div>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="cw-info">
+                                            <p class="cw-title"><%= item.movie_name %></p>
+                                            <p class="cw-meta">
+                                                <%= epLabel %>
+                                                <% if (pct > 0) { %>
+                                                    <span style="color:var(--primary);font-weight:600"><%= pct %>%</span>
+                                                <% } %>
+                                            </p>
+                                        </div>
+                                    </a>
+                                <% }) %>
+                            </div>
+                        </section>
+                        <% } %>
+
+                            <!-- ===== Top 10 Thịnh Hành — Netflix Rank Style ===== -->
+                            <% if (topMovies && topMovies.length >= 10) { %>
+                                <section class="section">
+                                    <div class="section-header">
+                                        <h2 class="section-title">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--primary)" stroke="none" style="margin-right:4px">
+                                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                                            </svg>
+                                            Top 10 Thịnh Hành
+                                        </h2>
+                                    </div>
+                                    <div class="rank-grid">
+                                        <% topMovies.slice(0, 10).forEach((movie, index) => { %>
+                                            <a href="/phim/<%= movie.slug %>" class="rank-card" data-rank="<%= index + 1 %>">
+                                                <span class="rank-number"><%= index + 1 %></span>
+                                                <div class="rank-card-poster">
+                                                    <img src="<%= movie.thumb_url %>" alt="<%= movie.name %>" loading="<%= index < 4 ? 'eager' : 'lazy' %>" width="200" height="300" data-fallback="/images/no-poster.svg">
+                                                    <div class="rank-card-overlay">
+                                                        <span class="rank-card-name"><%= movie.name %></span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <% }); %>
+                                    </div>
+                                </section>
+                            <% } %>
+
+                                    <!-- ===== Phim Chiếu Rạp — Cinema Spotlight (Apple TV+ style) ===== -->
+                                    <% if (theaterMovies && theaterMovies.length > 0) { %>
+                                        <section class="section">
+                                            <div class="section-header">
+                                                <h2 class="section-title">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:2px">
+                                                        <rect x="2" y="2" width="20" height="20" rx="2" />
+                                                        <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5" />
+                                                    </svg>
+                                                    Phim Chiếu Rạp
+                                                </h2>
+                                                <a href="/danh-sach/phim-chieu-rap" class="section-link">
+                                                    Xem tất cả
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                                </a>
+                                            </div>
+                                            <% const cinemaMain = theaterMovies[0]; %>
+                                            <div class="cinema-grid">
+                                                <!-- Main big card -->
+                                                <a href="/xem/<%= cinemaMain.slug %>/<%= cinemaMain.epSlug || 'tap-1' %>" class="cinema-main">
+                                                    <div class="cinema-main-bg" style="background-image:url('<%= cinemaMain.poster_url || cinemaMain.thumb_url %>')"></div>
+                                                    <div class="cinema-main-overlay"></div>
+                                                    <div class="cinema-main-content">
+                                                        <div class="cinema-tag">
+                                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                                            Đang chiếu rạp
+                                                        </div>
+                                                        <h3 class="cinema-main-title"><%= cinemaMain.name %></h3>
+                                                        <div class="cinema-main-meta">
+                                                            <% if (cinemaMain.year && cinemaMain.year > 0) { %><span><%= cinemaMain.year %></span><% } %>
+                                                            <span class="cm-dot"></span>
+                                                            <strong><%= cinemaMain.quality %></strong>
+                                                            <% if (cinemaMain.rating && cinemaMain.rating > 0) { %>
+                                                                <span class="cm-dot"></span>
+                                                                <span>⭐ <%= cinemaMain.rating.toFixed(1) %></span>
+                                                            <% } %>
+                                                            <% if (cinemaMain.time) { %><span class="cm-dot"></span><span><%= cinemaMain.time %></span><% } %>
+                                                        </div>
+                                                        <span class="cinema-main-btn">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                                            Xem ngay
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <!-- Side list (5 cards) -->
+                                                <div class="cinema-side">
+                                                    <% theaterMovies.slice(1, 6).forEach(movie => { %>
+                                                        <a href="/phim/<%= movie.slug %>" class="cinema-side-card">
+                                                            <div class="cinema-side-thumb">
+                                                                <img src="<%= movie.thumb_url %>" alt="<%= movie.name %>" loading="lazy" width="56" height="80" data-fallback="/images/no-poster.svg">
+                                                            </div>
+                                                            <div class="cinema-side-info">
+                                                                <div class="cinema-side-title"><%= movie.name %></div>
+                                                                <div class="cinema-side-meta">
+                                                                    <span class="badge-quality"><%= movie.quality %></span>
+                                                                    <span><%= movie.year %></span>
+                                                                    <% if (movie.time) { %><span>· <%= movie.time %></span><% } %>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    <% } %>
+
+                                    <!-- ===== Phim Bộ Hot — Horizontal Scroll Row (Netflix-style) ===== -->
+                                    <% if (seriesMovies && seriesMovies.length > 0) { %>
+                                        <section class="section">
+                                            <div class="section-header">
+                                                <h2 class="section-title">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                        stroke="var(--primary)" stroke-width="2"
+                                                        style="margin-right:2px">
+                                                        <rect x="2" y="7" width="20" height="14" rx="2" />
+                                                        <polyline points="17 2 12 7 7 2" />
+                                                    </svg>
+                                                    Phim Bộ Hot
+                                                </h2>
+                                                <a href="/danh-sach/phim-bo" class="section-link">
+                                                    Xem tất cả
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <div class="movie-row">
+                                                <button class="row-arrow row-arrow-left" data-action="scrollRow" data-dir="-1"
+                                                    aria-label="Cuộn trái">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2.5">
+                                                        <polyline points="15 18 9 12 15 6" />
+                                                    </svg>
+                                                </button>
+                                                <div class="movie-row-track">
+                                                    <% seriesMovies.forEach(movie => { %>
+                                                        <%- include('../partials/movie-card', { movie }) %>
+                                                    <% }); %>
+                                                </div>
+                                                <button class="row-arrow row-arrow-right" data-action="scrollRow" data-dir="1"
+                                                    aria-label="Cuộn phải">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2.5">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </section>
+                                    <% } %>
+
+                                                    <!-- ===== Featured Banner — Giữa các section ===== -->
+                                                    <% if (topMovies && topMovies.length> 6) { %>
+                                                        <% const featuredMovie=topMovies[5]; %>
+                                                            <section class="featured-banner">
+                                                                <div class="featured-banner-bg"
+                                                                    style="background-image: url('<%= featuredMovie.backdrop_url || featuredMovie.poster_url || featuredMovie.thumb_url %>')">
+                                                                </div>
+                                                                <div class="featured-banner-overlay"></div>
+                                                                <div class="featured-banner-content">
+                                                                    <div class="featured-banner-badges">
+                                                                        <span class="badge-quality">
+                                                                            <%= featuredMovie.quality %>
+                                                                        </span>
+                                                                        <span class="badge-lang">
+                                                                            <%= featuredMovie.lang %>
+                                                                        </span>
+                                                                        <% if (featuredMovie.rating &&
+                                                                            featuredMovie.rating> 0)
+                                                                            { %>
+                                                                            <span
+                                                                                class="rating-badge rating-badge-sm <%= featuredMovie.rating >= 7 ? 'rating-high' : featuredMovie.rating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                                                                                <svg width="10" height="10"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    fill="currentColor">
+                                                                                    <polygon
+                                                                                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                                                                </svg>
+                                                                                <%= featuredMovie.rating.toFixed(1) %>
+                                                                            </span>
+                                                                            <% } %>
+                                                                    </div>
+                                                                    <h3 class="featured-banner-title">
+                                                                        <%= featuredMovie.name %>
+                                                                    </h3>
+                                                                    <p class="featured-banner-sub">
+                                                                        <%= featuredMovie.origin_name %><% if (featuredMovie.year && featuredMovie.year > 0) { %> (<%= featuredMovie.year %>)<% } %>
+                                                                    </p>
+                                                                    <a href="/xem/<%= featuredMovie.slug %>/<%= featuredMovie.epSlug || 'tap-1' %>"
+                                                                        class="btn btn-primary" style="margin-top:12px">
+                                                                        <svg width="16" height="16" viewBox="0 0 24 24"
+                                                                            fill="currentColor">
+                                                                            <polygon points="5 3 19 12 5 21 5 3" />
+                                                                        </svg>
+                                                                        Xem ngay
+                                                                    </a>
+                                                                </div>
+                                                            </section>
+                                                            <% } %>
+
+                                                                <!-- ===== Phim Mới Cập Nhật — Update Feed (compact pulse list) ===== -->
+                                                                <% if (newMovies && newMovies.length > 0) { %>
+                                                                    <section class="section">
+                                                                        <div class="section-header">
+                                                                            <h2 class="section-title">
+                                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                                                                Phim Mới Cập Nhật
+                                                                            </h2>
+                                                                            <a href="/danh-sach/phim-moi-cap-nhat" class="section-link">
+                                                                                Xem tất cả
+                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="update-list">
+                                                                            <% newMovies.slice(0, 12).forEach(movie => { %>
+                                                                                <a href="/phim/<%= movie.slug %>" class="update-card">
+                                                                                    <div class="update-thumb">
+                                                                                        <img src="<%= movie.thumb_url %>" alt="<%= movie.name %>" loading="lazy" width="70" height="105" data-fallback="/images/no-poster.svg">
+                                                                                        <span class="update-thumb-tag">Mới</span>
+                                                                                    </div>
+                                                                                    <div class="update-info">
+                                                                                        <div class="update-title"><%= movie.name %></div>
+                                                                                        <div class="update-origin"><%= movie.origin_name || '' %></div>
+                                                                                        <div class="update-meta">
+                                                                                            <span class="update-ep-badge"><%= movie.episode_current %></span>
+                                                                                            <% if (movie.year && movie.year > 0) { %><span><%= movie.year %></span><% } %>
+                                                                                            <% if (movie.rating && movie.rating > 0) { %><span>⭐ <%= movie.rating.toFixed(1) %></span><% } %>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </a>
+                                                                            <% }); %>
+                                                                        </div>
+                                                                    </section>
+                                                                <% } %>
+
+                                                                        <!-- ===== Phim Lẻ Hay — Landscape Backdrop (Disney+ wide) ===== -->
+                                                                        <% if (singleMovies && singleMovies.length > 0) { %>
+                                                                            <section class="section">
+                                                                                <div class="section-header">
+                                                                                    <h2 class="section-title">
+                                                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:2px">
+                                                                                            <polygon points="5 3 19 12 5 21 5 3" />
+                                                                                        </svg>
+                                                                                        Phim Lẻ Hay
+                                                                                    </h2>
+                                                                                    <a href="/danh-sach/phim-le" class="section-link">
+                                                                                        Xem tất cả
+                                                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                                                                    </a>
+                                                                                </div>
+                                                                                <div class="landscape-grid">
+                                                                                    <% singleMovies.slice(0, 12).forEach(movie => { %>
+                                                                                        <a href="/phim/<%= movie.slug %>" class="landscape-card">
+                                                                                            <div class="landscape-card-bg" style="background-image:url('<%= movie.poster_url || movie.thumb_url %>')"></div>
+                                                                                            <div class="landscape-card-overlay"></div>
+                                                                                            <div class="landscape-card-play">
+                                                                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                                                                            </div>
+                                                                                            <div class="landscape-card-content">
+                                                                                                <div class="landscape-card-title"><%= movie.name %></div>
+                                                                                                <div class="landscape-card-meta">
+                                                                                                    <% if (movie.rating && movie.rating > 0) { %>
+                                                                                                        <span class="landscape-card-rating">
+                                                                                                            <svg width="11" height="11" viewBox="0 0 24 24" fill="#ffc107"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                                                                            <%= movie.rating.toFixed(1) %>
+                                                                                                        </span>
+                                                                                                        <span class="lc-dot"></span>
+                                                                                                    <% } %>
+                                                                                                    <% if (movie.year && movie.year > 0) { %><span><%= movie.year %></span><% } %>
+                                                                                                    <span class="lc-dot"></span>
+                                                                                                    <span><%= movie.quality %></span>
+                                                                                                    <% if (movie.time) { %><span class="lc-dot"></span><span><%= movie.time %></span><% } %>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </a>
+                                                                                    <% }); %>
+                                                                                </div>
+                                                                            </section>
+                                                                        <% } %>
+
+                                                                                <!-- ===== Thịnh Hành — Horizontal Scroll Row ===== -->
+                                                                                <% if (hotMovies && hotMovies.length> 0) { %>
+                                                                                    <section class="section">
+                                                                                        <div class="section-header">
+                                                                                            <h2 class="section-title">
+                                                                                                Thịnh Hành
+                                                                                            </h2>
+                                                                                            <a href="/danh-sach/phim-bo-dang-chieu"
+                                                                                                class="section-link">
+                                                                                                Xem tất cả
+                                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                                                    <polyline points="9 18 15 12 9 6" />
+                                                                                                </svg>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                        <div class="movie-row">
+                                                                                            <button class="row-arrow row-arrow-left" data-action="scrollRow" data-dir="-1" aria-label="Cuộn trái">
+                                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6" /></svg>
+                                                                                            </button>
+                                                                                            <div class="movie-row-track">
+                                                                                                <% hotMovies.forEach(movie=> { %>
+                                                                                                    <%- include('../partials/movie-card', { movie }) %>
+                                                                                                <% }); %>
+                                                                                            </div>
+                                                                                            <button class="row-arrow row-arrow-right" data-action="scrollRow" data-dir="1" aria-label="Cuộn phải">
+                                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </section>
+                                                                                    <% } %>
+
+                                                                                    <!-- ===== Anime — Cinematic Glow (conic gradient) ===== -->
+                                                                                    <% if (typeof animeMovies !== 'undefined' && animeMovies && animeMovies.length > 0) { %>
+                                                                                    <section class="section">
+                                                                                        <div class="section-header">
+                                                                                            <h2 class="section-title">
+                                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:2px">
+                                                                                                    <circle cx="12" cy="12" r="10" />
+                                                                                                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                                                                                                    <line x1="9" y1="9" x2="9.01" y2="9" />
+                                                                                                    <line x1="15" y1="9" x2="15.01" y2="9" />
+                                                                                                </svg>
+                                                                                                Anime Hay
+                                                                                            </h2>
+                                                                                            <a href="/danh-sach/hoat-hinh" class="section-link">
+                                                                                                Xem tất cả
+                                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6" /></svg>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                        <div class="anime-grid">
+                                                                                            <% animeMovies.slice(0, 12).forEach(movie => { %>
+                                                                                                <a href="/phim/<%= movie.slug %>" class="anime-card">
+                                                                                                    <div class="anime-card-inner">
+                                                                                                        <div class="anime-card-img" style="background-image:url('<%= movie.thumb_url %>')"></div>
+                                                                                                        <div class="anime-card-overlay"></div>
+                                                                                                        <div class="anime-card-info">
+                                                                                                            <div class="anime-card-name"><%= movie.name %></div>
+                                                                                                            <span class="anime-card-ep"><%= movie.episode_current %></span>
+                                                                                                        </div>
+                                                                                                        <div class="anime-card-tag">A</div>
+                                                                                                    </div>
+                                                                                                </a>
+                                                                                            <% }); %>
+                                                                                        </div>
+                                                                                    </section>
+                                                                                    <% } %>
+
+                                                                                    <!-- ===== Khám phá theo thể loại — Genre Explorer ===== -->
+                                                                                    <section class="section">
+                                                                                        <div class="section-header">
+                                                                                            <h2 class="section-title">
+                                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-right:2px">
+                                                                                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                                                                                </svg>
+                                                                                                Khám Phá Theo Thể Loại
+                                                                                            </h2>
+                                                                                        </div>
+                                                                                        <div class="genre-grid">
+                                                                                            <a href="/the-loai/hanh-dong" class="genre-card g-action">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+                                                                                                    Hành Động
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/tinh-cam" class="genre-card g-romance">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                                                                                                    Tình Cảm
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/hai-huoc" class="genre-card g-comedy">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="white" stroke-width="1.5" fill="none"/><line x1="9" y1="9" x2="9.01" y2="9" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="15" y1="9" x2="15.01" y2="9" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+                                                                                                    Hài Hước
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/kinh-di" class="genre-card g-horror">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></span>
+                                                                                                    Kinh Dị
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/danh-sach/hoat-hinh" class="genre-card g-anime">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-linecap="round" stroke-width="3"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-linecap="round" stroke-width="3"/></svg></span>
+                                                                                                    Anime
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/vien-tuong" class="genre-card g-scifi">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+                                                                                                    Viễn Tưởng
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/bi-an" class="genre-card g-mystery">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                                                                                                    Bí Ẩn
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/tam-ly" class="genre-card g-drama">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                                                                                                    Tâm Lý
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/chien-tranh" class="genre-card g-war">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 2.5c0 1.5-1.5 7-1.5 7h-2S9.5 4 9.5 2.5a2.5 2.5 0 0 1 5 0zm-7 5.5c1.5 0 7 1.5 7 1.5v2S8 13 6.5 13A2.5 2.5 0 0 1 4 10.5 2.5 2.5 0 0 1 6.5 8zm0 8c0-1.5 1.5-7 1.5-7h2s1.5 5.5 1.5 7a2.5 2.5 0 0 1-5 0zm7.5-5.5c-1.5 0-7-1.5-7-1.5v-2s6.5-1.5 8-1.5A2.5 2.5 0 0 1 17.5 8a2.5 2.5 0 0 1-2.5 2.5z"/></svg></span>
+                                                                                                    Chiến Tranh
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/lich-su" class="genre-card g-history">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                                                                                                    Lịch Sử
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/hinh-su" class="genre-card g-mystery">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                                                                                                    Hình Sự
+                                                                                                </div>
+                                                                                            </a>
+                                                                                            <a href="/the-loai/phieu-luu" class="genre-card g-action">
+                                                                                                <div class="genre-card-content">
+                                                                                                    <span class="genre-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></span>
+                                                                                                    Phiêu Lưu
+                                                                                                </div>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </section>
+
+        </div>

@@ -1,0 +1,65 @@
+<div class="error-page">
+    <div class="error-content">
+        <div class="error-code">
+            <span class="digit">4</span>
+            <span class="digit zero">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="8"
+                        stroke-dasharray="8 12" />
+                    <circle cx="35" cy="42" r="5" fill="currentColor" />
+                    <circle cx="65" cy="42" r="5" fill="currentColor" />
+                    <path d="M 35 65 Q 50 55 65 65" fill="none" stroke="currentColor" stroke-width="4"
+                        stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="digit">3</span>
+        </div>
+        <% if (typeof csrfExpired !== 'undefined' && csrfExpired) { %>
+            <h1 class="error-title">Phiên làm việc hết hạn</h1>
+            <p class="error-desc">
+                Token bảo mật đã hết hiệu lực. Vui lòng tải lại trang và thử lại.
+            </p>
+            <div class="error-actions">
+                <a href="javascript:location.reload()" class="btn-back-home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10" />
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                    Tải lại trang
+                </a>
+                <a href="/" class="btn-search-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Về trang chủ
+                </a>
+            </div>
+        <% } else { %>
+            <h1 class="error-title">Truy cập bị từ chối</h1>
+            <p class="error-desc">Bạn không có quyền xem trang này. Vui lòng đăng nhập hoặc liên hệ quản trị viên.</p>
+            <div class="error-actions">
+                <a href="/" class="btn-back-home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Về trang chủ
+                </a>
+                <a href="/dang-nhap" class="btn-search-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                        <polyline points="10 17 15 12 10 7" />
+                        <line x1="15" y1="12" x2="3" y2="12" />
+                    </svg>
+                    Đăng nhập
+                </a>
+            </div>
+        <% } %>
+    </div>
+    <div class="error-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+</div>

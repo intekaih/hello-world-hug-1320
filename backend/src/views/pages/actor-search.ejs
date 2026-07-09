@@ -1,0 +1,117 @@
+<div class="container">
+    <div class="cat-toolbar">
+        <div class="cat-toolbar-left">
+            <div class="breadcrumb">
+                <a href="/" class="breadcrumb-link">Trang chủ</a>
+                <span class="breadcrumb-sep">›</span>
+                <span class="breadcrumb-current">Diễn viên</span>
+            </div>
+            <h1 class="cat-toolbar-title">Tìm phim theo diễn viên</h1>
+        </div>
+    </div>
+
+    <!-- Search box -->
+    <form class="actor-search-form" action="/dien-vien" method="GET" id="actorSearchForm">
+        <div class="actor-search-input-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="actor-search-icon">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+                type="text"
+                name="q"
+                value="<%= typeof query !== 'undefined' ? query : '' %>"
+                placeholder="Nhập tên diễn viên..."
+                class="actor-search-input"
+                autocomplete="off"
+                autofocus>
+            <button type="submit" class="actor-search-submit">Tìm kiếm</button>
+        </div>
+    </form>
+
+    <% if (typeof query !== 'undefined' && query && typeof searchResults !== 'undefined' && searchResults.length > 0) { %>
+        <!-- Search results -->
+        <div class="actor-list-header">
+            <h2 class="actor-section-title">Kết quả cho "<%= query %>"</h2>
+            <% if (typeof totalResults !== 'undefined' && totalResults > 0) { %>
+                <span class="actor-list-count"><%= totalResults.toLocaleString() %> kết quả</span>
+            <% } %>
+        </div>
+        <div class="actor-grid">
+            <% searchResults.forEach(person => { %>
+                <a href="/dien-vien/<%= encodeURIComponent(person.name) %>" class="actor-card">
+                    <div class="actor-card-img">
+                        <% if (person.profileUrl) { %>
+                            <img src="<%= person.profileUrl %>" alt="<%= person.name %>" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'actor-card-no-img\'><svg width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg></div>'">
+                        <% } else { %>
+                            <div class="actor-card-no-img">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="actor-card-info">
+                        <p class="actor-card-name"><%= person.name %></p>
+                        <% if (person.knownFor && person.knownFor.length > 0) { %>
+                            <p class="actor-card-known"><%= person.knownFor.slice(0,2).join(', ') %></p>
+                        <% } %>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+
+        <% if (totalPages > 1) { %>
+            <%- include('../partials/actor-pagination', { currentPage, totalPages, query }) %>
+        <% } %>
+
+    <% } else if (typeof query !== 'undefined' && query) { %>
+        <div class="cat-empty">
+            <div class="cat-empty-icon">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
+            <h3>Không tìm thấy diễn viên "<%= query %>"</h3>
+            <p>Thử tìm với tên khác hoặc dùng tiếng Anh</p>
+        </div>
+    <% } else { %>
+        <!-- Popular actors -->
+        <div class="actor-list-header">
+            <h2 class="actor-section-title">Diễn viên nổi tiếng</h2>
+            <% if (typeof totalResults !== 'undefined' && totalResults > 0) { %>
+                <span class="actor-list-count"><%= totalResults.toLocaleString() %> diễn viên</span>
+            <% } %>
+        </div>
+        <div class="actor-grid">
+            <% popularActors.forEach(person => { %>
+                <a href="/dien-vien/<%= encodeURIComponent(person.name) %>" class="actor-card">
+                    <div class="actor-card-img">
+                        <% if (person.profileUrl) { %>
+                            <img src="<%= person.profileUrl %>" alt="<%= person.name %>" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'actor-card-no-img\'><svg width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg></div>'">
+                        <% } else { %>
+                            <div class="actor-card-no-img">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="actor-card-info">
+                        <p class="actor-card-name"><%= person.name %></p>
+                        <% if (person.knownFor && person.knownFor.length > 0) { %>
+                            <p class="actor-card-known"><%= person.knownFor.slice(0,2).join(', ') %></p>
+                        <% } %>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+
+        <% if (totalPages > 1) { %>
+            <%- include('../partials/actor-pagination', { currentPage, totalPages, query: '' }) %>
+        <% } %>
+    <% } %>
+</div>

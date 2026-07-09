@@ -1,0 +1,405 @@
+<%# JSON-LD Structured Data cho SEO (Movie / TVSeries) — dữ liệu được serialize an toàn từ controller %>
+<script type="application/ld+json" nonce="<%= nonce %>"><%- jsonLd %></script>
+<% if (typeof faqJsonLd !== 'undefined' && faqJsonLd) { %>
+<script type="application/ld+json" nonce="<%= nonce %>"><%- faqJsonLd %></script>
+<% } %>
+
+<% if (locals.relatedParts && (locals.relatedParts.length > 1)) { %>
+<% var _rpIdx = -1; for (var _rpi = 0; _rpi < locals.relatedParts.length; _rpi++) { if (locals.relatedParts[_rpi].isCurrent) _rpIdx = _rpi; } %>
+<% if (_rpIdx > 0) { %><link rel="prev" href="/phim/<%= locals.relatedParts[_rpIdx - 1].slug %>"><% } %>
+<% if (_rpIdx >= 0 && _rpIdx < locals.relatedParts.length - 1) { %><link rel="next" href="/phim/<%= locals.relatedParts[_rpIdx + 1].slug %>"><% } %>
+<% } %>
+
+<!-- Cinematic Hero Backdrop -->
+<div class="detail-hero">
+    <div class="detail-hero-bg" style="background-image: url('<%= movie.poster_url || movie.thumb_url %>')"></div>
+    <div class="detail-hero-overlay"></div>
+
+    <div class="detail-content container">
+        <!-- Poster Card -->
+        <div class="detail-poster">
+            <img src="<%= movie.thumb_url %>" alt="<%= movie.name %>" loading="eager"
+                width="300" height="450" data-fallback="/images/no-poster.svg">
+        </div>
+
+        <!-- Info Panel -->
+        <div class="detail-info">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb" style="padding:0 0 16px;margin:0">
+                <a href="/" class="breadcrumb-link">Trang chủ</a>
+                <span class="breadcrumb-sep">›</span>
+                <% if (movie.type==='series' ) { %>
+                    <a href="/danh-sach/phim-bo" class="breadcrumb-link">Phim Bộ</a>
+                    <% } else if (movie.type==='hoathinh' ) { %>
+                        <a href="/danh-sach/hoat-hinh" class="breadcrumb-link">Anime</a>
+                        <% } else { %>
+                            <a href="/danh-sach/phim-le" class="breadcrumb-link">Phim Lẻ</a>
+                            <% } %>
+                                <span class="breadcrumb-sep">›</span>
+                                <span class="breadcrumb-current">
+                                    <%= movie.name %>
+                                </span>
+            </div>
+
+            <!-- Badges -->
+            <div class="detail-badges">
+                <span class="badge-quality">
+                    <%= movie.quality %>
+                </span>
+                <span class="badge-lang">
+                    <%= movie.lang %>
+                </span>
+                <span class="badge-ep">
+                    <%= movie.episode_current %>
+                </span>
+                <% const tmdbRating=movie.tmdb?.vote_average || 0; %>
+                    <% if (tmdbRating> 0) { %>
+                        <span
+                            class="rating-badge rating-badge-lg <%= tmdbRating >= 7 ? 'rating-high' : tmdbRating >= 5 ? 'rating-mid' : 'rating-low' %>">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            IMDB <%= tmdbRating.toFixed(1) %>
+                        </span>
+                        <% } %>
+            </div>
+
+            <!-- Title -->
+            <h1 class="detail-title">
+                <%= movie.name %>
+            </h1>
+            <p class="detail-origin">
+                <%= movie.origin_name %><% if (movie.year && movie.year > 0) { %> (<%= movie.year %>)<% } %>
+            </p>
+
+            <div id="seasonNavContainer">
+                                            <% if (locals.relatedParts && (locals.relatedParts.length > 1)) { %>
+                                                <div class="season-nav">
+                                                    <% for (var _si = 0; _si < locals.relatedParts.length; _si++) { var _sp = locals.relatedParts[_si]; %>
+                                                        <a href="/phim/<%= _sp.slug %>"
+                                                           class="season-btn<%= _sp.isCurrent ? ' active' : '' %>"
+                                                           title="<%= _sp.fullName %>">
+                                                            <%= _sp.fullName %>
+                                                        </a>
+                                                    <% } %>
+                                                </div>
+                                            <% } %>
+            </div>
+
+            <!-- Meta Info -->
+            <div class="detail-meta">
+                <% if (movie.time) { %>
+                    <div class="detail-meta-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>
+                            <%= movie.time %>
+                        </span>
+                    </div>
+                    <% } %>
+                        <% if (movie.country && movie.country.length> 0) { %>
+                            <div class="detail-meta-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                <span>
+                                    <% movie.country.forEach((c, i)=> { %><% if (i> 0) { %>, <% } %><a
+                                                    href="/quoc-gia/<%= c.slug %>">
+                                                    <%= c.name %>
+                                                </a>
+                                                <% }); %>
+                                </span>
+                            </div>
+                            <% } %>
+                                <div class="detail-meta-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" />
+                                        <polyline points="17 2 12 7 7 2" />
+                                    </svg>
+                                    <span>
+                                        <%= movie.episode_current %> / <%= movie.episode_total %>
+                                    </span>
+                                </div>
+            </div>
+
+            <!-- Action Button + Genre Chips (same row) -->
+            <% const epCurrent=(movie.episode_current || '' ).toLowerCase(); const
+                isTrailer=epCurrent.includes('trailer'); const isUpcoming=epCurrent.includes('sắp chiếu') ||
+                epCurrent.includes('sap chieu'); const isNotReleased=isTrailer || isUpcoming; %>
+                <div class="detail-actions-group">
+                    <% if (!isNotReleased && episodes.length> 0) { %>
+                        <a href="/xem/<%= movie.slug %>/<%= episodes[0].slug %>" class="btn btn-primary" id="detailCTA">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                            <span id="detailCTALabel">Xem ngay</span>
+                        </a>
+                        <% } else if (isTrailer && movie.trailer_url) { %>
+                            <a href="<%= movie.trailer_url %>" target="_blank" rel="noopener noreferrer"
+                                class="btn btn-primary">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                Xem Trailer
+                            </a>
+                            <% } else if (isUpcoming) { %>
+                                <span class="detail-chip" style="opacity:0.6;cursor:not-allowed">Sắp chiếu</span>
+                                <% } %>
+
+                                    <% if (user) { %>
+                                        <button class="btn btn-ghost detail-fav-btn" id="detailFavBtn"
+                                            data-action="toggleFav" data-slug="<%= movie.slug %>"
+                                            data-name="<%= movie.name %>"
+                                            data-thumb="<%= movie.poster_url || movie.thumb_url || '' %>"
+                                            data-origin="<%= movie.origin_name || '' %>"
+                                            data-episode="<%= movie.episode_current || '' %>"
+                                            title="Yêu thích + Nhận thông báo tập mới">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path
+                                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                            </svg>
+                                            <span class="detail-fav-label">Yêu thích</span>
+                                        </button>
+                                        <span class="detail-notif-hint">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                            </svg>
+                                            Nhận thông báo tập mới
+                                        </span>
+                                        <% } %>
+
+                                            <% if (movie.category && movie.category.length> 0) { %>
+                                                <% movie.category.forEach(c=> { %>
+                                                    <a href="/the-loai/<%= c.slug %>" class="detail-chip">
+                                                        <%= c.name %>
+                                                    </a>
+                                                    <% }); %>
+                                                        <% } %>
+                </div>
+
+                <!-- Cast & Director -->
+                <% if (movie.actor && movie.actor.length> 0) { %>
+                    <div class="detail-cast">
+                        <span class="detail-cast-label">Diễn viên:</span>
+                        <span class="detail-cast-value">
+                            <%= movie.actor.slice(0, 8).join(', ') %><%= movie.actor.length > 8 ? ' ...' : '' %>
+                        </span>
+                    </div>
+                    <% } %>
+                        <% if (movie.director && movie.director.length> 0 && movie.director[0] !== '') { %>
+                            <div class="detail-cast">
+                                <span class="detail-cast-label">Đạo diễn:</span>
+                                <span class="detail-cast-value">
+                                    <%= movie.director.join(', ') %></span>
+                </div>
+            <% } %>
+
+            <!-- Synopsis -->
+            <% if (movie.content) { %>
+                <div class="detail-desc">
+                    <h2>Nội dung phim</h2>
+                    <%- movie.content %>
+                </div>
+            <% } %>
+
+            <!-- FAQ: provided via JSON-LD schema in <head> -->
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Episodes Section -->
+    <% if (!isNotReleased && episodes.length > 1) { %>
+        <div class="episode-section">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <polyline points="17 2 12 7 7 2" />
+                </svg>
+                Danh sách tập
+                <span class="episode-count"><%= episodes.length %> tập</span>
+            </h2>
+            <div class="episode-grid">
+                <% episodes.forEach(ep => { %>
+                    <a href="/xem/<%= movie.slug %>/<%= ep.slug %>" class="episode-btn">
+                        <%= String(ep.name).toLowerCase() === 'full' ? 'Full' : (String(ep.name).replace(/t[ậa]p\s*/i, '').trim() || ep.name) %>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
+    <% } else if (!isNotReleased && episodes.length === 1) { %>
+        <div class="single-movie-banner">
+            <div class="single-movie-info">
+                <span class="badge-quality"><%= movie.quality %></span>
+                <% if (movie.time) { %>
+                    <span class="badge-lang"><%= movie.time %></span>
+                <% } %>
+                <span class="badge-lang"><%= movie.lang %></span>
+            </div>
+            <a href="/xem/<%= movie.slug %>/<%= episodes[0].slug %>" class="btn btn-primary single-movie-play">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+                Xem Full
+            </a>
+        </div>
+        <% } %>
+
+            <!-- Related Movies (lazy-loaded via API) -->
+            <section class="detail-related" id="relatedSection">
+                <div class="section-header">
+                    <h3 class="section-title">Phim Liên Quan</h3>
+                </div>
+                <div class="movie-row">
+                    <button class="row-arrow row-arrow-left" data-action="scrollRow" data-dir="-1" aria-label="Cuộn trái">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6" /></svg>
+                    </button>
+                    <div class="movie-row-track" id="relatedGrid">
+                        <% relatedMovies.forEach(movie=> { %>
+                            <%- include('../partials/movie-card', { movie }) %>
+                        <% }); %>
+                    </div>
+                    <button class="row-arrow row-arrow-right" data-action="scrollRow" data-dir="1" aria-label="Cuộn phải">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <% if (user) { %>
+            <script nonce="<%= nonce %>">
+                (function () {
+                    var btn = document.getElementById('detailFavBtn');
+                    if (btn) {
+                        fetch('/api/favorites/check/<%= movie.slug %>', { credentials: 'same-origin' })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                if (data.isFavorite) {
+                                    var svg = btn.querySelector('svg');
+                                    svg.setAttribute('fill', 'var(--primary)');
+                                    svg.setAttribute('stroke', 'var(--primary)');
+                                    btn.classList.add('fav-active');
+                                } else {
+                                    btn.classList.add('fav-highlight');
+                                }
+                            })
+                            .catch(function () { });
+                    }
+
+                    // Resume CTA: fetch latest progress for this movie
+                    fetch('/api/watch/latest/<%= movie.slug %>', { credentials: 'same-origin' })
+                        .then(function (r) { return r.json(); })
+                        .then(function (data) {
+                            if (data.success && data.progress && data.progress.current_time > 30) {
+                                var p = data.progress;
+                                var cta = document.getElementById('detailCTA');
+                                var label = document.getElementById('detailCTALabel');
+                                if (!cta || !label) return;
+                                // Format time
+                                var t = p.current_time;
+                                var h = Math.floor(t / 3600);
+                                var m = Math.floor((t % 3600) / 60);
+                                var s = t % 60;
+                                var timeStr = h > 0
+                                    ? h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0')
+                                    : m + ':' + String(s).padStart(2, '0');
+                                var epName = (p.episode_slug || '').replace(/-/g, ' ');
+                                label.textContent = 'Xem tiếp từ ' + timeStr;
+                                cta.href = '/xem/<%= movie.slug %>/' + p.episode_slug + '?t=' + t;
+                                cta.title = 'Xem tiếp ' + epName + ' từ ' + timeStr;
+                                cta.classList.add('resume-cta');
+                            }
+                        })
+                        .catch(function () { });
+                })();
+            </script>
+            <% } %>
+
+            <script nonce="<%= nonce %>">
+                // Lazy-load related movies if SSR returned empty
+                (function () {
+                    var grid = document.getElementById('relatedGrid');
+                    var section = document.getElementById('relatedSection');
+                    if (!grid || !section) return;
+                    if (grid.querySelector('.movie-card')) return;
+                    fetch('/api/movies/<%= movie.slug %>/related')
+                        .then(function (r) { return r.json(); })
+                        .then(function (data) {
+                            if (data.relatedParts && data.relatedParts.length > 1) {
+                                var container = document.getElementById('seasonNavContainer');
+                                if (container && !container.innerHTML.trim()) {
+                                    var nav = document.createElement('div');
+                                    nav.className = 'season-nav';
+                                    data.relatedParts.forEach(function(part) {
+                                        var a = document.createElement('a');
+                                        a.href = '/phim/' + encodeURIComponent(part.slug);
+                                        a.className = 'season-btn' + (part.isCurrent ? ' active' : '');
+                                        a.title = part.fullName || part.name;
+                                        a.textContent = part.fullName || part.name;
+                                        nav.appendChild(a);
+                                    });
+                                    container.appendChild(nav);
+                                }
+                            }
+                            if (data.relatedMovies && data.relatedMovies.length > 0) {
+                                data.relatedMovies.forEach(function (movie) {
+                                    var card = document.createElement('div');
+                                    card.className = 'movie-card';
+                                    var thumb = movie.poster_url || movie.thumb_url || '/images/no-poster.svg';
+                                    // Build DOM safely — no innerHTML to prevent XSS
+                                    var link = document.createElement('a');
+                                    link.href = '/phim/' + encodeURIComponent(movie.slug);
+                                    link.className = 'movie-card-link';
+                                    var imgWrap = document.createElement('div');
+                                    imgWrap.className = 'movie-card-img';
+                                    var img = document.createElement('img');
+                                    img.src = thumb;
+                                    img.alt = movie.name || '';
+                                    img.width = 300; img.height = 450;
+                                    img.loading = 'lazy';
+                                    img.onerror = function () { this.onerror = null; this.src = '/images/no-poster.svg'; };
+                                    var badges = document.createElement('div');
+                                    badges.className = 'movie-card-badges';
+                                    var bq = document.createElement('span');
+                                    bq.className = 'badge-quality';
+                                    bq.textContent = movie.quality || '';
+                                    var bl = document.createElement('span');
+                                    bl.className = 'badge-lang';
+                                    bl.textContent = (movie.lang || '').replace(/Thuyết Minh/gi, 'TM');
+                                    badges.appendChild(bq); badges.appendChild(bl);
+                                    imgWrap.appendChild(img); imgWrap.appendChild(badges);
+                                    var info = document.createElement('div');
+                                    info.className = 'movie-card-info';
+                                    var h3 = document.createElement('h3');
+                                    h3.className = 'movie-card-title';
+                                    h3.textContent = movie.name || '';
+                                    var meta = document.createElement('div');
+                                    meta.className = 'movie-card-meta';
+                                    var yr = document.createElement('span');
+                                    yr.className = 'movie-card-year';
+                                    yr.textContent = (movie.year && movie.year > 0) ? String(movie.year) : '';
+                                    var ep = document.createElement('span');
+                                    ep.textContent = movie.episode_current || '';
+                                    meta.appendChild(yr); meta.appendChild(ep);
+                                    info.appendChild(h3); info.appendChild(meta);
+                                    link.appendChild(imgWrap); link.appendChild(info);
+                                    card.appendChild(link);
+                                    grid.appendChild(card);
+                                });
+                            } else {
+                                section.style.display = 'none';
+                            }
+                        })
+                        .catch(function () { section.style.display = 'none'; });
+                })();
+            </script>

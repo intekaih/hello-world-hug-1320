@@ -1,0 +1,99 @@
+<div class="container">
+    <div class="category-header" style="margin-top: 20px">
+        <h1>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--primary)" stroke="var(--primary)"
+                stroke-width="2">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+            Phim yêu thích
+            <span style="font-size:0.85rem;color:var(--text-muted);font-weight:400">(<%= totalFavorites %>
+                    phim)</span>
+        </h1>
+    </div>
+
+    <% if (favorites.length===0) { %>
+        <div style="text-align:center;padding:60px 20px;color:var(--text-muted);">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                style="opacity:0.3;margin-bottom:16px;">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+            <p style="font-size:1.1rem;margin-bottom:8px;">Chưa có phim yêu thích nào</p>
+            <p style="font-size:0.85rem;">Nhấn vào biểu tượng ❤ trên phim để thêm vào danh sách yêu thích</p>
+            <a href="/" class="btn btn-primary" style="margin-top:20px;display:inline-flex;align-items:center;gap:6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+                Khám phá phim
+            </a>
+        </div>
+        <% } else { %>
+            <div class="movie-grid movie-grid-large">
+                <% favorites.forEach(fav=> { %>
+                    <div class="movie-card animate-in">
+                        <a href="/phim/<%= fav.movie_slug %>" class="movie-card-link">
+                            <div class="movie-card-img skeleton">
+                                <img src="<%= fav.movie_thumb || '/images/no-poster.svg' %>" alt="<%= fav.movie_name %>"
+                                    loading="lazy" data-skeleton-parent
+                                    data-fallback="/images/no-poster.svg" data-fallback-class="skeleton">
+                            </div>
+                            <div class="movie-card-info">
+                                <h3 class="movie-card-title">
+                                    <%= fav.movie_name || fav.movie_slug %>
+                                </h3>
+                                <div class="movie-card-meta">
+                                    <span>
+                                        <%= fav.movie_origin_name || '' %>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                        <button class="fav-remove-btn" data-action="removeFavFromPage" data-slug="<%= fav.movie_slug %>"
+                            title="Bỏ yêu thích">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+                    <% }) %>
+            </div>
+
+            <% if (totalPages > 1) { %>
+            <div class="pagination">
+                <% if (currentPage > 1) { %>
+                    <a href="/yeu-thich?page=<%= currentPage - 1 %>" class="pagination-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </a>
+                <% } %>
+                <% const _startF = Math.max(1, currentPage - 2); const _endF = Math.min(totalPages, currentPage + 2); %>
+                <% if (_startF > 1) { %>
+                    <a href="/yeu-thich?page=1">1</a>
+                    <% if (_startF > 2) { %><span class="pagination-dots">…</span><% } %>
+                <% } %>
+                <% for (let p = _startF; p <= _endF; p++) { %>
+                    <% if (p === currentPage) { %>
+                        <span class="active"><%= p %></span>
+                    <% } else { %>
+                        <a href="/yeu-thich?page=<%= p %>"><%= p %></a>
+                    <% } %>
+                <% } %>
+                <% if (_endF < totalPages) { %>
+                    <% if (_endF < totalPages - 1) { %><span class="pagination-dots">…</span><% } %>
+                    <a href="/yeu-thich?page=<%= totalPages %>"><%= totalPages %></a>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                    <a href="/yeu-thich?page=<%= currentPage + 1 %>" class="pagination-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </a>
+                <% } %>
+            </div>
+            <% } %>
+                    <% } %>
+</div>

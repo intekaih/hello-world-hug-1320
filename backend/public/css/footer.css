@@ -1,0 +1,232 @@
+/* ---- Footer ---- */
+.footer {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 40px 0 0;
+    margin-top: 0;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--bg-card));
+    pointer-events: none;
+}
+
+/* ---- Main 2-col grid ---- */
+.footer-main {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px 40px;
+    align-items: center;
+    padding-bottom: 32px;
+}
+
+/* ---- Brand column ---- */
+.footer-brand-logo {
+    display: inline-block;
+    margin-bottom: 14px;
+}
+
+.footer-brand-logo svg {
+    height: 40px;
+    width: auto;
+    color: var(--text-primary);
+}
+
+.footer-desc {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 320px;
+}
+
+/* ---- Nav columns ---- */
+.footer-col-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+    margin: 0 0 14px;
+}
+
+.footer-col-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-col-links a {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+    display: inline-block;
+}
+
+.footer-col-links a:hover {
+    color: var(--primary);
+    padding-left: 4px;
+}
+
+/* ---- SVG showcase ---- */
+.footer-svg-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.footer-svg-wrap {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.footer-svg-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-svg-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Dark/light theme toggle */
+.footer-svg-dark { display: flex !important; }
+.footer-svg-light { display: none !important; }
+
+:root[data-theme="light"] .footer-svg-light { display: flex !important; }
+:root[data-theme="light"] .footer-svg-dark { display: none !important; }
+
+/* ---- Bottom bar ---- */
+.footer-bottom {
+    border-top: 1px solid var(--border);
+    padding: 16px 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.footer-bottom-sep {
+    opacity: 0.3;
+}
+
+.footer-bottom-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-bottom-link:hover {
+    color: var(--primary);
+}
+
+/* ---- Image lazy loading ---- */
+.img-lazy {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.img-lazy.loaded {
+    opacity: 1;
+}
+
+.img-placeholder {
+    background: linear-gradient(135deg, var(--bg-surface), var(--bg-card));
+    animation: shimmer 1.5s infinite;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+    .footer-main {
+        grid-template-columns: 1.5fr 1fr 1fr auto;
+        gap: 24px 32px;
+    }
+
+    .footer-svg-wrap {
+        width: 170px;
+        height: 170px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px 24px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+
+    .footer-brand-logo {
+        display: flex;
+        justify-content: center;
+    }
+
+    .footer-desc {
+        max-width: 100%;
+    }
+
+    .footer-svg-showcase {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+
+    .footer-svg-wrap {
+        width: 160px;
+        height: 160px;
+    }
+
+    .footer-brand-logo svg {
+        height: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 16px;
+    }
+
+    .footer-svg-wrap {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (max-width: 360px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-svg-wrap {
+        width: 130px;
+        height: 130px;
+    }
+
+    .footer-brand-logo svg {
+        height: 32px;
+    }
+}

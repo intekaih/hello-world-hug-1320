@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450">
+  <rect width="300" height="450" fill="#12121e"/>
+  <rect x="0" y="0" width="300" height="450" fill="url(#grad)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F4ABB4;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(150, 200)">
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#F4ABB4" stroke-width="1.5" opacity="0.4"/>
+    <polygon points="-12,-18 -12,18 18,0" fill="#F4ABB4" opacity="0.5"/>
+  </g>
+  <text x="150" y="280" text-anchor="middle" fill="#6a6a80" font-family="sans-serif" font-size="14">No Poster</text>
+</svg>

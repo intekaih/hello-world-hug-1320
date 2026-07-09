@@ -1,0 +1,140 @@
+<div class="admin-layout">
+    <%- include('../partials/admin-sidebar') %>
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>Bảng điều khiển</h1>
+            </div>
+
+            <!-- Thống kê -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon pink">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats.totalUsers %>
+                    </div>
+                    <div class="stat-label">Tổng tài khoản</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats.onlineUsers %>
+                    </div>
+                    <div class="stat-label">Đang online</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon blue">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats.totalViews.toLocaleString() %>
+                    </div>
+                    <div class="stat-label">Tổng lượt xem</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon purple">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= stats.todayViews %>
+                    </div>
+                    <div class="stat-label">Lượt xem hôm nay</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon" style="background:rgba(16,185,129,0.15);color:#10b981">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= (stats.uniqueIPs || 0).toLocaleString() %>
+                    </div>
+                    <div class="stat-label">Khách truy cập (IP)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon" style="background:rgba(239,68,68,0.15);color:#ef4444">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="11" width="18" height="10" rx="2" />
+                            <circle cx="12" cy="5" r="3" />
+                            <line x1="8" y1="16" x2="8" y2="16.01" />
+                            <line x1="16" y1="16" x2="16" y2="16.01" />
+                            <path d="M9 20h6" />
+                        </svg>
+                    </div>
+                    <div class="stat-value">
+                        <%= (stats.botViews || 0).toLocaleString() %>
+                    </div>
+                    <div class="stat-label">Bot đã lọc</div>
+                </div>
+            </div>
+
+            <!-- Bảng tài khoản gần đây -->
+            <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+                <h2 style="font-size:1.1rem;font-weight:600">Tài khoản gần đây</h2>
+                <a href="/admin/users" class="btn btn-sm btn-outline">Xem tất cả</a>
+            </div>
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tài khoản</th>
+                            <th>Tên hiển thị</th>
+                            <th>Quyền</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recentUsers.forEach(u=> { %>
+                            <tr>
+                                <td>
+                                    <%= u.id %>
+                                </td>
+                                <td style="font-weight:500">
+                                    <%= u.username %>
+                                </td>
+                                <td>
+                                    <%= u.display_name %>
+                                </td>
+                                <td><span class="role-badge <%= u.role === 'admin' ? 'role-admin' : 'role-user' %>">
+                                        <%= u.role %>
+                                    </span></td>
+                                <td><span class="status-badge <%= u.is_active ? 'status-active' : 'status-inactive' %>">
+                                        <span
+                                            style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>
+                                        <%= u.is_active ? 'Hoạt động' : 'Khóa' %>
+                                    </span></td>
+                                <td style="color:var(--text-muted);font-size:0.85rem">
+                                    <%= u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'N/A' %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>

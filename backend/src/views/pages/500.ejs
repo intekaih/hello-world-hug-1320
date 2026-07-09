@@ -1,0 +1,48 @@
+<% /* 500 Error Page */ %>
+
+    <div class="error-page">
+        <div class="error-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="error-content">
+            <div class="error-code">
+                <span class="digit">5</span>
+                <span class="zero">
+                    <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4">
+                        <circle cx="60" cy="60" r="50" />
+                        <circle cx="42" cy="48" r="5" fill="currentColor" stroke="none" />
+                        <circle cx="78" cy="48" r="5" fill="currentColor" stroke="none" />
+                        <path d="M40 82 Q60 68 80 82" stroke-width="4" stroke-linecap="round" fill="none" />
+                    </svg>
+                </span>
+                <span class="digit">0</span>
+            </div>
+            <h1 class="error-title">Lỗi máy chủ</h1>
+            <p class="error-desc">
+                Đã xảy ra lỗi không mong muốn. Chúng tôi đang khắc phục sự cố này.
+                <% if (typeof error !=='undefined' && error) { %>
+                    <br><small style="color: var(--text-muted); font-size: 0.8rem;">
+                        <%= error %>
+                    </small>
+                    <% } %>
+            </p>
+            <div class="error-actions">
+                <a href="/" class="btn-back-home">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Về trang chủ
+                </a>
+                <a href="javascript:location.reload()" class="btn-search-link">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10" />
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                    </svg>
+                    Thử lại
+                </a>
+            </div>
+        </div>
+    </div>

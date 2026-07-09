@@ -1,0 +1,46 @@
+<div class="error-page">
+    <div class="error-content">
+        <div class="error-code">
+            <span class="digit">4</span>
+            <span class="digit zero">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="8"
+                        stroke-dasharray="8 12" />
+                    <circle cx="35" cy="42" r="5" fill="currentColor" />
+                    <circle cx="65" cy="42" r="5" fill="currentColor" />
+                    <path d="M 35 68 Q 50 78 65 68" fill="none" stroke="currentColor" stroke-width="4"
+                        stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="digit">0</span>
+        </div>
+        <h1 class="error-title">Yêu cầu không hợp lệ</h1>
+        <p class="error-desc">
+            Dữ liệu gửi lên không đúng định dạng hoặc thiếu thông tin bắt buộc. Vui lòng kiểm tra lại và thử lại.
+            <% if (typeof error !== 'undefined' && error) { %>
+                <br><small style="color: var(--text-muted); font-size: 0.8rem;"><%= error %></small>
+            <% } %>
+        </p>
+        <div class="error-actions">
+            <a href="javascript:history.back()" class="btn-back-home">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                Quay lại
+            </a>
+            <a href="/" class="btn-search-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+    <div class="error-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+</div>
