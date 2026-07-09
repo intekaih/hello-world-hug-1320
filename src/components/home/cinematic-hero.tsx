@@ -314,9 +314,9 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.6 }}
-            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.22em] text-foreground/80"
+            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.22em] text-white/85"
           >
-            <span className="rounded-sm border border-foreground/30 px-1.5 py-0.5 text-[10px]">
+            <span className="rounded-sm border border-white/40 px-1.5 py-0.5 text-[10px]">
               {movie.rating}
             </span>
             <span>{movie.year}</span>
@@ -329,7 +329,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
           <motion.p
             variants={fadeUp}
             transition={{ duration: 0.7 }}
-            className="max-w-xl text-[15px] leading-relaxed text-foreground/85 sm:text-base"
+            className="max-w-xl text-[15px] leading-relaxed text-white/90 sm:text-base"
           >
             {movie.overview}
           </motion.p>
