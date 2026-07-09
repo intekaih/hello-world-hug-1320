@@ -94,14 +94,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "movieCC — Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày. Xem online mượt trên mọi thiết bị.",
       },
       { name: "theme-color", content: "#0a0a12" },
-      { property: "og:title", content: "movieCC — Xem phim online chất lượng cao" },
+      { property: "og:title", content: "movieCC — Xem phim online Vietsub, Thuyết minh chất lượng cao" },
       {
         property: "og:description",
         content:
-          "Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày.",
+          "movieCC — Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày. Xem online mượt trên mọi thiết bị.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "movieCC — Xem phim online Vietsub, Thuyết minh chất lượng cao" },
+      { name: "twitter:description", content: "movieCC — Kho phim bộ, phim lẻ, anime Vietsub & thuyết minh cập nhật mỗi ngày. Xem online mượt trên mọi thiết bị." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/618bf36f-888c-4d80-be71-d9181fe0b6cb/id-preview-c4d10bf4--230020e9-0874-4d6d-8c7c-8dbd412a279e.lovable.app-1783569257946.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/618bf36f-888c-4d80-be71-d9181fe0b6cb/id-preview-c4d10bf4--230020e9-0874-4d6d-8c7c-8dbd412a279e.lovable.app-1783569257946.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
