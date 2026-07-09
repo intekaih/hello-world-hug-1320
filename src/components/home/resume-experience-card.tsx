@@ -223,13 +223,17 @@ export function ResumeExperienceCard({
             animate={reduce ? undefined : { y: hover ? -6 : 0, scale: hover ? 1.05 : 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
           >
-            <ProgressRing
-              progress={item.progress}
-              size={featured ? 96 : 76}
-              stroke={featured ? 4 : 3}
-            >
+            {showProgress ? (
+              <ProgressRing
+                progress={item.progress}
+                size={featured ? 96 : 76}
+                stroke={featured ? 4 : 3}
+              >
+                <MagneticPlay size={featured ? 64 : 52} active={hover} />
+              </ProgressRing>
+            ) : (
               <MagneticPlay size={featured ? 64 : 52} active={hover} />
-            </ProgressRing>
+            )}
           </motion.div>
 
           {/* Bottom content */}
