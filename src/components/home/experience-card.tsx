@@ -20,6 +20,7 @@ import {
   useRef,
   useState,
   type MouseEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
@@ -27,6 +28,11 @@ import { type MovieCard, hasVisibleProgress, isNearComplete } from "@/lib/home-q
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
 import { useTranslation } from "@/hooks/useTranslation";
+import { claimPreviewSlot, releasePreviewSlot } from "@/lib/media/preview-slot";
+
+/** Hover-intent delay before we consider it a real preview intent. */
+const HOVER_INTENT_MS = 200;
+
 
 /**
  * ExperienceCard — the "Movie Experience Card" replacing the flat poster.
