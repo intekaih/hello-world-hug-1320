@@ -306,6 +306,21 @@
       "added": "Saved to watchlist",
       "notInterested": "Not interested",
       "close": "Close"
+    },
+    "autoNext": {
+      "tooltip": "Auto-play next episode is ON.",
+      "openSettings": "Turn off in Settings",
+      "manualHint": "Autoplay is off — pick to continue.",
+      "softAsk": "You've auto-played 3 episodes in a row — keep going?",
+      "continueYes": "Keep going",
+      "pauseTonight": "Pause for tonight"
+    },
+    "settings": {
+      "eyebrow": "Player",
+      "title": "Player settings",
+      "autoNextLabel": "Auto-play next episode",
+      "autoNextExplain": "Automatically move to the next episode after credits. Turn off any time.",
+      "resumeNow": "Resume now"
     }
   },
   "search": {
@@ -588,5 +603,3 @@
     }
   }
 }
-
-
