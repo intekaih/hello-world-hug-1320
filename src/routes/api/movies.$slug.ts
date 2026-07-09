@@ -114,13 +114,28 @@ const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+import { getCatalog } from "@/lib/catalog";
+
 export const Route = createFileRoute("/api/movies/$slug")({
   server: {
     handlers: {
       GET: async ({ params }) => {
-        const movie = MOVIES[params.slug];
-        if (movie) return Response.json(movie);
+        // 1) Hand-curated overrides win (rich TMDB metadata for hero titles).
+        const curated = MOVIES[params.slug];
+        if (curated) return Response.json(curated);
 
+        // 2) Ask the active CatalogSource (KKPhim in prod, Mock in dev).
+        const detail = await getCatalog().detail(params.slug);
+        if (detail) {
+          return Response.json({
+            ...detail,
+            original_title: detail.origin_name,
+            categories: detail.category,
+            country: detail.country.join(", "),
+          });
+        }
+
+        // 3) Legacy suggest-pool fallback so any suggest slug still resolves.
         const p = POOL.find((m) => slugify(m.title) === params.slug);
         if (p) {
           return Response.json({

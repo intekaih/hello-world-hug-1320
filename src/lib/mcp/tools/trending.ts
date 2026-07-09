@@ -1,25 +1,18 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { browsePool, toCard } from "../data";
+import { getCatalog } from "@/lib/catalog";
 
 export default defineTool({
   name: "trending",
   title: "Trending movies",
-  description:
-    "Top-rated titles from the MovieCC catalog, sorted by rating then year. Unique by slug.",
+  description: "Top-rated titles from the active CatalogSource.",
   inputSchema: {
     limit: z.number().int().optional().describe("Max results. Default 18, max 50."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: ({ limit }) => {
+  handler: async ({ limit }) => {
     const l = Math.min(50, Math.max(1, limit ?? 18));
-    const seen = new Set<string>();
-    const items = browsePool
-      .slice()
-      .sort((a, b) => b.rating - a.rating || b.year - a.year)
-      .filter((m) => (seen.has(m.slug) ? false : (seen.add(m.slug), true)))
-      .slice(0, l)
-      .map(toCard);
+    const items = await getCatalog().trending(l);
     const payload = { items, total: items.length };
     return {
       content: [{ type: "text", text: JSON.stringify(payload) }],

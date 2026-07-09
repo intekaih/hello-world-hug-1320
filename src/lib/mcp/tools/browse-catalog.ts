@@ -1,22 +1,28 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { browsePool, toCard } from "../data";
+import { getCatalog } from "@/lib/catalog";
 
 export default defineTool({
   name: "browse_catalog",
   title: "Browse catalog",
   description:
-    "List the base MovieCC public catalog without a query. Useful for exploring what's available. Returns up to `limit` cards.",
+    "Page through the MovieCC catalog without a query. Backed by the active CatalogSource.",
   inputSchema: {
-    limit: z.number().int().optional().describe("Max number of results. Default 50, max 200."),
-    offset: z.number().int().optional().describe("How many items to skip. Default 0."),
+    type: z
+      .enum(["phim-bo", "phim-le", "hoat-hinh", "tv-shows"])
+      .optional()
+      .describe("Catalog type."),
+    category: z.string().optional(),
+    country: z.string().optional(),
+    year: z.number().int().optional(),
+    sort: z.enum(["newest", "oldest", "rating", "az"]).optional(),
+    page: z.number().int().optional(),
+    limit: z.number().int().optional().describe("Page size. Default 24, max 200."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: ({ limit, offset }) => {
-    const l = Math.min(200, Math.max(1, limit ?? 50));
-    const o = Math.max(0, offset ?? 0);
-    const items = browsePool.slice(o, o + l).map(toCard);
-    const payload = { items, total: browsePool.length, offset: o, limit: l };
+  handler: async ({ limit, ...rest }) => {
+    const pageSize = Math.min(200, Math.max(1, limit ?? 24));
+    const payload = await getCatalog().browse({ ...rest, pageSize });
     return {
       content: [{ type: "text", text: JSON.stringify(payload) }],
       structuredContent: payload,
