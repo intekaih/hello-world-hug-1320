@@ -66,7 +66,10 @@ function NotificationsPage() {
         }
       />
 
+      <NotificationPreferences />
+
       {isLoading ? (
+
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
             <div
