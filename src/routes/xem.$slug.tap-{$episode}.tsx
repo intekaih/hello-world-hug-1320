@@ -106,7 +106,8 @@ function WatchPage() {
     queryFn: async () => {
       try {
         const { fetchMovieDetail } = await import("@/api-client/movie-detail");
-        const { movie: m } = await fetchMovieDetail(slug);
+        const { movie: m, episodes: eps } = await fetchMovieDetail(slug);
+        const epCount = eps?.[0]?.items?.length ?? m.total_episodes ?? 0;
         return {
           title: m.title,
           poster_url: m.poster_url,
@@ -114,6 +115,7 @@ function WatchPage() {
           year: m.year,
           overview: m.overview,
           overview_vi: m.overview_vi,
+          total_episodes: epCount || FALLBACK_TOTAL_EPISODES,
         };
       } catch {
         return null;
