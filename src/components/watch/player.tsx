@@ -117,6 +117,7 @@ export function PlayerContainer({
   onChangeEpisode,
   cinemaMode = false,
   onToggleCinemaMode,
+  onServerChange,
 }: Props) {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -124,6 +125,9 @@ export function PlayerContainer({
   const hlsRef = useRef<Hls | null>(null);
 
   const [serverId, setServerId] = useState(servers[0]?.id ?? "");
+  useEffect(() => {
+    onServerChange?.(serverId);
+  }, [serverId, onServerChange]);
   const currentSrc = useMemo(
     () => servers.find((s) => s.id === serverId)?.src ?? "",
     [serverId, servers],
