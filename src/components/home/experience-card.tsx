@@ -16,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import {
+  memo,
   useCallback,
   useEffect,
   useRef,
@@ -85,7 +86,7 @@ const SIZES = {
 
 const EASE = ease.outSoft;
 
-export function ExperienceCard({
+function ExperienceCardImpl({
   movie,
   trailerUrl,
   progress,
@@ -729,3 +730,6 @@ function ProgressBadge({
     </div>
   );
 }
+
+export const ExperienceCard = memo(ExperienceCardImpl);
+
