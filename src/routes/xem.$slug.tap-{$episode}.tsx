@@ -65,6 +65,7 @@ function WatchPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [cinemaMode, setCinemaMode] = useState(false);
+  const [activeServerId, setActiveServerId] = useState<string>("");
 
   const { data: epData } = useQuery({
     queryKey: ["be-episode", slug, episode],
