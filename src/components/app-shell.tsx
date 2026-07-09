@@ -409,7 +409,7 @@ export function AppShell() {
       {/* Main column */}
       <div
         className={cn(
-          "flex min-h-screen flex-col transition-[padding] duration-300",
+          "flex min-h-dvh flex-col transition-[padding] duration-300",
           sidebarCollapsed ? "md:pl-[76px]" : "md:pl-[260px]",
         )}
       >
