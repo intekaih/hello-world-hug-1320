@@ -561,7 +561,19 @@
     }
   },
 
+  "welcomeBack": {
+    "ariaLabel": "Welcome back",
+    "eyebrow": "Welcome back",
+    "headline": "You paused {{title}}",
+    "sub": "{{remaining}} left — pick up right where you stopped.",
+    "subEp": "Episode {{episode}} · {{remaining}} left — pick up right where you stopped.",
+    "resume": "Resume",
+    "dismiss": "Dismiss",
+    "newThisWeek": "See what's new this week",
+    "newThisWeekMore": "See all"
+  },
   "taste": {
+
     "eyebrow": "Light personalization",
     "title": "Tell movieCC what you love",
     "subtitle": "Pick a few things you enjoy — we'll tune recommendations to fit. Skip anytime, edit later.",
