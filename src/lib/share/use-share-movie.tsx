@@ -11,15 +11,18 @@ import { ShareSheet } from "@/components/share/share-sheet";
  */
 export type SharePayload = {
   title: string;
-  /** Full url. If omitted, uses window.location.href. */
+  /** Canonical slug — preferred for building /phim/{slug}?ref=share links. */
+  slug?: string;
+  /** Full url. Overrides slug-based derivation. */
   url?: string;
-  /** Optional cover art shown inside the sheet. */
+  /** Optional cover art shown inside the sheet and share card. */
   posterUrl?: string;
   /** Optional short description / tagline. */
   description?: string;
   /** Optional playback timestamp — appended as ?t=<seconds>. */
   timestampSeconds?: number;
 };
+
 
 type Ctx = {
   open: (payload: SharePayload) => void;
