@@ -943,7 +943,7 @@ function ResultsSection({
       {isLoading ? (
         <ResultsSkeleton />
       ) : items.length === 0 ? (
-        <SearchEmptyState />
+        <SearchEmptyState q={q} setFilter={setFilter} />
       ) : (
         <SearchResultsGrid items={items} />
       )}
