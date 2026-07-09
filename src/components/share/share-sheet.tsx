@@ -170,6 +170,18 @@ export function ShareSheet({ payload, open, onOpenChange, onCopied, onShared }: 
           <p className="text-left text-sm text-foreground-muted">{emotionalMessage}</p>
         </DialogHeader>
 
+        {/* Share card preview — poster + tagline + QR to /phim/{slug}?ref=share */}
+        <ShareCardPreview
+          title={payload.title}
+          posterUrl={payload.posterUrl}
+          url={url}
+          tagline={t("share.card.tagline")}
+          brand={t("share.card.brand")}
+          qrHint={t("share.card.qrHint")}
+        />
+
+
+
         {/* Channel grid */}
         <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6">
           {channels.map((c) => (
