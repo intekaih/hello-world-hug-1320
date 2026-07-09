@@ -15,6 +15,8 @@ import {
 import { useTranslation } from "@/hooks/useTranslation";
 import { transition } from "@/lib/design";
 
+import { hasVisibleProgress } from "@/lib/home-queries";
+
 type HistoryEntry = {
   slug: string;
   episode: string;
@@ -96,6 +98,20 @@ function HistoryPage() {
   });
 
   const items = query.data?.items ?? [];
+
+  const unfinished = useMemo(() => {
+    return items
+      .filter((it) => {
+        const p = it.duration > 0 ? it.position / it.duration : 0;
+        return hasVisibleProgress(p);
+      })
+      .map((it) => ({
+        it,
+        p: it.duration > 0 ? it.position / it.duration : 0,
+      }))
+      .sort((a, b) => b.p - a.p)
+      .map((x) => x.it);
+  }, [items]);
 
   const buckets = useMemo(() => {
     const map: Record<BucketKey, HistoryEntry[]> = {
