@@ -305,6 +305,7 @@ export function PlayerContainer({
     const video = videoRef.current;
     if (!video) return;
     let firstPlayFired = false;
+    let lastTimeSync = 0;
     const onPlay = () => {
       setPlaying(true);
       if (!firstPlayFired) {
@@ -313,7 +314,13 @@ export function PlayerContainer({
       }
     };
     const onPause = () => setPlaying(false);
+    // Throttle timeupdate to ~4Hz. Native `timeupdate` fires 4-60 times/sec;
+    // committing state each fire triggers cascading re-renders in this
+    // 1700-line component (measurable jank on low-end mobile).
     const onTime = () => {
+      const now = performance.now();
+      if (now - lastTimeSync < 250) return;
+      lastTimeSync = now;
       setCurrentTime(video.currentTime);
       setSharedPlayerTime(video.currentTime);
     };
@@ -345,6 +352,7 @@ export function PlayerContainer({
       video.removeEventListener("playing", onPlaying);
     };
   }, []);
+
 
   /* -------------------------- Save progress ------------------------------- */
   const saveProgress = useCallback(() => {
