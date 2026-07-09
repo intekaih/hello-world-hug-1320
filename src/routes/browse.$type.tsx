@@ -182,7 +182,7 @@ function BrowseDiscoveryBoard() {
                       transition={{
                         duration: 0.4,
                         delay: Math.min(i * 0.025, 0.4),
-                        ease: [0.16, 1, 0.3, 1],
+                        ease: ease.outSoft,
                       }}
                     >
                       <ExperienceCard

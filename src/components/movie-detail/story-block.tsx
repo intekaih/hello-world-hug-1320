@@ -99,7 +99,7 @@ export function StoryBlock({ movie }: { movie: Movie }) {
             initial={reduce ? false : { opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: ease.outSoft }}
             className="relative"
           >
             <p
@@ -140,7 +140,7 @@ export function StoryBlock({ movie }: { movie: Movie }) {
               initial={reduce ? false : { opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, delay: 0.15, ease: ease.outSoft }}
               className="relative flex flex-col justify-center gap-3 rounded-2xl border border-primary/25 bg-primary/[0.06] p-6"
             >
               <Quote

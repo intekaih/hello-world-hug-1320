@@ -106,7 +106,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, ease: ease.outSoft }}
             className="pointer-events-none absolute inset-0"
             aria-hidden
           >
@@ -165,7 +165,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
               <motion.div
                 initial={reduce ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.7, ease: ease.outSoft }}
                 className="flex items-center gap-3"
               >
                 <span className="inline-block h-px w-8 bg-gradient-to-r from-primary to-transparent" />
@@ -202,7 +202,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
               <motion.div
                 initial={reduce ? false : { opacity: 0, y: 30, rotate: -2 }}
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                transition={{ duration: 0.9, ease: ease.outSoft, delay: 0.2 }}
                 className="hidden lg:block"
               >
                 <div className="relative aspect-[2/3] w-64 overflow-hidden rounded-2xl shadow-[var(--shadow-cinematic)] ring-1 ring-white/10">

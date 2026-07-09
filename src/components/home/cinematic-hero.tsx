@@ -139,7 +139,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
           initial={{ opacity: 0, scale: 1.08 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.04 }}
-          transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.6, ease: ease.outSoft }}
           className="absolute inset-0"
         >
           <motion.div
@@ -217,13 +217,13 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
           <motion.div
             initial={{ height: "12vh" }}
             animate={{ height: entered ? "3.5vh" : "12vh" }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            transition={{ duration: 1.6, ease: ease.outSoft, delay: 0.1 }}
             className="pointer-events-none absolute inset-x-0 top-0 bg-black"
           />
           <motion.div
             initial={{ height: "12vh" }}
             animate={{ height: entered ? "3.5vh" : "12vh" }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            transition={{ duration: 1.6, ease: ease.outSoft, delay: 0.1 }}
             className="pointer-events-none absolute inset-x-0 bottom-0 bg-black"
           />
 
@@ -381,7 +381,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
 
 /* -------------------------------------------------------------------- */
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+const EASE = ease.outSoft as const;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },

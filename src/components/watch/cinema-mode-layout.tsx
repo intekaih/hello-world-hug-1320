@@ -14,7 +14,7 @@ export function CinemaModeLayout({ children }: { children: ReactNode }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.985 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.55, ease: ease.out }}
       className="relative min-h-dvh overflow-hidden bg-black text-white motion-reduce:transform-none"
     >
       {children}

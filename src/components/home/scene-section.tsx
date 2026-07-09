@@ -260,7 +260,7 @@ function getEntranceVariants(
   const NONE: EntranceSpec = {
     initial: { opacity: 1 },
     whileInView: { opacity: 1 },
-    transition: { duration: 0, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0, ease: ease.outSoft },
   };
 
   if (reduce) return NONE;
@@ -271,35 +271,35 @@ function getEntranceVariants(
       return {
         initial: { opacity: 0, filter: "blur(18px)", scale: 1.04 },
         whileInView: { opacity: 1, filter: "blur(0px)", scale: 1 },
-        transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 1.1, ease: ease.outSoft },
       };
     case "sweep":
       // Lateral camera pan across the scene.
       return {
         initial: { opacity: 0, x: -40 },
         whileInView: { opacity: 1, x: 0 },
-        transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: 0.9, ease: ease.out },
       };
     case "iris":
       // Epic reveal — scale-in from a heavy, cinematic starting pose.
       return {
         initial: { opacity: 0, scale: 0.92, y: 20 },
         whileInView: { opacity: 1, scale: 1, y: 0 },
-        transition: { duration: 1.05, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 1.05, ease: ease.outSoft },
       };
     case "drift":
       // Slow ambient drift — for coming-soon, floating-through-space vibe.
       return {
         initial: { opacity: 0, y: 40, filter: "blur(6px)" },
         whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
-        transition: { duration: 1.3, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 1.3, ease: ease.outSoft },
       };
     case "rise":
     default:
       return {
         initial: { opacity: 0, y: 24 },
         whileInView: { opacity: 1, y: 0 },
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+        transition: { duration: 0.8, ease: ease.outSoft },
       };
   }
 }

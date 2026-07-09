@@ -91,7 +91,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.4, ease: ease.outSoft }}
           className="absolute inset-0"
         >
           <div
@@ -141,7 +141,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           {/* Genre eyebrow */}
           <motion.div
             variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, ease: ease.outSoft }}
             className="flex items-center gap-3"
           >
             <span className="h-px w-8 bg-primary" />
@@ -153,7 +153,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
           {/* Title / logo */}
           <motion.div
             variants={{ hidden: { opacity: 0, y: 24, filter: "blur(14px)" }, show: { opacity: 1, y: 0, filter: "blur(0px)" } }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1, ease: ease.outSoft }}
           >
             <HeroTitle logo={movie.logo_url} title={movie.title} />
 

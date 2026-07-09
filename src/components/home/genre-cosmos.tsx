@@ -93,7 +93,7 @@ export function GenreCosmos() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, delay: i * 0.06, ease: ease.outSoft }}
               onMouseEnter={() => setHovered(g.slug)}
               className={cn("relative", g.span)}
             >
