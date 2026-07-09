@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AnimatePresence,
   motion,
@@ -97,6 +98,32 @@ export function ExperienceCard({
   const rootRef = useRef<HTMLAnchorElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
+  const navigate = useNavigate();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const resumeEpisode = episode?.match(/E(\d+)/i)?.[1] ?? "1";
+  const watchTo = "/xem/$slug/tap-{$episode}" as const;
+  const watchParams = { slug: movie.slug, episode: resumeEpisode };
+
+  const prefetchedRef = useRef(false);
+  const prefetchDetail = useCallback(() => {
+    if (prefetchedRef.current) return;
+    prefetchedRef.current = true;
+    // Warm TanStack Router route + underlying detail API.
+    void router.preloadRoute({ to: "/phim/$slug", params: { slug: movie.slug } }).catch(() => {});
+    void queryClient
+      .prefetchQuery({
+        queryKey: ["movie", movie.slug],
+        queryFn: async () => {
+          const r = await fetch(`/api/movies/${movie.slug}`);
+          if (!r.ok) throw new Error(String(r.status));
+          return r.json();
+        },
+        staleTime: 5 * 60_000,
+      })
+      .catch(() => {});
+  }, [movie.slug, queryClient, router]);
 
   // Hover stage tracking — timers advance through the four stages.
   const [hovered, setHovered] = useState(false);
@@ -194,11 +221,12 @@ export function ExperienceCard({
     stageTimers.current.push(
       window.setTimeout(() => {
         setStage(3);
+        prefetchDetail();
         mountTrailer();
       }, HOVER_INTENT_MS),
     );
     stageTimers.current.push(window.setTimeout(() => setStage(4), 600));
-  }, [clearStageTimers, reduce, mountTrailer]);
+  }, [clearStageTimers, reduce, mountTrailer, prefetchDetail]);
 
   const leave = useCallback(() => {
     clearStageTimers();
@@ -323,6 +351,10 @@ export function ExperienceCard({
       onMouseEnter={enter}
       onMouseLeave={leave}
       onMouseMove={handleMove}
+      onFocus={() => {
+        setStage((s) => Math.max(s, 4));
+        prefetchDetail();
+      }}
       onClick={handleClick}
       onPointerDown={handlePointerDown}
       onPointerUp={cancelLongPress}
@@ -522,11 +554,16 @@ export function ExperienceCard({
         {/* Quick actions — Stage 4 spring reveal */}
         <div className="pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 flex-col gap-2">
           <QuickAction
-            icon={<Play className="h-3.5 w-3.5 fill-current" />}
-            label="Play"
+            icon={<Play className="h-4 w-4 fill-current" />}
+            label={progress != null ? "Tiếp tục" : "Phát"}
             visible={stage4}
             delay={0}
             primary
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              void navigate({ to: watchTo, params: watchParams });
+            }}
           />
           <QuickAction
             icon={<Bookmark className={cn("h-3.5 w-3.5", saved && "fill-current")} />}

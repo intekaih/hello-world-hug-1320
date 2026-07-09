@@ -250,14 +250,35 @@ export function MovieActionCluster({ movie }: { movie: Movie }) {
     <div className="flex flex-wrap items-center gap-2.5 pt-4 sm:gap-3">
       <PlayCTA slug={movie.slug} label={t("movieDetail.actions.watchNow")} />
 
+      {/* Secondary emphasis — "Thêm vào danh sách" sits right next to Play */}
+      <motion.button
+        type="button"
+        onClick={toggleWl}
+        whileTap={{ scale: 0.96 }}
+        whileHover={{ y: -1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 22 }}
+        aria-pressed={wl}
+        aria-label={
+          wl
+            ? t("movieDetail.actions.watchlistRemove")
+            : t("movieDetail.actions.watchlist")
+        }
+        className={cn(
+          "inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold backdrop-blur-md transition-colors",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60",
+          wl
+            ? "border-cyan/50 bg-cyan/15 text-white"
+            : "border-white/25 bg-white/[0.08] text-white hover:border-white/45 hover:bg-white/[0.14]",
+        )}
+      >
+        <Bookmark className={cn("h-4 w-4", wl && "fill-current")} aria-hidden />
+        <span>
+          {wl
+            ? t("movieDetail.actions.watchlistRemove")
+            : t("movieDetail.actions.watchlist")}
+        </span>
+      </motion.button>
 
-      {movie.trailer_url && (
-        <GlassAction
-          icon={Film}
-          label={t("movieDetail.actions.trailer")}
-          onClick={() => window.open(movie.trailer_url, "_blank", "noopener")}
-        />
-      )}
       <GlassAction
         icon={Heart}
         active={fav}
@@ -269,17 +290,13 @@ export function MovieActionCluster({ movie }: { movie: Movie }) {
         }
         onClick={toggleFav}
       />
-      <GlassAction
-        icon={Bookmark}
-        active={wl}
-        activeClass="text-cyan border-cyan/40 bg-cyan/10"
-        label={
-          wl
-            ? t("movieDetail.actions.watchlistRemove")
-            : t("movieDetail.actions.watchlist")
-        }
-        onClick={toggleWl}
-      />
+      {movie.trailer_url && (
+        <GlassAction
+          icon={Film}
+          label={t("movieDetail.actions.trailer")}
+          onClick={() => window.open(movie.trailer_url, "_blank", "noopener")}
+        />
+      )}
       <GlassAction
         icon={Share2}
         label={
