@@ -227,6 +227,12 @@
       "exitCinema": "Exit cinema",
       "shortcuts": "Keyboard shortcuts"
     },
+    "skip": {
+      "intro": "Skip intro",
+      "recap": "Skip recap",
+      "introAria": "Skip intro (press S)",
+      "recapAria": "Skip recap (press S)"
+    },
     "loading": {
       "eyebrow": "Loading",
       "title": "Preparing your theater…",
