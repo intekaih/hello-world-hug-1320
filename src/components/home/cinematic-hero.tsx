@@ -64,7 +64,18 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
   const contentY = useTransform(smoothY, (v) => v * 6);
 
   const movie = movies[index];
-  const trailerSrc = movie ? trailers?.[movie.id] : undefined;
+  // Prefer explicit trailer map (backward-compat); fall back to normalized
+  // movie.trailer_url. Only direct video URLs autoplay; YouTube/Vimeo/none
+  // gracefully fall back to the animated backdrop + optional external btn.
+  const trailerSource = movie ? normalizeTrailerSource(movie) : { kind: "none" as const };
+  const explicitTrailer = movie ? trailers?.[movie.id] : undefined;
+  const trailerSrc =
+    explicitTrailer ??
+    (trailerSource.kind === "direct" ? trailerSource.src : undefined);
+  const externalTrailer =
+    trailerSource.kind === "youtube" || trailerSource.kind === "vimeo"
+      ? trailerSource.external
+      : undefined;
 
   // Auto-advance slides
   useEffect(() => {
