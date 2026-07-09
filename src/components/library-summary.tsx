@@ -121,6 +121,3 @@ export function LibrarySummary() {
   );
 }
 
-export const Route = createFileRoute("/library-summary-noop")({
-  component: () => null,
-});
