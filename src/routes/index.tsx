@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 import {
   CategoryChips,
@@ -23,6 +24,8 @@ import { SceneAtmosphere } from "@/components/home/scene-atmosphere";
 import { SceneSection } from "@/components/home/scene-section";
 import { homeQueryOptions } from "@/lib/home-queries";
 import { buildPageMeta } from "@/lib/page-meta";
+import { getDaypart, readHourOverride, rerankForLateNight } from "@/lib/daypart";
+import { useTranslation } from "@/hooks/useTranslation";
 
 
 export const Route = createFileRoute("/")({
@@ -42,7 +45,26 @@ export const Route = createFileRoute("/")({
 const isLoggedIn = true;
 
 function Home() {
+  const { t } = useTranslation();
   const { data, isLoading, isError, refetch } = useQuery(homeQueryOptions);
+
+  const daypart = useMemo(() => getDaypart(readHourOverride()), []);
+  const dpEyebrow = t(`home.daypart.${daypart}.eyebrow`);
+  const dpTitle = t(`home.daypart.${daypart}.title`);
+  const dpSubtitle = t(`home.daypart.${daypart}.subtitle`);
+  const forYou = useMemo(() => {
+    if (!data) return [];
+    return daypart === "late_night"
+      ? rerankForLateNight(data.newMovies)
+      : data.newMovies;
+  }, [data, daypart]);
+  const animeSorted = useMemo(() => {
+    if (!data) return [];
+    return daypart === "late_night"
+      ? rerankForLateNight(data.animeMovies)
+      : data.animeMovies;
+  }, [data, daypart]);
+
 
   if (isError) {
     return (
