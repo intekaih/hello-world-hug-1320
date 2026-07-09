@@ -249,7 +249,7 @@ type EntranceSpec = {
   whileInView: Record<string, number | string>;
   transition: {
     duration: number;
-    ease: [number, number, number, number];
+    ease: readonly [number, number, number, number];
     delay?: number;
   };
 };
