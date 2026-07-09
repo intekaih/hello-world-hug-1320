@@ -702,7 +702,22 @@
       "copiedTitle": "Đã copy link",
       "copiedDescription": "\"{{title}}\" đã sẵn sàng để chia sẻ.",
       "opened": "Đang mở {{channel}}…",
-      "copyFailed": "Không copy được — thử lại nhé."
+      "copyFailed": "Không copy được — thử lại nhé.",
+      "sharedTitle": "Đã chia sẻ ✨",
+      "sharedDescription": "Cảm ơn bạn đã mời qua {{channel}}.",
+      "addWatchlist": "Thêm vào Watchlist",
+      "addedWatchlist": "Đã lưu vào Watchlist"
+    },
+    "card": {
+      "tagline": "Tôi đang xem trên movieCC",
+      "brand": "movieCC",
+      "qrHint": "Quét để mở"
+    },
+    "invited": {
+      "eyebrow": "Bạn được mời xem",
+      "title": "Một người bạn nghĩ bạn sẽ thích {{title}}",
+      "cta": "Xem ngay",
+      "dismiss": "Đóng"
     },
     "messages": {
       "one": "Mình nghĩ bạn sẽ thích phim này.",
