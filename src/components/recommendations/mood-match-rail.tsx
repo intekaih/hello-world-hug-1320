@@ -1,16 +1,20 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
+import { ArrowRight, X } from "lucide-react";
 
 import type { RecMovie } from "@/lib/recommendations/engine";
 import type { BrowseMovie } from "@/routes/api/browse";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ease } from "@/lib/design";
 import { SceneSection } from "@/components/home/scene-section";
+import { suppressSlug } from "@/lib/recommendations/suppress";
 import { RecommendationReasonChip } from "./reason-chip";
 
 /**
- * MoodMatchRail — "Because you watched [Seed]" — pairs a seed poster
- * with a horizontally-scrolling ribbon of similar-mood matches.
+ * MoodMatchRail — "Because you watched [Seed]" — pairs a small seed poster
+ * with a narrative arrow pointing into a horizontally-scrolling ribbon
+ * of similar-mood matches. Each card carries its own reason chip and a
+ * "Not interested" affordance that suppresses the slug for 14 days.
  */
 export function MoodMatchRail({
   seed,
@@ -30,11 +34,12 @@ export function MoodMatchRail({
       subtitle={t("recommendations.because.subtitle")}
       entrance="sweep"
     >
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-[220px_1fr] md:gap-6">
+      <div className="flex items-stretch gap-3 md:gap-5">
+        {/* Small seed poster — narrative anchor, not the hero */}
         <Link
           to="/phim/$slug"
           params={{ slug: seed.slug }}
-          className="group relative mx-auto block w-[160px] overflow-hidden rounded-2xl ring-1 ring-white/10 md:mx-0 md:w-[220px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
+          className="group relative block w-[92px] shrink-0 overflow-hidden rounded-xl ring-1 ring-white/10 md:w-[112px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
           aria-label={seed.title}
         >
           <img
@@ -43,15 +48,25 @@ export function MoodMatchRail({
             loading="lazy"
             className="aspect-[2/3] h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent p-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/90">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent px-2 pb-1.5 pt-6">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-primary/90">
               {t("recommendations.because.seedLabel")}
             </p>
-            <p className="mt-0.5 line-clamp-1 text-sm font-semibold text-white">{seed.title}</p>
+            <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold text-white">
+              {seed.title}
+            </p>
           </div>
         </Link>
 
-        <div className="scrollbar-thin -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto rail-scroll px-4 pb-2 md:mx-0 md:px-0 md:gap-4">
+        {/* Narrative arrow: seed → matches */}
+        <div
+          className="flex shrink-0 items-center text-primary/70"
+          aria-hidden
+        >
+          <ArrowRight className="h-6 w-6 md:h-7 md:w-7" strokeWidth={2.2} />
+        </div>
+
+        <div className="scrollbar-thin -mr-4 flex flex-1 snap-x snap-proximity gap-3 overflow-x-auto rail-scroll pr-4 pb-2 md:mr-0 md:pr-0 md:gap-4">
           {items.map((m, i) => (
             <motion.div
               key={`${m.id}-${m.slug}`}
@@ -68,7 +83,12 @@ export function MoodMatchRail({
                 aria-label={m.title}
               >
                 <div className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-neutral-900 ring-1 ring-white/5 transition-all duration-500 group-hover:ring-2 group-hover:ring-primary/60">
-                  <img src={m.poster_url} alt={m.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
+                  <img
+                    src={m.poster_url}
+                    alt={m.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                  />
                   <div className="absolute left-2 top-2">
                     <RecommendationReasonChip reason={m.reason} value={m.reasonValue} />
                   </div>
@@ -77,6 +97,19 @@ export function MoodMatchRail({
                   {m.title}
                 </p>
               </Link>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  suppressSlug(m.slug);
+                }}
+                aria-label={t("recommendations.notInterested.aria", { title: m.title })}
+                title={t("recommendations.notInterested.tooltip")}
+                className="absolute right-2 top-2 z-10 grid h-7 w-7 place-items-center rounded-full bg-black/70 text-white/85 opacity-0 ring-1 ring-white/15 backdrop-blur-sm transition hover:bg-black/90 hover:text-white focus-visible:opacity-100 group-hover:opacity-100"
+              >
+                <X className="h-3.5 w-3.5" strokeWidth={2.5} />
+              </button>
             </motion.div>
           ))}
         </div>
@@ -84,3 +117,4 @@ export function MoodMatchRail({
     </SceneSection>
   );
 }
+
