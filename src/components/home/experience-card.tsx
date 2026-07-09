@@ -221,11 +221,12 @@ export function ExperienceCard({
     stageTimers.current.push(
       window.setTimeout(() => {
         setStage(3);
+        prefetchDetail();
         mountTrailer();
       }, HOVER_INTENT_MS),
     );
     stageTimers.current.push(window.setTimeout(() => setStage(4), 600));
-  }, [clearStageTimers, reduce, mountTrailer]);
+  }, [clearStageTimers, reduce, mountTrailer, prefetchDetail]);
 
   const leave = useCallback(() => {
     clearStageTimers();
