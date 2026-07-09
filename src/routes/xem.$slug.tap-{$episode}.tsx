@@ -285,26 +285,50 @@ function WatchPage() {
         </div>
         {/* Mobile server chip bar — one-tap switching without opening settings */}
         {!cinemaMode && servers.length > 1 && (
-          <div className="mt-3 flex gap-2 overflow-x-auto rail-scroll px-1 sm:hidden" role="tablist" aria-label="Nguồn phát">
-            {servers.map((s) => {
-              const active = (activeServerId || servers[0]?.id) === s.id;
-              return (
-                <button
-                  key={s.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setActiveServerId(s.id)}
-                  className={cn(
-                    "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition",
-                    active
-                      ? "border-primary/60 bg-primary/20 text-white"
-                      : "border-white/15 bg-white/5 text-white/70 hover:text-white",
-                  )}
-                >
-                  {s.name}
-                </button>
-              );
-            })}
+          <div className="mt-3 sm:hidden">
+            <div className="mb-1.5 flex items-center justify-between px-1">
+              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                Nguồn phát
+              </span>
+              <span className="text-[10px] text-muted-foreground/70">
+                {servers.length} nguồn
+              </span>
+            </div>
+            <div
+              className="flex gap-2 overflow-x-auto rail-scroll px-1 pb-1"
+              role="tablist"
+              aria-label="Nguồn phát"
+            >
+              {servers.map((s) => {
+                const active = (activeServerId || servers[0]?.id) === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setActiveServerId(s.id)}
+                    className={cn(
+                      "group relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                      active
+                        ? "border-primary bg-primary text-primary-foreground shadow-[0_4px_20px_-4px_hsl(var(--primary)/0.5)]"
+                        : "border-border/60 bg-surface-elevated/80 text-foreground/75 hover:border-border hover:text-foreground active:scale-[0.97]",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-1.5 w-1.5 rounded-full transition",
+                        active
+                          ? "bg-primary-foreground shadow-[0_0_8px_currentColor]"
+                          : "bg-muted-foreground/40",
+                      )}
+                      aria-hidden
+                    />
+                    {s.name}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </motion.div>
