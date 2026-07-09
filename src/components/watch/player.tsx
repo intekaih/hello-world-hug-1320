@@ -1624,6 +1624,45 @@ function PlayerSettingsSheet({
                 </button>
               </div>
             </div>
+
+            <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-white">
+                    {t("player.settings.soundLabel")}
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-white/65">
+                    {t("player.settings.soundExplain")}
+                  </p>
+                </div>
+                <button
+                  role="switch"
+                  aria-checked={soundEnabled}
+                  aria-label={t("player.settings.soundLabel")}
+                  onClick={() => {
+                    const next = !soundEnabled;
+                    setSoundEnabled(next);
+                    // Preview cue right after enabling so the user knows what
+                    // they just opted into. `playWhoosh` re-reads the store,
+                    // so we schedule after the state commit.
+                    if (next) setTimeout(playWhoosh, 30);
+                  }}
+                  className={cn(
+                    "relative h-6 w-11 shrink-0 rounded-full border transition",
+                    soundEnabled
+                      ? "border-primary/40 bg-primary/70"
+                      : "border-white/15 bg-white/10",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "absolute top-1/2 h-5 w-5 -translate-y-1/2 rounded-full bg-white shadow transition-all",
+                      soundEnabled ? "left-[22px]" : "left-[2px]",
+                    )}
+                  />
+                </button>
+              </div>
+            </div>
           </motion.div>
         </>
       )}
