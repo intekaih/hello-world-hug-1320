@@ -320,7 +320,9 @@
       "title": "Player settings",
       "autoNextLabel": "Auto-play next episode",
       "autoNextExplain": "Automatically move to the next episode after credits. Turn off any time.",
-      "resumeNow": "Resume now"
+      "resumeNow": "Resume now",
+      "soundLabel": "UI sound cues",
+      "soundExplain": "Play a soft cue when you add to a list or finish an episode. Off by default."
     }
   },
   "search": {
