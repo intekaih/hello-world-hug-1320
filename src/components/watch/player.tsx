@@ -1210,7 +1210,7 @@ export function WatchActions({
         className="flex flex-col items-center gap-1 rounded-xl px-4 py-2.5 text-xs font-medium text-foreground-muted transition hover:bg-white/5 hover:text-foreground"
       >
         <Share2 className="h-5 w-5" />
-        <span>{copied ? "Đã copy" : "Chia sẻ"}</span>
+        <span>{t("share.actions.share")}</span>
       </button>
     </div>
   );
