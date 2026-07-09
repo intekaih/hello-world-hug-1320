@@ -57,17 +57,17 @@ export function ComingSoonScene({ movies }: { movies: MovieCard[] }) {
                 params={{ slug: m.slug }}
                 className="group relative flex items-stretch gap-4 overflow-hidden rounded-2xl border border-white/8 bg-black/25 p-3 backdrop-blur-sm transition hover:border-white/25 sm:gap-5 sm:p-4"
               >
-                {/* Date badge */}
+                {/* Honest "soon" badge — no fake dates */}
                 <div className="relative z-10 flex w-[76px] shrink-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/50 py-3 text-center">
                   <Calendar
                     className="mb-1 h-3.5 w-3.5 text-white/50"
                     aria-hidden
                   />
-                  <div className="font-display text-2xl font-semibold leading-none text-white">
-                    {day}
+                  <div className="font-display text-base font-semibold leading-none text-white">
+                    SOON
                   </div>
-                  <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50">
-                    {mon}
+                  <div className="mt-1 font-mono text-[9px] uppercase tracking-[0.28em] text-white/50">
+                    {m.year || "TBA"}
                   </div>
                 </div>
 
