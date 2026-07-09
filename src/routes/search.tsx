@@ -467,6 +467,8 @@ function CinematicSearchHero({
             activeIdx={activeIdx}
             onSelect={(item) => submit(item.title)}
             setActiveIdx={setActiveIdx}
+            loading={loadingSuggestions}
+            onSubmitRaw={() => submit(debounced)}
           />
         </div>
 
