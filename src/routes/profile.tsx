@@ -6,9 +6,11 @@ import { toast } from "sonner";
 
 import { RequireAuth, PageHeader } from "@/components/user-lists/shared";
 import { LibrarySummary } from "@/components/library-summary";
+import { TastePreferencesCard } from "@/components/onboarding/taste-preferences-card";
 import { useAuthStore } from "@/store/authStore";
 import { apiPost } from "@/api-client";
 import { useTranslation } from "@/hooks/useTranslation";
+
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
