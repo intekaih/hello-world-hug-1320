@@ -202,7 +202,7 @@ function HistoryPage() {
                     key={`unfinished-${item.slug}-${item.episode}`}
                     item={item}
                     index={i}
-                    onRemove={() => removeOne.mutate(item.slug)}
+                    onRemove={() => removeOne.mutate(item.id)}
                   />
                 ))}
               </MovieGrid>
@@ -223,7 +223,7 @@ function HistoryPage() {
                       key={`${item.slug}-${item.episode}`}
                       item={item}
                       index={i}
-                      onRemove={() => removeOne.mutate(item.slug)}
+                      onRemove={() => removeOne.mutate(item.id)}
                     />
                   ))}
                 </MovieGrid>
