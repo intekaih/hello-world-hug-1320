@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Movie } from "./types";
 import { useShareMovie } from "@/lib/share/use-share-movie";
+import { playWhoosh } from "@/lib/ui-sound";
 
 /* -------------------------------------------------------------------------- */
 /*  Persisted client-side bookmark state — matches the previous behaviour     */
