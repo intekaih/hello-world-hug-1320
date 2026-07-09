@@ -82,18 +82,34 @@ export function useShareMovie() {
 }
 
 /**
- * Build the canonical URL from a payload. Handles ?t= for player shares.
+ * Build the canonical share URL.
+ *  · Prefers `/phim/{slug}?ref=share` when a slug is present — the invite
+ *    banner keys on `ref=share`, so this attribution must survive channels.
+ *  · Falls back to explicit `url` or the current location.
+ *  · Appends `?t=` for player timestamp shares.
  */
 export function buildShareUrl(p: SharePayload): string {
-  const base =
-    p.url ?? (typeof window !== "undefined" ? window.location.href : "");
-  if (p.timestampSeconds == null || p.timestampSeconds <= 0) return base;
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "https://movie.cc";
+  const base = p.slug
+    ? `${origin}/phim/${p.slug}`
+    : p.url ?? (typeof window !== "undefined" ? window.location.href : origin);
   try {
-    const u = new URL(base, typeof window !== "undefined" ? window.location.origin : "https://example.com");
-    u.searchParams.set("t", String(Math.floor(p.timestampSeconds)));
+    const u = new URL(base, origin);
+    if (p.slug) u.searchParams.set("ref", "share");
+    if (p.timestampSeconds && p.timestampSeconds > 0) {
+      u.searchParams.set("t", String(Math.floor(p.timestampSeconds)));
+    }
     return u.toString();
   } catch {
+    // Absolute-worst fallback for exotic base URLs
+    const params: string[] = [];
+    if (p.slug) params.push("ref=share");
+    if (p.timestampSeconds && p.timestampSeconds > 0)
+      params.push(`t=${Math.floor(p.timestampSeconds)}`);
+    if (!params.length) return base;
     const sep = base.includes("?") ? "&" : "?";
-    return `${base}${sep}t=${Math.floor(p.timestampSeconds)}`;
+    return `${base}${sep}${params.join("&")}`;
   }
 }
+
