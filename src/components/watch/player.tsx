@@ -447,6 +447,72 @@ export function PlayerContainer({
     }
   }, [currentTime, duration, slug, episode]);
 
+  /* -------------------------- Flow-preserving skips ----------------------- */
+  const SKIP_PREF_KEY = `mcc:skipIntro:${slug}`;
+  const [skipPref, setSkipPref] = useState<"on" | "off" | null>(null);
+  useEffect(() => {
+    try {
+      const v = window.localStorage.getItem(SKIP_PREF_KEY);
+      setSkipPref(v === "on" || v === "off" ? v : null);
+    } catch {
+      setSkipPref(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+
+  // Determine which skip marker (if any) applies right now.
+  // Only show inside [5s, endSec]; never during the next-ep prompt window.
+  const skipTarget = useMemo<
+    { kind: "intro" | "recap"; endSec: number } | null
+  >(() => {
+    if (nextPromptOpen) return null;
+    if (
+      typeof introEndSec === "number" &&
+      currentTime >= 5 &&
+      currentTime < introEndSec
+    ) {
+      return { kind: "intro", endSec: introEndSec };
+    }
+    if (
+      typeof recapEndSec === "number" &&
+      currentTime >= 5 &&
+      currentTime < recapEndSec
+    ) {
+      return { kind: "recap", endSec: recapEndSec };
+    }
+    return null;
+  }, [currentTime, introEndSec, recapEndSec, nextPromptOpen]);
+
+  const performSkip = useCallback(() => {
+    if (!skipTarget) return;
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = Math.max(v.currentTime, skipTarget.endSec);
+    try {
+      window.localStorage.setItem(SKIP_PREF_KEY, "on");
+    } catch {
+      /* ignore */
+    }
+    setSkipPref("on");
+    track("player_skip", { slug, episode, kind: skipTarget.kind });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skipTarget, slug, episode]);
+
+  // Auto-skip when the user previously chose to skip on this series.
+  const autoSkipRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (skipPref !== "on" || !skipTarget) return;
+    const key = `${episode}::${skipTarget.kind}`;
+    if (autoSkipRef.current === key) return;
+    autoSkipRef.current = key;
+    performSkip();
+  }, [skipPref, skipTarget, episode, performSkip]);
+  useEffect(() => {
+    autoSkipRef.current = null;
+  }, [episode]);
+
+
+
 
 
 
