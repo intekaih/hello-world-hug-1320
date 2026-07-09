@@ -47,7 +47,7 @@ function hash(s: string) {
   return Math.abs(h);
 }
 
-export function ShareSheet({ payload, open, onOpenChange, onCopied }: Props) {
+export function ShareSheet({ payload, open, onOpenChange, onCopied, onShared }: Props) {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
