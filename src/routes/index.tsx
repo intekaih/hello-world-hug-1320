@@ -174,16 +174,16 @@ function Home() {
           </StaggerItem>
         )}
 
-        {/* SCENE 06 — Because You Watched — violet, sweep camera pan */}
+        {/* SCENE 06 — Because You Watched — daypart-aware ritual surface */}
         <StaggerItem>
           <SceneSection
-            mood="violet"
-            eyebrow="✧ Because you watched"
-            title="Dành riêng cho bạn"
-            subtitle="Gợi ý dựa trên tâm trạng gần đây và những gì bạn đã lưu."
+            mood={daypart === "late_night" ? "midnight" : "violet"}
+            eyebrow={dpEyebrow}
+            title={dpTitle}
+            subtitle={dpSubtitle}
             entrance="sweep"
           >
-            <MovieRow movies={data.newMovies} />
+            <MovieRow movies={forYou} />
           </SceneSection>
         </StaggerItem>
 
