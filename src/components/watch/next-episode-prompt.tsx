@@ -66,11 +66,26 @@ export function NextEpisodePrompt({
             }}
           />
           <div className="flex items-start gap-3">
+            {posterUrl && (
+              <div className="relative h-16 w-12 shrink-0 overflow-hidden rounded-md ring-1 ring-white/15">
+                <img
+                  src={posterUrl}
+                  alt=""
+                  aria-hidden
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
             <div className="min-w-0 flex-1">
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary/90">
                 {t("player.nextEpisode.eyebrow")}
               </div>
-              <p className="mt-1 text-sm font-medium text-white">
+              {typeof nextEpisodeNumber === "number" && (
+                <div className="mt-0.5 truncate text-sm font-semibold text-white">
+                  {t("player.nextEpisode.upNextLabel", { n: nextEpisodeNumber })}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-white/75">
                 {t("player.nextEpisode.startsIn", { seconds: count })}
               </p>
             </div>
