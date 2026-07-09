@@ -60,7 +60,7 @@ const FALLBACK_SERVERS: ServerSource[] = [
   { id: "backup", name: "Dự phòng", src: FALLBACK_STREAM },
 ];
 
-const TOTAL_EPISODES = 48;
+const FALLBACK_TOTAL_EPISODES = 1;
 
 function WatchPage() {
   const { slug, episode } = Route.useParams();
