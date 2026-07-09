@@ -337,8 +337,8 @@ function CinematicSearchHero({
   const [activeIdx, setActiveIdx] = useState(-1);
   const listboxId = useId();
 
-  const showSuggestions =
-    focused && debounced.trim().length > 0 && suggestions.length > 0;
+  // Open panel the moment there's a query — skeleton fills the <150ms gap.
+  const showSuggestions = focused && debounced.trim().length > 0;
 
   useEffect(() => setActiveIdx(-1), [debounced]);
 
