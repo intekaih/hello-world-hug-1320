@@ -96,6 +96,9 @@ function ProfilePage() {
       {/* keep t reference in case future strings adopt i18n */}
       <span className="sr-only">{t("library.summary.title")}</span>
 
+      <TastePreferencesCard />
+
+
 
       <section className="glass rounded-2xl border border-foreground/10 p-6">
         <div className="flex items-center gap-4">
