@@ -551,8 +551,21 @@
     "tonight": {
       "eyebrow": "Tonight's pick",
       "subtitle": "A single confident recommendation based on your recent mood.",
+      "subtitleFor": {
+        "sameGenre": "Because you gravitate to {{value}} — tuned for tonight.",
+        "sameCountry": "In the same key as the {{value}} film you just watched.",
+        "similarMood": "Same atmosphere as what you've been watching.",
+        "highlyRated": "High-rated tonight — a safe press play.",
+        "newEpisode": "A new episode in your taste — catch up tonight.",
+        "fromWatchlist": "From the list you saved — time has come.",
+        "resume": "You're mid-way — pick up right where you left off.",
+        "rewatch": "One you loved — warm and familiar.",
+        "unexplored": "Something new, still in your lane.",
+        "trending": "Everyone's watching — don't miss out."
+      },
       "cta": "Watch tonight"
     },
+
     "because": {
       "eyebrow": "Because you watched",
       "title": "Because you watched \"{{title}}\"",
