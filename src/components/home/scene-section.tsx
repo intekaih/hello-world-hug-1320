@@ -148,7 +148,7 @@ export function SceneSection({
       data-scene-mood={mood}
       data-entrance={entrance}
       className={cn(
-        "relative -mx-4 overflow-hidden px-4 py-14 sm:-mx-6 sm:px-6 sm:py-20 lg:-mx-8 lg:px-8",
+        "scene-y relative -mx-4 overflow-hidden px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
         className,
       )}
       style={
