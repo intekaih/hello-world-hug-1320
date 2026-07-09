@@ -362,5 +362,85 @@
       "clear": "Xóa bộ lọc",
       "apply": "Áp dụng"
     }
+  },
+  "library": {
+    "summary": {
+      "eyebrow": "Kho cá nhân",
+      "title": "Rạp phim của riêng bạn",
+      "watched": "Đang xem",
+      "favorites": "Yêu thích",
+      "watchlist": "Xem sau",
+      "unread": "Chưa đọc"
+    }
+  },
+  "history": {
+    "eyebrow": "Hành trình của bạn",
+    "title": "Hành trình của bạn",
+    "subtitle": "Tiếp tục nơi bạn dừng lại",
+    "count": "{{n}} đang xem",
+    "clearAll": "Xóa tất cả",
+    "confirmClear": "Xóa toàn bộ lịch sử xem?",
+    "remove": "Xóa khỏi lịch sử",
+    "continue": "Xem tiếp",
+    "remaining": "còn {{n}} phút",
+    "episodeLabel": "Tập {{ep}}",
+    "progress": "Đã xem {{n}}%",
+    "groups": {
+      "today": "Hôm nay",
+      "yesterday": "Hôm qua",
+      "thisWeek": "Tuần này",
+      "older": "Trước đó"
+    },
+    "empty": {
+      "title": "Hành trình của bạn bắt đầu tại đây",
+      "description": "Những phim bạn xem dở sẽ hiện ở đây để bạn tiếp tục bất cứ lúc nào.",
+      "cta": "Khám phá ngay"
+    }
+  },
+  "favorites": {
+    "eyebrow": "Kho tuyển chọn",
+    "title": "Yêu thích",
+    "subtitle": "Những bộ phim đã ở lại trong bạn",
+    "count": "{{n}} phim đã lưu",
+    "remove": "Bỏ yêu thích",
+    "sort": {
+      "recent": "Mới thêm",
+      "az": "A → Z",
+      "za": "Z → A"
+    },
+    "empty": {
+      "title": "Kho yêu thích còn trống",
+      "description": "Bấm trái tim ở bất kỳ phim nào để lưu giữ mãi.",
+      "cta": "Tìm phim yêu thích"
+    }
+  },
+  "watchlist": {
+    "eyebrow": "Hàng chờ rạp riêng",
+    "title": "Xem sau",
+    "subtitle": "Danh sách riêng, theo thứ tự",
+    "count": "{{n}} trong hàng chờ",
+    "remove": "Bỏ khỏi hàng chờ",
+    "position": "#{{n}}",
+    "addNote": "Thêm ghi chú",
+    "editNote": "Sửa ghi chú",
+    "empty": {
+      "title": "Hàng chờ còn trống",
+      "description": "Đánh dấu phim để tạo hàng chờ xem riêng của bạn.",
+      "cta": "Duyệt kho phim"
+    }
+  },
+  "notifications": {
+    "eyebrow": "Tín hiệu từ thư viện",
+    "title": "Thông báo",
+    "subtitle": "Tập mới, gợi ý và cập nhật",
+    "markAllRead": "Đọc tất cả",
+    "markRead": "Đánh dấu đã đọc",
+    "newEpisode": "Tập mới",
+    "unreadBadge": "{{n}} mới",
+    "empty": {
+      "title": "Yên tĩnh",
+      "description": "Tập mới và gợi ý dành riêng cho bạn sẽ xuất hiện tại đây.",
+      "cta": "Khám phá phim"
+    }
   }
 }

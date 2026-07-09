@@ -362,5 +362,85 @@
       "clear": "Clear filters",
       "apply": "Apply"
     }
+  },
+  "library": {
+    "summary": {
+      "eyebrow": "Your archive",
+      "title": "Your personal cinema",
+      "watched": "In progress",
+      "favorites": "Favorites",
+      "watchlist": "Watch later",
+      "unread": "Unread"
+    }
+  },
+  "history": {
+    "eyebrow": "Your journey",
+    "title": "Your Journey",
+    "subtitle": "Pick up where you left off",
+    "count": "{{n}} in progress",
+    "clearAll": "Clear all",
+    "confirmClear": "Clear your entire watch history?",
+    "remove": "Remove from history",
+    "continue": "Continue",
+    "remaining": "{{n}} min left",
+    "episodeLabel": "EP {{ep}}",
+    "progress": "{{n}}% watched",
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "thisWeek": "This week",
+      "older": "Older"
+    },
+    "empty": {
+      "title": "Your journey starts here",
+      "description": "Movies you begin will appear here so you can resume anytime.",
+      "cta": "Discover something"
+    }
+  },
+  "favorites": {
+    "eyebrow": "Curated vault",
+    "title": "Favorites",
+    "subtitle": "The films that stayed with you",
+    "count": "{{n}} loved",
+    "remove": "Unfavorite",
+    "sort": {
+      "recent": "Recently added",
+      "az": "A → Z",
+      "za": "Z → A"
+    },
+    "empty": {
+      "title": "Your vault is empty",
+      "description": "Tap the heart on any movie to keep it forever.",
+      "cta": "Find something to love"
+    }
+  },
+  "watchlist": {
+    "eyebrow": "Watch later cinema queue",
+    "title": "Watchlist",
+    "subtitle": "Your private queue, in order",
+    "count": "{{n}} queued",
+    "remove": "Remove from queue",
+    "position": "#{{n}}",
+    "addNote": "Add a note",
+    "editNote": "Edit note",
+    "empty": {
+      "title": "Your queue is empty",
+      "description": "Bookmark movies to build your personal watch queue.",
+      "cta": "Browse the catalog"
+    }
+  },
+  "notifications": {
+    "eyebrow": "Signals from your library",
+    "title": "Notifications",
+    "subtitle": "New episodes, picks, and updates",
+    "markAllRead": "Mark all read",
+    "markRead": "Mark read",
+    "newEpisode": "New episode",
+    "unreadBadge": "{{n}} new",
+    "empty": {
+      "title": "All quiet",
+      "description": "New episodes and personalized picks will appear here.",
+      "cta": "Discover movies"
+    }
   }
 }

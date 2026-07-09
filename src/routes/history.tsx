@@ -2,14 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { History as HistoryIcon, Trash2, Play, X } from "lucide-react";
 import { motion } from "motion/react";
+import { useMemo } from "react";
 
 import {
   EmptyState,
   GridSkeleton,
+  GroupHeading,
   MovieGrid,
   PageHeader,
   RequireAuth,
 } from "@/components/user-lists/shared";
+import { useTranslation } from "@/hooks/useTranslation";
+import { transition } from "@/lib/design";
 
 type HistoryEntry = {
   slug: string;
@@ -26,8 +30,8 @@ type HistoryEntry = {
 export const Route = createFileRoute("/history")({
   head: () => ({
     meta: [
-      { title: "Lịch sử xem — movieCC" },
-      { name: "description", content: "Xem tiếp những gì bạn đang dở." },
+      { title: "Hành trình của bạn — movieCC" },
+      { name: "description", content: "Tiếp tục hành trình xem phim của bạn." },
     ],
   }),
   component: () => (
@@ -37,14 +41,28 @@ export const Route = createFileRoute("/history")({
   ),
 });
 
+type BucketKey = "today" | "yesterday" | "thisWeek" | "older";
+const BUCKET_ORDER: BucketKey[] = ["today", "yesterday", "thisWeek", "older"];
+
+function bucketOf(ts: number, now = Date.now()): BucketKey {
+  const d = new Date(ts);
+  const n = new Date(now);
+  const startOfToday = new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime();
+  const startOfYesterday = startOfToday - 86_400_000;
+  const startOfWeek = startOfToday - 6 * 86_400_000;
+  const t = d.getTime();
+  if (t >= startOfToday) return "today";
+  if (t >= startOfYesterday) return "yesterday";
+  if (t >= startOfWeek) return "thisWeek";
+  return "older";
+}
+
 function HistoryPage() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const query = useQuery<{ items: HistoryEntry[] }>({
     queryKey: ["history"],
-    queryFn: async () => {
-      const res = await fetch("/api/history");
-      return await res.json();
-    },
+    queryFn: async () => (await fetch("/api/history")).json(),
   });
 
   const removeOne = useMutation({
@@ -79,21 +97,37 @@ function HistoryPage() {
 
   const items = query.data?.items ?? [];
 
+  const buckets = useMemo(() => {
+    const map: Record<BucketKey, HistoryEntry[]> = {
+      today: [],
+      yesterday: [],
+      thisWeek: [],
+      older: [],
+    };
+    for (const it of items) map[bucketOf(it.updatedAt)].push(it);
+    return map;
+  }, [items]);
+
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Đang xem"
+        eyebrow={t("history.eyebrow")}
+        title={t("history.title")}
+        subtitle={t("history.subtitle")}
         count={query.isLoading ? undefined : items.length}
+        countLabel={
+          query.isLoading ? undefined : t("history.count", { n: items.length })
+        }
         icon={<HistoryIcon className="h-5 w-5" />}
         actions={
           items.length > 0 && (
             <button
               onClick={() => {
-                if (confirm("Xóa toàn bộ lịch sử xem?")) clearAll.mutate();
+                if (confirm(t("history.confirmClear"))) clearAll.mutate();
               }}
-              className="flex items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 py-2 text-sm text-foreground/80 transition hover:border-primary/50 hover:text-foreground"
+              className="flex min-h-11 items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 text-sm text-foreground/80 transition hover:border-destructive/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
             >
-              <Trash2 className="h-4 w-4" /> Xóa tất cả
+              <Trash2 className="h-4 w-4" /> {t("history.clearAll")}
             </button>
           )
         }
@@ -104,21 +138,35 @@ function HistoryPage() {
       ) : items.length === 0 ? (
         <EmptyState
           icon={<HistoryIcon className="h-8 w-8" />}
-          title="Chưa xem phim nào"
-          description="Các phim bạn đang xem sẽ hiện tại đây để tiếp tục nhanh chóng."
-          cta={{ label: "Khám phá ngay", to: "/" }}
+          title={t("history.empty.title")}
+          description={t("history.empty.description")}
+          cta={{ label: t("history.empty.cta"), to: "/" }}
         />
       ) : (
-        <MovieGrid>
-          {items.map((item, i) => (
-            <HistoryCard
-              key={`${item.slug}-${item.episode}`}
-              item={item}
-              index={i}
-              onRemove={() => removeOne.mutate(item.slug)}
-            />
-          ))}
-        </MovieGrid>
+        <div className="space-y-10">
+          {BUCKET_ORDER.map((key) => {
+            const group = buckets[key];
+            if (!group.length) return null;
+            return (
+              <section key={key} aria-label={t(`history.groups.${key}`)}>
+                <GroupHeading
+                  label={t(`history.groups.${key}`)}
+                  count={group.length}
+                />
+                <MovieGrid>
+                  {group.map((item, i) => (
+                    <HistoryCard
+                      key={`${item.slug}-${item.episode}`}
+                      item={item}
+                      index={i}
+                      onRemove={() => removeOne.mutate(item.slug)}
+                    />
+                  ))}
+                </MovieGrid>
+              </section>
+            );
+          })}
+        </div>
       )}
     </div>
   );
@@ -133,7 +181,9 @@ function HistoryCard({
   index: number;
   onRemove: () => void;
 }) {
+  const { t } = useTranslation();
   const progress = item.duration > 0 ? Math.min(1, item.position / item.duration) : 0;
+  const percent = Math.round(progress * 100);
   const remainingMin = Math.max(0, Math.round((item.duration - item.position) / 60));
   const title = item.name ?? item.slug;
   const isSeries = (item.totalEpisodes ?? 0) > 1;
@@ -142,48 +192,50 @@ function HistoryCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: Math.min(index * 0.03, 0.4) }}
-      className="group relative overflow-hidden rounded-xl border border-foreground/10 bg-elevated"
+      transition={{ ...transition.scene, delay: Math.min(index * 0.03, 0.4) }}
+      className="group relative overflow-hidden rounded-2xl border border-foreground/10 bg-elevated transition-shadow duration-300 hover:shadow-xl hover:shadow-primary/15"
     >
       <Link
         to="/xem/$slug/tap-{$episode}"
         params={{ slug: item.slug, episode: item.episode }}
         search={{ t: Math.floor(item.position) }}
-        className="block"
+        aria-label={`${t("history.continue")} ${title}`}
+        className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
       >
         <div className="relative aspect-[2/3] overflow-hidden bg-black/40">
           {item.thumb && (
             <img
               src={item.thumb}
-              alt={title}
+              alt=""
               loading="lazy"
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-500 will-change-transform group-hover:scale-[1.04]"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
 
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/90 shadow-2xl shadow-primary/50">
-              <Play className="ml-0.5 h-6 w-6 fill-white text-foreground" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="glass-strong flex h-14 w-14 items-center justify-center rounded-full ring-1 ring-primary/40 shadow-2xl shadow-primary/40">
+              <Play className="ml-0.5 h-6 w-6 fill-primary text-primary" />
             </div>
           </div>
 
           {isSeries && (
-            <div className="absolute left-2 top-2 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-              Tập {item.episode}
+            <div className="glass absolute left-2 top-2 rounded-md px-2 py-0.5 text-[10px] font-medium text-foreground">
+              {t("history.episodeLabel", { ep: item.episode })}
             </div>
           )}
 
-          {/* Progress bar */}
           <div className="absolute inset-x-0 bottom-0">
-            <div className="mx-2 mb-2 flex items-center justify-between text-[10px] text-foreground/70">
-              <span>{Math.round(progress * 100)}%</span>
-              <span>{remainingMin} phút còn lại</span>
+            <div className="mx-2.5 mb-2 flex items-center justify-between text-[10px] font-medium tabular-nums text-foreground/85">
+              <span>{t("history.progress", { n: percent })}</span>
+              <span>{t("history.remaining", { n: remainingMin })}</span>
             </div>
             <div className="h-1 w-full bg-foreground/10">
-              <div
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${percent}%` }}
+                transition={transition.scene}
                 className="h-full bg-gradient-to-r from-primary to-accent"
-                style={{ width: `${progress * 100}%` }}
               />
             </div>
           </div>
@@ -196,15 +248,17 @@ function HistoryCard({
           e.stopPropagation();
           onRemove();
         }}
-        aria-label="Xóa khỏi lịch sử"
-        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-black/70 text-white/80 opacity-0 transition hover:bg-primary hover:text-white group-hover:opacity-100"
+        aria-label={t("history.remove")}
+        className="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full bg-black/70 text-foreground/80 opacity-0 backdrop-blur-sm transition hover:bg-primary hover:text-primary-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 group-hover:opacity-100 md:h-8 md:w-8"
       >
         <X className="h-4 w-4" />
       </button>
 
-      <div className="p-2.5">
+      <div className="p-3">
         <div className="truncate text-sm font-medium text-foreground">{title}</div>
-        <div className="truncate text-xs text-muted-foreground">{item.origin_name ?? ""}</div>
+        <div className="truncate text-xs text-muted-foreground">
+          {item.origin_name ?? ""}
+        </div>
       </div>
     </motion.div>
   );

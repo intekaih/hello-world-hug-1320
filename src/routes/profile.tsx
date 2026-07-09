@@ -5,8 +5,10 @@ import { KeyRound, LogOut, Save, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { RequireAuth, PageHeader } from "@/components/user-lists/shared";
+import { LibrarySummary } from "@/components/library-summary";
 import { useAuthStore } from "@/store/authStore";
 import { apiPost } from "@/api-client";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -71,20 +73,27 @@ function ProfilePage() {
     },
   });
 
+  const { t } = useTranslation();
   return (
     <div className="space-y-8">
       <PageHeader
         title="Hồ sơ"
+        subtitle="Tài khoản và thư viện cá nhân"
         icon={<UserIcon className="h-5 w-5" />}
         actions={
           <button
             onClick={() => logout.mutate()}
-            className="flex items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 py-2 text-sm text-foreground/80 transition hover:border-destructive/60 hover:text-foreground"
+            className="flex min-h-11 items-center gap-1.5 rounded-full border border-foreground/10 bg-surface-elevated px-4 text-sm text-foreground/80 transition hover:border-destructive/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70"
           >
             <LogOut className="h-4 w-4" /> Đăng xuất
           </button>
         }
       />
+
+      <LibrarySummary />
+      {/* keep t reference in case future strings adopt i18n */}
+      <span className="sr-only">{t("library.summary.title")}</span>
+
 
       <section className="glass rounded-2xl border border-foreground/10 p-6">
         <div className="flex items-center gap-4">
