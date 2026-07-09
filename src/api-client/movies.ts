@@ -137,7 +137,18 @@ function formatRemaining(seconds: number): string {
 
 /** Fetch home data from the real Express BE and normalize to FE shape. */
 export async function fetchHomeData(): Promise<HomeData> {
-  const be = await apiGet<BeHomeResponse>("/movies/home");
+  let be: BeHomeResponse;
+  try {
+    be = await apiGet<BeHomeResponse>("/movies/home");
+  } catch (err) {
+    // BE down / CORS / offline → serve mock so the app is never a dead skeleton.
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.warn("[home] BE unreachable, using mock:", err);
+    }
+    const { MOCK_HOME_DATA } = await import("@/lib/home-mock");
+    return MOCK_HOME_DATA;
+  }
 
   // Continue-watching row is fed by the authenticated /history endpoint.
   // Guests silently get an empty list (fetchHistory handles 401 → []).
