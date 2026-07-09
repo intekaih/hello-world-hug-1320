@@ -5,6 +5,8 @@ import { Sparkles, Heart, Compass, LogIn, TrendingUp, Wand2 } from "lucide-react
 
 import type { DiscoverPayload, DiscoverMovie } from "./api/discover";
 import { useAuthStore, selectIsAuthenticated } from "@/store/authStore";
+import { RecommendationEngine } from "@/components/recommendations/recommendation-engine";
+
 
 async function fetchDiscover(): Promise<DiscoverPayload> {
   const res = await fetch("/api/discover", { credentials: "include" });
@@ -252,6 +254,10 @@ function DiscoverPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-10 p-4 md:p-6 md:space-y-14">
       <TasteHero data={data} isAuthed={isAuthed} />
+
+      <RecommendationEngine />
+
+
 
       {data.because.map((b, i) => (
         <Rail
