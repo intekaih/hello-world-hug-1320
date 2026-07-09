@@ -245,19 +245,52 @@ function TopBar({ onOpenMenu }: { onOpenMenu?: () => void }) {
 
             <NotificationBell />
 
-            <Link to="/profile" aria-label={t("nav.profile")} className="ml-1">
-              <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
-                <AvatarImage src="" alt="" />
-                <AvatarFallback className="bg-primary/20 text-primary">
-                  YO
-                </AvatarFallback>
-              </Avatar>
-            </Link>
+            <AuthHeaderSlot />
           </div>
         </div>
       </div>
     </header>
   );
+}
+
+function AuthHeaderSlot() {
+  const { user, status } = useAuth();
+  if (status === "loading") {
+    return (
+      <div className="ml-1 h-9 w-9 animate-pulse rounded-full bg-foreground/10" />
+    );
+  }
+  if (!user) {
+    return (
+      <Link
+        to="/login"
+        className="ml-1 rounded-full border border-foreground/15 px-3 py-1.5 text-sm font-medium text-foreground/80 transition hover:border-primary/60 hover:text-foreground"
+      >
+        Đăng nhập
+      </Link>
+    );
+  }
+  const initials =
+    (user.name || user.username || "?")
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((s) => s[0]?.toUpperCase())
+      .join("") || "?";
+  return (
+    <Link to="/profile" aria-label="Hồ sơ" className="ml-1">
+      <Avatar className="h-9 w-9 ring-2 ring-white/10 transition hover:ring-primary/50">
+        <AvatarImage src={user.avatar_url || ""} alt={user.name} />
+        <AvatarFallback className="bg-primary/20 text-primary">
+          {initials}
+        </AvatarFallback>
+      </Avatar>
+    </Link>
+  );
+}
+
+function _EndAuthHeaderSlot() {
+  return null;
 }
 
 function BottomTabBar() {
