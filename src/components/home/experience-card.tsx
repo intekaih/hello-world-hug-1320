@@ -23,9 +23,10 @@ import {
 } from "react";
 
 import { thumbSrc } from "@/utils/thumbSrc";
-import type { MovieCard } from "@/lib/home-queries";
+import { type MovieCard, hasVisibleProgress, isNearComplete } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
+import { useTranslation } from "@/hooks/useTranslation";
 
 /**
  * ExperienceCard — the "Movie Experience Card" replacing the flat poster.
@@ -350,8 +351,10 @@ export function ExperienceCard({
           </span>
         </div>
 
-        {/* Progress ring / resume state */}
-        {progress != null && <ProgressBadge progress={progress} />}
+        {/* Progress ring — only when actually in progress */}
+        {hasVisibleProgress(progress) && (
+          <ProgressBadge progress={progress!} nearlyDone={isNearComplete(progress)} />
+        )}
 
         {/* Episode badge */}
         {episode && (
@@ -514,7 +517,14 @@ function QuickAction({
   );
 }
 
-function ProgressBadge({ progress }: { progress: number }) {
+function ProgressBadge({
+  progress,
+  nearlyDone,
+}: {
+  progress: number;
+  nearlyDone: boolean;
+}) {
+  const { t } = useTranslation();
   const clamped = Math.max(0, Math.min(1, progress));
   const R = 14;
   const C = 2 * Math.PI * R;
@@ -522,24 +532,9 @@ function ProgressBadge({ progress }: { progress: number }) {
   return (
     <div className="absolute bottom-2 left-2 flex items-center gap-1.5">
       <div className="relative grid h-9 w-9 place-items-center">
-        {/* Resume glow */}
-        <span
-          aria-hidden
-          className="absolute inset-0 rounded-full bg-primary/40 blur-md"
-        />
-        <svg
-          viewBox="0 0 36 36"
-          className="absolute inset-0 h-full w-full -rotate-90"
-          aria-hidden
-        >
-          <circle
-            cx="18"
-            cy="18"
-            r={R}
-            fill="none"
-            stroke="oklch(1 0 0 / 0.2)"
-            strokeWidth="2.5"
-          />
+        <span aria-hidden className="absolute inset-0 rounded-full bg-primary/40 blur-md" />
+        <svg viewBox="0 0 36 36" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden>
+          <circle cx="18" cy="18" r={R} fill="none" stroke="oklch(1 0 0 / 0.2)" strokeWidth="2.5" />
           <circle
             cx="18"
             cy="18"
@@ -554,9 +549,15 @@ function ProgressBadge({ progress }: { progress: number }) {
         </svg>
         <Play className="relative h-3 w-3 fill-white text-white" />
       </div>
-      <span className="rounded-full bg-black/55 px-2 py-0.5 font-mono text-[10px] font-medium text-white backdrop-blur-md">
-        {Math.round(clamped * 100)}%
-      </span>
+      {nearlyDone ? (
+        <span className="rounded-full bg-primary px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_0_14px_-4px_var(--color-primary)]">
+          {t("continueWatching.nearlyDone")}
+        </span>
+      ) : (
+        <span className="rounded-full bg-black/55 px-2 py-0.5 font-mono text-[10px] font-medium text-white backdrop-blur-md">
+          {Math.round(clamped * 100)}%
+        </span>
+      )}
     </div>
   );
 }
