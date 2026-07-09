@@ -152,10 +152,15 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
     setPaused(false);
   }, [mx, my]);
 
-  // Deterministic particles per slide
+  // Deterministic particles per slide. Cut count on coarse pointer — 22
+  // continuously-animated spans are a measurable scroll-jank source on
+  // low-end mobile GPUs.
   const particles = useMemo(() => {
     const seed = movie?.id ?? 1;
-    return Array.from({ length: 22 }, (_, i) => {
+    const isCoarse = typeof window !== "undefined"
+      && window.matchMedia?.("(pointer: coarse)").matches;
+    const count = isCoarse ? 8 : 22;
+    return Array.from({ length: count }, (_, i) => {
       const r = pseudo(seed * 97 + i * 13);
       return {
         left: r() * 100,
@@ -168,6 +173,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
       };
     });
   }, [movie?.id]);
+
 
   if (!movie) return null;
 
