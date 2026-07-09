@@ -16,6 +16,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { Movie } from "./types";
 import { useShareMovie } from "@/lib/share/use-share-movie";
 import { playWhoosh } from "@/lib/ui-sound";
+import { track } from "@/lib/track";
 
 /* -------------------------------------------------------------------------- */
 /*  Persisted client-side bookmark state — matches the previous behaviour     */
@@ -89,6 +90,7 @@ export function useBookmarkState(movie: Movie) {
       setWatchlist(next);
       if (next) {
         playWhoosh();
+        track("watchlist_add", { slug: movie.slug, source: "detail_hero" });
         // Loss-aversion + safety: 5s window to undo an add.
         toast(t("watchlist.addedToast"), {
           duration: 5000,
