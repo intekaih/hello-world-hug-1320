@@ -86,7 +86,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   return (
     <section
       ref={sectionRef}
-      className="dark relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-black text-white sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
+      className="relative -mx-4 h-[68vh] min-h-[520px] overflow-hidden bg-background sm:-mx-6 sm:h-[78vh] lg:-mx-8 lg:rounded-[28px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => {
         setPaused(false);
@@ -125,8 +125,8 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Content */}
-      <div className="absolute inset-0 flex items-end p-5 sm:p-10 lg:p-14">
+      {/* Content — always dark scope so text stays legible over the movie image */}
+      <div className="dark absolute inset-0 flex items-end p-5 text-white sm:p-10 lg:p-14">
         <motion.div
           key={`content-${movie.id}`}
           initial="hidden"

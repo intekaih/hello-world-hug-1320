@@ -141,7 +141,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="dark relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-black text-white sm:-mx-6 lg:-mx-8 lg:rounded-[32px]"
+      className="relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-background sm:-mx-6 lg:-mx-8 lg:rounded-[32px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={handleLeave}
       onMouseMove={handleMouseMove}
@@ -252,7 +252,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
       </AnimatePresence>
 
       {/* CONTENT LAYER */}
-      <div className="absolute inset-0 flex items-end p-5 pb-14 sm:p-10 sm:pb-20 lg:p-16 lg:pb-24">
+      <div className="dark absolute inset-0 flex items-end p-5 pb-14 text-white sm:p-10 sm:pb-20 lg:p-16 lg:pb-24">
         <motion.div
           key={`content-${movie.id}`}
           style={{ x: contentX, y: contentY }}

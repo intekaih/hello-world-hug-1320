@@ -83,7 +83,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       aria-label={movie.title}
-      className="dark relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-black text-white sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
+      className="relative -mx-4 h-[92vh] min-h-[640px] overflow-hidden bg-background sm:-mx-6 lg:-mx-8 lg:rounded-[2rem]"
       style={{ ["--px" as string]: "0px", ["--py" as string]: "0px" }}
     >
       {/* Backdrop — Ken Burns + parallax */}
@@ -159,7 +159,7 @@ export function MovieDetailHero({ movie }: { movie: Movie }) {
       )}
 
       {/* Content — bottom aligned */}
-      <div className="absolute inset-0 flex items-end">
+      <div className="dark absolute inset-0 flex items-end text-white">
         <div className="w-full p-6 sm:p-10 lg:p-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="max-w-2xl space-y-5">
