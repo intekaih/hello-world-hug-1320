@@ -742,5 +742,11 @@
       "three": "Bộ này đáng xem đấy.",
       "four": "Xem cái này rồi lại nghĩ đến bạn."
     }
+  },
+  "wellness": {
+    "title": "Bạn đã xem khá lâu rồi",
+    "body": "Hôm nay bạn đã xem khoảng {{m}} phút — nghỉ ngơi 5 phút, uống nước, rồi quay lại nhé?",
+    "continue": "Tiếp tục xem",
+    "break": "Nghỉ 5 phút"
   }
 }
