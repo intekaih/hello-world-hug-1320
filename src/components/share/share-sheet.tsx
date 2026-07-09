@@ -150,7 +150,7 @@ export function ShareSheet({ payload, open, onOpenChange, onCopied }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="glass-strong border border-white/12 bg-background/60 backdrop-blur-xl sm:max-w-md"
+        className="glass-strong border border-glass-border bg-surface-glass backdrop-blur-xl sm:max-w-md"
         aria-describedby={undefined}
       >
         <DialogHeader className="space-y-1.5">
@@ -177,7 +177,7 @@ export function ShareSheet({ payload, open, onOpenChange, onCopied }: Props) {
         </div>
 
         {/* Link row */}
-        <div className="mt-3 flex items-stretch gap-2 rounded-2xl border border-white/10 bg-white/5 p-1.5">
+        <div className="mt-3 flex items-stretch gap-2 rounded-2xl border border-glass-border bg-foreground/5 p-1.5">
           <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
             <Link2 className="h-4 w-4 shrink-0 text-foreground-muted" aria-hidden />
             <span className="truncate text-xs text-foreground/90" title={url}>
@@ -197,8 +197,8 @@ export function ShareSheet({ payload, open, onOpenChange, onCopied }: Props) {
           type="button"
           onClick={() => doCopy(`${payload.title} — ${url}`, "titleLink")}
           className={cn(
-            "mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-foreground/90",
-            "transition hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
+            "mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-glass-border bg-foreground/5 px-4 py-2.5 text-sm font-medium text-foreground/90",
+            "transition hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
             copiedKey === "titleLink" && "border-primary/40 bg-primary/10 text-primary",
           )}
         >
@@ -254,8 +254,8 @@ function ChannelButton({
       transition={{ type: "spring", stiffness: 380, damping: 22 }}
       aria-label={channel.label}
       className={cn(
-        "group flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.03] p-3",
-        "transition hover:border-primary/40 hover:bg-white/[0.06]",
+        "group flex flex-col items-center gap-1.5 rounded-2xl border border-glass-border bg-foreground/5 p-3",
+        "transition hover:border-primary/40 hover:bg-foreground/10",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
       )}
     >
