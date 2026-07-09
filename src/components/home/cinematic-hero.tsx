@@ -295,7 +295,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
                 Tiếp tục · Còn {resume.remaining}
               </span>
             ) : (
-              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-foreground/70">
+              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-white/75">
                 Feature Presentation · Ep 01
               </span>
             )}
