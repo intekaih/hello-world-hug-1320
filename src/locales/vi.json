@@ -381,6 +381,19 @@
       "phim-le": "Phim lẻ",
       "hoat-hinh": "Anime",
       "tv-shows": "TV Shows"
+    },
+    "continueWatching": "Tiếp tục xem",
+    "noResultsWithQuery": "Không tìm thấy kết quả cho \"{{q}}\"",
+    "why": "vì: {{reason}}",
+    "suggest": {
+      "searchFor": "Tìm"
+    },
+    "recovery": {
+      "hint": "Không dead-end — thử một hướng khác:",
+      "action": "Hành động",
+      "lateNight": "Đêm khuya",
+      "under2h": "Dưới 2 giờ",
+      "topRated": "Đỉnh 2024"
     }
   },
   "home": {
