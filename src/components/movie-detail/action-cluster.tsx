@@ -45,11 +45,14 @@ export function useBookmarkState(movie: Movie) {
       const next = !fav;
       setFav(next);
       persist(`fav:${movie.slug}`, next);
+      // Confirmation cue only on ADD — silent on remove to avoid nagging.
+      if (next) playWhoosh();
     },
     toggleWl: () => {
       const next = !wl;
       setWl(next);
       persist(`wl:${movie.slug}`, next);
+      if (next) playWhoosh();
     },
   };
 }
