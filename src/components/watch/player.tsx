@@ -749,6 +749,41 @@ export function PlayerContainer({
         </button>
       )}
 
+      {/* Skip intro / recap */}
+      <AnimatePresence>
+        {skipTarget && (
+          <motion.button
+            key={skipTarget.kind}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              performSkip();
+            }}
+            aria-label={
+              skipTarget.kind === "intro"
+                ? t("player.skip.introAria")
+                : t("player.skip.recapAria")
+            }
+            className="glass-strong pointer-events-auto absolute bottom-24 right-4 z-30 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.6)] transition hover:border-primary/40 hover:bg-black/75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:bottom-28"
+          >
+            {skipTarget.kind === "intro"
+              ? t("player.skip.intro")
+              : t("player.skip.recap")}
+            <kbd
+              aria-hidden
+              className="rounded border border-white/25 bg-white/10 px-1.5 font-mono text-[10px] uppercase tracking-[0.15em] text-white/75"
+            >
+              S
+            </kbd>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+
+
       {/* Controls */}
       <AnimatePresence>
         {controlsVisible && (
