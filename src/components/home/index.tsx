@@ -283,7 +283,7 @@ const CATEGORIES = [
 export function CategoryChips() {
   const [active, setActive] = useState("All");
   return (
-    <div className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto rail-scroll px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
       {CATEGORIES.map((c) => {
         const isActive = c === active;
         return (
@@ -390,7 +390,7 @@ export function MovieRow({
       )}
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-4 overflow-x-auto rail-scroll px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {movies.map((m) => (
           <ExperienceCard key={m.id} movie={m} />
@@ -527,7 +527,7 @@ export function Top10Section({ movies }: { movies: MovieCard[] }) {
       />
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 py-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-6 overflow-x-auto rail-scroll px-4 py-4 pl-10 sm:-mx-6 sm:px-6 sm:pl-14 lg:-mx-8 lg:px-8 lg:pl-16"
       >
         {movies.slice(0, 10).map((m, i) => (
           <ExperienceCard
@@ -574,7 +574,7 @@ export function ContinueWatching({ items }: { items: ContinueWatchingItem[] }) {
       />
       <div
         ref={ref}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto rail-scroll px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {items.map((m) => (
           <Link

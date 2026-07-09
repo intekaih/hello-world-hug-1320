@@ -51,7 +51,7 @@ export function MoodMatchRail({
           </div>
         </Link>
 
-        <div className="scrollbar-thin -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0 md:gap-4">
+        <div className="scrollbar-thin -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto rail-scroll px-4 pb-2 md:mx-0 md:px-0 md:gap-4">
           {items.map((m, i) => (
             <motion.div
               key={`${m.id}-${m.slug}`}

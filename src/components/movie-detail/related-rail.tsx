@@ -68,7 +68,7 @@ export function RelatedMovieRail({
             hidden: {},
             show: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
           }}
-          className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+          className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-4 overflow-x-auto rail-scroll px-4 py-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
         >
           {items.map((m) => (
             <motion.div

@@ -20,7 +20,7 @@ export function CastCarousel({ cast }: { cast: string[] }) {
         eyebrow={t("movieDetail.cast.eyebrow")}
         title={t("movieDetail.cast.title")}
       />
-      <div className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div className="scrollbar-none -mx-4 flex snap-x snap-proximity gap-4 overflow-x-auto rail-scroll px-4 pb-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         {cast.map((name, i) => (
           <CastCard key={`${name}-${i}`} name={name} index={i} />
         ))}

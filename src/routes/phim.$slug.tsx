@@ -260,7 +260,7 @@ function SeriesPartsNav({
           hidden: {},
           show: { transition: { staggerChildren: 0.05 } },
         }}
-        className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+        className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto rail-scroll px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
         {parts.map((p) => {
           const active = p.slug === currentSlug;
