@@ -21,18 +21,27 @@ const hero = (i: number, title: string, overview: string): HeroMovie => ({
   trailer_url: null,
 });
 
-const card = (i: number, title: string, tag = "mccp"): MovieCard => ({
-  id: 1000 + i,
-  slug: `mock-${tag}-${i}`,
-  title,
-  poster_url: POSTER(`${tag}${i}`),
-  year: 2020 + (i % 5),
-  rating: Number((7 + (i % 30) / 10).toFixed(1)),
-});
+const card = (i: number, title: string, tag = "mccp", kind: "series" | "single" | "anime" = "single"): MovieCard => {
+  const qualities = ["4K", "FHD", "HD", "FHD"];
+  const isSeries = kind !== "single";
+  return {
+    id: 1000 + i,
+    slug: `mock-${tag}-${i}`,
+    title,
+    poster_url: POSTER(`${tag}${i}`),
+    year: 2020 + (i % 5),
+    rating: Number((7 + (i % 30) / 10).toFixed(1)),
+    quality: qualities[i % qualities.length],
+    kind,
+    episodeLabel: isSeries
+      ? (i % 4 === 0 ? "Full" : `Tập ${(i % 12) + 1}/${(i % 12) + 4}`)
+      : undefined,
+  };
+};
 
-const seed = (prefix: string, count: number) =>
+const seed = (prefix: string, count: number, kind: "series" | "single" | "anime" = "single") =>
   Array.from({ length: count }, (_, i) =>
-    card(i, `${prefix} ${i + 1}`, prefix.toLowerCase().replace(/\s/g, "")),
+    card(i, `${prefix} ${i + 1}`, prefix.toLowerCase().replace(/\s/g, ""), kind),
   );
 
 export const MOCK_HOME_DATA: HomeData = {
@@ -41,9 +50,9 @@ export const MOCK_HOME_DATA: HomeData = {
     hero(2, "Bí Mật Kinh Đô", "Một điệp viên trẻ lần theo dấu vết cuối cùng của cha."),
     hero(3, "Đêm Không Ngủ", "Thành phố về đêm — nơi mọi bí mật đều có giá."),
   ],
-  top10Movies: seed("Top", 10),
-  hotSeriesMovies: seed("Bộ", 12),
-  newMovies: seed("Mới", 12),
-  animeMovies: seed("Anime", 12),
+  top10Movies: seed("Top", 10, "single"),
+  hotSeriesMovies: seed("Bộ", 12, "series"),
+  newMovies: seed("Mới", 12, "single"),
+  animeMovies: seed("Anime", 12, "anime"),
   continueWatching: [],
 };

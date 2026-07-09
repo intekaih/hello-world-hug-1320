@@ -21,6 +21,12 @@ export type MovieCard = {
   poster_url: string;
   year: number;
   rating: number;
+  /** e.g. "HD", "FHD", "4K", "CAM" — shown as a small badge on the card. */
+  quality?: string;
+  /** e.g. "Tập 12/24", "Full", "Trailer" — normalized episode/series status. */
+  episodeLabel?: string;
+  /** "series" | "single" | "anime" — used to decide whether to show episode chip. */
+  kind?: "series" | "single" | "anime";
 };
 
 /**

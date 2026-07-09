@@ -488,12 +488,19 @@ export function ExperienceCard({
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[oklch(0.06_0.02_280/0.94)] via-[oklch(0.06_0.02_280/0.35)] to-transparent"
         />
 
-        {/* Rating chip — always on */}
-        <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/55 px-2 py-0.5 backdrop-blur-md">
-          <Star className="h-3 w-3 fill-gold text-gold" />
-          <span className="font-mono text-[10px] font-semibold text-white">
-            {movie.rating.toFixed(1)}
-          </span>
+        {/* Top-left chip stack: rating + quality */}
+        <div className="absolute left-2 top-2 flex flex-col items-start gap-1">
+          <div className="flex items-center gap-1 rounded-full bg-black/55 px-2 py-0.5 backdrop-blur-md">
+            <Star className="h-3 w-3 fill-gold text-gold" />
+            <span className="font-mono text-[10px] font-semibold text-white">
+              {movie.rating.toFixed(1)}
+            </span>
+          </div>
+          {movie.quality && (
+            <span className="rounded-md bg-primary/85 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-wider text-white shadow-sm">
+              {movie.quality}
+            </span>
+          )}
         </div>
 
         {/* Progress ring — only when actually in progress */}
@@ -501,12 +508,22 @@ export function ExperienceCard({
           <ProgressBadge progress={progress!} nearlyDone={isNearComplete(progress)} />
         )}
 
-        {/* Episode badge */}
-        {episode && (
-          <div className="absolute right-2 top-2 rounded-full bg-black/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white backdrop-blur-md">
-            {episode}
-          </div>
-        )}
+        {/* Episode badge — prop (continue-watching) wins, else derive from card */}
+        {(() => {
+          const label = episode ?? movie.episodeLabel;
+          if (!label) return null;
+          const isFull = /full|hoàn tất|hoan tat/i.test(label);
+          return (
+            <div
+              className={cn(
+                "absolute right-2 top-2 rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-md",
+                isFull ? "bg-emerald-500/85" : "bg-black/60",
+              )}
+            >
+              {label}
+            </div>
+          );
+        })()}
 
         {/* Progressive metadata reveal */}
         <div className="absolute inset-x-0 bottom-0 p-3">
