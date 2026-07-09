@@ -105,14 +105,12 @@ function Home() {
         <Stagger>
 
         {/* Welcome-back banner: 1×/session after a 48h lapse; dismiss = 7d */}
-        <StaggerItem>
-          <WelcomeBackHost
-            resume={data.continueWatching.find(
-              (c) => c.progress > 0.05 && c.progress < 0.95,
-            )}
-            newThisWeek={data.newMovies}
-          />
-        </StaggerItem>
+        <WelcomeBackHost
+          resume={data.continueWatching.find(
+            (c) => c.progress > 0.05 && c.progress < 0.95,
+          )}
+          newThisWeek={data.newMovies}
+        />
 
 
 
