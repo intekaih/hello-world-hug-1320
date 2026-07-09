@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { useNotifPrefsStore } from "@/store/notifPrefsStore";
+import { track } from "@/lib/track";
 
 
 export type Notification = {
@@ -257,7 +258,13 @@ export function NotificationBell() {
     <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() =>
+          setOpen((v) => {
+            const next = !v;
+            if (next) track("notif_open", { surface: "tray", unread: count });
+            return next;
+          })
+        }
         aria-label={count > 0 ? `Thông báo (${count} chưa đọc)` : "Thông báo"}
         aria-expanded={open}
         className="relative inline-flex h-9 w-9 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground"

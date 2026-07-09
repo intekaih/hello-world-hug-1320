@@ -292,7 +292,14 @@ export function PlayerContainer({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const onPlay = () => setPlaying(true);
+    let firstPlayFired = false;
+    const onPlay = () => {
+      setPlaying(true);
+      if (!firstPlayFired) {
+        firstPlayFired = true;
+        track("play_start", { slug, source: "player" });
+      }
+    };
     const onPause = () => setPlaying(false);
     const onTime = () => {
       setCurrentTime(video.currentTime);
@@ -1041,6 +1048,7 @@ export function PlayerContainer({
         onTooltipSeen={markBingeTooltipSeen}
         onOpenSettings={() => setSettingsSheetOpen(true)}
         onCancel={() => {
+          track("auto_next_cancel", { slug, episode: epNum });
           autoAdvanceStreakRef.current = 0;
           setNextPromptOpen(false);
         }}
@@ -1050,6 +1058,7 @@ export function PlayerContainer({
           onChangeEpisode(epNum + 1);
         }}
         onAutoAdvance={() => {
+          track("auto_next_fire", { slug, next: epNum + 1 });
           autoAdvanceStreakRef.current += 1;
           setNextPromptOpen(false);
           onChangeEpisode(epNum + 1);

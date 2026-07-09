@@ -344,7 +344,10 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
                 <Link
                   to="/xem/$slug/tap-{$episode}"
                   params={{ slug: resume.slug, episode: resume.episode }}
-                  onClick={() => track("hero_resume_clicked", { slug: resume.slug })}
+                  onClick={() => {
+                    track("hero_resume_clicked", { slug: resume.slug });
+                    track("home_primary_cta_click", { slug: resume.slug, kind: "resume" });
+                  }}
                   className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
                 >
                   <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full" />
@@ -355,7 +358,10 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
                 <Link
                   to="/phim/$slug"
                   params={{ slug: resume.slug }}
-                  onClick={() => track("hero_resume_clicked", { slug: resume.slug })}
+                  onClick={() => {
+                    track("hero_resume_clicked", { slug: resume.slug });
+                    track("home_primary_cta_click", { slug: resume.slug, kind: "resume" });
+                  }}
                   className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
                 >
                   <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full" />
@@ -367,8 +373,10 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
               <Link
                 to="/xem/$slug/tap-{$episode}"
                 params={{ slug: movie.slug, episode: "1" }}
+                onClick={() => track("home_primary_cta_click", { slug: movie.slug, kind: "play" })}
                 className="group/cta relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-foreground px-7 py-3.5 text-[13px] font-semibold uppercase tracking-[0.16em] text-background shadow-[var(--shadow-cinematic)] transition-transform duration-300 hover:-translate-y-0.5"
               >
+
                 <span
                   aria-hidden
                   className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover/cta:translate-x-full"
