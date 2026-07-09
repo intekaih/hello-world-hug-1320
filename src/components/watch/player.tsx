@@ -357,17 +357,18 @@ export function PlayerContainer({
   }, [slug, episode, title, poster]);
 
 
-  // every 5s while playing
+  // every 10s while playing (throttle to keep BE quiet)
   useEffect(() => {
     const id = window.setInterval(() => {
       const video = videoRef.current;
       if (!video || video.paused) return;
       saveProgress();
-      const { shouldPrompt } = noteWatching(5);
+      const { shouldPrompt } = noteWatching(10);
       if (shouldPrompt) setWellnessOpen(true);
-    }, 5000);
+    }, 10_000);
     return () => window.clearInterval(id);
   }, [saveProgress]);
+
 
   // save on pause + before unload
   useEffect(() => {
