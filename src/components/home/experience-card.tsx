@@ -106,7 +106,20 @@ export function ExperienceCard({
   // Trailer mount + ready state (Stage 3 fade-in).
   const [videoMounted, setVideoMounted] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const [inView, setInView] = useState(true);
+
+  // Coarse-pointer tap-preview state: first tap arms the preview, second
+  // tap navigates. `previewArmed` is true while we are showing the
+  // preview overlay from a tap gesture (not a hover).
+  const [previewArmed, setPreviewArmed] = useState(false);
+  const previewSlotId = useRef<symbol | null>(null);
+  const isCoarsePointer = useRef(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    isCoarsePointer.current = window.matchMedia("(pointer: coarse)").matches;
+  }, []);
+
 
   // Mouse-tracked 3D tilt.
   const mx = useMotionValue(0.5);
