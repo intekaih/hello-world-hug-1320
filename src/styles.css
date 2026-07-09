@@ -583,3 +583,41 @@
   100% { transform: translateX(220%) skewX(-12deg); }
 }
 
+
+/* ============================================================
+ * Theme System 2.0 — media & overlay utilities
+ * ============================================================ */
+
+/* Always-white text intended to sit ON TOP of images / video / posters.
+ * Identity across themes because the surface underneath is media, not the
+ * page background. Comes with a token-driven drop shadow for legibility. */
+@utility on-media {
+  color: oklch(1 0 0);
+  text-shadow: 0 2px 12px oklch(0 0 0 / 0.55), 0 1px 2px oklch(0 0 0 / 0.35);
+}
+@utility on-media-muted {
+  color: oklch(1 0 0 / 0.82);
+  text-shadow: 0 2px 8px oklch(0 0 0 / 0.45);
+}
+
+/* Cinematic scrim — stays dark in both themes because it exists to make
+ * white typography readable over arbitrary media. */
+@utility scrim-bottom {
+  background: linear-gradient(0deg, oklch(0 0 0 / 0.90) 0%, oklch(0 0 0 / 0.55) 35%, transparent 75%);
+}
+@utility scrim-top {
+  background: linear-gradient(180deg, oklch(0 0 0 / 0.65) 0%, transparent 60%);
+}
+@utility scrim-left {
+  background: linear-gradient(90deg, oklch(0 0 0 / 0.75), transparent 55%);
+}
+
+/* Hero overlay — theme-aware. Dark = deep vignette. Light = warm cream. */
+@utility hero-overlay {
+  background: var(--hero-overlay-bottom), var(--hero-overlay-left);
+}
+
+/* Card image scrim used for bottom title fades */
+@utility card-overlay {
+  background: var(--card-overlay);
+}
