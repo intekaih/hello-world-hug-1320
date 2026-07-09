@@ -647,7 +647,20 @@ function DiscoveryPortal({
   setFilter: (patch: Partial<SearchParams>) => void;
 }) {
   const { t } = useTranslation();
+  const continueQuery = useQuery({
+    queryKey: ["search-continue-watching"],
+    queryFn: async ({ signal }) => {
+      const res = await fetch("/api/history", { signal });
+      if (!res.ok) return { items: [] as { slug: string; title?: string }[] };
+      return (await res.json()) as {
+        items: { slug: string; title?: string; episode?: string }[];
+      };
+    },
+    staleTime: 60_000,
+  });
+  const continueItems = (continueQuery.data?.items ?? []).slice(0, 6);
   return (
+
     <div className="space-y-12 pt-2">
       {recent.length > 0 && (
         <DiscoverySection
