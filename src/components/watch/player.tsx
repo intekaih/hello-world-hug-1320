@@ -1545,6 +1545,8 @@ function PlayerSettingsSheet({
   const pauseUntil = usePlayerStore((s) => s.pauseAutoplayUntil);
   const resumeAutoplay = usePlayerStore((s) => s.resumeAutoplay);
   const paused = !!pauseUntil && Date.now() < pauseUntil;
+  const soundEnabled = useUIStore((s) => s.soundEnabled);
+  const setSoundEnabled = useUIStore((s) => s.setSoundEnabled);
 
   return (
     <AnimatePresence>
