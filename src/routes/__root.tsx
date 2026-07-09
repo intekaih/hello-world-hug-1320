@@ -163,9 +163,11 @@ function RootComponent() {
           <ShareProvider>
             <AppShell />
           </ShareProvider>
+          <AppOnboardingHost />
           <Toaster />
         </AuthInitializer>
       </I18nProvider>
+
     </QueryClientProvider>
   );
 }
