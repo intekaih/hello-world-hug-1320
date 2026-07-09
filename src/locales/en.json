@@ -702,7 +702,22 @@
       "copiedTitle": "Link copied",
       "copiedDescription": "\"{{title}}\" is ready to share.",
       "opened": "Opening {{channel}}…",
-      "copyFailed": "Couldn't copy — try again."
+      "copyFailed": "Couldn't copy — try again.",
+      "sharedTitle": "Shared ✨",
+      "sharedDescription": "Thanks for spreading the word via {{channel}}.",
+      "addWatchlist": "Add to Watchlist",
+      "addedWatchlist": "Saved to Watchlist"
+    },
+    "card": {
+      "tagline": "I'm watching on movieCC",
+      "brand": "movieCC",
+      "qrHint": "Scan to open"
+    },
+    "invited": {
+      "eyebrow": "You've been invited",
+      "title": "A friend thinks you'll love {{title}}",
+      "cta": "Watch now",
+      "dismiss": "Dismiss"
     },
     "messages": {
       "one": "I think you'll love this one.",
