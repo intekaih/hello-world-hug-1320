@@ -542,8 +542,25 @@
       "title": "Yên tĩnh",
       "description": "Tập mới và gợi ý dành riêng cho bạn sẽ xuất hiện tại đây.",
       "cta": "Khám phá phim"
+    },
+    "prefs": {
+      "title": "Tuỳ chọn thông báo",
+      "subtitle": "Chọn loại thông báo bạn muốn nhận. Lưu trên thiết bị này.",
+      "new_episode": {
+        "title": "Tập mới",
+        "desc": "Chỉ khi bộ phim nằm trong danh sách xem hoặc lịch sử của bạn."
+      },
+      "recommendation": {
+        "title": "Gợi ý phim",
+        "desc": "Đề xuất định kỳ dựa trên gu của bạn. Mặc định tắt."
+      },
+      "system": {
+        "title": "Hệ thống",
+        "desc": "Cập nhật tài khoản và thông báo quan trọng."
+      }
     }
   },
+
   "taste": {
     "eyebrow": "Cá nhân hoá nhẹ nhàng",
     "title": "Nói cho movieCC biết bạn thích gì",
