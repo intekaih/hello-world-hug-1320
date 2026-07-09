@@ -68,6 +68,10 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface-glass: var(--surface-glass);
+  --color-glass-border: var(--glass-border);
+  --color-overlay: var(--overlay);
+  --color-scrim: var(--scrim);
 
   --font-display: "Fraunces", "Times New Roman", ui-serif, serif;
   --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -145,6 +149,17 @@
   --sidebar-accent-foreground: oklch(0.18 0.02 280);
   --sidebar-border: oklch(0.18 0.02 280 / 0.08);
   --sidebar-ring: oklch(0.65 0.22 15);
+
+  /* Theme System 2.0 — light */
+  --surface-glass: oklch(1 0 0 / 0.72);
+  --glass-border: oklch(0.18 0.02 280 / 0.10);
+  --overlay: oklch(0.18 0.02 280 / 0.55);
+  --scrim: oklch(0.10 0.02 280 / 0.70);
+  --hero-overlay-bottom: linear-gradient(180deg, transparent 0%, oklch(1 0 0 / 0.35) 55%, var(--background) 100%);
+  --hero-overlay-left: linear-gradient(90deg, oklch(1 0 0 / 0.55), transparent 55%);
+  --card-overlay: linear-gradient(180deg, transparent 55%, oklch(0.10 0.02 280 / 0.75) 100%);
+  --shadow-soft: 0 8px 24px -12px oklch(0.18 0.02 280 / 0.20);
+  --shadow-media: 0 24px 48px -16px oklch(0.18 0.02 280 / 0.25);
 }
 
 .dark {
@@ -184,6 +199,17 @@
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(1 0 0 / 0.08);
   --sidebar-ring: oklch(0.65 0.22 15);
+
+  /* Theme System 2.0 — dark */
+  --surface-glass: oklch(0.14 0.02 280 / 0.55);
+  --glass-border: oklch(1 0 0 / 0.10);
+  --overlay: oklch(0 0 0 / 0.65);
+  --scrim: oklch(0 0 0 / 0.85);
+  --hero-overlay-bottom: linear-gradient(180deg, transparent 0%, oklch(0.09 0.02 280 / 0.55) 55%, var(--background) 100%);
+  --hero-overlay-left: linear-gradient(90deg, oklch(0.09 0.02 280 / 0.90), transparent 55%);
+  --card-overlay: linear-gradient(180deg, transparent 55%, oklch(0 0 0 / 0.85) 100%);
+  --shadow-soft: 0 12px 32px -12px oklch(0 0 0 / 0.55);
+  --shadow-media: 0 30px 60px -18px oklch(0 0 0 / 0.65);
 }
 
 @layer base {
@@ -557,3 +583,41 @@
   100% { transform: translateX(220%) skewX(-12deg); }
 }
 
+
+/* ============================================================
+ * Theme System 2.0 — media & overlay utilities
+ * ============================================================ */
+
+/* Always-white text intended to sit ON TOP of images / video / posters.
+ * Identity across themes because the surface underneath is media, not the
+ * page background. Comes with a token-driven drop shadow for legibility. */
+@utility on-media {
+  color: oklch(1 0 0);
+  text-shadow: 0 2px 12px oklch(0 0 0 / 0.55), 0 1px 2px oklch(0 0 0 / 0.35);
+}
+@utility on-media-muted {
+  color: oklch(1 0 0 / 0.82);
+  text-shadow: 0 2px 8px oklch(0 0 0 / 0.45);
+}
+
+/* Cinematic scrim — stays dark in both themes because it exists to make
+ * white typography readable over arbitrary media. */
+@utility scrim-bottom {
+  background: linear-gradient(0deg, oklch(0 0 0 / 0.90) 0%, oklch(0 0 0 / 0.55) 35%, transparent 75%);
+}
+@utility scrim-top {
+  background: linear-gradient(180deg, oklch(0 0 0 / 0.65) 0%, transparent 60%);
+}
+@utility scrim-left {
+  background: linear-gradient(90deg, oklch(0 0 0 / 0.75), transparent 55%);
+}
+
+/* Hero overlay — theme-aware. Dark = deep vignette. Light = warm cream. */
+@utility hero-overlay {
+  background: var(--hero-overlay-bottom), var(--hero-overlay-left);
+}
+
+/* Card image scrim used for bottom title fades */
+@utility card-overlay {
+  background: var(--card-overlay);
+}

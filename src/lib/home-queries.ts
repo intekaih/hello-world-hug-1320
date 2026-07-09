@@ -11,6 +11,7 @@ export type HeroMovie = {
   runtime: string;
   rating: string;
   genres: string[];
+  trailer_url?: string | null;
 };
 
 export type MovieCard = {

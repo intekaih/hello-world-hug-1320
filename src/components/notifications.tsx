@@ -195,7 +195,7 @@ export function NotificationBell() {
               exit={{ scale: 0.6, opacity: 0 }}
               transition={{ duration: 0.4 }}
               aria-hidden="true"
-              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-white shadow-lg shadow-primary/40"
+              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-none text-primary-foreground shadow-lg shadow-primary/40"
             >
               {count > 9 ? "9+" : count}
             </motion.span>

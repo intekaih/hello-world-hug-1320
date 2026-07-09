@@ -21,6 +21,7 @@ import { thumbSrc } from "@/utils/thumbSrc";
 import type { HeroMovie } from "@/lib/home-queries";
 import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
+import { normalizeTrailerSource } from "@/lib/media/trailer";
 
 /**
  * CinematicHero — the emotional opening scene of MovieCC.
@@ -63,7 +64,18 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
   const contentY = useTransform(smoothY, (v) => v * 6);
 
   const movie = movies[index];
-  const trailerSrc = movie ? trailers?.[movie.id] : undefined;
+  // Prefer explicit trailer map (backward-compat); fall back to normalized
+  // movie.trailer_url. Only direct video URLs autoplay; YouTube/Vimeo/none
+  // gracefully fall back to the animated backdrop + optional external btn.
+  const trailerSource = movie ? normalizeTrailerSource(movie) : { kind: "none" as const };
+  const explicitTrailer = movie ? trailers?.[movie.id] : undefined;
+  const trailerSrc =
+    explicitTrailer ??
+    (trailerSource.kind === "direct" ? trailerSource.src : undefined);
+  const externalTrailer =
+    trailerSource.kind === "youtube" || trailerSource.kind === "vimeo"
+      ? trailerSource.external
+      : undefined;
 
   // Auto-advance slides
   useEffect(() => {
@@ -330,8 +342,8 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
         </motion.div>
       </div>
 
-      {/* Trailer mute toggle */}
-      {trailerSrc && (
+      {/* Trailer mute toggle (direct video) or external trailer link */}
+      {trailerSrc ? (
         <button
           onClick={() => setMuted((m) => !m)}
           aria-label={muted ? "Bật tiếng trailer" : "Tắt tiếng trailer"}
@@ -339,7 +351,18 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
         >
           {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
         </button>
-      )}
+      ) : externalTrailer ? (
+        <a
+          href={externalTrailer}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Xem trailer"
+          className="glass absolute right-5 top-5 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/10 sm:right-10 sm:top-10"
+        >
+          <Play className="h-3.5 w-3.5 fill-current" />
+          Trailer
+        </a>
+      ) : null}
 
       {/* Progress rail */}
       <div className="absolute bottom-5 right-5 z-10 flex items-center gap-4 sm:bottom-10 sm:right-10">

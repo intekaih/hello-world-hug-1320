@@ -14,6 +14,7 @@ import { Link } from "@tanstack/react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ExperienceCard } from "@/components/home/experience-card";
+import { HeroTrailer } from "@/components/home/hero-trailer";
 import type {
   ContinueWatchingItem,
   HeroMovie,
@@ -109,20 +110,14 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
             className="absolute inset-0 will-change-transform"
             style={{ transition: "transform 600ms var(--ease-out-soft)" }}
           >
-            <img
-              src={thumbSrc(movie.backdrop_url, { w: 1920 })}
-              alt=""
-              className="ken-burns h-[112%] w-[108%] -translate-x-[4%] -translate-y-[6%] object-cover"
-            />
+            <HeroTrailer movie={movie} />
           </div>
 
           {/* Cinematic color grade */}
           <div className="pointer-events-none absolute inset-0 aurora opacity-70 mix-blend-soft-light" />
 
-          {/* Bottom-up cinematic scrim */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-          {/* Left-to-right darkening for text legibility */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/85 via-background/20 to-transparent" />
+          {/* Theme-aware hero overlay (dark: deep vignette; light: warm cream) */}
+          <div className="pointer-events-none absolute inset-0 hero-overlay" />
           {/* Vignette */}
           <div className="pointer-events-none absolute inset-0 [background:radial-gradient(ellipse_at_center,transparent_45%,oklch(0_0_0/0.55)_100%)]" />
           {/* Film grain */}
