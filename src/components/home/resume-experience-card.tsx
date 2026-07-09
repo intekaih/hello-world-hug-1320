@@ -300,14 +300,6 @@ export function ResumeExperienceCard({
               </motion.p>
             </motion.div>
 
-            {/* Thin timeline progress bar */}
-            <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/10">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${pct}%` }}
-                transition={
-                  reduce ? { duration: 0 } : { duration: 1.1, ease: ease.outSoft, delay: 0.1 }
-                }
             {/* Thin timeline progress bar — only when actually in progress */}
             {showProgress && (
               <div className="mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/10">
