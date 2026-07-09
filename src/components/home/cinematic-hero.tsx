@@ -382,7 +382,7 @@ export function CinematicHero({ movies, trailers }: CinematicHeroProps) {
 
 /* -------------------------------------------------------------------- */
 
-const EASE = ease.outSoft as const;
+const EASE = ease.outSoft;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },

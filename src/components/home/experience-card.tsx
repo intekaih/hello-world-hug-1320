@@ -74,7 +74,7 @@ const SIZES = {
   lg: "w-[190px] sm:w-[220px] lg:w-[240px]",
 } as const;
 
-const EASE = ease.outSoft as const;
+const EASE = ease.outSoft;
 
 export function ExperienceCard({
   movie,
