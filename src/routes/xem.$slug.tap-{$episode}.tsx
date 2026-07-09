@@ -262,6 +262,8 @@ function WatchPage() {
             poster={backdropUrl}
             servers={servers}
             initialTime={initialTime}
+            introEndSec={introEndSec}
+            recapEndSec={recapEndSec}
             onChangeEpisode={goToEpisode}
             cinemaMode={cinemaMode}
             onToggleCinemaMode={toggleCinema}
