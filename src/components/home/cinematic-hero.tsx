@@ -392,7 +392,7 @@ export function CinematicHero({ movies, trailers, resume }: CinematicHeroProps) 
             <Link
               to="/phim/$slug"
               params={{ slug: resumeValid && resume ? resume.slug : movie.slug }}
-              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium uppercase tracking-[0.16em] text-foreground transition hover:bg-foreground/10"
+              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-[13px] font-medium uppercase tracking-[0.16em] text-white transition hover:bg-white/15"
             >
               <Info className="h-4 w-4" /> Chi tiết
             </Link>
