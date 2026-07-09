@@ -554,11 +554,16 @@ export function ExperienceCard({
         {/* Quick actions — Stage 4 spring reveal */}
         <div className="pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 flex-col gap-2">
           <QuickAction
-            icon={<Play className="h-3.5 w-3.5 fill-current" />}
-            label="Play"
+            icon={<Play className="h-4 w-4 fill-current" />}
+            label={progress != null ? "Tiếp tục" : "Phát"}
             visible={stage4}
             delay={0}
             primary
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              void navigate({ to: watchTo, params: watchParams });
+            }}
           />
           <QuickAction
             icon={<Bookmark className={cn("h-3.5 w-3.5", saved && "fill-current")} />}
