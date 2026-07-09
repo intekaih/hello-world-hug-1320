@@ -7,12 +7,14 @@ import {
   useMarkRead,
   useNotifications,
 } from "@/components/notifications";
+import { NotificationPreferences } from "@/components/notification-preferences";
 import {
   EmptyState,
   PageHeader,
   RequireAuth,
 } from "@/components/user-lists/shared";
 import { useTranslation } from "@/hooks/useTranslation";
+
 
 export const Route = createFileRoute("/notifications")({
   head: () => ({
@@ -64,7 +66,10 @@ function NotificationsPage() {
         }
       />
 
+      <NotificationPreferences />
+
       {isLoading ? (
+
         <div className="space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
             <div

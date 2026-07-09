@@ -3,8 +3,10 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Check, PlayCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+
+import { useNotifPrefsStore } from "@/store/notifPrefsStore";
 
 
 export type Notification = {
@@ -31,22 +33,102 @@ export function formatRelative(ts: number) {
   return new Date(ts).toLocaleDateString("vi-VN");
 }
 
+/**
+ * Canonical notification copy:
+ *   new_episode → "{title} · Tập {ep} đã lên · {relativeTime}"
+ *   others      → falls back to the server-provided message.
+ * Kept as a single helper so bell dropdown, full page, and toast agree.
+ */
+export function formatNotificationCopy(n: Notification): {
+  headline: string;
+  meta: string;
+} {
+  if (n.type === "new_episode" && n.episode) {
+    return {
+      headline: n.movie_name,
+      meta: `Tập ${n.episode} đã lên · ${formatRelative(n.createdAt)}`,
+    };
+  }
+  return {
+    headline: n.movie_name,
+    meta: `${n.message} · ${formatRelative(n.createdAt)}`,
+  };
+}
+
+/** Slugs a user is "following" for notification purposes = watchlist ∪ history. */
+type FollowResp = { items: { movie_slug?: string; slug?: string }[] };
+
+function useFollowedSlugs() {
+  const wl = useQuery<FollowResp>({
+    queryKey: ["notif", "follow", "watchlist"],
+    queryFn: async () => (await fetch("/api/watchlist")).json(),
+    staleTime: 60_000,
+  });
+  const hist = useQuery<FollowResp>({
+    queryKey: ["notif", "follow", "history"],
+    queryFn: async () => (await fetch("/api/history")).json(),
+    staleTime: 60_000,
+  });
+  return useMemo(() => {
+    const set = new Set<string>();
+    for (const it of wl.data?.items ?? []) {
+      const s = it.movie_slug ?? it.slug;
+      if (s) set.add(s);
+    }
+    for (const it of hist.data?.items ?? []) {
+      const s = it.slug ?? it.movie_slug;
+      if (s) set.add(s);
+    }
+    return set;
+  }, [wl.data, hist.data]);
+}
+
+type NotificationsResp = { items: Notification[] };
+
+/**
+ * Notifications feed with two filters applied on top of the raw store:
+ * 1. `new_episode` items are dropped when the slug is NOT followed
+ *    (watchlist ∪ history) — no spam for shows the user never asked for.
+ * 2. Any type disabled in the preference center is hidden entirely.
+ */
 export function useNotifications() {
-  return useQuery<{ items: Notification[] }>({
+  const followed = useFollowedSlugs();
+  const prefs = useNotifPrefsStore();
+  const q = useQuery<NotificationsResp>({
     queryKey: ["notifications"],
     queryFn: async () => (await fetch("/api/notifications")).json(),
   });
+
+  const items = useMemo(() => {
+    const raw = q.data?.items ?? [];
+    return raw.filter((n) => {
+      if (!prefs[n.type]) return false;
+      if (n.type === "new_episode" && !followed.has(n.movie_slug)) return false;
+      return true;
+    });
+  }, [q.data, followed, prefs]);
+
+  return { ...q, data: q.data ? { items } : q.data, rawCount: q.data?.items.length ?? 0 };
 }
 
+/**
+ * Unread count derived from the filtered feed so the bell badge and the
+ * dropdown can never disagree. The underlying query still polls every
+ * 60s to trigger a re-derive when the server store changes.
+ */
 export function useUnreadCount() {
-  return useQuery<{ count: number }>({
+  const { data } = useNotifications();
+  const server = useQuery<{ count: number }>({
     queryKey: ["notifications", "unread-count"],
     queryFn: async () => (await fetch("/api/notifications/unread-count")).json(),
     refetchInterval: () => (typeof document !== "undefined" && document.hidden ? false : 60_000),
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
   });
+  const count = (data?.items ?? []).filter((n) => !n.read).length;
+  return { data: { count }, isLoading: server.isLoading };
 }
+
 
 /**
  * Watches the unread-count query and fires a toast + returns a "bump" pulse
@@ -64,10 +146,12 @@ function useNotificationAlerts(count: number, items: Notification[]) {
     if (count > prev) {
       setBump((b) => b + 1);
       const latest = items.find((n) => !n.read);
-      const title = latest ? `${latest.movie_name}` : "Bạn có thông báo mới";
-      const description = latest?.message ?? `${count} thông báo chưa đọc`;
+      const copy = latest ? formatNotificationCopy(latest) : null;
+      const title = copy?.headline ?? "Bạn có thông báo mới";
+      const description = copy?.meta ?? `${count} thông báo chưa đọc`;
       toast(title, {
         description,
+
         action: latest
           ? {
               label: "Xem",
@@ -279,17 +363,27 @@ export function NotificationBell() {
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="truncate text-sm font-medium text-foreground">
-                          {n.movie_name}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <PlayCircle className="h-3 w-3 text-accent" />
-                          <span className="truncate">{n.message}</span>
-                        </div>
-                        <div className="mt-0.5 text-[10px] text-muted-foreground">
-                          {formatRelative(n.createdAt)}
-                        </div>
+                        {(() => {
+                          const c = formatNotificationCopy(n);
+                          return (
+                            <>
+                              <div className="truncate text-sm font-medium text-foreground">
+                                {c.headline}
+                              </div>
+                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <PlayCircle className="h-3 w-3 text-accent" />
+                                <span className="truncate">{c.meta}</span>
+                              </div>
+                            </>
+                          );
+                        })()}
+                        {n.type === "new_episode" && !n.read && (
+                          <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                            Xem ngay →
+                          </div>
+                        )}
                       </div>
+
                     </Link>
                   </li>
                 ))
@@ -384,8 +478,18 @@ export function NotificationRow({
           <div className="font-display font-semibold text-foreground transition-colors group-hover:text-primary">
             {n.movie_name}
           </div>
-          <p className="mt-0.5 text-sm text-muted-foreground">{n.message}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {n.type === "new_episode" && n.episode
+              ? `Tập ${n.episode} đã lên`
+              : n.message}
+          </p>
+          {n.type === "new_episode" && (
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-[11px] font-semibold text-primary ring-1 ring-primary/25">
+              <PlayCircle className="h-3 w-3" /> Xem ngay
+            </span>
+          )}
         </div>
+
       </Link>
       {!n.read && (
         <button
