@@ -211,7 +211,7 @@ function Home() {
             entrance="drift"
             particles="dust"
           >
-            <MovieRow movies={data.animeMovies} />
+            <MovieRow movies={animeSorted} />
           </SceneSection>
         </StaggerItem>
 
