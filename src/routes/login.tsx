@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Eye, EyeOff, Loader2, Lock, User, AlertCircle, Film } from "lucide-react";
 import { z } from "zod";
+import { useAuth } from "@/lib/auth-context";
 
 const searchSchema = z.object({
   redirect: fallback(z.string(), "/").default("/"),
