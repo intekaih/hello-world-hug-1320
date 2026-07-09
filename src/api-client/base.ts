@@ -1,9 +1,21 @@
 import { ensureCsrfToken } from "@/hooks/useCsrfToken";
 
+// Backend Express API base URL — phải set trong .env Lovable:
+// VITE_API_BASE_URL=http://localhost:3000
+const API_BASE_URL =
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
+
 export type ApiInit = Omit<RequestInit, "body"> & {
   json?: unknown;
   body?: BodyInit | null;
 };
+
+/** Resolve full URL: nếu path là absolute (http/https) thì giữ nguyên; nếu relative thì prefix API_BASE_URL */
+function resolveUrl(path: string): string {
+  if (/^https?:\/\//.test(path)) return path;
+  if (!API_BASE_URL) return path;  // dev fallback — dùng Vite proxy
+  return `${API_BASE_URL.replace(/\/+$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 export class ApiError extends Error {
   status: number;
@@ -36,7 +48,7 @@ export async function apiFetch<T = unknown>(path: string, init: ApiInit = {}): P
     if (token && !headers.has("X-CSRF-Token")) headers.set("X-CSRF-Token", token);
   }
 
-  const res = await fetch(path, {
+  const res = await fetch(resolveUrl(path), {
     ...init,
     method,
     headers,
