@@ -505,6 +505,30 @@
       "sameCountry": "From {{value}}",
       "similarMood": "Feels like {{value}}"
     }
+  },
+  "share": {
+    "sheet": {
+      "eyebrow": "Share this moment"
+    },
+    "actions": {
+      "share": "Share",
+      "copyLink": "Copy link",
+      "copyTitleLink": "Copy title + link",
+      "copied": "Copied"
+    },
+    "toast": {
+      "copiedTitle": "Link copied",
+      "copiedDescription": "\"{{title}}\" is ready to share.",
+      "opened": "Opening {{channel}}…",
+      "copyFailed": "Couldn't copy — try again."
+    },
+    "messages": {
+      "one": "I think you'll love this one.",
+      "two": "Movie night?",
+      "three": "This one's worth it.",
+      "four": "Saw this and thought of you."
+    }
   }
 }
+
 
