@@ -53,7 +53,10 @@ export type RecInputs = {
   history: HistorySignal[];
   favorites: LibrarySignal[];
   watchlist: LibrarySignal[];
+  /** Slugs the user hit "Not interested" on — hidden across every surface. */
+  suppressed?: Set<string>;
 };
+
 
 export type RecSurfaces = {
   hasSignals: boolean;
@@ -121,7 +124,12 @@ function topReason(m: BrowseMovie, w: ReturnType<typeof buildWeights>): {
 // ── main ──────────────────────────────────────────────────────────────
 
 export function buildRecommendations(input: RecInputs): RecSurfaces {
-  const { pool, history, favorites, watchlist } = input;
+  const { pool: rawPool, history, favorites, watchlist, suppressed } = input;
+  const suppress = suppressed ?? new Set<string>();
+  // Suppression is global: a hidden slug can't appear on any surface, including
+  // Tonight and "Because you watched…" seeds — otherwise the "Not interested"
+  // signal feels ignored on the next render.
+  const pool = suppress.size > 0 ? rawPool.filter((m) => !suppress.has(m.slug)) : rawPool;
   const bySlug = new Map(pool.map((m) => [m.slug, m]));
 
   const historySeeds = history
@@ -141,8 +149,9 @@ export function buildRecommendations(input: RecInputs): RecSurfaces {
   const hasSignals =
     historySeeds.length + favSeeds.length + watchSeeds.length > 0;
 
-  // ── Fallback: no signals → trending only ────────────────────────────
+  // ── Fallback: no signals → cold-start uses ONLY trending / highlyRated ─
   if (!hasSignals) {
+
     const trending = pool
       .slice()
       .sort((a, b) => b.rating - a.rating || b.year - a.year)

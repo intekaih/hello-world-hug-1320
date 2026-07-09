@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
+import { X } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { RecMovie } from "@/lib/recommendations/engine";
@@ -7,7 +8,10 @@ import type { SceneMood } from "@/components/home/scene-section";
 import { SceneSection } from "@/components/home/scene-section";
 import { ease } from "@/lib/design";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
+import { suppressSlug } from "@/lib/recommendations/suppress";
 import { RecommendationReasonChip } from "./reason-chip";
+
 
 /**
  * RecommendationSection — cinematic wrapper around a taste-scored rail.
@@ -50,6 +54,7 @@ export function RecommendationSection({
 }
 
 function RecCard({ movie, index }: { movie: RecMovie; index: number }) {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -89,6 +94,20 @@ function RecCard({ movie, index }: { movie: RecMovie; index: number }) {
           {movie.title}
         </p>
       </Link>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          suppressSlug(movie.slug);
+        }}
+        aria-label={t("recommendations.notInterested.aria", { title: movie.title })}
+        title={t("recommendations.notInterested.tooltip")}
+        className="absolute right-2 top-2 z-10 grid h-7 w-7 place-items-center rounded-full bg-black/70 text-white/85 opacity-0 ring-1 ring-white/15 backdrop-blur-sm transition hover:bg-black/90 hover:text-white focus-visible:opacity-100 group-hover:opacity-100"
+      >
+        <X className="h-3.5 w-3.5" strokeWidth={2.5} />
+      </button>
     </motion.div>
   );
 }
+

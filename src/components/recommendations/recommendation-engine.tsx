@@ -4,9 +4,11 @@ import { useMemo } from "react";
 import { buildRecommendations, type RecInputs } from "@/lib/recommendations/engine";
 import type { BrowseMovie } from "@/routes/api/browse";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useSuppressedRecs } from "@/hooks/useSuppressedRecs";
 import { RecommendationSection } from "./recommendation-section";
 import { TonightPick } from "./tonight-pick";
 import { MoodMatchRail } from "./mood-match-rail";
+
 
 type PoolResp = { items: BrowseMovie[] };
 type HistoryResp = {
@@ -35,6 +37,8 @@ async function j<T>(url: string): Promise<T> {
  */
 export function RecommendationEngine() {
   const { t } = useTranslation();
+  const { suppressed } = useSuppressedRecs();
+
 
   const pool = useQuery({
     queryKey: ["rec", "pool"],
@@ -71,9 +75,11 @@ export function RecommendationEngine() {
       })),
       favorites: (favorites.data?.items ?? []).map((f) => ({ slug: f.movie_slug, createdAt: f.createdAt })),
       watchlist: (watchlist.data?.items ?? []).map((w) => ({ slug: w.movie_slug, createdAt: w.createdAt })),
+      suppressed,
     };
     return buildRecommendations(input);
-  }, [pool.data, history.data, favorites.data, watchlist.data]);
+  }, [pool.data, history.data, favorites.data, watchlist.data, suppressed]);
+
 
   if (!surfaces) {
     return (

@@ -14,8 +14,16 @@ import { RecommendationReasonChip } from "./reason-chip";
  */
 export function TonightPick({ movie }: { movie: RecMovie }) {
   const { t } = useTranslation();
+  // Dynamic subtitle keyed off the reason kind, with a graceful fallback.
+  // e.g. sameGenre → "Vì bạn hay xem {genre}", highlyRated → "Điểm cao đêm nay", …
+  const subtitleKey = `recommendations.tonight.subtitleFor.${movie.reason}`;
+  const subtitle = movie.reasonValue
+    ? t(subtitleKey, { value: movie.reasonValue, defaultValue: t("recommendations.tonight.subtitle") })
+    : t(subtitleKey, { defaultValue: t("recommendations.tonight.subtitle") });
+
   return (
     <motion.div
+
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -52,7 +60,7 @@ export function TonightPick({ movie }: { movie: RecMovie }) {
             {movie.title}
           </h2>
           <p className="mt-2 text-sm text-white/70 md:text-base">
-            {t("recommendations.tonight.subtitle")}
+            {subtitle}
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
