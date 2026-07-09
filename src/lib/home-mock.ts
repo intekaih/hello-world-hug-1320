@@ -21,14 +21,23 @@ const hero = (i: number, title: string, overview: string): HeroMovie => ({
   trailer_url: null,
 });
 
-const card = (i: number, title: string, tag = "mccp"): MovieCard => ({
-  id: 1000 + i,
-  slug: `mock-${tag}-${i}`,
-  title,
-  poster_url: POSTER(`${tag}${i}`),
-  year: 2020 + (i % 5),
-  rating: Number((7 + (i % 30) / 10).toFixed(1)),
-});
+const card = (i: number, title: string, tag = "mccp", kind: "series" | "single" | "anime" = "single"): MovieCard => {
+  const qualities = ["4K", "FHD", "HD", "FHD"];
+  const isSeries = kind !== "single";
+  return {
+    id: 1000 + i,
+    slug: `mock-${tag}-${i}`,
+    title,
+    poster_url: POSTER(`${tag}${i}`),
+    year: 2020 + (i % 5),
+    rating: Number((7 + (i % 30) / 10).toFixed(1)),
+    quality: qualities[i % qualities.length],
+    kind,
+    episodeLabel: isSeries
+      ? (i % 4 === 0 ? "Full" : `Tập ${(i % 12) + 1}/${(i % 12) + 4}`)
+      : undefined,
+  };
+};
 
 const seed = (prefix: string, count: number) =>
   Array.from({ length: count }, (_, i) =>
