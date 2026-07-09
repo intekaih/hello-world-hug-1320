@@ -60,7 +60,7 @@ export function TonightPick({ movie }: { movie: RecMovie }) {
             {movie.title}
           </h2>
           <p className="mt-2 text-sm text-white/70 md:text-base">
-            {t("recommendations.tonight.subtitle")}
+            {subtitle}
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
