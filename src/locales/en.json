@@ -405,6 +405,21 @@
         "title": "Tight and sharp for this hour",
         "subtitle": "Highly rated picks — enough to finish before you drift off."
       }
+    },
+    "lucky": {
+      "eyebrow": "◈ Today's lucky pick",
+      "title": "Spin mood — 12 picks for today",
+      "subtitle": "A bounded spin: a new set each day, up to 3 reshuffles.",
+      "shuffle": "Shuffle",
+      "shuffleAria": "Shuffle — {{remaining}}/{{max}} left today",
+      "remaining": "{{n}} shuffles left today",
+      "exhausted": "Out of shuffles — check back tomorrow.",
+      "reason": {
+        "highlyRated": "Highly rated",
+        "trending": "Trending",
+        "unexplored": "Hidden gem",
+        "similarMood": "Your mood"
+      }
     }
   },
   "browse": {

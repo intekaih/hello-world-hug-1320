@@ -19,6 +19,7 @@ import { ComingSoonScene } from "@/components/home/coming-soon-scene";
 import { ContinueWatchingImmersive } from "@/components/home/continue-watching-immersive";
 import { EditorialScene } from "@/components/home/editorial-scene";
 import { GenreCosmos } from "@/components/home/genre-cosmos";
+import { LuckyRow } from "@/components/home/lucky-row";
 import { MysteryScene } from "@/components/home/mystery-scene";
 import { SceneAtmosphere } from "@/components/home/scene-atmosphere";
 import { SceneSection } from "@/components/home/scene-section";
@@ -184,6 +185,23 @@ function Home() {
             entrance="sweep"
           >
             <MovieRow movies={forYou} />
+          </SceneSection>
+        </StaggerItem>
+
+        {/* SCENE 06.5 — Controlled surprise · seeded editorial lottery */}
+        <StaggerItem>
+          <SceneSection
+            mood="gold"
+            entrance="focus"
+          >
+            <LuckyRow
+              pool={[
+                ...data.top10Movies,
+                ...data.hotSeriesMovies,
+                ...data.newMovies,
+                ...data.animeMovies,
+              ]}
+            />
           </SceneSection>
         </StaggerItem>
 

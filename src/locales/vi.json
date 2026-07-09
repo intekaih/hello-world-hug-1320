@@ -405,6 +405,21 @@
         "title": "Gọn nhẹ và sắc nét cho giờ này",
         "subtitle": "Những lựa chọn đánh giá cao, đủ để kết thúc trước khi bạn ngủ quên."
       }
+    },
+    "lucky": {
+      "eyebrow": "◈ Hôm nay may mắn",
+      "title": "Spin mood — 12 gợi ý hôm nay",
+      "subtitle": "Một cú xoay có biên: mỗi ngày một set, xáo lại tối đa 3 lần.",
+      "shuffle": "Xáo lại",
+      "shuffleAria": "Xáo lại — còn {{remaining}}/{{max}} lượt hôm nay",
+      "remaining": "Còn {{n}} lượt hôm nay",
+      "exhausted": "Hết lượt — quay lại ngày mai nhé.",
+      "reason": {
+        "highlyRated": "Điểm cao",
+        "trending": "Đang hot",
+        "unexplored": "Ít người biết",
+        "similarMood": "Cùng mood"
+      }
     }
   },
   "browse": {
