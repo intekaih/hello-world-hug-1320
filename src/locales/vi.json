@@ -551,8 +551,21 @@
     "tonight": {
       "eyebrow": "Gợi ý tối nay",
       "subtitle": "Một gợi ý duy nhất, dựa trên tâm trạng gần đây của bạn.",
+      "subtitleFor": {
+        "sameGenre": "Vì bạn hay xem {{value}} — chọn đúng tông cho tối nay.",
+        "sameCountry": "Cùng hơi thở phim {{value}} bạn vừa xem.",
+        "similarMood": "Cùng bầu không khí với những gì bạn đang xem.",
+        "highlyRated": "Điểm cao đêm nay — an toàn để bấm play.",
+        "newEpisode": "Có tập mới trong gu bạn — bắt kịp tối nay.",
+        "fromWatchlist": "Từ danh sách bạn đã lưu — đến lúc rồi.",
+        "resume": "Bạn đang dở — mở lại đúng chỗ.",
+        "rewatch": "Một bộ bạn từng yêu — ấm áp và quen thuộc.",
+        "unexplored": "Điều mới mẻ, nhưng vẫn hợp gu bạn.",
+        "trending": "Cả nhà đang xem — đừng bỏ lỡ."
+      },
       "cta": "Xem tối nay"
     },
+
     "because": {
       "eyebrow": "Vì bạn đã xem",
       "title": "Vì bạn đã xem \"{{title}}\"",
