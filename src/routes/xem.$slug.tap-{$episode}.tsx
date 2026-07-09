@@ -19,6 +19,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { thumbSrc } from "@/utils/thumbSrc";
 import { useTranslation } from "@/hooks/useTranslation";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 const searchSchema = z.object({
   t: fallback(z.number(), 0).default(0),

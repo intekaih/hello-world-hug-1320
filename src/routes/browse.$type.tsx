@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useTranslation } from "@/hooks/useTranslation";
 import { ExperienceCard } from "@/components/home/experience-card";
 import { cn } from "@/lib/utils";
+import { ease } from "@/lib/design";
 
 const TYPE_LABEL_KEYS: Record<string, string> = {
   "phim-bo": "phim-bo",
