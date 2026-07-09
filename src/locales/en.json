@@ -335,6 +335,30 @@
       "tv-shows": "TV Shows"
     }
   },
+  "home": {
+    "daypart": {
+      "morning": {
+        "eyebrow": "◐ Your morning",
+        "title": "Ease into the day",
+        "subtitle": "Something that fits alongside your first coffee."
+      },
+      "afternoon": {
+        "eyebrow": "◑ Your afternoon",
+        "title": "A midday break",
+        "subtitle": "A short pause between the day's beats."
+      },
+      "evening": {
+        "eyebrow": "◕ Your evening",
+        "title": "Cinema night at home",
+        "subtitle": "Slow down, dim the lights, step into another world."
+      },
+      "late_night": {
+        "eyebrow": "☾ Late night · pick something shorter?",
+        "title": "Tight and sharp for this hour",
+        "subtitle": "Highly rated picks — enough to finish before you drift off."
+      }
+    }
+  },
   "browse": {
     "titleSuffix": "MovieCC",
     "description": "Browse the full catalog. Filter by genre, country, year.",
