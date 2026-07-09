@@ -323,6 +323,10 @@ export function ExperienceCard({
       onMouseEnter={enter}
       onMouseLeave={leave}
       onMouseMove={handleMove}
+      onClick={handleClick}
+      onPointerDown={handlePointerDown}
+      onPointerUp={cancelLongPress}
+      onPointerCancel={cancelLongPress}
       className={cn(
         "group/card relative shrink-0 snap-start",
         SIZES[size],
