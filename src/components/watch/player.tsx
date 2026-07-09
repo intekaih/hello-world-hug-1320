@@ -1016,12 +1016,42 @@ export function PlayerContainer({
         seconds={Math.max(1, Math.round(duration - currentTime))}
         nextEpisodeNumber={epNum + 1}
         posterUrl={poster}
-        onCancel={() => setNextPromptOpen(false)}
+        autoAdvance={effectiveAutoNext}
+        softAsk={softAskArmed}
+        showTooltip={effectiveAutoNext && !firstBingeTooltipSeen}
+        onTooltipSeen={markBingeTooltipSeen}
+        onOpenSettings={() => setSettingsSheetOpen(true)}
+        onCancel={() => {
+          autoAdvanceStreakRef.current = 0;
+          setNextPromptOpen(false);
+        }}
         onPlayNow={() => {
+          autoAdvanceStreakRef.current = 0;
           setNextPromptOpen(false);
           onChangeEpisode(epNum + 1);
         }}
+        onAutoAdvance={() => {
+          autoAdvanceStreakRef.current += 1;
+          setNextPromptOpen(false);
+          onChangeEpisode(epNum + 1);
+        }}
+        onContinueAutoplay={() => {
+          autoAdvanceStreakRef.current = 0;
+          setSoftAskArmed(false);
+        }}
+        onPauseTonight={() => {
+          pauseAutoplayTonight();
+          autoAdvanceStreakRef.current = 0;
+          setSoftAskArmed(false);
+          setNextPromptOpen(false);
+        }}
       />
+
+      <PlayerSettingsSheet
+        open={settingsSheetOpen}
+        onClose={() => setSettingsSheetOpen(false)}
+      />
+
 
       <BingeBridgeOverlay
         visible={completeOpen && isLastEp}
