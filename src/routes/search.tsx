@@ -662,6 +662,32 @@ function DiscoveryPortal({
   return (
 
     <div className="space-y-12 pt-2">
+      {continueItems.length > 0 && (
+        <DiscoverySection
+          eyebrow={<TrendingUp className="h-3.5 w-3.5" />}
+          title={t("search.continueWatching")}
+        >
+          <ChipRow>
+            {continueItems.map((c) => {
+              const label =
+                c.title ??
+                c.slug.replace(/-/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+              return (
+                <PortalChip key={c.slug} onClick={() => onPick(label)} accent>
+                  {label}
+                  {c.episode ? (
+                    <span className="ml-1 font-mono text-[10px] text-white/60">
+                      ·EP{c.episode}
+                    </span>
+                  ) : null}
+                </PortalChip>
+              );
+            })}
+          </ChipRow>
+        </DiscoverySection>
+      )}
+
+
       {recent.length > 0 && (
         <DiscoverySection
           eyebrow={<Clock className="h-3.5 w-3.5" />}
