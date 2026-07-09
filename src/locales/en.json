@@ -482,6 +482,14 @@
     "count": "{{n}} in progress",
     "clearAll": "Clear all",
     "confirmClear": "Clear your entire watch history?",
+    "clear": {
+      "title": "Clear all watch history",
+      "description": "This can't be undone. Type {{word}} to confirm.",
+      "inputLabel": "Type {{word}} to continue",
+      "hint": "You can cancel any time — nothing is removed until you confirm.",
+      "cancel": "Cancel",
+      "confirm": "Clear history"
+    },
     "remove": "Remove from history",
     "continue": "Continue",
     "remaining": "{{n}} min left",
