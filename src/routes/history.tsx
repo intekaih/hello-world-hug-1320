@@ -18,7 +18,14 @@ import { transition } from "@/lib/design";
 
 import { hasVisibleProgress } from "@/lib/home-queries";
 
+import {
+  fetchHistory,
+  deleteHistory as beDeleteHistory,
+  type HistoryItem,
+} from "@/api-client/history";
+
 type HistoryEntry = {
+  id: string;
   slug: string;
   episode: string;
   position: number;
@@ -29,6 +36,19 @@ type HistoryEntry = {
   thumb?: string;
   totalEpisodes?: number;
 };
+
+function toEntry(h: HistoryItem): HistoryEntry {
+  return {
+    id: h.id,
+    slug: h.movieSlug,
+    episode: h.episode,
+    position: h.position,
+    duration: h.duration,
+    updatedAt: new Date(h.watchedAt).getTime() || Date.now(),
+    name: h.movieName,
+    thumb: h.posterUrl,
+  };
+}
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -65,28 +85,34 @@ function HistoryPage() {
   const qc = useQueryClient();
   const query = useQuery<{ items: HistoryEntry[] }>({
     queryKey: ["history"],
-    queryFn: async () => (await fetch("/api/history")).json(),
+    queryFn: async () => ({
+      items: (await fetchHistory(100)).map(toEntry),
+    }),
   });
 
   const removeOne = useMutation({
-    mutationFn: async (slug: string) => {
-      await fetch(`/api/history?slug=${encodeURIComponent(slug)}`, { method: "DELETE" });
+    mutationFn: async (id: string) => {
+      await beDeleteHistory(id);
     },
-    onMutate: async (slug) => {
+    onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: ["history"] });
       const prev = qc.getQueryData<{ items: HistoryEntry[] }>(["history"]);
       qc.setQueryData<{ items: HistoryEntry[] }>(["history"], (old) => ({
-        items: (old?.items ?? []).filter((i) => i.slug !== slug),
+        items: (old?.items ?? []).filter((i) => i.id !== id),
       }));
       return { prev };
     },
     onError: (_e, _s, ctx) => ctx?.prev && qc.setQueryData(["history"], ctx.prev),
-    onSettled: () => qc.invalidateQueries({ queryKey: ["history"] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["history"] });
+      qc.invalidateQueries({ queryKey: ["home"] });
+    },
   });
 
   const clearAll = useMutation({
     mutationFn: async () => {
-      await fetch("/api/history", { method: "DELETE" });
+      const items = qc.getQueryData<{ items: HistoryEntry[] }>(["history"])?.items ?? [];
+      await Promise.allSettled(items.map((i) => beDeleteHistory(i.id)));
     },
     onMutate: async () => {
       await qc.cancelQueries({ queryKey: ["history"] });
@@ -95,8 +121,12 @@ function HistoryPage() {
       return { prev };
     },
     onError: (_e, _v, ctx) => ctx?.prev && qc.setQueryData(["history"], ctx.prev),
-    onSettled: () => qc.invalidateQueries({ queryKey: ["history"] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["history"] });
+      qc.invalidateQueries({ queryKey: ["home"] });
+    },
   });
+
 
   const items = query.data?.items ?? [];
   const [clearOpen, setClearOpen] = useState(false);
@@ -172,7 +202,7 @@ function HistoryPage() {
                     key={`unfinished-${item.slug}-${item.episode}`}
                     item={item}
                     index={i}
-                    onRemove={() => removeOne.mutate(item.slug)}
+                    onRemove={() => removeOne.mutate(item.id)}
                   />
                 ))}
               </MovieGrid>
@@ -193,7 +223,7 @@ function HistoryPage() {
                       key={`${item.slug}-${item.episode}`}
                       item={item}
                       index={i}
-                      onRemove={() => removeOne.mutate(item.slug)}
+                      onRemove={() => removeOne.mutate(item.id)}
                     />
                   ))}
                 </MovieGrid>

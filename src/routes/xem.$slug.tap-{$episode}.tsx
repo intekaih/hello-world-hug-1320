@@ -88,13 +88,14 @@ function WatchPage() {
   const { data: history } = useQuery({
     queryKey: ["history", slug, episode],
     queryFn: async () => {
-      const res = await fetch(`/api/history/${slug}/${episode}`);
-      if (!res.ok) return { position: 0, duration: 0 };
-      return res.json() as Promise<{ position: number; duration: number }>;
+      const { getEpisodeProgress } = await import("@/api-client/history");
+      const saved = await getEpisodeProgress(slug, episode);
+      return saved ?? { position: 0, duration: 0 };
     },
     staleTime: 0,
     gcTime: 0,
   });
+
 
   const { data: movie } = useQuery({
     queryKey: ["be-movie-meta", slug],

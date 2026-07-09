@@ -340,33 +340,35 @@ export function PlayerContainer({
     if (!video || !video.duration) return;
     if (video.currentTime < 1) return;
     try {
-      fetch("/api/history", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        keepalive: true,
-        body: JSON.stringify({
-          slug,
+      void import("@/api-client/history").then(({ saveProgressBeacon }) => {
+        saveProgressBeacon({
+          movieSlug: slug,
+          movieName: title,
+          posterUrl: poster ?? "",
           episode,
+          episodeSlug: `tap-${episode}`,
           position: video.currentTime,
           duration: video.duration,
-        }),
-      }).catch(() => {});
+        });
+      });
     } catch {
       /* ignore */
     }
-  }, [slug, episode]);
+  }, [slug, episode, title, poster]);
 
-  // every 5s while playing
+
+  // every 10s while playing (throttle to keep BE quiet)
   useEffect(() => {
     const id = window.setInterval(() => {
       const video = videoRef.current;
       if (!video || video.paused) return;
       saveProgress();
-      const { shouldPrompt } = noteWatching(5);
+      const { shouldPrompt } = noteWatching(10);
       if (shouldPrompt) setWellnessOpen(true);
-    }, 5000);
+    }, 10_000);
     return () => window.clearInterval(id);
   }, [saveProgress]);
+
 
   // save on pause + before unload
   useEffect(() => {

@@ -119,10 +119,52 @@ export function toCard(m: BeMovie): MovieCard {
   };
 }
 
+function hashPositive(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function formatRemaining(seconds: number): string {
+  const s = Math.max(0, Math.round(seconds));
+  if (s < 60) return `còn ${s}s`;
+  const m = Math.ceil(s / 60);
+  if (m < 60) return `còn ${m} phút`;
+  const h = Math.floor(m / 60);
+  const rm = m % 60;
+  return `còn ${h}h ${String(rm).padStart(2, "0")}m`;
+}
+
 /** Fetch home data from the real Express BE and normalize to FE shape. */
 export async function fetchHomeData(): Promise<HomeData> {
   const be = await apiGet<BeHomeResponse>("/movies/home");
-  const continueWatching: ContinueWatchingItem[] = []; // wired later via /history
+
+  // Continue-watching row is fed by the authenticated /history endpoint.
+  // Guests silently get an empty list (fetchHistory handles 401 → []).
+  let continueWatching: ContinueWatchingItem[] = [];
+  try {
+    const { fetchHistory } = await import("./history");
+    const history = await fetchHistory(12);
+    continueWatching = history
+      .filter((h) => !h.completed && h.duration > 0)
+      .map((h) => {
+        const progress = Math.min(1, Math.max(0, h.progressPercent / 100));
+        return {
+          id: hashPositive(`${h.movieSlug}::${h.episode}`),
+          slug: h.movieSlug,
+          title: h.movieName,
+          poster_url: h.posterUrl,
+          year: 0,
+          rating: 0,
+          progress,
+          remaining: formatRemaining(h.duration - h.position),
+          episodeLabel: h.episode,
+        } as ContinueWatchingItem;
+      });
+  } catch {
+    /* keep empty on failure */
+  }
+
   return {
     heroMovies: (be.heroMovies ?? []).map(toHero),
     top10Movies: (be.top10Movies ?? []).map(toCard),
@@ -132,3 +174,4 @@ export async function fetchHomeData(): Promise<HomeData> {
     continueWatching,
   };
 }
+
