@@ -373,10 +373,12 @@
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  /* No `scroll-behavior: smooth` here — it queues an animation on every
+   * wheel/trackpad tick and makes horizontal rails feel stuck. Programmatic
+   * scrolls pass `behavior: "smooth"` explicitly on the scrollTo/scrollBy call. */
   scrollbar-gutter: stable;
-  contain: paint;
 }
+
 
 /* Mobile / low-end: soften expensive backdrop-filter which is a known
  * source of scroll jank on iOS Safari and Android Chrome. */
