@@ -15,6 +15,8 @@ import {
 import { useTranslation } from "@/hooks/useTranslation";
 import { transition } from "@/lib/design";
 
+import { hasVisibleProgress } from "@/lib/home-queries";
+
 type HistoryEntry = {
   slug: string;
   episode: string;
@@ -97,6 +99,20 @@ function HistoryPage() {
 
   const items = query.data?.items ?? [];
 
+  const unfinished = useMemo(() => {
+    return items
+      .filter((it) => {
+        const p = it.duration > 0 ? it.position / it.duration : 0;
+        return hasVisibleProgress(p);
+      })
+      .map((it) => ({
+        it,
+        p: it.duration > 0 ? it.position / it.duration : 0,
+      }))
+      .sort((a, b) => b.p - a.p)
+      .map((x) => x.it);
+  }, [items]);
+
   const buckets = useMemo(() => {
     const map: Record<BucketKey, HistoryEntry[]> = {
       today: [],
@@ -144,6 +160,24 @@ function HistoryPage() {
         />
       ) : (
         <div className="space-y-10">
+          {unfinished.length > 0 && (
+            <section aria-label={t("history.groups.unfinished")}>
+              <GroupHeading
+                label={t("history.groups.unfinished")}
+                count={unfinished.length}
+              />
+              <MovieGrid>
+                {unfinished.map((item, i) => (
+                  <HistoryCard
+                    key={`unfinished-${item.slug}-${item.episode}`}
+                    item={item}
+                    index={i}
+                    onRemove={() => removeOne.mutate(item.slug)}
+                  />
+                ))}
+              </MovieGrid>
+            </section>
+          )}
           {BUCKET_ORDER.map((key) => {
             const group = buckets[key];
             if (!group.length) return null;

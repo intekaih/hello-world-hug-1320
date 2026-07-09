@@ -105,6 +105,8 @@
     "nextEpisodeWaiting": "Next episode is waiting",
     "pickUpWhereLeft": "Pick up right where you left off",
     "episode": "Episode {{n}}",
+    "nearlyDone": "Almost done",
+    "finishIt": "Finish it",
     "lastWatched": {
       "justNow": "Just now",
       "minutesAgo": "{{n}} min ago",
@@ -410,6 +412,7 @@
     "episodeLabel": "EP {{ep}}",
     "progress": "{{n}}% watched",
     "groups": {
+      "unfinished": "Unfinished",
       "today": "Today",
       "yesterday": "Yesterday",
       "thisWeek": "This week",

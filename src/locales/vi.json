@@ -105,6 +105,8 @@
     "nextEpisodeWaiting": "Tập tiếp theo đang chờ",
     "pickUpWhereLeft": "Tiếp tục từ nơi bạn dừng lại",
     "episode": "Tập {{n}}",
+    "nearlyDone": "Sắp xong",
+    "finishIt": "Xem nốt",
     "lastWatched": {
       "justNow": "Vừa xem",
       "minutesAgo": "{{n}} phút trước",
@@ -410,6 +412,7 @@
     "episodeLabel": "Tập {{ep}}",
     "progress": "Đã xem {{n}}%",
     "groups": {
+      "unfinished": "Dở dang",
       "today": "Hôm nay",
       "yesterday": "Hôm qua",
       "thisWeek": "Tuần này",
