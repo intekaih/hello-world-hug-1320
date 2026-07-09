@@ -17,6 +17,7 @@ import {
   FloatingMovieActions,
   MovieDetailHero,
   MovieFactRail,
+  SeasonProgressBlock,
   SectionHeader,
   StoryBlock,
   type Movie,
