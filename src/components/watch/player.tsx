@@ -969,6 +969,13 @@ export function PlayerContainer({
                     </button>
                   )}
                   <button
+                    onClick={() => setSettingsSheetOpen(true)}
+                    className="rounded-full p-1.5 transition hover:bg-white/10"
+                    aria-label={t("player.settings.title")}
+                  >
+                    <Settings className="h-5 w-5" />
+                  </button>
+                  <button
                     onClick={() => setShortcutsOpen(true)}
                     className="hidden rounded-full p-1.5 transition hover:bg-white/10 sm:inline-flex"
                     aria-label={t("player.controls.shortcuts")}
