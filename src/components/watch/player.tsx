@@ -74,6 +74,7 @@ type Props = {
   onChangeEpisode: (ep: number) => void;
   cinemaMode?: boolean;
   onToggleCinemaMode?: () => void;
+  onServerChange?: (id: string) => void;
 };
 
 /* -------------------------------------------------------------------------- */
