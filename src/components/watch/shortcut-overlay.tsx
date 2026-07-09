@@ -42,7 +42,7 @@ export function ShortcutOverlay({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 8, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="glass-strong relative w-[min(92vw,520px)] rounded-2xl border border-white/12 p-6 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]"
+            className="glass-strong relative w-[min(92vw,520px)] rounded-2xl p-6 shadow-[var(--shadow-elevated)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
