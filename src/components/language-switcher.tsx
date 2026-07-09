@@ -33,7 +33,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
             aria-label={t("language.switchTo", { name: t(`language.${l.code}`) })}
             className={`rounded-full px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] transition ${
               active
-                ? "bg-gradient-to-r from-primary to-[oklch(0.72_0.24_35)] text-white shadow-[0_4px_16px_-4px_oklch(0.68_0.24_25/0.55)]"
+                ? "bg-gradient-to-r from-primary to-[oklch(0.72_0.24_35)] text-primary-foreground shadow-[0_4px_16px_-4px_oklch(0.68_0.24_25/0.55)]"
                 : "text-foreground-muted hover:text-foreground"
             }`}
           >
