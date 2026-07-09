@@ -202,6 +202,11 @@ function HistoryPage() {
           })}
         </div>
       )}
+      <ClearHistoryDialog
+        open={clearOpen}
+        onOpenChange={setClearOpen}
+        onConfirm={() => clearAll.mutate()}
+      />
     </div>
   );
 }
