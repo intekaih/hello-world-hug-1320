@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Eye, EyeOff, Loader2, Lock, User, AlertCircle, Film } from "lucide-react";
 import { z } from "zod";
+import { useAuth } from "@/lib/auth-context";
 
 const searchSchema = z.object({
   redirect: fallback(z.string(), "/").default("/"),
@@ -44,6 +45,7 @@ function LoginPage() {
   const queryClient = useQueryClient();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const { login } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -57,28 +59,13 @@ function LoginPage() {
   const onSubmit = async (values: LoginForm) => {
     setServerError(null);
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = (await res.json()) as {
-        success: boolean;
-        error?: string;
-        user?: import("@/store/authStore").AuthUser;
-      };
-      if (!res.ok || !data.success || !data.user) {
-        setServerError(data.error ?? "Đăng nhập thất bại. Vui lòng thử lại.");
-        return;
-      }
-      // Hydrate store immediately so the next page sees the user.
-      (await import("@/store/authStore")).useAuthStore
-        .getState()
-        .setUser(data.user);
+      await login(values.username, values.password);
       await queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       navigate({ to: redirect || "/", replace: true });
-    } catch {
-      setServerError("Không thể kết nối máy chủ. Kiểm tra lại kết nối.");
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Đăng nhập thất bại. Vui lòng thử lại.";
+      setServerError(msg);
     }
   };
 

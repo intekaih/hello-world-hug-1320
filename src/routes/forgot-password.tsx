@@ -41,19 +41,12 @@ function ForgotPasswordPage() {
   const onSubmit = async (values: FormValues) => {
     setServerError(null);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = (await res.json()) as { success: boolean; error?: string };
-      if (!res.ok || !data.success) {
-        setServerError(data.error ?? "Không thể xử lý yêu cầu.");
-        return;
-      }
+      const { forgotPassword } = await import("@/api-client/auth");
+      await forgotPassword(values.identifier);
       setSent(true);
     } catch {
-      setServerError("Không thể kết nối máy chủ.");
+      // BE errors are swallowed inside forgotPassword to avoid leaking existence.
+      setSent(true);
     }
   };
 
