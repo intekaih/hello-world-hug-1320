@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { ease } from "@/lib/design";
 import { useTranslation } from "@/hooks/useTranslation";
 import { claimPreviewSlot, releasePreviewSlot } from "@/lib/media/preview-slot";
+import { track } from "@/lib/track";
 
 /** Hover-intent delay before we consider it a real preview intent. */
 const HOVER_INTENT_MS = 200;
@@ -195,6 +196,7 @@ export function ExperienceCard({
     if (!trailerUrl) return;
     setVideoError(false);
     setVideoMounted(true);
+    track("card_hover_preview_start", { slug: movie.slug });
     // Claim the global slot so other cards stop their videos.
     previewSlotId.current = claimPreviewSlot(() => {
       // Another card took over — collapse this preview.
@@ -204,7 +206,7 @@ export function ExperienceCard({
       setVideoReady(false);
       setPreviewArmed(false);
     });
-  }, [trailerUrl]);
+  }, [trailerUrl, movie.slug]);
 
   const enter = useCallback(() => {
     if (reduce) {
