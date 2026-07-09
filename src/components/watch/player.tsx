@@ -106,6 +106,8 @@ export function PlayerContainer({
   poster,
   servers,
   initialTime = 0,
+  introEndSec,
+  recapEndSec,
   onChangeEpisode,
   cinemaMode = false,
   onToggleCinemaMode,
