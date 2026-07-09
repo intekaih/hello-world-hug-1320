@@ -50,7 +50,7 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (paused || movies.length <= 1) return;
@@ -61,14 +61,22 @@ export function HeroBanner({ movies }: { movies: HeroMovie[] }) {
     return () => window.clearInterval(id);
   }, [paused, movies.length, index]);
 
+  // Write parallax offset via ref — avoids re-rendering the whole hero on
+  // every mousemove.
   const handleMouseMove = (e: React.MouseEvent) => {
     const el = sectionRef.current;
-    if (!el) return;
+    const p = parallaxRef.current;
+    if (!el || !p) return;
+    if (typeof window !== "undefined" &&
+        !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const rect = el.getBoundingClientRect();
-    setMouse({
-      x: (e.clientX - rect.left) / rect.width - 0.5,
-      y: (e.clientY - rect.top) / rect.height - 0.5,
-    });
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    p.style.transform = `translate3d(${x * -18}px, ${y * -12}px, 0)`;
+  };
+  const clearParallax = () => {
+    const p = parallaxRef.current;
+    if (p) p.style.transform = "translate3d(0,0,0)";
   };
 
   const movie = movies[index];
