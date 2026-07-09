@@ -561,7 +561,19 @@
     }
   },
 
+  "welcomeBack": {
+    "ariaLabel": "Chào mừng bạn quay lại",
+    "eyebrow": "Chào mừng trở lại",
+    "headline": "Bạn bỏ dở {{title}}",
+    "sub": "Còn {{remaining}} — mở tiếp đúng chỗ bạn dừng.",
+    "subEp": "Tập {{episode}} · còn {{remaining}} — mở tiếp đúng chỗ bạn dừng.",
+    "resume": "Xem tiếp",
+    "dismiss": "Đóng",
+    "newThisWeek": "Xem điều mới tuần này",
+    "newThisWeekMore": "Xem tất cả"
+  },
   "taste": {
+
     "eyebrow": "Cá nhân hoá nhẹ nhàng",
     "title": "Nói cho movieCC biết bạn thích gì",
     "subtitle": "Chọn vài thứ bạn yêu — chúng tôi dùng để gợi ý phim hợp gu hơn. Bỏ qua cũng được, sửa sau lúc nào cũng được.",
