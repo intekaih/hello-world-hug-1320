@@ -64,6 +64,8 @@ type Props = {
   poster?: string;
   servers: ServerSource[];
   initialTime?: number;
+  introEndSec?: number;
+  recapEndSec?: number;
   onChangeEpisode: (ep: number) => void;
   cinemaMode?: boolean;
   onToggleCinemaMode?: () => void;
